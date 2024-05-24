@@ -5,15 +5,11 @@ import ThemeToggle from '@/components/ToggleTheme';
 
 import NavBar from '@/components/Header/Navbar';
 import Banner from '@/components/Header/Banner';
-import Footer from '@/components/Footer';
-import { ThemeProvider } from 'next-themes';
 
 export const metadata = {
   title: 'Home',
   keywords: 'LWR'
 }
-
-// lwr
 
 import LWRFooter from '@/components/Footer/LWRFooter'
 
