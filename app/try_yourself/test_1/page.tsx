@@ -41,34 +41,57 @@ const reducer = (state, action) => {
     }
 }
 
+const initialState = [
+    { id: 1, question: 'How many apples here: * * *', options: [2, 1, 3, 5], correct: [3], status: 'pending' },
+    { id: 2, question: 'How many bananas here: * *', options: [2, 1, 3, 5], correct: [2], status: 'pending' },
+    { id: 3, question: 'How many kiwi here: *', options: [2, 1, 3, 5], correct: [1], status: 'pending' },
+]
+
 const TryYourself = () => {
 
     const [downloadQuestions, setDownloadQuestions] = useState(true)
-    const [state, dispatch] = useReducer(reducer, []);
+    const [state, dispatch] = useReducer(reducer, initialState);
     const [index, setIndex] = useState(0);
 
 
+
+    // useEffect(() => {
+    //     async function fetchQuestions() {
+    //         try {
+    //             const response = await fetch('http://localhost:3000/api/questions');
+    //             if (!response.ok) {
+    //                 throw new Error('Network issue');
+    //             }
+
+    //             const questions = await response.json();
+    //             dispatch({ option: 'initialize', questions });
+
+    //         } catch (error) {
+    //             console.error(error);
+    //         } finally {
+    //             setDownloadQuestions(false);
+    //         }
+    //     }
+
+    //     fetchQuestions();
+    // }, []);
+
+    const [time, setTime] = useState(0);
+    const [timesUp, setTimesUp] = useState(false);
+
     useEffect(() => {
-        async function fetchQuestions() {
-            try {
-                const response = await fetch('http://localhost:3000/api/questions');
-                if (!response.ok) {
-                    throw new Error('Network issue');
-                }
-
-                const questions = await response.json();
-                dispatch({ option: 'initialize', questions });
-
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setDownloadQuestions(false);
+        const timer = setTimeout(() => {
+            if (time >= 10) {
+                setTime(0);
+                clearTimeout(timer);
+                timesUp(true);
+                return
             }
-        }
+            setTime(time + 1);
+        }, 1000)
+    }, [time])
 
-        fetchQuestions();
-    }, []);
-    console.log(state)
+
 
     const q = state[index] || {}
 
@@ -81,14 +104,10 @@ const TryYourself = () => {
         return [index === 0, state.length - 1 === index]
     }
 
-    console.log(state.length)
-    console.log(index)
-    console.log(state)
-
 
     return (
         <>
-            {!downloadQuestions ? <Container>
+            {!timesUp ? <Container>
                 {index < state.length
                     ? <QuestionsCards
                         question={q.question}
@@ -97,7 +116,7 @@ const TryYourself = () => {
                         type={q.type}
                         isFirstLast={isFirstLastQuestions()} />
                     : <SummaryCards questions={state} />}
-            </Container> : 'Loading questions'}
+            </Container> : 'Time\'s up'}
         </>
     )
 }
@@ -146,7 +165,7 @@ const QuestionsCards: React.FC<any> = (props) => {
                         {props.question}
                     </Card.Title>
                     <Form onSubmit={handleSubmit} className='p-2 m-2'>
-                        {props.answers.map((a: string, i: number) => {
+                        {props.options.map((a: string, i: number) => {
                             return (
                                 <Form.Check
                                     key={`${props.id}-${i + 1}`}

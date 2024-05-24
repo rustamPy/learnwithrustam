@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Home",
+        "href": "/"
+    },
+    {
+        "name": "About",
+        "href": "#about",
+        "submenus": [
+            {
+                "name": "Who am I?",
+                "href": "#whoami"
+            },
+            {
+                "name": "Steps to take",
+                "href": "steps"
+            }
+        ]
+    },
+    {
+        "name": "Courses",
+        "href": "#courses"
+    },
+    {
+        "name": "Upcoming courses",
+        "href": "/coming-courses"
+    },
+    {
+        "name": "Contact",
+        "href": "#contact"
+    }
+]

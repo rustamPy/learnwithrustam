@@ -12,7 +12,7 @@ const InfoBoxes = () => {
             link: "/properties",
             text: "Browse Properties"
         },
-        bg: '#f3f4f6'
+        bg: 'red'
     },
     {
         id: 1,
@@ -20,9 +20,9 @@ const InfoBoxes = () => {
         children: 'List your properties and reach potential tenants. Rent as an airbnb or long term.',
         button: {
             link: "/add-property",
-            text: "Add Property"
+            text: "Add Property",
         },
-        bg: '#dbeafe'
+        bg: 'red'
     }]
     return (    
         <>
@@ -30,7 +30,7 @@ const InfoBoxes = () => {
             <section>
                 <div className="container-xl lg:container m-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-lg">
-                        {boxes.map(box => (<InfoBox key={box.id} {...box}> {box.children} </InfoBox>))}
+                        {boxes.map(box => (<InfoBox key={box.id} {...box} bg={localStorage.getItem('theme')}> {box.children} </InfoBox>))}
                     </div>
                 </div>
             </section>
