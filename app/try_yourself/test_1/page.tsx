@@ -225,9 +225,9 @@ const SummaryCards: React.FC<any> = (props) => {
             <Tabs defaultActiveKey={'tab-1'} className='mt-9'>
                 {props.questions.map((question: object, index: number) => {
                     return (
-                        <Tab eventKey={`tab-${index + 1}`} title={`${index + 1}`}>
+                        <Tab key={question.id} eventKey={`tab-${index + 1}`} title={`${index + 1}`}>
                             <Form>
-                                <div key={question.id}>
+                                <div >
                                     <h1> {question.question} </h1>
                                     {question.answers.map((a: string, i: number) => {
                                         return (
