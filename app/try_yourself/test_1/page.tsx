@@ -84,7 +84,7 @@ const TryYourself = () => {
             if (time >= 10) {
                 setTime(0);
                 clearTimeout(timer);
-                timesUp(true);
+                setTimesUp(true);
                 return
             }
             setTime(time + 1);
