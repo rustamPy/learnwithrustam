@@ -5,6 +5,7 @@ let connected = false;
 const connectDB = async () => {
     mongoose.set('strictQuery', false);
     if (connected) {
+        console.log('already connected')
         return;
     }
 
