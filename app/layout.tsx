@@ -1,15 +1,9 @@
 import React, { ReactNode } from 'react'
-import '@/assets/styles/globals.css'
 
 import { Typography } from "@material-tailwind/react";
-export const metadata = {
-  title: 'Home',
-  keywords: 'LWR'
-}
 
 
-
-const HomeLayout: React.FC<({ children: ReactNode })> = ({ children }) => {
+const HomeLayout: React.FC<({ children: ReactNode })> = () => {
   return (
     <html lang="en">
       <body>
