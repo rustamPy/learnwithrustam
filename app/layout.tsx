@@ -3,7 +3,7 @@ import '@/assets/styles/globals.css'
 
 import NavBar from '@/components/Header/Navbar';
 import Banner from '@/components/Header/Banner';
-
+import { Typography } from "@material-tailwind/react";
 export const metadata = {
   title: 'Home',
   keywords: 'LWR'
@@ -17,12 +17,9 @@ const HomeLayout: React.FC<({ children: ReactNode })> = ({ children }) => {
   return (
     <html lang="en">
       <body>
-        <Banner />
-        <NavBar />
-        <main>
-          {children}
-        </main>
-        <LWRFooter />
+        <Typography variant="h5" className="mb-6">
+          Material Tailwind
+        </Typography>
       </body>
     </html>
   )
