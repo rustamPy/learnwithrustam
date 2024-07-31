@@ -25,33 +25,41 @@ const imageMap = {
     'Python Entry': pythonEntry,
 }
 
-const SearchWindow = () => {
-    const [filteredCourses, setFilteredCourses] = useState([]);
+interface Course {
+    id: number;
+    title: string;
+    desc: string;
+    level: string;
+    price: string[];
+    options: {
+        plus: string[];
+        minus: string[];
+    };
+}
 
-    const handleSearch = ({ query, courseType }) => {
-        let filtered = coursesData;
+const SearchWindow: React.FC = () => {
+    const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
+
+    const handleSearch = ({ query, courseType }: { query: string; courseType: string }) => {
+        let filtered = coursesData as Course[];
 
         if (courseType !== 'all') {
             filtered = filtered.filter(course => course.level === courseType);
         }
 
         if (query) {
-            const lowercasedLocation = query.toLowerCase();
+            const lowercasedQuery = query.toLowerCase();
             filtered = filtered.filter(course =>
-                course.title.toLowerCase().includes(lowercasedLocation) ||
-                course.desc.toLowerCase().includes(lowercasedLocation)
+                course.title.toLowerCase().includes(lowercasedQuery) ||
+                course.desc.toLowerCase().includes(lowercasedQuery)
             );
         }
 
-        if (!query && courseType == 'all') {
+        if (!query && courseType === 'all') {
             setFilteredCourses([]);
-        }
-
-        else {
+        } else {
             setFilteredCourses(filtered);
         }
-
-        // Filter by location if needed, for now, we'll just use courseType
     };
 
     return (
@@ -67,9 +75,9 @@ const SearchWindow = () => {
                 </div>
                 <SearchFunc onSearch={handleSearch} />
                 <div className="grid gap-x-10 gap-y-8 md:grid-cols-2 lg:grid-cols-3 max-w-5xl mt-10">
-                    {filteredCourses.map((course, key) => (
+                    {filteredCourses.map(course => (
                         <CourseCard
-                            key={key}
+                            id={course.id}
                             title={course.title}
                             desc={course.desc}
                             price={course.price}
@@ -83,11 +91,15 @@ const SearchWindow = () => {
 }
 
 
-const SearchFunc = ({ onSearch }) => {
-    const [courseType, setCourseType] = useState('all');
-    const [query, setQuery] = useState('');
+interface SearchFuncProps {
+    onSearch: ({ query, courseType }: { query: string; courseType: string }) => void;
+}
 
-    const handleSubmit = (event) => {
+const SearchFunc: React.FC<SearchFuncProps> = ({ onSearch }) => {
+    const [courseType, setCourseType] = useState<string>('all');
+    const [query, setQuery] = useState<string>('');
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         onSearch({ query, courseType });
     };
@@ -138,21 +150,20 @@ const SearchFunc = ({ onSearch }) => {
 
 
 // Course Card - a box with course information
-interface CoursesCardProps {
-    key: number;
+interface CourseCardProps {
+    id: number;
     title: string;
     desc: string;
     price: string[];
     options: {
-        icon: React.ReactNode;
-        info: string;
-    }[];
-    icon: React.ReactNode;
-    children: React.ReactNode;
+        plus: string[];
+        minus: string[];
+    };
 }
-const CourseCard = ({ key, title, desc, price, options }: CoursesCardProps) => {
+
+const CourseCard: React.FC<CourseCardProps> = ({ id, title, desc, price, options }) => {
     return (
-        <Card key={key} variant="gradient" color="white">
+        <Card key={id} variant="gradient" color="white">
             <CardHeader
                 floated={false}
                 shadow={false}

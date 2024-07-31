@@ -11,7 +11,7 @@ import Index from '@/app/page';
 const IndexHero = () => {
     return (
         <>
-            <div className='text-center m-9 mt-20' style={{ textAlign: "-webkit-center" }}>
+            <div className='text-center m-9 mt-20'>
 
                 {/* Header of the page */}
                 <Typography variant="h6" className='uppercase text-lwr-dark-blue dark:text-white'>Online IT Classes</Typography>
