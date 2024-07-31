@@ -124,7 +124,7 @@ function NavListMenu() {
                 allowHover={true}
             >
                 <MenuHandler>
-                    <Typography as="div" variant="medium" className="font-bold">
+                    <Typography as="div" variant="small" className="font-bold">
                         <ListItem
                             className="flex items-center gap-2 py-2 pr-4 font-bold text-lwr-dark-blue"
                             selected={isMenuOpen || isMobileMenuOpen}
@@ -163,7 +163,7 @@ function NavList() {
             <Typography
                 as="a"
                 href="#"
-                variant="medium"
+                variant="small"
                 className="font-bold text-lwr-dark-blue"
             >
                 <ListItem className="flex items-center gap-2 py-2 pr-4">Home</ListItem>
@@ -172,7 +172,7 @@ function NavList() {
             <Typography
                 as="a"
                 href="#"
-                variant="medium"
+                variant="small"
                 className="font-bold text-lwr-dark-blue"
             >
                 <ListItem className="flex items-center gap-2 py-2 pr-4">
