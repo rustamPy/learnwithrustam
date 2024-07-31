@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import {
     Card,
@@ -9,9 +9,10 @@ import {
     Button,
 } from "@material-tailwind/react";
 
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import coreItInter from '@/assets/images/cit_inter.jpg'
 import pythonEntry from '@/assets/images/python_entry.jpg'
+import placeholder from '@/assets/images/placeholder.webp'
 
 
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
@@ -20,7 +21,10 @@ import { MinusCircleIcon } from "@heroicons/react/24/outline";
 
 import coursesData from '@/components/courses.json'
 
-const imageMap = {
+/*
+@type {{[key: string]: StaticImageData}}
+*/
+const ImageMap = {
     'General IT - Entry': coreItInter,
     'Python Entry': pythonEntry,
 }
@@ -76,7 +80,8 @@ const SearchWindow: React.FC = () => {
                 <SearchFunc onSearch={handleSearch} />
                 <div className="grid gap-x-10 gap-y-8 md:grid-cols-2 lg:grid-cols-3 max-w-5xl mt-10">
                     {filteredCourses.map(course => (
-                        <CourseCard
+                        <CourseCard 
+                            key={course.id}
                             id={course.id}
                             title={course.title}
                             desc={course.desc}
@@ -162,6 +167,7 @@ interface CourseCardProps {
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ id, title, desc, price, options }) => {
+    const bgimage: StaticImageData = title in ImageMap ? ImageMap[title] : placeholder;
     return (
         <Card key={id} variant="gradient" color="white">
             <CardHeader
@@ -172,7 +178,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ id, title, desc, price, options
             >
                 <div className="absolute inset-0 m-0 h-full w-full"></div>
                 <div className="relative">
-                    <Image src={imageMap[title]} style={{ borderRadius: 10 }} className="mb-3" />
+                    <Image src={bgimage} style={{ borderRadius: 10 }} className="mb-3" alt='non' />
                     <Typography
                         variant="h6"
                         color="blue-gray"
