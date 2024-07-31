@@ -244,7 +244,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ id, title, desc, price, options
                                 {m}
                             </Typography>
                         </li>
-                    ))};
+                    ))}
                 </ul>
                 <Button fullWidth variant="gradient" color="gray">
                     details

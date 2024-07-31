@@ -5,8 +5,6 @@ import HeroCarousel from '@/components/Hero/Carousel'
 import SearchWindow from '@/components/Hero/SearchWindow';
 
 import { Typography } from '@material-tailwind/react';
-import Index from '@/app/page';
-
 
 const IndexHero = () => {
     return (
