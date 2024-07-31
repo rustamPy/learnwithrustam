@@ -14,7 +14,7 @@ const IndexHero = () => {
             <div className='text-center m-9 mt-20' style={{ textAlign: "-webkit-center" }}>
 
                 {/* Header of the page */}
-                <Typography variant="h8" className='uppercase text-lwr-dark-blue dark:text-white'>Online IT Classes</Typography>
+                <Typography variant="h6" className='uppercase text-lwr-dark-blue dark:text-white'>Online IT Classes</Typography>
                 <Typography variant="h1" className='uppercase text-lwr-dark-blue dark:text-white font-bold'>
                     <span className='text-lwr-orange-100'>Join. </span>
                     Learn.
