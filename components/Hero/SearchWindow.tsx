@@ -24,7 +24,12 @@ import coursesData from '@/components/courses.json'
 /*
 @type {{[key: string]: StaticImageData}}
 */
-const ImageMap = {
+
+type ImageMapType = {
+    [key: string]: StaticImageData;
+};
+
+const ImageMap: ImageMapType = {
     'General IT - Entry': coreItInter,
     'Python Entry': pythonEntry,
 }
