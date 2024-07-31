@@ -1,12 +1,12 @@
 import React from 'react';
 
-import LWRHero from '@/components/Hero/LWRHero';
+import IndexHero from '@/components/Hero/IndexHero';
 
 
 const Index = () => {
   return (
     <>
-      <LWRHero />
+      <IndexHero />
     </>
   )
 }

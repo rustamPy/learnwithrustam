@@ -208,13 +208,13 @@ export default function NavbarWithMegaMenu() {
                     variant="h1"
                     className="mr-4 cursor-pointer py-1.5 lg:ml-2 dark:text-lwr-dark-blue text-2xl"
                 >
-                    LEARN {<span className="text-lwr-orange">{'{W}'}</span>} RUSTAM
+                    LEARN {<span className="text-lwr-orange-100">{'{W}'}</span>} RUSTAM
                 </Typography>
                 <div className="hidden lg:block">
                     <NavList />
                 </div>
                 <div className="hidden gap-2 lg:flex">
-                    <Button variant="filled" size="sm" className="text-lwr-orange">
+                    <Button variant="filled" size="sm" className="text-lwr-orange-100">
                         Log In
                     </Button>
                     <Button variant="filled" size="sm">
@@ -237,7 +237,7 @@ export default function NavbarWithMegaMenu() {
             <Collapse open={openNav}>
                 <NavList />
                 <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
-                    <Button variant="filled" size="sm" className="text-lwr-orange" fullWidth>
+                    <Button variant="filled" size="sm" className="text-lwr-orange-100" fullWidth>
                         Log In
                     </Button>
                     <Button variant="filled" size="sm" fullWidth>

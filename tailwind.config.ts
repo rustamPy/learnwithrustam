@@ -8,7 +8,8 @@ module.exports = withMT({
         'lwr-dark-blue': '#101828FF',
         'lwr-light-grey': '#cccccc6e',
         'lwr-solid-grey': '#cccccc',
-        'lwr-orange': '#F6A426'
+        'lwr-orange-100': '#F6A426',
+        'lwr-orange-200': '#db8606'
       }
     },
   },

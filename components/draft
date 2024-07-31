@@ -1,0 +1,314 @@
+const courses = [
+    {
+        category: 'general',
+        level: 'easy',
+        duration: ['3', 'month'
+        ],
+        status: true,
+        title: "General IT - Entry",
+        image: "",
+        desc: `This course is designed to provide you with a solid foundation in Information Technology(IT) concepts and practices. 
+            It serves as an essential stepping stone for individuals who are new to the world of IT`,
+        price: [
+            "$",
+            "129",
+            "year"
+        ],
+        options: [
+            {
+                icon: (
+                    <CheckCircleIcon className="h-5 w-5 text-blue-gray-900" />
+                ),
+                info: "Complete documentation",
+            },
+            {
+                icon: (
+                    <CheckCircleIcon className="h-5 w-5 text-blue-gray-900" />
+                ),
+                info: "Working materials in Sketch",
+            },
+            {
+                icon: (
+                    <MinusCircleIcon
+                        strokeWidth={
+                            2.5
+                        }
+                        className="h-5 w-5 text-blue-gray-900"
+                    />
+                ),
+                info: "Integration help",
+            },
+            {
+                icon: (
+                    <MinusCircleIcon
+                        strokeWidth={
+                            2.5
+                        }
+                        className="h-5 w-5 text-blue-gray-900"
+                    />
+                ),
+                info: "40GB Cloud storage",
+            },
+            {
+                icon: (
+                    <MinusCircleIcon
+                        strokeWidth={
+                            2.5
+                        }
+                        className="h-5 w-5 text-blue-gray-900"
+                    />
+                ),
+                info: "Support team full assist",
+            },
+        ],
+    },
+    {
+        category: 'general',
+        level: 'medium',
+        duration: ['3', 'month'
+        ],
+        status: true,
+        title: "General IT - Intermediate",
+        image: "",
+        desc: `This course covers a range of more complex topics and subjects to build upon the foundational knowledge gained in the Entry level of IT.`,
+        price: [
+            "$",
+            "299",
+            "year"
+        ],
+        options: [
+            {
+                icon: (
+                    <CheckCircleIcon className="h-5 w-5 text-blue-gray-900" />
+                ),
+                info: "Complete documentation",
+            },
+            {
+                icon: (
+                    <CheckCircleIcon className="h-5 w-5 text-blue-gray-900" />
+                ),
+                info: "Working materials in Sketch",
+            },
+            {
+                icon: (
+                    <CheckCircleIcon
+                        strokeWidth={
+                            2.5
+                        }
+                        className="h-5 w-5 text-blue-gray-900"
+                    />
+                ),
+                info: "Integration help",
+            },
+            {
+                icon: (
+                    <CheckCircleIcon
+                        strokeWidth={
+                            2.5
+                        }
+                        className="h-5 w-5 text-blue-gray-900"
+                    />
+                ),
+                info: "40GB Cloud storage",
+            },
+            {
+                icon: (
+                    <MinusCircleIcon
+                        strokeWidth={
+                            2.5
+                        }
+                        className="h-5 w-5 text-blue-gray-900"
+                    />
+                ),
+                info: "Support team full assist",
+            },
+        ],
+    },
+    {
+        category: 'python',
+        level: 'medium',
+        duration: ['4', 'month'
+        ],
+        status: true,
+        title: "Python - Entry",
+        image: "",
+        desc: `This course serves as an entrance to coding and software development through the Python. 
+            It encompasses the fundamental principles of the Python programming language and delves into the core concepts of Object-Oriented Programming (OOP).`,
+        price: [
+            "$",
+            "299",
+            "year"
+        ],
+        options: [
+            {
+                icon: (
+                    <CheckCircleIcon className="h-5 w-5 text-blue-gray-900" />
+                ),
+                info: "Complete documentation",
+            },
+            {
+                icon: (
+                    <CheckCircleIcon className="h-5 w-5 text-blue-gray-900" />
+                ),
+                info: "Working materials in Sketch",
+            },
+            {
+                icon: (
+                    <CheckCircleIcon
+                        strokeWidth={
+                            2.5
+                        }
+                        className="h-5 w-5 text-blue-gray-900"
+                    />
+                ),
+                info: "Integration help",
+            },
+            {
+                icon: (
+                    <CheckCircleIcon
+                        strokeWidth={
+                            2.5
+                        }
+                        className="h-5 w-5 text-blue-gray-900"
+                    />
+                ),
+                info: "40GB Cloud storage",
+            },
+            {
+                icon: (
+                    <CheckCircleIcon
+                        strokeWidth={
+                            2.5
+                        }
+                        className="h-5 w-5 text-blue-gray-900"
+                    />
+                ),
+                info: "Support team full assist",
+            },
+        ],
+    },
+    {
+        category: 'python',
+        level: 'medium',
+        duration: ['4', 'month'
+        ],
+        status: false,
+        title: "Python - Intermediate",
+        image: "",
+        desc: `todo`,
+        price: [
+            "$",
+            "299",
+            "year"
+        ],
+        options: [
+            {
+                icon: (
+                    <CheckCircleIcon className="h-5 w-5 text-blue-gray-900" />
+                ),
+                info: "Complete documentation",
+            },
+            {
+                icon: (
+                    <CheckCircleIcon className="h-5 w-5 text-blue-gray-900" />
+                ),
+                info: "Working materials in Sketch",
+            },
+            {
+                icon: (
+                    <CheckCircleIcon
+                        strokeWidth={
+                            2.5
+                        }
+                        className="h-5 w-5 text-blue-gray-900"
+                    />
+                ),
+                info: "Integration help",
+            },
+            {
+                icon: (
+                    <CheckCircleIcon
+                        strokeWidth={
+                            2.5
+                        }
+                        className="h-5 w-5 text-blue-gray-900"
+                    />
+                ),
+                info: "40GB Cloud storage",
+            },
+            {
+                icon: (
+                    <CheckCircleIcon
+                        strokeWidth={
+                            2.5
+                        }
+                        className="h-5 w-5 text-blue-gray-900"
+                    />
+                ),
+                info: "Support team full assist",
+            },
+        ],
+    },
+    {
+        category: 'python',
+        level: 'medium',
+        duration: ['4', 'month'
+        ],
+        status: false,
+        title: "Python - Advanced",
+        image: "",
+        desc: `todo`,
+        price: [
+            "$",
+            "299",
+            "year"
+        ],
+        options: [
+            {
+                icon: (
+                    <CheckCircleIcon className="h-5 w-5 text-blue-gray-900" />
+                ),
+                info: "Complete documentation",
+            },
+            {
+                icon: (
+                    <CheckCircleIcon className="h-5 w-5 text-blue-gray-900" />
+                ),
+                info: "Working materials in Sketch",
+            },
+            {
+                icon: (
+                    <CheckCircleIcon
+                        strokeWidth={
+                            2.5
+                        }
+                        className="h-5 w-5 text-blue-gray-900"
+                    />
+                ),
+                info: "Integration help",
+            },
+            {
+                icon: (
+                    <CheckCircleIcon
+                        strokeWidth={
+                            2.5
+                        }
+                        className="h-5 w-5 text-blue-gray-900"
+                    />
+                ),
+                info: "40GB Cloud storage",
+            },
+            {
+                icon: (
+                    <CheckCircleIcon
+                        strokeWidth={
+                            2.5
+                        }
+                        className="h-5 w-5 text-blue-gray-900"
+                    />
+                ),
+                info: "Support team full assist",
+            },
+        ],
+    },
+];

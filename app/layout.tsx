@@ -1,8 +1,6 @@
 import React, { ReactNode } from 'react'
 import '@/assets/styles/globals.css'
 
-import ThemeToggle from '@/components/ToggleTheme';
-
 import NavBar from '@/components/Header/Navbar';
 import Banner from '@/components/Header/Banner';
 
@@ -12,12 +10,13 @@ export const metadata = {
 }
 
 import LWRFooter from '@/components/Footer/LWRFooter'
+import SearchWindow from '@/components/Hero/SearchWindow';
 
 
 const HomeLayout: React.FC<({ children: ReactNode })> = ({ children }) => {
   return (
     <html lang="en">
-      <body suppressHydrationWarning className='dark:bg-lwr-dark-blue p-2'>
+      <body>
         <Banner />
         <NavBar />
         <main>
