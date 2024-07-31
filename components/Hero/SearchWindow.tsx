@@ -21,9 +21,6 @@ import { MinusCircleIcon } from "@heroicons/react/24/outline";
 
 import coursesData from '@/components/courses.json'
 
-/*
-@type {{[key: string]: StaticImageData}}
-*/
 
 type ImageMapType = {
     [key: string]: StaticImageData;
@@ -172,7 +169,7 @@ interface CourseCardProps {
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ id, title, desc, price, options }) => {
-    const bgimage: StaticImageData = title in ImageMap ? ImageMap[title] : placeholder;
+    const bgimage: StaticImageData = ImageMap[title] || placeholder;
     return (
         <Card key={id} variant="gradient" color="white">
             <CardHeader
