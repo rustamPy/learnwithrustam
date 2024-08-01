@@ -21,9 +21,7 @@ const handler = NextAuth({
     },
     callbacks: {
         async session({ session, user }) {
-            console.log(user)
             session.user.id = user.id;
-            session.user.phone = user.phone;
             return session;
         },
     }
