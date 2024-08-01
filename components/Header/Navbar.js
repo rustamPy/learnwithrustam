@@ -186,7 +186,7 @@ function NavList() {
 
 export default function NavbarWithMegaMenu() {
     const [openNav, setOpenNav] = useState(false);
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
 
     const handleWindowResize = () =>
         window.innerWidth >= 960 && setOpenNav(false);
@@ -216,24 +216,25 @@ export default function NavbarWithMegaMenu() {
                     <NavList />
                 </div>
                 <div className="hidden gap-2 lg:flex">
-                    {!session ?
-                        <>
-                            <Button variant="filled" size="sm" onClick={() => signIn("github")}>
-                                Sign in Github
-                            </Button>
-
-                            <Button variant="filled" size="sm" onClick={() => signIn("google")}>
-                                Sign in Google
-                            </Button>
-                        </>
-                        :
+                    {status === "loading" ? (
+                        <div>Loading...</div> // Or a loading spinner
+                    ) : status === "authenticated" ? (
                         <>
                             <UserProfile user={session} />
                             <Button variant="filled" size="sm" onClick={() => signOut({ callbackUrl: '/' })}>
                                 Sign out
                             </Button>
                         </>
-                    }
+                    ) : (
+                        <>
+                            <Button variant="filled" size="sm" onClick={() => signIn("github")}>
+                                Sign in Github
+                                    </Button>
+                            <Button variant="filled" size="sm" onClick={() => signIn("google")}>
+                                Sign in Google
+                            </Button>
+                        </>
+                    )}
                     <ThemeToggle />
                 </div>
                 <IconButton

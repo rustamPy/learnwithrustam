@@ -1,30 +1,27 @@
-'use client';
-import React, { ReactNode } from 'react'
+import React from 'react'
 import '@/assets/styles/globals.css'
-
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "./api/auth/[...nextauth]/route"
+import ClientSessionProvider from './SessionProvider'
 import NavBar from '@/components/Header/Navbar';
 import Banner from '@/components/Header/Banner';
-import { SessionProvider } from "next-auth/react";
-
 import LWRFooter from '@/components/Footer/LWRFooter'
 
+export default async function RootLayout({ children }) {
+  const session = await getServerSession(authOptions)
 
-const HomeLayout = ({ children }) => {
   return (
     <html lang="en">
       <body>
-        <SessionProvider>
-
+        <ClientSessionProvider session={session}>
           <Banner />
           <NavBar />
           <main>
             {children}
           </main>
           <LWRFooter />
-        </SessionProvider>
+        </ClientSessionProvider>
       </body>
     </html>
   )
 }
-
-export default HomeLayout
