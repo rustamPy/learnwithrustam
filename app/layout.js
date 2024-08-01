@@ -9,18 +9,18 @@ import { SessionProvider } from "next-auth/react";
 import LWRFooter from '@/components/Footer/LWRFooter'
 
 
-const HomeLayout: React.FC<({ children: ReactNode })> = ({ children }) => {
+const HomeLayout = ({ children }) => {
   return (
     <html lang="en">
       <body>
         <SessionProvider>
 
-        <Banner />
-        <NavBar />
-        <main>
-          {children}
-        </main>
-        <LWRFooter />
+          <Banner />
+          <NavBar />
+          <main>
+            {children}
+          </main>
+          <LWRFooter />
         </SessionProvider>
       </body>
     </html>

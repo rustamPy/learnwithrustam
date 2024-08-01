@@ -224,7 +224,7 @@ export default function NavbarWithMegaMenu() {
 
                             <Button variant="filled" size="sm" onClick={() => signIn("google")}>
                                 Sign in Google
-                            </Button> 
+                            </Button>
                         </>
                         :
                         <>
@@ -269,11 +269,8 @@ export default function NavbarWithMegaMenu() {
     );
 }
 
-interface UserProfileProps {
-    user: Any;
-}
 
-const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
+const UserProfile = ({ user }) => {
     return (
         <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
             <a href="/profile"><img src={user.user?.image} width={30} style={{ borderRadius: 50 }} /></a>

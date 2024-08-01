@@ -2,8 +2,8 @@
 import { FaMoon, FaSun } from "react-icons/fa";
 import React, { useEffect, useState } from 'react';
 
-const ThemeToggle: React.FC = () => {
-    const [theme, setTheme] = useState<string>(() => {
+const ThemeToggle = () => {
+    const [theme, setTheme] = useState(() => {
         if (typeof window !== 'undefined') {
             return localStorage.getItem('theme') || 'light';
         }

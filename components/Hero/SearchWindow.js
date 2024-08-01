@@ -25,32 +25,16 @@ import coursesData from '@/public/courses.json'
 import { useSession } from 'next-auth/react';
 
 
-type ImageMapType = {
-    [key: string]: StaticImageData;
-};
-
-const IMAGEMAP: ImageMapType = {
+const IMAGEMAP = {
     'General IT - Entry': coreItInter,
     'Python Entry': pythonEntry,
 }
 
-interface Course {
-    id: number;
-    title: string;
-    desc: string;
-    level: string;
-    price: string[];
-    options: {
-        plus: string[];
-        minus: string[];
-    };
-}
+const SearchWindow = () => {
+    const [filteredCourses, setFilteredCourses] = useState([]);
 
-const SearchWindow: React.FC = () => {
-    const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
-
-    const handleSearch = ({ query, courseType }: { query: string; courseType: string }) => {
-        let filtered = coursesData as Course[];
+    const handleSearch = ({ query, courseType }) => {
+        let filtered = coursesData;
 
         if (courseType !== 'all') {
             filtered = filtered.filter(course => course.level === courseType);
@@ -85,7 +69,7 @@ const SearchWindow: React.FC = () => {
                 <SearchFunc onSearch={handleSearch} />
                 <div className="grid gap-x-10 gap-y-8 md:grid-cols-2 lg:grid-cols-3 max-w-5xl mt-10">
                     {filteredCourses.map(course => (
-                        <CourseCard 
+                        <CourseCard
                             key={course.id}
                             id={course.id}
                             title={course.title}
@@ -101,15 +85,11 @@ const SearchWindow: React.FC = () => {
 }
 
 
-interface SearchFuncProps {
-    onSearch: ({ query, courseType }: { query: string; courseType: string }) => void;
-}
+const SearchFunc = ({ onSearch }) => {
+    const [courseType, setCourseType] = useState('all');
+    const [query, setQuery] = useState('');
 
-const SearchFunc: React.FC<SearchFuncProps> = ({ onSearch }) => {
-    const [courseType, setCourseType] = useState<string>('all');
-    const [query, setQuery] = useState<string>('');
-
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
         onSearch({ query, courseType });
     };
@@ -158,21 +138,8 @@ const SearchFunc: React.FC<SearchFuncProps> = ({ onSearch }) => {
     )
 }
 
-
-// Course Card - a box with course information
-interface CourseCardProps {
-    id: number;
-    title: string;
-    desc: string;
-    price: string[];
-    options: {
-        plus: string[];
-        minus: string[];
-    };
-}
-
-const CourseCard: React.FC<CourseCardProps> = async ({ id, title, desc, price, options }) => {
-    const bgimage: StaticImageData = IMAGEMAP[title] || placeholder;
+const CourseCard = async ({ id, title, desc, price, options }) => {
+    const bgimage = IMAGEMAP[title] || placeholder;
     const { data: session } = useSession();
     return (
         <Card key={id} variant="gradient" color="white">
@@ -253,7 +220,7 @@ const CourseCard: React.FC<CourseCardProps> = async ({ id, title, desc, price, o
                 {session ?
                     <a href={`/course/${id}`}>
 
-                <Button fullWidth variant="gradient" color="gray">
+                        <Button fullWidth variant="gradient" color="gray">
                             Details
                         </Button> </a>
                     :
