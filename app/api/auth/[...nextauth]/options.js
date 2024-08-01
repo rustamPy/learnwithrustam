@@ -17,7 +17,6 @@ export const authOptions = {
     pages: {
         signIn: "/auth/signin",
     },
-    secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
         async session({ session, user }) {
             session.user.id = user.id;
