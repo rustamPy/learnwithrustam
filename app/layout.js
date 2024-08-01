@@ -1,7 +1,7 @@
 import React from 'react'
 import '@/assets/styles/globals.css'
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "./api/auth/[...nextauth]/route"
+import { authOptions } from "@/app/api/auth/[...nextauth]/options"
 import ClientSessionProvider from './SessionProvider'
 import NavBar from '@/components/Header/Navbar';
 import Banner from '@/components/Header/Banner';
