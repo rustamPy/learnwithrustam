@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 
+
 import {
     Card,
     CardHeader,
@@ -19,14 +20,16 @@ import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { MinusCircleIcon } from "@heroicons/react/24/outline";
 
 
-import coursesData from '@/components/courses.json'
+import coursesData from '@/public/courses.json'
+
+import { useSession } from 'next-auth/react';
 
 
 type ImageMapType = {
     [key: string]: StaticImageData;
 };
 
-const ImageMap: ImageMapType = {
+export const IMAGEMAP: ImageMapType = {
     'General IT - Entry': coreItInter,
     'Python Entry': pythonEntry,
 }
@@ -168,8 +171,9 @@ interface CourseCardProps {
     };
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ id, title, desc, price, options }) => {
-    const bgimage: StaticImageData = ImageMap[title] || placeholder;
+const CourseCard: React.FC<CourseCardProps> = async ({ id, title, desc, price, options }) => {
+    const bgimage: StaticImageData = IMAGEMAP[title] || placeholder;
+    const { data: session } = useSession();
     return (
         <Card key={id} variant="gradient" color="white">
             <CardHeader
@@ -246,15 +250,22 @@ const CourseCard: React.FC<CourseCardProps> = ({ id, title, desc, price, options
                         </li>
                     ))}
                 </ul>
+                {session ?
+                    <a href={`/course/${id}`}>
+
                 <Button fullWidth variant="gradient" color="gray">
-                    details
-                </Button>
+                            Details
+                        </Button> </a>
+                    :
+
+                    <Button fullWidth variant="gradient" color="gray" disabled>
+                        For Authorized Users Only
+                    </Button>
+                }
             </CardBody>
         </Card>
 
     );
 }
-
-
 
 export default SearchWindow;

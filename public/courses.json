@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "category": "general",
+    "level": "intermediate",
+    "duration": [
+      "3",
+      "month"
+    ],
+    "topics": [
+      {
+        "title": "Networking Fundamentals",
+        "details": [
+          "Review of basic networking concepts",
+          "Introduction to advanced networking protocols",
+          "Subnetting and IP addressing",
+          "Hands-on network configuration exercises"
+        ]
+      }
+    ],
+    "status": true,
+    "title": "General IT - Intermediate",
+    "desc": "This course is designed to provide you with a solid foundation in Information Technology(IT) concepts and practices. It serves as an essential stepping stone for individuals who are new to the world of IT",
+    "price": [
+      "₼",
+      "70",
+      "month"
+    ],
+    "options": {
+      "plus": [
+        "effective"
+      ],
+      "minus": [
+        "expensive"
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "category": "general",
+    "level": "intermediate",
+    "duration": [
+      "3",
+      "month"
+    ],
+    "topics": [
+      {
+        "title": "Networking Fundamentals",
+        "details": [
+          "Review of basic networking concepts",
+          "Introduction to advanced networking protocols",
+          "Subnetting and IP addressing",
+          "Hands-on network configuration exercises"
+        ]
+      }
+    ],
+    "status": true,
+    "title": "Python Entry",
+    "image": "",
+    "desc": "This course is designed to provide you with a solid foundation in Information Technology(IT) concepts and practices. It serves as an essential stepping stone for individuals who are new to the world of IT",
+    "price": [
+      "$",
+      "129",
+      "year"
+    ],
+    "options": {
+      "plus": [
+        "effective"
+      ],
+      "minus": [
+        "expensive"
+      ]
+    }
+  },
+  {
+    "id": 3,
+    "category": "general",
+    "level": "intermediate",
+    "duration": [
+      "3",
+      "month"
+    ],
+    "topics": [
+      {
+        "title": "Networking Fundamentals",
+        "details": [
+          "Review of basic networking concepts",
+          "Introduction to advanced networking protocols",
+          "Subnetting and IP addressing",
+          "Hands-on network configuration exercises"
+        ]
+      }
+    ],
+    "status": true,
+    "title": "Python Entry",
+    "image": "",
+    "desc": "This course is designed to provide you with a solid foundation in Information Technology(IT) concepts and practices. It serves as an essential stepping stone for individuals who are new to the world of IT",
+    "price": [
+      "$",
+      "129",
+      "year"
+    ],
+    "options": {
+      "plus": [
+        "effective"
+      ],
+      "minus": [
+        "expensive"
+      ]
+    }
+  }
+]

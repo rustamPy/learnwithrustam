@@ -1,5 +1,7 @@
 'use client';
 import React, { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import {
     Navbar,
     Collapse,
@@ -28,7 +30,6 @@ import {
     SunIcon,
     TagIcon,
     UserGroupIcon,
-    MoonIcon
 } from "@heroicons/react/24/solid";
 import ThemeToggle from '@/components/ToggleTheme';
 
@@ -162,7 +163,7 @@ function NavList() {
         <List className="mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
             <Typography
                 as="a"
-                href="#"
+                href="/"
                 variant="small"
                 className="font-bold text-lwr-dark-blue"
             >
@@ -171,12 +172,12 @@ function NavList() {
             <NavListMenu />
             <Typography
                 as="a"
-                href="#"
+                href="/contact"
                 variant="small"
                 className="font-bold text-lwr-dark-blue"
             >
                 <ListItem className="flex items-center gap-2 py-2 pr-4">
-                    Contact Us
+                    Contact Me
                 </ListItem>
             </Typography>
         </List>
@@ -185,6 +186,7 @@ function NavList() {
 
 export default function NavbarWithMegaMenu() {
     const [openNav, setOpenNav] = useState(false);
+    const { data: session } = useSession();
 
     const handleWindowResize = () =>
         window.innerWidth >= 960 && setOpenNav(false);
@@ -204,7 +206,7 @@ export default function NavbarWithMegaMenu() {
             <div className="flex items-center justify-between text-blue-gray-900 dark:text-white">
                 <Typography
                     as="a"
-                    href="#"
+                    href="/"
                     variant="h1"
                     className="mr-4 cursor-pointer py-1.5 lg:ml-2 dark:text-lwr-dark-blue text-2xl"
                 >
@@ -214,12 +216,24 @@ export default function NavbarWithMegaMenu() {
                     <NavList />
                 </div>
                 <div className="hidden gap-2 lg:flex">
-                    <Button variant="filled" size="sm" className="text-lwr-orange-100">
-                        Log In
-                    </Button>
-                    <Button variant="filled" size="sm">
-                        Sign In
-                    </Button>
+                    {!session ?
+                        <>
+                            <Button variant="filled" size="sm" onClick={() => signIn("github")}>
+                                Sign in Github
+                            </Button>
+
+                            <Button variant="filled" size="sm" onClick={() => signIn("google")}>
+                                Sign in Google
+                            </Button> 
+                        </>
+                        :
+                        <>
+                            <UserProfile user={session} />
+                            <Button variant="filled" size="sm" onClick={() => signOut({ callbackUrl: '/' })}>
+                                Sign out
+                            </Button>
+                        </>
+                    }
                     <ThemeToggle />
                 </div>
                 <IconButton
@@ -237,15 +251,32 @@ export default function NavbarWithMegaMenu() {
             <Collapse open={openNav}>
                 <NavList />
                 <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
-                    <Button variant="filled" size="sm" className="text-lwr-orange-100" fullWidth>
-                        Log In
-                    </Button>
-                    <Button variant="filled" size="sm" fullWidth>
-                        Sign In
-                    </Button>
+                    {!session ?
+                        <Button variant="filled" size="sm" onClick={() => signIn("github")}>
+                            Sign in
+                        </Button> :
+                        <>
+                            <UserProfile user={session} />
+                            <Button variant="filled" size="sm" onClick={() => signOut({ callbackUrl: '/' })}>
+                                Sign out
+                            </Button>
+                        </>
+                    }
                     <ThemeToggle />
                 </div>
             </Collapse>
         </Navbar>
     );
+}
+
+interface UserProfileProps {
+    user: Any;
+}
+
+const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
+    return (
+        <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+            <a href="/profile"><img src={user.user?.image} width={30} style={{ borderRadius: 50 }} /></a>
+        </div>
+    )
 }
