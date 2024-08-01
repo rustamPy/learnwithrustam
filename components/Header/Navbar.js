@@ -252,9 +252,16 @@ export default function NavbarWithMegaMenu() {
                 <NavList />
                 <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
                     {!session ?
-                        <Button variant="filled" size="sm" onClick={() => signIn("github")}>
-                            Sign in
-                        </Button> :
+                        <>
+                            <Button variant="filled" size="sm" onClick={() => signIn("github")}>
+                                Sign in Github
+                            </Button>
+
+                            <Button variant="filled" size="sm" onClick={() => signIn("google")}>
+                                Sign in Google
+                            </Button>
+                        </>
+                        :
                         <>
                             <UserProfile user={session} />
                             <Button variant="filled" size="sm" onClick={() => signOut({ callbackUrl: '/' })}>
