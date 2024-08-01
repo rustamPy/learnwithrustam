@@ -6,7 +6,7 @@ import coreItInter from '@/assets/images/cit_inter.jpg'
 import pythonEntry from '@/assets/images/python_entry.jpg'
 import placeholder from '@/assets/images/placeholder.webp'
 
-export const IMAGEMAP = {
+const IMAGEMAP = {
     'General IT - Entry': coreItInter,
     'Python Entry': pythonEntry,
 }
