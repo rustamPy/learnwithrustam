@@ -22,7 +22,6 @@ const authOptions = {
     callbacks: {
         async session({ session, user }) {
             session.user.id = user.id;
-            session.user.phone = user.phone; // Include phone number
             return session;
         },
     },
