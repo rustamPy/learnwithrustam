@@ -29,7 +29,7 @@ type ImageMapType = {
     [key: string]: StaticImageData;
 };
 
-export const IMAGEMAP: ImageMapType = {
+const IMAGEMAP: ImageMapType = {
     'General IT - Entry': coreItInter,
     'Python Entry': pythonEntry,
 }

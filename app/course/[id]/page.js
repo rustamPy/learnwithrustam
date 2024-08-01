@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from "react";
 
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import coreItInter from '@/assets/images/cit_inter.jpg'
 import pythonEntry from '@/assets/images/python_entry.jpg'
 import placeholder from '@/assets/images/placeholder.webp'
@@ -10,14 +10,7 @@ export const IMAGEMAP = {
     'General IT - Entry': coreItInter,
     'Python Entry': pythonEntry,
 }
-import {
-    Card,
-    CardHeader,
-    CardBody,
-    Typography,
-    Button,
-    Link
-} from "@material-tailwind/react";
+
 
 export default function CoursePage({ params }) {
 
