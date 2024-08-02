@@ -190,7 +190,7 @@ export default function NavbarWithMegaMenu() {
                     as="a"
                     href="/"
                     variant="h1"
-                    className="mr-4 cursor-pointer py-1.5 lg:ml-2 dark:text-lwr-dark-blue text-2xl"
+                    className="mr-4 cursor-pointer py-1.5 lg:ml-2 dark:text-lwr-dark-blue text-2xl font-extrabold"
                 >
                     LEARN {<span className="text-lwr-orange-100">{'{W}'}</span>} RUSTAM
                 </Typography>
@@ -209,12 +209,12 @@ export default function NavbarWithMegaMenu() {
                         ) : (
                             <>
                                 <Button variant="filled" size="sm" onClick={() => signIn("github")}>
-                                        Sign in with GitHub
-                                    </Button>
-                                    <Button variant="filled" size="sm" onClick={() => signIn("google")}>
-                                        Sign in with Google
-                                    </Button>
-                                </>
+                                    Sign in with GitHub
+                                </Button>
+                                <Button variant="filled" size="sm" onClick={() => signIn("google")}>
+                                    Sign in with Google
+                                </Button>
+                            </>
                         )
                     }
                     <ThemeToggle />

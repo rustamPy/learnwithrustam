@@ -12,13 +12,10 @@ export function BannerSection() {
         <>
             {show && session &&
                 <section className="mx-auto dark:bg-lwr-light-grey">
-                    <div className="mb-4 shadow-sm px-4 py-2 flex bg-gray-900 flex-wrap lg:items-center lg:justify-center justify-end gap-x-6">
+                    <div className="bg-gradient-to-r from-black via-lwr-orange-100 to-black mb-4 shadow-4xl px-4 py-2 flex flex-wrap lg:items-center lg:justify-center justify-end gap-x-6">
                         <Typography variant="h6" color="white" className="text-md">
                             Welcome, {session.user?.name}
                         </Typography>
-                        <Button color="white" size="sm">
-                            <a href="https://learnwithrustam.com" target="blank">check out the old one</a>
-                        </Button>
                         <IconButton color="white" variant="text" onClick={() => setShow(false)}>
                             <XMarkIcon className="text-white w-4 h-4 stroke-2" />
                         </IconButton>

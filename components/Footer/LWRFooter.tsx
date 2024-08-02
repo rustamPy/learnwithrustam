@@ -1,6 +1,7 @@
 'use client';
 import { Typography } from "@material-tailwind/react";
 import Image from "next/image";
+import footerIcon from "@/assets/images/footer_icon.png"
 
 const LINKS = [
     {
@@ -25,14 +26,15 @@ const LWRFooter = () => {
             <div className="mx-auto w-full max-w-7xl px-8">
                 <div className="grid grid-cols-1 justify-between gap-4 md:grid-cols-2">
                     <div className="flex flex-col items-start mb-6 md:mb-0">
-                        <Typography variant="h5" className="mb-4">
-                            Learn {'{w}'} Rustam™
-                    </Typography>
-                        <img
-                            src={"https://sportsfarmlwr.com/cdn/shop/files/Smallerlogo_9f490171-8531-4580-9bd3-371cc3dc1406.png?v=1714150511"} // Replace with your image path or URL
-                            alt="Learn with Rustam Logo"
-                            className="w-32 h-auto"
-                        />
+                        <Typography
+                            as="a"
+                            href="/"
+                            variant="h1"
+                            className="cursor-pointer py-1.5 dark:text-white text-base font-extrabold"
+                        >
+                            LEARN {<span className="text-lwr-orange-100">{'{W}'}</span>} RUSTAM
+                        </Typography>
+                        <Image src={footerIcon} alt="footericon" width={100} height={100} style={{ opacity: 0.3 }} />
                     </div>
 
 
@@ -67,7 +69,7 @@ const LWRFooter = () => {
                         variant="small"
                         className="mb-4 text-center font-normal text-blue-gray-900 md:mb-0 dark:text-white"
                     >
-                        &copy; {currentYear} React. All Rights Reserved.
+                        &copy; {currentYear} LWR. All Rights Reserved.
                     </Typography>
                     <div className="flex gap-4 text-blue-gray-900 sm:justify-center">
                         <Typography as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100">
