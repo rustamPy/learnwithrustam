@@ -198,25 +198,25 @@ export default function NavbarWithMegaMenu() {
                     <NavList />
                 </div>
                 <div className="hidden gap-2 lg:flex">
-                    {status === "loading" ? (
-                        <div>Loading...</div> // Or a loading spinner
-                    ) : status === "authenticated" ? (
-                        <>
-                            <UserProfile user={session} />
-                            <Button variant="filled" size="sm" onClick={() => signOut({ callbackUrl: '/' })}>
-                                Sign out
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                            <Button variant="filled" size="sm" onClick={() => signIn("github")}>
-                                Sign in Github
+                    {
+                        status === "loading" || status === "authenticated" ? (
+                            <>
+                                <UserProfile user={session} />
+                                <Button variant="filled" size="sm" onClick={() => signOut({ callbackUrl: '/' })}>
+                                    Sign out
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Button variant="filled" size="sm" onClick={() => signIn("github")}>
+                                        Sign in with GitHub
                                     </Button>
-                            <Button variant="filled" size="sm" onClick={() => signIn("google")}>
-                                Sign in Google
-                            </Button>
-                        </>
-                    )}
+                                    <Button variant="filled" size="sm" onClick={() => signIn("google")}>
+                                        Sign in with Google
+                                    </Button>
+                                </>
+                        )
+                    }
                     <ThemeToggle />
                 </div>
                 <IconButton

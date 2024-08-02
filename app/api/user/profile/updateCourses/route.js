@@ -1,8 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import clientPromise from "@/lib/mongodb";
 import { NextResponse } from "next/server";
-import { authOptions } from '@/app/api/auth/[...nextauth]/options'
-
+import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 
 export async function PATCH(request) {
     const session = await getServerSession(authOptions);
@@ -14,24 +13,23 @@ export async function PATCH(request) {
     const client = await clientPromise;
     const db = client.db("test"); // Ensure the correct database is used
 
-    // Extract phoneNumber from the request body
-    const { phone } = await request.json();
-
+    // Extract phoneNumber and courses from the request body
+    const { phone, courses } = await request.json();
 
     try {
         const result = await db.collection("users").updateOne(
-            { email: session.user.email }, // Use email from session to identify the user
-            { $set: { phone } }      // Update the phone field
+            { email: session.user.email },
+            { $set: { courses } }
         );
 
         // Check if a document was modified
         if (result.modifiedCount === 0) {
-            return NextResponse.json({ error: "User not found or phone number not changed" }, { status: 404 });
+            return NextResponse.json({ error: "User not found or data not changed" }, { status: 404 });
         }
 
-        return NextResponse.json({ message: "Phone number updated successfully" });
+        return NextResponse.json({ message: "Data is updated successfully" });
     } catch (error) {
-        console.error("Error updating phone number:", error);
+        console.error("Error updating data:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }

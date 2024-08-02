@@ -22,6 +22,7 @@ export const authOptions = {
         async session({ session, user }) {
             session.user.id = user.id;
             session.user.phone = user.phone;
+            session.user.courses = user.courses;
             return session;
         },
     }

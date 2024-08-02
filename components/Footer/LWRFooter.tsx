@@ -1,5 +1,6 @@
 'use client';
 import { Typography } from "@material-tailwind/react";
+import Image from "next/image";
 
 const LINKS = [
     {
@@ -23,11 +24,18 @@ const LWRFooter = () => {
         <footer className="relative w-full">
             <div className="mx-auto w-full max-w-7xl px-8">
                 <div className="grid grid-cols-1 justify-between gap-4 md:grid-cols-2">
-                    <Typography variant="h5" className="mb-6">
-                        Learn with Rustam
-                        <br />
-
+                    <div className="flex flex-col items-start mb-6 md:mb-0">
+                        <Typography variant="h5" className="mb-4">
+                            Learn {'{w}'} Rustam™
                     </Typography>
+                        <img
+                            src={"https://sportsfarmlwr.com/cdn/shop/files/Smallerlogo_9f490171-8531-4580-9bd3-371cc3dc1406.png?v=1714150511"} // Replace with your image path or URL
+                            alt="Learn with Rustam Logo"
+                            className="w-32 h-auto"
+                        />
+                    </div>
+
+
                     <div className="grid grid-cols-3 justify-between gap-4">
                         {LINKS.map(({ title, items }) => (
                             <ul key={title}>

@@ -1,13 +1,20 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CourseCard } from '@/components/Hero/SearchWindow'
 import { useSession } from 'next-auth/react';
 import courses from '@/public/courses.json'; // Assuming the JSON is in the same directory
 
 const CoursesGrid = () => {
-    const { data: session } = useSession();
+    const { data: session, update } = useSession();
     const coursesPerPage = 4; // Number of courses per page
     const [currentPage, setCurrentPage] = useState(1);
+    const [userCourses, setUserCourses] = useState([]);
+
+    useEffect(() => {
+        if (session?.user?.courses) {
+            setUserCourses(session.user.courses);
+        }
+    }, [session]);
 
     // Calculate total number of pages
     const totalPages = Math.ceil(courses.length / coursesPerPage);
@@ -33,19 +40,61 @@ const CoursesGrid = () => {
             setCurrentPage(currentPage - 1);
         }
     };
+    console.log(userCourses)
+
+    // Function to handle adding or removing a course
+    const toggleCourse = async (courseId) => {
+        let updatedCourses;
+        if (userCourses) {
+            if (userCourses.includes(courseId)) {
+                // Remove course
+                updatedCourses = userCourses.filter(id => id !== courseId);
+            } else {
+                // Add course
+                updatedCourses = [...userCourses, courseId];
+            }
+
+            try {
+                const response = await fetch('/api/user/profile/updateCourses', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ courses: updatedCourses }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to update courses');
+                }
+
+                setUserCourses(updatedCourses);
+                await update(); // Refresh the session data
+
+            } catch (error) {
+                console.error('Error updating courses:', error);
+            }
+        }
+    };
 
     return (
         <div style={{ flexDirection: "column" }} className="p-6 flex items-center lg:mr-24 lg:ml-24">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
                 {currentCourses.map(course => (
-                    <CourseCard
-                        key={course.id}
-                        id={course.id}
-                        title={course.title}
-                        desc={course.desc}
-                        price={course.price}
-                        options={course.options}
-                    />
+                    <div key={course.id} className="relative">
+                        <CourseCard
+                            id={course.id}
+                            title={course.title}
+                            desc={course.desc}
+                            price={course.price}
+                            options={course.options}
+                        />
+                        <button
+                            onClick={() => toggleCourse(course.id)}
+                            className={`absolute top-2 right-2 px-4 py-2 text-white font-bold rounded-md ${userCourses.includes(course.id) ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'}`}
+                        >
+                            {userCourses.includes(course.id) ? 'Unsave' : 'Save'}
+                        </button>
+                    </div>
                 ))}
             </div>
 
@@ -62,17 +111,18 @@ const CoursesGrid = () => {
                     Previous
                 </button>
 
-                <div className="flex items-center gap-2"></div>
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                        className={`relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg ${currentPage === index + 1 ? 'bg-gray-900 text-center align-middle font-sans text-xs font-medium uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none' : 'text-center align-middle font-sans text-xs font-medium uppercase dark:text-white text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'}`}
-                        type="button"
-                        key={index}
-                        onClick={() => goToPage(index + 1)}
-                    >
-                        {index + 1}
-                    </button>
-                ))}
+                <div className="flex items-center gap-2">
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <button
+                            className={`relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg ${currentPage === index + 1 ? 'bg-gray-900 text-center align-middle font-sans text-xs font-medium uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none' : 'text-center align-middle font-sans text-xs font-medium uppercase dark:text-white text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'}`}
+                            type="button"
+                            key={index}
+                            onClick={() => goToPage(index + 1)}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
 
                 <button
                     className="flex items-center gap-2 px-6 py-3 font-sans text-xs font-bold text-center dark:text-white text-gray-900 uppercase align-middle transition-all rounded-lg select-none hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"

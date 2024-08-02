@@ -10,6 +10,15 @@ module.exports = withMT({
         'lwr-solid-grey': '#cccccc',
         'lwr-orange-100': '#F6A426',
         'lwr-orange-200': '#db8606'
+      },
+      keyframes: {
+        scroll: {
+          '0%': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
+      },
+      animation: {
+        scroll: 'scroll 10s linear infinite',
       }
     },
   },
