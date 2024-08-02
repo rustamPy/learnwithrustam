@@ -140,7 +140,7 @@ export default function Profile() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
                     {loading ?
                         selectedCourses.map(v => (
-                            <div className="max-w-full animate-pulse">
+                            <div key={v} className="max-w-full animate-pulse">
                                 <Card className="mt-6 animate-pulse w-64">
                                     <CardHeader
                                         shadow={false}
