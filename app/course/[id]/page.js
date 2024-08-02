@@ -56,18 +56,18 @@ export default function CoursePage({ params }) {
 
     return (
         <section className="relative bg-gradient-to-r from-blue-400 to-purple-500 p-8 mt-10 mb-10">
-            <div className="flex flex-col items-center bg-white shadow-lg rounded-lg p-6">
+            <div className="flex flex-col items-center dark:bg-black bg-white shadow-lg rounded-lg p-6">
                 <Image
                     src={bgimage}
                     alt={course.title}
-                    className="w-72 h-72 mb-4 rounded-lg"
+                    className="w-[20%] h-[20%] mb-4 rounded-lg"
                 />
-                <div className="text-center">
+                <div className="">
                     {/* Course Title */}
-                    <h4 className="text-lg font-semibold mb-2">
+                    <h4 className="text-lg font-semibold mb-2 text-center">
                         <i className="fa-solid fa-monument"></i> Course Title:
                     </h4>
-                    <div className="text-4xl font-bold mb-4">
+                    <div className="text-4xl font-bold mb-4 text-center">
                         <p>
                             <span className="text-red-500">{course.title}</span>
                         </p>
@@ -92,7 +92,7 @@ export default function CoursePage({ params }) {
                         {course.topics.map((topic, index) => (
                             <li key={index}>
                                 <h5 className="font-semibold">{topic.title}</h5>
-                                <ul className="list-disc list-inside ml-6 space-y-2">
+                                <ul className="list-inside ml-6 space-y-2">
                                     {topic.details.map((detail, i) => (
                                         <li key={i}>{detail}</li>
                                     ))}
@@ -114,7 +114,7 @@ export default function CoursePage({ params }) {
                     <h4 className="text-lg font-semibold mb-2">
                         <i className="fa-solid fa-cubes-stacked"></i> Assessment and Grading:
                     </h4>
-                    <p className="mb-4">{course.assessment}</p>
+                    <p className="mb-4">{course.assessments}</p>
 
                     <h4 className="text-lg font-semibold mb-2">
                         <i className="fa-solid fa-hat-wizard"></i> Enrollment Information:

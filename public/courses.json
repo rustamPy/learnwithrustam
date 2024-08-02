@@ -7,20 +7,10 @@
       "3",
       "month"
     ],
-    "topics": [
-      {
-        "title": "Networking Fundamentals",
-        "details": [
-          "Review of basic networking concepts",
-          "Introduction to advanced networking protocols",
-          "Subnetting and IP addressing",
-          "Hands-on network configuration exercises"
-        ]
-      }
-    ],
     "status": true,
     "title": "General IT - Intermediate",
     "desc": "This course is designed to provide you with a solid foundation in Information Technology(IT) concepts and practices. It serves as an essential stepping stone for individuals who are new to the world of IT",
+    "overview": "Here's a broad lesson plan with overarching objectives for an entry-level Python programming course. This plan is intended to span multiple sessions and can be adapted to fit the specific needs and pace of each student:",
     "price": [
       "₼",
       "70",
@@ -37,27 +27,29 @@
   },
   {
     "id": 2,
-    "category": "general",
+    "category": "python",
     "level": "intermediate",
     "duration": [
-      "3",
-      "month"
-    ],
-    "topics": [
-      {
-        "title": "Networking Fundamentals",
-        "details": [
-          "Review of basic networking concepts",
-          "Introduction to advanced networking protocols",
-          "Subnetting and IP addressing",
-          "Hands-on network configuration exercises"
-        ]
-      }
+      "4",
+      "months"
     ],
     "status": true,
     "title": "Python Entry",
-    "image": "",
-    "desc": "This course is designed to provide you with a solid foundation in Information Technology(IT) concepts and practices. It serves as an essential stepping stone for individuals who are new to the world of IT",
+    "desc": "This course serves as an entrance to coding and software development through the Python. It encompasses the fundamental principles of the Python programming language and delves into the core concepts of Object-Oriented Programming (OOP).",
+    "overview": "Here's a broad lesson plan with overarching objectives for an entry-level Python programming course. This plan is intended to span multiple sessions and can be adapted to fit the specific needs and pace of each student:",
+    "format": "The course is conducted entirely online through the Slack platform. The lessons will be hands-on and highly engaging and interactive. One group will have maximum 5 students . Each lesson has a duration of approximately 50 minutes , which is roughly equivalent to one hour, twice per week. The Python - Entry course typically spans a period of 2 months, although the exact duration may vary from one student to another. Each student will receive personalized attention and support throughout the course.",
+    "materials": "Given that the lessons will be held online, as previously mentioned, course materials will be accessible through screen sharing. These materials consist of PowerPoint presentations that are regularly updated with the latest information. The key essentials for students will include owning a laptop and having a notebook at their disposal. The software they are going to use during lessons will be absolutely free to use.",
+    "assessments": "Quizzes: (every week) Regular quizzes will be administered to assess students' comprehension of course material and to reinforce key concepts. These quizzes will typically cover recent topics and serve as a form of ongoing assessment.",
+    "topics": [
+      {
+        "title": "Introduce the world of programming and Python as a programming language",
+        "details": [
+          "a",
+          "b"
+        ]
+      }
+    ],
+    "instructor": "Rustam Karimov",
     "price": [
       "$",
       "129",
@@ -80,21 +72,127 @@
       "3",
       "month"
     ],
-    "topics": [
-      {
-        "title": "Networking Fundamentals",
-        "details": [
-          "Review of basic networking concepts",
-          "Introduction to advanced networking protocols",
-          "Subnetting and IP addressing",
-          "Hands-on network configuration exercises"
-        ]
-      }
-    ],
     "status": true,
     "title": "Python Entry",
     "image": "",
     "desc": "This course is designed to provide you with a solid foundation in Information Technology(IT) concepts and practices. It serves as an essential stepping stone for individuals who are new to the world of IT",
+    "price": [
+      "$",
+      "129",
+      "year"
+    ],
+    "options": {
+      "plus": [
+        "effective"
+      ],
+      "minus": [
+        "expensive"
+      ]
+    }
+  },
+  {
+    "id": 4,
+    "category": "python",
+    "level": "intermediate",
+    "duration": [
+      "4",
+      "months"
+    ],
+    "status": true,
+    "title": "Python Entry",
+    "desc": "This course serves as an entrance to coding and software development through the Python. It encompasses the fundamental principles of the Python programming language and delves into the core concepts of Object-Oriented Programming (OOP).",
+    "overview": "Here's a broad lesson plan with overarching objectives for an entry-level Python programming course. This plan is intended to span multiple sessions and can be adapted to fit the specific needs and pace of each student:",
+    "format": "The course is conducted entirely online through the Slack platform. The lessons will be hands-on and highly engaging and interactive. One group will have maximum 5 students . Each lesson has a duration of approximately 50 minutes , which is roughly equivalent to one hour, twice per week. The Python - Entry course typically spans a period of 2 months, although the exact duration may vary from one student to another. Each student will receive personalized attention and support throughout the course.",
+    "materials": "Given that the lessons will be held online, as previously mentioned, course materials will be accessible through screen sharing. These materials consist of PowerPoint presentations that are regularly updated with the latest information. The key essentials for students will include owning a laptop and having a notebook at their disposal. The software they are going to use during lessons will be absolutely free to use.",
+    "assessments": "Quizzes: (every week) Regular quizzes will be administered to assess students' comprehension of course material and to reinforce key concepts. These quizzes will typically cover recent topics and serve as a form of ongoing assessment.",
+    "topics": [
+      {
+        "title": "Introduce the world of programming and Python as a programming language",
+        "details": [
+          "a",
+          "b"
+        ]
+      }
+    ],
+    "instructor": "Rustam Karimov",
+    "price": [
+      "$",
+      "129",
+      "year"
+    ],
+    "options": {
+      "plus": [
+        "effective"
+      ],
+      "minus": [
+        "expensive"
+      ]
+    }
+  },
+  {
+    "id": 5,
+    "category": "python",
+    "level": "intermediate",
+    "duration": [
+      "4",
+      "months"
+    ],
+    "status": true,
+    "title": "Python Entry",
+    "desc": "This course serves as an entrance to coding and software development through the Python. It encompasses the fundamental principles of the Python programming language and delves into the core concepts of Object-Oriented Programming (OOP).",
+    "overview": "Here's a broad lesson plan with overarching objectives for an entry-level Python programming course. This plan is intended to span multiple sessions and can be adapted to fit the specific needs and pace of each student:",
+    "format": "The course is conducted entirely online through the Slack platform. The lessons will be hands-on and highly engaging and interactive. One group will have maximum 5 students . Each lesson has a duration of approximately 50 minutes , which is roughly equivalent to one hour, twice per week. The Python - Entry course typically spans a period of 2 months, although the exact duration may vary from one student to another. Each student will receive personalized attention and support throughout the course.",
+    "materials": "Given that the lessons will be held online, as previously mentioned, course materials will be accessible through screen sharing. These materials consist of PowerPoint presentations that are regularly updated with the latest information. The key essentials for students will include owning a laptop and having a notebook at their disposal. The software they are going to use during lessons will be absolutely free to use.",
+    "assessments": "Quizzes: (every week) Regular quizzes will be administered to assess students' comprehension of course material and to reinforce key concepts. These quizzes will typically cover recent topics and serve as a form of ongoing assessment.",
+    "topics": [
+      {
+        "title": "Introduce the world of programming and Python as a programming language",
+        "details": [
+          "a",
+          "b"
+        ]
+      }
+    ],
+    "instructor": "Rustam Karimov",
+    "price": [
+      "$",
+      "129",
+      "year"
+    ],
+    "options": {
+      "plus": [
+        "effective"
+      ],
+      "minus": [
+        "expensive"
+      ]
+    }
+  },
+  {
+    "id": 6,
+    "category": "python",
+    "level": "intermediate",
+    "duration": [
+      "4",
+      "months"
+    ],
+    "status": true,
+    "title": "Python Entry",
+    "desc": "This course serves as an entrance to coding and software development through the Python. It encompasses the fundamental principles of the Python programming language and delves into the core concepts of Object-Oriented Programming (OOP).",
+    "overview": "Here's a broad lesson plan with overarching objectives for an entry-level Python programming course. This plan is intended to span multiple sessions and can be adapted to fit the specific needs and pace of each student:",
+    "format": "The course is conducted entirely online through the Slack platform. The lessons will be hands-on and highly engaging and interactive. One group will have maximum 5 students . Each lesson has a duration of approximately 50 minutes , which is roughly equivalent to one hour, twice per week. The Python - Entry course typically spans a period of 2 months, although the exact duration may vary from one student to another. Each student will receive personalized attention and support throughout the course.",
+    "materials": "Given that the lessons will be held online, as previously mentioned, course materials will be accessible through screen sharing. These materials consist of PowerPoint presentations that are regularly updated with the latest information. The key essentials for students will include owning a laptop and having a notebook at their disposal. The software they are going to use during lessons will be absolutely free to use.",
+    "assessments": "Quizzes: (every week) Regular quizzes will be administered to assess students' comprehension of course material and to reinforce key concepts. These quizzes will typically cover recent topics and serve as a form of ongoing assessment.",
+    "topics": [
+      {
+        "title": "Introduce the world of programming and Python as a programming language",
+        "details": [
+          "a",
+          "b"
+        ]
+      }
+    ],
+    "instructor": "Rustam Karimov",
     "price": [
       "$",
       "129",

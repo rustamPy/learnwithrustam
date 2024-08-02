@@ -138,7 +138,7 @@ const SearchFunc = ({ onSearch }) => {
     )
 }
 
-const CourseCard = async ({ id, title, desc, price, options }) => {
+export const CourseCard = ({ id, title, desc, price, options }) => {
     const bgimage = IMAGEMAP[title] || placeholder;
     const { data: session } = useSession();
     return (

@@ -35,18 +35,20 @@ import ThemeToggle from '@/components/ToggleTheme';
 
 const navListMenuItems = [
     {
-        title: "Products",
-        description: "Find the perfect solution for your needs.",
-        icon: SquaresPlusIcon,
+        title: "Courses",
+        description: "Find the perfect course for yourself",
+        href: "/courses",
+        icon: RectangleGroupIcon,
     },
     {
-        title: "About Us",
+        title: "About Me",
         description: "Meet and learn about our dedication",
+        href: "/about",
         icon: UserGroupIcon,
     },
     {
         title: "Blog",
-        description: "Find the perfect solution for your needs.",
+        description: "Find your answers here",
         icon: Bars4Icon,
     },
     {
@@ -55,38 +57,18 @@ const navListMenuItems = [
         icon: SunIcon,
     },
     {
-        title: "Support",
-        description: "Reach out to us for assistance or inquiries",
-        icon: GlobeAmericasIcon,
-    },
-    {
         title: "Contact",
         description: "Find the perfect solution for your needs.",
         icon: PhoneIcon,
-    },
-    {
-        title: "News",
-        description: "Read insightful articles, tips, and expert opinions.",
-        icon: NewspaperIcon,
-    },
-    {
-        title: "Products",
-        description: "Find the perfect solution for your needs.",
-        icon: RectangleGroupIcon,
-    },
-    {
-        title: "Special Offers",
-        description: "Explore limited-time deals and bundles",
-        icon: TagIcon,
-    },
+    }
 ];
 
 function NavListMenu() {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
     const renderItems = navListMenuItems.map(
-        ({ icon, title, description }, key) => (
-            <a href="#" key={key}>
+        ({ icon, title, description, href }, key) => (
+            <a href={href} key={key}>
                 <MenuItem className="flex items-center gap-3 rounded-lg">
                     <div className="flex items-center justify-center rounded-lg p-2 ">
                         {" "}

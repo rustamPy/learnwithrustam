@@ -15,8 +15,8 @@ const IndexHero = () => {
                 <Typography variant="h6" className='uppercase text-lwr-dark-blue dark:text-white'>Online IT Classes</Typography>
                 <Typography variant="h1" className='uppercase text-lwr-dark-blue dark:text-white font-bold'>
                     <span className='text-lwr-orange-100'>Join. </span>
-                    Learn.
                     Connect.
+                    Learn.
                 </Typography>
 
                 {/* Hero Carousel is carousel of images with admin */}

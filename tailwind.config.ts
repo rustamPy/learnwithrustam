@@ -5,7 +5,7 @@ module.exports = withMT({
   theme: {
     extend: {
       colors: {
-        'lwr-dark-blue': '#101828FF',
+        'lwr-dark-blue': '#112346ff',
         'lwr-light-grey': '#cccccc6e',
         'lwr-solid-grey': '#cccccc',
         'lwr-orange-100': '#F6A426',
