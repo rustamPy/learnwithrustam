@@ -81,8 +81,8 @@ function Deck() {
 
 export default function App() {
     return (
-        <div className={styles.container}>
+        <section className={`${styles.container} mt-[-60px] mb-2 bg-gradient-to-r from-blue-400 to-purple-500 p-72`}>
             <Deck />
-        </div>
+        </section>
     );
 }

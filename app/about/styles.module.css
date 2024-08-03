@@ -1,5 +1,4 @@
 .container {
-    background: lightblue;
     cursor: url('https://uploads.codesandbox.io/uploads/user/b3e56831-8b98-4fee-b941-0e27f39883ab/Ad1_-cursor.png') 39 39,
         auto;
     display: flex;
@@ -24,10 +23,10 @@
     background-size: auto 85%;
     background-repeat: no-repeat;
     background-position: center center;
-    width: 45vh;
-    max-width: 150px;
+    width: 46vh;
+        max-width: 240px;
     height: 85vh;
-    max-height: 285px;
+    max-height: 420px;
     will-change: transform;
     border-radius: 10px;
     box-shadow: 0 12.5px 100px -10px rgba(50, 50, 73, 0.4), 0 10px 10px -10px rgba(50, 50, 73, 0.3);

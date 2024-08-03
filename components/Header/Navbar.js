@@ -184,7 +184,7 @@ export default function NavbarWithMegaMenu() {
 
     return (
         // max-w-screen-xl
-        <Navbar blurred style={{ border: 0 }} className={`sticky mx-auto m-auto px-4 py-2 top-2 z-10 dark:bg-lwr-light-grey`}>
+        <Navbar blurred style={{ border: 0 }} className={`sticky lg:mx-auto lg:m-auto px-4 py-2 top-2 dark:bg-lwr-light-grey z-50`}>
             <div className="flex items-center justify-between text-blue-gray-900 dark:text-white">
                 <Typography
                     as="a"
