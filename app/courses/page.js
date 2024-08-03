@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { CourseCard } from '@/components/Hero/SearchWindow'
 import { useSession } from 'next-auth/react';
-import courses from '@/public/courses.json'; // Assuming the JSON is in the same directory
+import courses from '@/public/courses.json';
+
 
 const CoursesGrid = () => {
     const { data: session, update } = useSession();
@@ -77,7 +78,8 @@ const CoursesGrid = () => {
     };
 
     return (
-        <div style={{ flexDirection: "column" }} className="p-6 flex items-center lg:mr-24 lg:ml-24">
+        <div className="flex flex-col p-6 items-center lg:mr-24 lg:ml-24">
+            <img src='imgs/courses_1.png' width={'200px'} />
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
                 {currentCourses.map(course => (
                     <div key={course.id} className="relative">

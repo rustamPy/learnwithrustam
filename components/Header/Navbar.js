@@ -208,12 +208,11 @@ export default function NavbarWithMegaMenu() {
                             </>
                         ) : (
                             <>
-                                <Button variant="filled" size="sm" onClick={() => signIn("github")}>
-                                    Sign in with GitHub
-                                </Button>
-                                <Button variant="filled" size="sm" onClick={() => signIn("google")}>
-                                    Sign in with Google
-                                </Button>
+                                <a href="/signin">
+                                    <Button variant="filled" size="sm">
+                                        Sign in
+                                    </Button>
+                                </a>
                             </>
                         )
                     }
@@ -234,23 +233,23 @@ export default function NavbarWithMegaMenu() {
             <Collapse open={openNav}>
                 <NavList />
                 <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
-                    {!session ?
-                        <>
-                            <Button variant="filled" size="sm" onClick={() => signIn("github")}>
-                                Sign in Github
-                            </Button>
-
-                            <Button variant="filled" size="sm" onClick={() => signIn("google")}>
-                                Sign in Google
-                            </Button>
-                        </>
-                        :
-                        <>
-                            <UserProfile user={session} />
-                            <Button variant="filled" size="sm" onClick={() => signOut({ callbackUrl: '/' })}>
-                                Sign out
-                            </Button>
-                        </>
+                    {
+                        status === "loading" || status === "authenticated" ? (
+                            <>
+                                <UserProfile user={session} />
+                                <Button variant="filled" size="sm" onClick={() => signOut({ callbackUrl: '/' })}>
+                                    Sign out
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <a href="/signin">
+                                    <Button variant="filled" size="sm">
+                                        Sign in
+                                    </Button>
+                                </a>
+                            </>
+                        )
                     }
                     <ThemeToggle />
                 </div>
