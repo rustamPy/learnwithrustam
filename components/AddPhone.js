@@ -57,9 +57,9 @@ const AddPhoneNumber = () => {
         <div className="text-xs">
             {session?.user?.phone ? (
                 <div className="flex items-center space-x-2">
-                    <p className="text-xs text-gray-700">
-                        <i>Your phone number:</i> {session.user.phone}
-                    </p>
+                    <li className="text-lg font-medium text-gray-900">
+                        Your phone number: {session.user.phone}
+                    </li>
                     <button
                         onClick={() => setIsEditing(true)}
                         className="text-lwr-orange-100 hover:text-lwr-orange-200"

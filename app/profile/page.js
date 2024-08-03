@@ -64,7 +64,7 @@ export default function Profile() {
                 <ul className="list-disc list-inside mb-6">
                     <li className="text-lg font-medium text-gray-900">Name: {session.user.name}</li>
                     <li className="text-lg font-medium text-gray-900">Email: {session.user.email}</li>
-                    <li><Phone showNumber={true} /></li>
+                    <Phone showNumber={true} />
                 </ul>
                 <button
                     onClick={() => signOut({ callbackUrl: '/' })}
