@@ -6,10 +6,23 @@ import { useSession } from "next-auth/react";
 
 export function BannerSection() {
     const [show, setShow] = useState(true);
+    const [showVersion, setShowVersion] = useState(true)
     const { data: session } = useSession();
 
     return (
         <>
+            {showVersion &&
+                <section className="mx-auto bg-[#cb3c3c]">
+                    <div className="shadow-4xl px-4 py-2 flex flex-wrap lg:items-center lg:justify-center justify-end gap-x-6">
+                        <Typography variant="h6" color="white" className="text-md">
+                            beta 0.1
+                        </Typography>
+                        <IconButton className="ml-auto" color="white" variant="text" onClick={() => setShowVersion(false)}>
+                            <XMarkIcon className="text-white w-4 h-4 stroke-2" />
+                        </IconButton>
+                    </div>
+                </section>
+            }
             {show && session &&
                 <section className="mx-auto dark:bg-lwr-light-grey">
                     <div className="bg-gradient-to-r from-black via-lwr-orange-100 to-black mb-4 shadow-4xl px-4 py-2 flex flex-wrap lg:items-center lg:justify-center justify-end gap-x-6">
