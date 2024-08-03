@@ -1,6 +1,6 @@
-# Learn with Rustam (LWR)
+# Learn with Rustam (LWR) - [link](https://learnwithrustam-exp.vercel.app)
 
-![Version](https://img.shields.io/badge/version-0.1.12-blue)
+![Version](https://img.shields.io/badge/version-0.1.-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Node.js](https://img.shields.io/badge/node-%3E%3D%2014.0.0-brightgreen)
 ![React](https://img.shields.io/badge/react-%5E17.0.0-blue)
@@ -113,20 +113,22 @@ cd lwr
 4. **Make Your Changes** : Implement your changes or new features.
 5. **Commit Your Changes**
 
-    ```
-    git commit -m "Add your message here"
-    ```
-
+   ```
+   git commit -m "Add your message here"
+   ```
 6. **Push to Your Fork**
-    ```
-    git push origin feature/your-feature-name
-    ```
+
+   ```
+   git push origin feature/your-feature-name
+   ```
 7. **Submit a Pull Request**: Go to the original repository on GitHub and create a pull request from your forked repository.
 
 ## License
+
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Contact
+
 For any inquiries or feedback, please contact us at:
 
 **Email**: karimov.rustam.live@gmail.com
