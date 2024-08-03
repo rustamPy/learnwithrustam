@@ -6,7 +6,7 @@
 ![React](https://img.shields.io/badge/react-%5E17.0.0-blue)
 ![Next.js](https://img.shields.io/badge/next-%5E12.0.0-lightgrey)
 
-Learn with Rustam (LWR) is an online platform for interactive courses and educational content. Our goal is to make learning accessible and engaging for everyone. The website offers a variety of courses across different subjects, allowing users to learn at their own pace and save their progress.
+Learn with Rustam (LWR) is an innovative online platform offering interactive courses and educational content designed to make learning accessible and engaging for everyone. Whether you're looking to master a new skill or explore a new subject, LWR provides a wide variety of courses across different disciplines, allowing users to learn at their own pace while saving their progress.
 
 <img src="image/README/footer_icon.png" alt="Description" width="100">
 
