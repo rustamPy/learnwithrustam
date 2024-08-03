@@ -55,12 +55,12 @@ export default function CoursePage({ params }) {
     }
 
     return (
-        <section className="relative bg-gradient-to-r from-blue-400 to-purple-500 p-8 mt-10 mb-10">
-            <div className="flex flex-col items-center dark:bg-black bg-white shadow-lg rounded-lg p-6">
+        <section className="relative bg-gradient-to-r from-blue-400 to-purple-500 p-2 lg:p-8 mt-[-76px]">
+            <div className="flex flex-col items-center dark:bg-black bg-white shadow-lg rounded-lg p-6 lg:mt-16 mt-24 mb-12">
                 <Image
                     src={bgimage}
                     alt={course.title}
-                    className="w-[20%] h-[20%] mb-4 rounded-lg"
+                    className="w-90 lg:w-80 mb-4 rounded-lg"
                 />
                 <div className="">
                     {/* Course Title */}

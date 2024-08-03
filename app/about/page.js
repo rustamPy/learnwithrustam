@@ -81,8 +81,8 @@ function Deck() {
 
 export default function App() {
     return (
-        <div className={styles.container}>
+        <section className={`${styles.container} mt-[300px] bg-lwr-orange-100`}>
             <Deck />
-        </div>
+        </section>
     );
 }
