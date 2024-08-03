@@ -12,7 +12,7 @@ const IMAGEMAP = {
     'Python Entry': pythonEntry,
 }
 
-import { SignInWindow } from "@/app/signin/page";
+import SignInWindow from "@/components/SignInWindow";
 import { Typography } from "@material-tailwind/react";
 
 
