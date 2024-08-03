@@ -129,6 +129,4 @@ This project is licensed under the MIT License. See the LICENSE file for details
 ## Contact
 For any inquiries or feedback, please contact us at:
 
-Email: karimov.rustam.live@gmail.com
-Twitter: @LearnWithRustam
-Website: Learn with Rustam
+**Email**: karimov.rustam.live@gmail.com
