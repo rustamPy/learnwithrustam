@@ -78,17 +78,19 @@ The application will be available at http://localhost:3000.
 The project structure is organized as follows:
 
 ```
-lwr/
+learnwithrustam/
 ├── public/                  # Static assets like images and icons
-├── src/
-│   ├── components/          # Reusable React components
-│   ├── pages/               # Next.js pages
-│   ├── styles/              # CSS and Tailwind styles
-│   ├── hooks/               # Custom hooks
-│   ├── context/             # Context providers for global state
-│   ├── utils/               # Utility functions and constants
-│   └── api/                 # API route handlers
-└── README.md
+├── app/
+│   ├── about/               # About page for information about LWR
+│   ├── course/[id]/         # Dynamic routes for individual course details
+│   ├── profile/             # User profile management
+│   ├── signin/              # User sign-in and authentication
+│   ├── courses/             # List of all available courses
+│   └── api/                 # API route handlers for backend logic
+│   ├── layout.js            # Main layout component for consistent styling and structure
+│   └── page.js              # Default landing page and routing setup
+├── components/              # Reusable React components
+└── README.md                # Project overview and setup instructions
 ```
 
 ## Contributing
