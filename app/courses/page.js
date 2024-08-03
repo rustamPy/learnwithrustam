@@ -1,9 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { CourseCard } from '@/components/Hero/SearchWindow'
+import { CourseCard } from '@/components/Hero/SearchWindow';
 import { useSession } from 'next-auth/react';
 import courses from '@/public/courses.json';
-
+import { Typography } from '@material-tailwind/react';
 
 const CoursesGrid = () => {
     const { data: session, update } = useSession();
@@ -41,7 +41,6 @@ const CoursesGrid = () => {
             setCurrentPage(currentPage - 1);
         }
     };
-    console.log(userCourses)
 
     // Function to handle adding or removing a course
     const toggleCourse = async (courseId) => {
@@ -77,9 +76,53 @@ const CoursesGrid = () => {
         }
     };
 
+    // Generate the pagination numbers with ellipses
+    const getPaginationNumbers = () => {
+        const pages = [];
+        const maxPageNumbersToShow = 5;
+        const sidePages = 2; // Number of pages to show on each side of the current page
+
+        if (totalPages <= maxPageNumbersToShow) {
+            for (let i = 1; i <= totalPages; i++) {
+                pages.push(i);
+            }
+        } else {
+            if (currentPage <= sidePages + 1) {
+                // Near the start
+                for (let i = 1; i <= sidePages + 2; i++) {
+                    pages.push(i);
+                }
+                pages.push('...');
+                pages.push(totalPages);
+            } else if (currentPage >= totalPages - sidePages) {
+                // Near the end
+                pages.push(1);
+                pages.push('...');
+                for (let i = totalPages - sidePages - 1; i <= totalPages; i++) {
+                    pages.push(i);
+                }
+            } else {
+                // Somewhere in the middle
+                pages.push(1);
+                pages.push('...');
+                for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+                    pages.push(i);
+                }
+                pages.push('...');
+                pages.push(totalPages);
+            }
+        }
+
+        return pages;
+    };
+
+    const paginationNumbers = getPaginationNumbers();
+
     return (
         <div className="flex flex-col p-6 items-center lg:mr-24 lg:ml-24">
             <img src='imgs/courses_1.png' width={'200px'} />
+            <Typography variant="h5" textGradient className='mb-4 text-lwr-orange-100' > Available Courses</Typography>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
                 {currentCourses.map(course => (
                     <div key={course.id} className="relative">
@@ -114,15 +157,21 @@ const CoursesGrid = () => {
                 </button>
 
                 <div className="flex items-center gap-2">
-                    {Array.from({ length: totalPages }, (_, index) => (
-                        <button
-                            className={`relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg ${currentPage === index + 1 ? 'bg-gray-900 text-center align-middle font-sans text-xs font-medium uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none' : 'text-center align-middle font-sans text-xs font-medium uppercase dark:text-white text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'}`}
-                            type="button"
-                            key={index}
-                            onClick={() => goToPage(index + 1)}
-                        >
-                            {index + 1}
-                        </button>
+                    {paginationNumbers.map((page, index) => (
+                        typeof page === 'number' ? (
+                            <button
+                                className={`relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg ${currentPage === page ? 'bg-gray-900 text-center align-middle font-sans text-xs font-medium uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none' : 'text-center align-middle font-sans text-xs font-medium uppercase dark:text-white text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'}`}
+                                type="button"
+                                key={index}
+                                onClick={() => goToPage(page)}
+                            >
+                                {page}
+                            </button>
+                        ) : (
+                            <span key={index} className="text-center align-middle font-sans text-xs font-medium uppercase dark:text-white text-gray-900">
+                                ...
+                            </span>
+                        )
                     ))}
                 </div>
 

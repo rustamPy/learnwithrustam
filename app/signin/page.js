@@ -14,16 +14,12 @@ import Image from "next/image";
 import AddPhone from '@/components/AddPhone'
 
 
-
-
 // @icons
 import GithubLogo from '@/assets/images/github-mark.png';
 
 
-
-function SignIn() {
+export const SignInWindow = ({ message, image_path, width }) => {
     const { data: session, status } = useSession();
-
 
     return (
         <section className="px-8">
@@ -36,10 +32,10 @@ function SignIn() {
                             className="md:px-24 md:py-14 py-8 border border-gray-300 dark:bg-gray-800 dark:border-none"
                         >
                             <CardHeader shadow={false} floated={false} className="flex flex-col items-center text-center dark:bg-gray-800">
-                                <img src={'imgs/login_1.png'} width={"100px"} alt="login_1" />
+                                <img src={image_path} width={width} alt="login_1" />
 
                                 <Typography className="text-gray-600 text-[18px] font-normal md:max-w-sm dark:text-white">
-                                    You need to sign in to choose courses.
+                                    {message}
                                 </Typography>
                             </CardHeader>
                             <CardBody>
@@ -82,11 +78,11 @@ function SignIn() {
                                         className="text-center mx-auto max-w-[19rem] !font-medium !text-gray-600 "
                                     >
                                         Upon signing in, you consent to abide by our{" "}
-                                        <a href="#" className="text-gray-900 dark:text-white">
+                                        <a href="/signin/terms_and_privacy#terms" className="text-gray-900 dark:text-white">
                                             Terms of Service
                                         </a>{" "}
                                         &{" "}
-                                        <a href="#" className="text-gray-900 dark:text-white">
+                                        <a href="/signin/terms_and_privacy#privacy" className="text-gray-900 dark:text-white">
                                             Privacy Policy.
                                         </a>
                                     </Typography>
@@ -139,6 +135,15 @@ function SignIn() {
             }
 
         </section>
+    )
+}
+
+function SignIn() {
+
+    return (
+        <SignInWindow message={'Please, sign-in to continue'}
+            image_path={'/imgs/login_1.png'}
+            width={"100px"} />
     );
 }
 

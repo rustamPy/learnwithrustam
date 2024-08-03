@@ -16,12 +16,11 @@ import {
 import Phone from '@/components/AddPhone'
 
 import 'react-phone-number-input/style.css'
-import PhoneInput from 'react-phone-number-input'
 import { CourseCard } from '@/components/Hero/SearchWindow'
 import coursesData from '@/public/courses.json'
 
 export default function Profile() {
-    const { data: session, status, update } = useSession();
+    const { data: session } = useSession();
     const [selectedCourses, setSelectedCourses] = useState([1, 2, 3, 4]);
     const [loading, setLoading] = useState(true);
 
