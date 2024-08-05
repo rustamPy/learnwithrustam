@@ -68,7 +68,7 @@ const AddPhoneNumber = () => {
                     </button>
                 </div>
             ) : (
-                <p className="text-xs"><i>Please, add your missing phone number:</i></p>
+                    <p className="text-xs dark:text-white"><i>Please, add your missing phone number (optional):</i></p>
             )}
 
             {(isEditing || !session?.user?.phone) && (

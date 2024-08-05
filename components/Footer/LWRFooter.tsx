@@ -22,7 +22,7 @@ const currentYear = new Date().getFullYear();
 
 const LWRFooter = () => {
     return (
-        <footer className="relative w-full">
+        <footer className="relative w-full bg-[#fcfcfc] pt-6 border-t border-[#f6f6f6]">
             <div className="mx-auto w-full max-w-7xl px-8">
                 <div className="grid grid-cols-1 justify-between gap-4 md:grid-cols-2">
                     <div className="flex flex-col items-start mb-6 md:mb-0">

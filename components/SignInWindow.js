@@ -98,7 +98,7 @@ const SignInWindow = ({ message, image_path, width }) => {
                                 <img src={'imgs/welcome_1.png'} width={"150px"} alt="welcome_1" />
 
                                 <Typography variant="h4" className="text-gray-900 md:max-w-sm dark:text-white">
-                                    Welcome,
+                                    Hey there,
                                 </Typography>
                                 <Typography variant="h2" color="blue" textGradient className="md:max-w-sm dark:text-white">
                                     {session.user?.name}
@@ -106,9 +106,6 @@ const SignInWindow = ({ message, image_path, width }) => {
 
                                 {!session.user.phone ?
                                     (<div className="flex flex-col items-center">
-                                        <Typography>
-                                            Add your phone number (optional):
-                                        </Typography>
                                         <AddPhone />
                                         <a href="/">
                                             <Button variant="filled" size="sm" className="bg-lwr-orange-100 mt-4">Continue without adding phone number</Button>
