@@ -117,7 +117,7 @@ const SignInWindow = ({ message, image_path, width }) => {
                                     ) :
                                     <>
 
-                                        <Typography variant="lead" className="mb-2">
+                                        <Typography variant="lead" className="mb-2 dark:text-white">
                                             You can now view course details, register for them, and directly reach out to me.
                                         </Typography>
                                         <a href="/">
