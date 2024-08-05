@@ -107,9 +107,12 @@ const SignInWindow = ({ message, image_path, width }) => {
                                 {!session.user.phone ?
                                     (<div className="flex flex-col items-center">
                                         <Typography>
-                                            Before we continue, you need to add your phone number:
+                                            Add your phone number (optional):
                                         </Typography>
                                         <AddPhone />
+                                        <a href="/">
+                                            <Button variant="filled" size="sm" className="bg-lwr-orange-100 mt-4">Continue without adding phone number</Button>
+                                        </a>
                                     </div>
                                     ) :
                                     <>
