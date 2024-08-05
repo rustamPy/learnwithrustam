@@ -31,7 +31,7 @@ const ThemeToggle = () => {
 
     return (
         <span onClick={toggleTheme} className="p-2 rounded">
-            {theme === 'light' ? <FaMoon className="text-lwr-dark-blue dark:text-white" /> : <FaSun className="text-lwr-dark-blue dark:text-white" />}
+            {theme === 'light' ? <FaMoon className="text-lwr-blue-500 dark:text-white" /> : <FaSun className="text-lwr-blue-500 dark:text-white" />}
         </span>
     );
 };

@@ -109,7 +109,7 @@ function NavListMenu() {
                 <MenuHandler>
                     <Typography as="div" variant="small" className="font-bold">
                         <ListItem
-                            className="flex items-center gap-2 py-2 pr-4 font-bold text-lwr-dark-blue"
+                            className="flex items-center gap-2 py-2 pr-4 font-bold text-lwr-blue-500"
                             selected={isMenuOpen || isMobileMenuOpen}
                             onClick={() => setIsMobileMenuOpen((cur) => !cur)}
                         >
@@ -127,7 +127,7 @@ function NavListMenu() {
                         </ListItem>
                     </Typography>
                 </MenuHandler>
-                <MenuList style={{ border: 0 }} className="hidden max-w-screen-xl rounded-xl lg:block text-lwr-dark-blue dark:bg-lwr-solid-grey">
+                <MenuList style={{ border: 0 }} className="hidden max-w-screen-xl rounded-xl lg:block text-lwr-blue-500 dark:bg-lwr-gray-300">
                     <ul className="grid grid-cols-3 gap-y-2 outline-none outline-0">
                         {renderItems}
                     </ul>
@@ -147,21 +147,37 @@ function NavList() {
                 as="a"
                 href="/"
                 variant="small"
-                className="font-bold text-lwr-dark-blue"
+                className="font-bold text-lwr-blue-500"
             >
                 <ListItem className="flex items-center gap-2 py-2 pr-4">Home</ListItem>
             </Typography>
-            <NavListMenu />
+            <Typography
+                as="a"
+                href="#features"
+                variant="small"
+                className="font-bold text-lwr-blue-500"
+            >
+                <ListItem className="flex items-center gap-2 py-2 pr-4">Features</ListItem>
+            </Typography>
             <Typography
                 as="a"
                 href="/contact"
                 variant="small"
-                className="font-bold text-lwr-dark-blue"
+                className="font-bold text-lwr-blue-500"
             >
                 <ListItem className="flex items-center gap-2 py-2 pr-4">
                     Contact Me
                 </ListItem>
             </Typography>
+            <Typography
+                as="a"
+                href="#together"
+                variant="small"
+                className="font-bold text-lwr-blue-500"
+            >
+                <ListItem className="flex items-center gap-2 py-2 pr-4">Bring Together</ListItem>
+            </Typography>
+            <NavListMenu />
         </List>
     );
 }
@@ -184,13 +200,13 @@ export default function NavbarWithMegaMenu() {
 
     return (
         // max-w-screen-xl
-        <Navbar blurred style={{ border: 0 }} className={`sticky lg:mx-auto lg:m-auto px-4 py-2 top-2 dark:bg-lwr-light-grey z-50`}>
+        <Navbar blurred className={`border-0 sticky lg:mx-auto lg:m-auto px-4 py-2 top-2 dark:bg-lwr-gray-200 z-50`}>
             <div className="flex items-center justify-between text-blue-gray-900 dark:text-white">
                 <Typography
                     as="a"
                     href="/"
                     variant="h1"
-                    className="mr-4 cursor-pointer py-1.5 lg:ml-2 dark:text-lwr-dark-blue text-2xl font-extrabold"
+                    className="mr-4 cursor-pointer py-1.5 lg:ml-2 text-lwr-blue-500 text-2xl font-extrabold"
                 >
                     LEARN {<span className="text-lwr-orange-100">{'{W}'}</span>} RUSTAM
                 </Typography>
@@ -220,7 +236,7 @@ export default function NavbarWithMegaMenu() {
                 </div>
                 <IconButton
                     variant="text"
-                    className="lg:hidden dark:text-lwr-dark-blue"
+                    className="lg:hidden dark:text-lwr-blue-500"
                     onClick={() => setOpenNav(!openNav)}
                 >
                     {openNav ? (

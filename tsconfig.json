@@ -39,6 +39,8 @@
 "app/loading.js",
 "app/not-found.js",
 "app/page.js"
+,
+"components/Footer/LWRFooter.jsx"
 ],
   "exclude": ["node_modules"]
 }
