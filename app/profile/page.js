@@ -4,9 +4,16 @@ import { useSession, signOut } from "next-auth/react";
 import { useState, useEffect } from "react";
 
 
-
+import Image from "next/image";
+import empty from "@/public/imgs/empty.png"
+import SignInWindow from '@/components/SignInWindow';
 
 import CoursesGrid from '@/components/CoursesGrid';
+
+const ColorMap = {
+    'student': 'green',
+    'parent': 'lwr-blue'
+}
 
 import { AddPhoneNumber, AddWorkTitle, AddAboutMe, UpdateStatus } from '@/components/UserProfileUtils'
 
@@ -32,12 +39,9 @@ export default function Profile() {
     if (!session) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-gray-100">
-                <div className="text-center">
-                    <h1 className="text-2xl font-bold mb-4">You are not authenticated</h1>
-                    <a href="/signin" className="text-blue-500 hover:underline">
-                        Sign In
-                    </a>
-                </div>
+                <SignInWindow message={'Please, sign-in to continue'}
+                    image_path={'/imgs/login_1.png'}
+                    width={"100px"} />
             </div>
         );
     }
@@ -49,8 +53,9 @@ export default function Profile() {
                 <div class="container mx-auto py-8">
                     <div class="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
                         <div class="col-span-4 sm:col-span-3">
-                            <div class="bg-white shadow rounded-lg p-6">
+                            <div class={`bg-${session.user.userStatus ? ColorMap[session.user.userStatus] : 'white'}-100 shadow rounded-lg p-6`}>
                                 <div class="flex flex-col items-center">
+                                    <UpdateStatus />
                                     <img
                                         src={session.user.image || '/default-avatar.png'}
                                         alt="User Avatar"
@@ -83,12 +88,18 @@ export default function Profile() {
                                 <p class="text-gray-700 break-words overflow-auto">
                                     <AddAboutMe />
                                 </p>
+                                {selectedCourses.length === 0 ?
+                                    <div className="flex flex-col items-center">
+                                        <h2 class="text-xl font-bold mt-6 mb-4"> No courses added</h2>
+                                        <Image src={empty} width={200} height={200} />
+                                    </div>
+                                    :
+                                    <div className="flex flex-col items-center">
+                                        <h2 class="text-xl font-bold mt-6 mb-4">{`Selected courses (${selectedCourses.length})`}</h2>
+                                        <CoursesGrid specificCourses={selectedCourses} cardsPerPage={3} />
+                                    </div>
+                                }
 
-                                <UpdateStatus />
-
-
-                                <h2 class="text-xl font-bold mt-6 mb-4">{`Selected courses (${selectedCourses.length})`}</h2>
-                                <CoursesGrid specificCourses={selectedCourses} cardsPerPage={3} />
                             </div>
                         </div>
                     </div>

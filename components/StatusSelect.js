@@ -1,4 +1,5 @@
 'use client';
+
 import React from 'react';
 import {
     Menu,
@@ -11,6 +12,8 @@ import {
 } from '@material-tailwind/react';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { CursorArrowRaysIcon } from '@heroicons/react/24/solid';
+
+
 
 const menuItems = [
     {
@@ -25,12 +28,12 @@ const menuItems = [
     }
 ];
 
-export const StatusSelect = ({ placeholder, value, onChange, onSubmit }) => {
+export const StatusSelect = ({ placeholder, value, onChange, onSubmit, locked = undefined }) => {
     const [openMenu, setOpenMenu] = React.useState(false);
-
     const handleSelect = (selectedValue) => {
+
         onChange(selectedValue);
-        onSubmit();
+        onSubmit(selectedValue);
         setOpenMenu(false);
     };
 
@@ -63,10 +66,10 @@ export const StatusSelect = ({ placeholder, value, onChange, onSubmit }) => {
                     {menuItems.map(({ title, description, value: itemValue }) => (
                         <MenuItem
                             key={itemValue}
-                            onClick={
-                                () => handleSelect(itemValue)
-                            }
+                            onClick={() => handleSelect(itemValue)}
+                            disabled={locked === 'student'}
                         >
+
                             <Typography variant="h6" color="blue-gray" className="mb-1">
                                 {title}
                             </Typography>

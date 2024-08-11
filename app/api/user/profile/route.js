@@ -20,6 +20,7 @@ export async function PATCH(request) {
     // Build the update object dynamically
     const updateData = {};
 
+
     if (worktitle) updateData.worktitle = worktitle;
     if (phone) updateData.phone = phone;
     if (courses) updateData.courses = courses;
@@ -39,6 +40,13 @@ export async function PATCH(request) {
         // Check if a document was modified
         if (result.modifiedCount === 0) {
             return NextResponse.json({ error: "User not found or data not changed" }, { status: 404 });
+        }
+
+        const currentUser = await db.collection("users").findOne({ email: session.user.email });
+
+        // Check if the user is trying to change from 'student' to something else
+        if (currentUser.userStatus === 'student' && userStatus && userStatus !== 'student') {
+            return NextResponse.json({ error: "Unauthorized status change" }, { status: 403 });
         }
 
         return NextResponse.json({ message: "Data is updated successfully" });

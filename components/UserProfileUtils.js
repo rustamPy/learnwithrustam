@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Button } from '@material-tailwind/react';
+import { badge, Button } from '@material-tailwind/react';
 import PhoneInput from 'react-phone-number-input';
 import { useSession } from 'next-auth/react';
 import { FaEdit } from 'react-icons/fa';
 import { StatusSelect } from '@/components/StatusSelect';
+
+import { AttentionWindow } from '@/components/AttentionWindow'
 
 import 'react-phone-number-input/style.css'; // Import the default styles
 
@@ -14,8 +16,9 @@ const EditableField = ({ fieldKey, apiEndpoint, placeholder, inputType = 'line' 
     const [message, setMessage] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const { data: session, update } = useSession();
+    const [isAttentionWindowOpen, setIsAttentionWindowOpen] = useState(false);
 
-    console.log(value)
+    console.log(`VALUE ${value}`)
 
     useEffect(() => {
         if (session?.user?.[fieldKey]) {
@@ -24,9 +27,16 @@ const EditableField = ({ fieldKey, apiEndpoint, placeholder, inputType = 'line' 
         }
     }, [session, fieldKey]);
 
-    const handleSubmit = async (event = undefined) => {
+    const handleSubmit = async (newValue = undefined, event = undefined) => {
         if (event) {
             event.preventDefault();
+        }
+        const valueToSubmit = newValue !== undefined ? newValue : value;
+
+        if (session?.user?.userStatus === 'student' && fieldKey === 'userStatus' && valueToSubmit !== 'student') {
+            setIsAttentionWindowOpen(true);
+            await update(); // Refetch session data
+            return;
         }
         try {
             const response = await fetch(apiEndpoint, {
@@ -34,7 +44,7 @@ const EditableField = ({ fieldKey, apiEndpoint, placeholder, inputType = 'line' 
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ [fieldKey]: value }), // Use dynamic field key
+                body: JSON.stringify({ [fieldKey]: valueToSubmit }), // Use dynamic field key
             });
 
             const data = await response.json();
@@ -55,7 +65,29 @@ const EditableField = ({ fieldKey, apiEndpoint, placeholder, inputType = 'line' 
 
     return (
         <>
-            {session?.user?.[fieldKey] || inputType === 'statusMenu' ? (
+            {isAttentionWindowOpen && (
+                <AttentionWindow
+                    title="Warning"
+                    content="Unauthorized status change"
+                    onClose={() => setIsAttentionWindowOpen(false)}
+                />
+            )}
+            <>
+                {fieldKey === 'userStatus' ?
+
+                    <>
+                        <form className="flex items-center space-x-2 mt-1">
+                            <StatusSelect
+                                placeholder={placeholder}
+                                value={value}
+                                onChange={setValue}
+                                onSubmit={handleSubmit}
+                                locked={session.user.userStatus} />
+                            {message && <p className="text-xs text-red-600 ml-2">{message}</p>}
+                        </form>
+
+                    </> :
+                    session?.user?.[fieldKey] ? (
                 <>
                     <>
                         {session.user[fieldKey]}
@@ -93,8 +125,9 @@ const EditableField = ({ fieldKey, apiEndpoint, placeholder, inputType = 'line' 
                         )}
                         {message && <p className="text-xs text-red-600 ml-2">{message}</p>}
                     </form>
-                ) : inputType === 'statusMenu' ? (
-                    <form onSubmit={handleSubmit} className="flex items-center space-x-2 mt-1">
+                    ) :
+                        inputType === 'statusMenu' ? (
+                            <form className="flex items-center space-x-2 mt-1">
                         <StatusSelect
                             placeholder={placeholder}
                             value={value}
@@ -135,6 +168,7 @@ const EditableField = ({ fieldKey, apiEndpoint, placeholder, inputType = 'line' 
                     </form>
                 )
             )}
+        </>
         </>
     );
 };
