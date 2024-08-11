@@ -73,21 +73,7 @@ const EditableField = ({ fieldKey, apiEndpoint, placeholder, inputType = 'line' 
                 />
             )}
             <>
-                {fieldKey === 'userStatus' ?
-
-                    <>
-                        <form className="flex items-center space-x-2 mt-1">
-                            <StatusSelect
-                                placeholder={placeholder}
-                                value={value}
-                                onChange={setValue}
-                                onSubmit={handleSubmit}
-                                locked={session.user.userStatus} />
-                            {message && <p className="text-xs text-red-600 ml-2">{message}</p>}
-                        </form>
-
-                    </> :
-                    session?.user?.[fieldKey] ? (
+                {session?.user?.[fieldKey] ? (
                 <>
                     <>
                         {session.user[fieldKey]}
@@ -128,11 +114,12 @@ const EditableField = ({ fieldKey, apiEndpoint, placeholder, inputType = 'line' 
                     ) :
                         inputType === 'statusMenu' ? (
                             <form className="flex items-center space-x-2 mt-1">
-                        <StatusSelect
-                            placeholder={placeholder}
-                            value={value}
-                            onChange={setValue}
-                            onSubmit={handleSubmit} />
+                                <StatusSelect
+                                    placeholder={placeholder}
+                                    value={value}
+                                    onChange={setValue}
+                                    onSubmit={handleSubmit}
+                                    locked={session.user.userStatus} />
                         {message && <p className="text-xs text-red-600 ml-2">{message}</p>}
                     </form>
                 ) : (
