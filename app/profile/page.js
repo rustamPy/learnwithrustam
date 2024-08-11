@@ -38,7 +38,7 @@ export default function Profile() {
     console.log(selectedCourses)
     if (!session) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-gray-100">
+            <div className="flex items-center justify-center bg-gray-100">
                 <SignInWindow message={'Please, sign-in to continue'}
                     image_path={'/imgs/login_1.png'}
                     width={"100px"} />
