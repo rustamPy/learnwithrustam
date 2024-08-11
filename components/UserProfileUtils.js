@@ -27,14 +27,11 @@ const EditableField = ({ fieldKey, apiEndpoint, placeholder, inputType = 'line' 
         }
     }, [session, fieldKey]);
 
-    const handleSubmit = async (event = undefined, newValue = undefined) => {
+    const handleSubmit = async ({ newValue = undefined, event = undefined } = {}) => {
         if (event) {
             event.preventDefault();
         }
         const valueToSubmit = newValue !== undefined ? newValue : value;
-
-        console.log(`valueToSubmit ${valueToSubmit}`)
-        console.log(`value ${value}`)
 
         if (session?.user?.userStatus === 'student' && fieldKey === 'userStatus' && valueToSubmit !== 'student') {
             setIsAttentionWindowOpen(true);
@@ -77,13 +74,15 @@ const EditableField = ({ fieldKey, apiEndpoint, placeholder, inputType = 'line' 
             )}
             {session?.user?.[fieldKey] ? (
                 fieldKey === 'userStatus' ? (
-                    <StatusSelect
-                        placeholder={placeholder}
-                        value={value}
-                        onChange={setValue}
-                        onSubmit={handleSubmit}
-                        locked={session.user.userStatus}
-                    />
+                    <form className="flex items-center space-x-2 mt-1">
+                        <StatusSelect
+                            placeholder={placeholder}
+                            value={value}
+                            onChange={setValue}
+                            onSubmit={handleSubmit}
+                            locked={session?.user?.userStatus}
+                        />
+                    </form>
                 ) : (
                         <>
                             {session.user[fieldKey]}{' '}

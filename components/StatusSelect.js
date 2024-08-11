@@ -33,7 +33,7 @@ export const StatusSelect = ({ placeholder, value, onChange, onSubmit, locked = 
     const handleSelect = (selectedValue) => {
 
         onChange(selectedValue);
-        onSubmit(selectedValue);
+        onSubmit({ newValue: selectedValue });
         setOpenMenu(false);
     };
 
