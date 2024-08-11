@@ -13,13 +13,27 @@ export async function PATCH(request) {
     const client = await clientPromise;
     const db = client.db("test"); // Ensure the correct database is used
 
-    // Extract phoneNumber and courses from the request body
-    const { phone, courses } = await request.json();
+    // Extract fields to update from the request body
+    const { worktitle, phone, courses, about, userStatus } = await request.json();
+
+
+    // Build the update object dynamically
+    const updateData = {};
+
+    if (worktitle) updateData.worktitle = worktitle;
+    if (phone) updateData.phone = phone;
+    if (courses) updateData.courses = courses;
+    if (about) updateData.about = about;
+    if (userStatus) updateData.userStatus = userStatus;
+
+    if (Object.keys(updateData).length === 0) {
+        return NextResponse.json({ error: "No valid fields provided for update" }, { status: 400 });
+    }
 
     try {
         const result = await db.collection("users").updateOne(
-            { email: session.user.email },
-            { $set: { courses } }
+            { email: session.user.email }, // Use email from session to identify the user
+            { $set: updateData } // Use the dynamically built update object
         );
 
         // Check if a document was modified

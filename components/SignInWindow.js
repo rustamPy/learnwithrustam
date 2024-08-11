@@ -11,7 +11,7 @@ import {
 } from "@material-tailwind/react";
 import Image from "next/image";
 
-import AddPhone from '@/components/AddPhone'
+import { AddPhoneNumber } from '@/components/UserProfileUtils'
 
 
 // @icons
@@ -106,7 +106,7 @@ const SignInWindow = ({ message, image_path, width }) => {
 
                                 {!session.user.phone ?
                                     (<div className="flex flex-col items-center">
-                                        <AddPhone />
+                                        <AddPhoneNumber />
                                         <a href="/">
                                             <Button variant="filled" size="sm" className="bg-lwr-orange-100 mt-4">Continue without adding phone number</Button>
                                         </a>

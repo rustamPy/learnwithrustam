@@ -153,7 +153,7 @@ function NavList() {
             </Typography>
             <Typography
                 as="a"
-                href="#features"
+                href="/#features"
                 variant="small"
                 className="font-bold text-lwr-blue-500"
             >
@@ -171,7 +171,7 @@ function NavList() {
             </Typography>
             <Typography
                 as="a"
-                href="#together"
+                href="/#together"
                 variant="small"
                 className="font-bold text-lwr-blue-500"
             >
