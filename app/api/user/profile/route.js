@@ -42,13 +42,6 @@ export async function PATCH(request) {
             return NextResponse.json({ error: "User not found or data not changed" }, { status: 404 });
         }
 
-        const currentUser = await db.collection("users").findOne({ email: session.user.email });
-
-        // Check if the user is trying to change from 'student' to something else
-        if (currentUser.userStatus === 'student' && userStatus && userStatus !== 'student') {
-            return NextResponse.json({ error: "Unauthorized status change" }, { status: 403 });
-        }
-
         return NextResponse.json({ message: "Data is updated successfully" });
     } catch (error) {
         console.error("Error updating data:", error);
