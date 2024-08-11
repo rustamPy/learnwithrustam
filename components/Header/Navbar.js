@@ -184,93 +184,103 @@ function NavList() {
 
 export default function NavbarWithMegaMenu() {
     const [openNav, setOpenNav] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
     const { data: session, status } = useSession();
 
-    const handleWindowResize = () =>
-        window.innerWidth >= 960 && setOpenNav(false);
 
+    useEffect(() => {   
 
-    useEffect(() => {
-        window.addEventListener("resize", handleWindowResize);
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 90);
+        };
+
+        window.addEventListener('scroll', handleScroll);
 
         return () => {
-            window.removeEventListener("resize", handleWindowResize);
+            window.removeEventListener('scroll', handleScroll);
         };
     }, []);
 
     return (
-        // max-w-screen-xl
-        <Navbar blurred className={`border-0 sticky lg:mx-auto lg:m-auto px-4 py-2 top-2 dark:bg-lwr-gray-200 z-50`}>
-            <div className="flex items-center justify-between text-blue-gray-900 dark:text-white">
-                <Typography
-                    as="a"
-                    href="/"
-                    variant="h1"
-                    className="mr-4 cursor-pointer py-1.5 lg:ml-2 text-lwr-blue-500 text-2xl font-extrabold"
-                >
-                    LEARN {<span className="text-lwr-orange-100">{'{W}'}</span>} RUSTAM
-                </Typography>
-                <div className="hidden lg:block">
+        <>
+            <Navbar
+                blurred
+                className={`border-0 sticky mx-auto transition-all duration-300 ${isScrolled
+                    ? 'top-2 mx-auto rounded-xl px-2 py-2'
+                    : 'top-0 max-w-full px-4 py-4'
+                    } dark:bg-lwr-gray-200 z-50`}
+            >
+                <div className="flex items-center justify-between text-blue-gray-900 dark:text-white">
+                    <Typography
+                        as="a"
+                        href="/"
+                        variant="h1"
+                        className="mr-4 cursor-pointer py-1.5 lg:ml-2 text-lwr-blue-500 text-2xl font-extrabold"
+                    >
+                        LEARN {<span className="text-lwr-orange-100">{'{W}'}</span>} RUSTAM
+                    </Typography>
+                    <div className="hidden lg:block">
+                        <NavList />
+                    </div>
+                    <div className="hidden gap-2 lg:flex">
+                        {
+                            status === "loading" || status === "authenticated" ? (
+                                <>
+                                    <UserProfile user={session} />
+                                    <Button variant="filled" size="sm" onClick={() => signOut({ callbackUrl: '/' })}>
+                                        Sign out
+                                    </Button>
+                                </>
+                            ) : (
+                                <>
+                                    <a href="/signin">
+                                        <Button variant="filled" size="sm">
+                                            Sign in
+                                        </Button>
+                                    </a>
+                                </>
+                            )
+                        }
+                        <ThemeToggle />
+                    </div>
+                    <IconButton
+                        variant="text"
+                        className="lg:hidden dark:text-lwr-blue-500"
+                        onClick={() => setOpenNav(!openNav)}
+                    >
+                        {openNav ? (
+                            <XMarkIcon className="h-6 w-6" strokeWidth={2} />
+                        ) : (
+                            <Bars3Icon className="h-6 w-6" strokeWidth={2} />
+                        )}
+                    </IconButton>
+                </div>
+                <Collapse open={openNav}>
                     <NavList />
-                </div>
-                <div className="hidden gap-2 lg:flex">
-                    {
-                        status === "loading" || status === "authenticated" ? (
-                            <>
-                                <UserProfile user={session} />
-                                <Button variant="filled" size="sm" onClick={() => signOut({ callbackUrl: '/' })}>
-                                    Sign out
-                                </Button>
-                            </>
-                        ) : (
-                            <>
-                                <a href="/signin">
-                                    <Button variant="filled" size="sm">
-                                        Sign in
+                    <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
+                        {
+                            status === "loading" || status === "authenticated" ? (
+                                <>
+                                    <UserProfile user={session} />
+                                    <Button variant="filled" size="sm" onClick={() => signOut({ callbackUrl: '/' })}>
+                                        Sign out
                                     </Button>
-                                </a>
-                            </>
-                        )
-                    }
-                    <ThemeToggle />
-                </div>
-                <IconButton
-                    variant="text"
-                    className="lg:hidden dark:text-lwr-blue-500"
-                    onClick={() => setOpenNav(!openNav)}
-                >
-                    {openNav ? (
-                        <XMarkIcon className="h-6 w-6" strokeWidth={2} />
-                    ) : (
-                        <Bars3Icon className="h-6 w-6" strokeWidth={2} />
-                    )}
-                </IconButton>
-            </div>
-            <Collapse open={openNav}>
-                <NavList />
-                <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
-                    {
-                        status === "loading" || status === "authenticated" ? (
-                            <>
-                                <UserProfile user={session} />
-                                <Button variant="filled" size="sm" onClick={() => signOut({ callbackUrl: '/' })}>
-                                    Sign out
-                                </Button>
-                            </>
-                        ) : (
-                            <>
-                                <a href="/signin">
-                                    <Button variant="filled" size="sm">
-                                        Sign in
-                                    </Button>
-                                </a>
-                            </>
-                        )
-                    }
-                    <ThemeToggle />
-                </div>
-            </Collapse>
-        </Navbar>
+                                </>
+                            ) : (
+                                <>
+                                    <a href="/signin">
+                                        <Button variant="filled" size="sm">
+                                            Sign in
+                                        </Button>
+                                    </a>
+                                </>
+                            )
+                        }
+                        <ThemeToggle />
+                    </div>
+                </Collapse>
+            </Navbar>
+        </>
     );
 }
 

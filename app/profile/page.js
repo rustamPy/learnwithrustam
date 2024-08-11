@@ -23,19 +23,14 @@ import coursesData from '@/public/courses.json'
 export default function Profile() {
     const { data: session } = useSession();
     const [selectedCourses, setSelectedCourses] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-
 
     useEffect(() => {
         if (session && session.user?.courses) {
             const user_courses = session.user?.courses;
             setSelectedCourses(coursesData.filter(course => user_courses.includes(course.id)));
-            setLoading(false);
         }
     }, [])
 
-    console.log(selectedCourses)
     if (!session) {
         return (
             <div className="flex items-center justify-center bg-gray-100">
@@ -49,12 +44,12 @@ export default function Profile() {
     return (
 
         <>
-            <div class="bg-gray-100">
-                <div class="container mx-auto py-8">
-                    <div class="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
-                        <div class="col-span-4 sm:col-span-3">
-                            <div class={`bg-${session.user.userStatus ? ColorMap[session.user.userStatus] : 'white'}-100 shadow rounded-lg p-6`}>
-                                <div class="flex flex-col items-center">
+            <div className="bg-gray-100">
+                <div className="container mx-auto py-8">
+                    <div className="grid grid-cols-4 sm:grid-cols-12 gap-6">
+                        <div className="col-span-4 sm:col-span-4">
+                            <div className={`bg-${session.user.userStatus ? ColorMap[session.user.userStatus] : 'white'}-100 shadow rounded-lg p-6`}>
+                                <div className="flex flex-col items-center">
                                     <UpdateStatus />
                                     <img
                                         src={session.user.image || '/default-avatar.png'}
@@ -62,40 +57,40 @@ export default function Profile() {
                                         className="w-32 h-32 rounded-full border-2 border-gray-300"
                                     />
 
-                                    <h1 class="text-xl font-bold">{session.user.name}</h1>
+                                    <h1 className="text-xl font-bold">{session.user.name}</h1>
                                     <AddWorkTitle />
-                                    <div class="mt-6 flex flex-wrap gap-4 justify-center">
-                                        <a href="#" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Contact</a>
-                                        <a href="#" class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">Resume</a>
+                                    <div className="mt-6 flex flex-wrap gap-4 justify-center">
+                                        <a href="#" className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Contact</a>
+                                        <a href="#" className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">Resume</a>
                                     </div>
                                 </div>
-                                <hr class="my-6 border-t border-gray-300" />
-                                <div class="flex flex-col">
-                                    <span class="text-gray-700 uppercase font-bold tracking-wider mb-2">Contacts:</span>
+                                <hr className="my-6 border-t border-gray-300" />
+                                <div className="flex flex-col">
+                                    <span className="text-gray-700 uppercase font-bold tracking-wider mb-2">Contacts:</span>
                                     <ul>
-                                        <li class="mb-2"><b>Phone:</b> {<AddPhoneNumber />}</li>
-                                        <li class="mb-2"><b>Email:</b> {session.user.email}</li>
-                                        <li class="mb-2">Node.js</li>
-                                        <li class="mb-2">HTML/CSS</li>
-                                        <li class="mb-2">Tailwind Css</li>
+                                        <li className="mb-2"><b>Phone:</b> {<AddPhoneNumber />}</li>
+                                        <li className="mb-2"><b>Email:</b> {session.user.email}</li>
+                                        <li className="mb-2">Node.js</li>
+                                        <li className="mb-2">HTML/CSS</li>
+                                        <li className="mb-2">Tailwind Css</li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-span-4 sm:col-span-9">
-                            <div class="bg-white shadow rounded-lg p-6">
-                                <h2 class="text-xl font-bold mb-4">About Me</h2>
-                                <p class="text-gray-700 break-words overflow-auto">
+                        <div className="col-span-4 sm:col-span-8">
+                            <div className="bg-white shadow rounded-lg p-6">
+                                <h2 className="text-xl font-bold mb-4">About Me</h2>
+                                <p className="text-gray-700 break-words overflow-auto">
                                     <AddAboutMe />
                                 </p>
                                 {selectedCourses.length === 0 ?
                                     <div className="flex flex-col items-center">
-                                        <h2 class="text-xl font-bold mt-6 mb-4"> No courses added</h2>
+                                        <h2 className="text-xl font-bold mt-6 mb-4"> No courses added</h2>
                                         <Image src={empty} width={200} height={200} />
                                     </div>
                                     :
                                     <div className="flex flex-col items-center">
-                                        <h2 class="text-xl font-bold mt-6 mb-4">{`Selected courses (${selectedCourses.length})`}</h2>
+                                        <h2 className="text-xl font-bold mt-6 mb-4">{`Selected courses (${selectedCourses.length})`}</h2>
                                         <CoursesGrid specificCourses={selectedCourses} cardsPerPage={3} />
                                     </div>
                                 }
