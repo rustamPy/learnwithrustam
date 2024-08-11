@@ -51,7 +51,7 @@ export const StatusSelect = ({ placeholder, value, onChange, onSubmit, locked = 
                     />
                 </Button>
             </MenuHandler>
-            <MenuList className="hidden w-[36rem] grid-cols-7 gap-3 overflow-visible lg:grid">
+            <MenuList className="grid-cols-7 gap-3 overflow-visible lg:grid">
                 <Card
                     color="gray"
                     shadow={false}
