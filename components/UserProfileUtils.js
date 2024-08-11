@@ -72,19 +72,26 @@ const EditableField = ({ fieldKey, apiEndpoint, placeholder, inputType = 'line' 
                     onClose={() => setIsAttentionWindowOpen(false)}
                 />
             )}
-            <>
-                {session?.user?.[fieldKey] ? (
-                <>
-                    <>
-                        {session.user[fieldKey]}
-                    </> {' '}
-                    <button
-                        onClick={() => setIsEditing(true)}
-                        className="text-lwr-orange-100 hover:text-lwr-orange-200"
-                    >
-                        <FaEdit className="h-3 w-3" />
-                    </button>
-                </>
+            {session?.user?.[fieldKey] ? (
+                fieldKey === 'userStatus' ? (
+                    <StatusSelect
+                        placeholder={placeholder}
+                        value={value}
+                        onChange={setValue}
+                        onSubmit={handleSubmit}
+                        locked={session.user.userStatus}
+                    />
+                ) : (
+                        <>
+                            {session.user[fieldKey]}{' '}
+                            <button
+                                onClick={() => setIsEditing(true)}
+                                className="text-lwr-orange-100 hover:text-lwr-orange-200"
+                            >
+                                <FaEdit className="h-3 w-3" />
+                            </button>
+                        </>
+                    )
             ) : (
                 <p className="text-xs dark:text-white">
                     <i>Please, add your {fieldKey} (optional):</i>
@@ -100,7 +107,7 @@ const EditableField = ({ fieldKey, apiEndpoint, placeholder, inputType = 'line' 
                             placeholder={placeholder}
                             className="text-xs h-8 w-48 input"
                         />
-                        {inputType !== 'statusMenu' && ( // Conditionally render the button
+                        {inputType !== 'statusMenu' && (
                             <Button
                                 type="submit"
                                 size="sm"
@@ -111,15 +118,15 @@ const EditableField = ({ fieldKey, apiEndpoint, placeholder, inputType = 'line' 
                         )}
                         {message && <p className="text-xs text-red-600 ml-2">{message}</p>}
                     </form>
-                    ) :
-                        inputType === 'statusMenu' ? (
-                            <form className="flex items-center space-x-2 mt-1">
-                                <StatusSelect
-                                    placeholder={placeholder}
-                                    value={value}
-                                    onChange={setValue}
-                                    onSubmit={handleSubmit}
-                                    locked={session.user.userStatus} />
+                ) : inputType === 'statusMenu' ? (
+                    <form className="flex items-center space-x-2 mt-1">
+                        <StatusSelect
+                            placeholder={placeholder}
+                            value={value}
+                            onChange={setValue}
+                            onSubmit={handleSubmit}
+                                locked={session?.user?.userStatus}
+                            />
                         {message && <p className="text-xs text-red-600 ml-2">{message}</p>}
                     </form>
                 ) : (
@@ -128,7 +135,8 @@ const EditableField = ({ fieldKey, apiEndpoint, placeholder, inputType = 'line' 
                             <textarea
                                 id="w3review"
                                 name="w3review"
-                                rows="4" cols="50"
+                                        rows="4"
+                                        cols="50"
                                 placeholder={placeholder}
                                 value={value}
                                 onChange={(e) => setValue(e.target.value)}
@@ -142,7 +150,7 @@ const EditableField = ({ fieldKey, apiEndpoint, placeholder, inputType = 'line' 
                                 className="text-xs h-8 w-48 input"
                             />
                         )}
-                        {inputType !== 'statusMenu' && ( // Conditionally render the button
+                                {inputType !== 'statusMenu' && (
                             <Button
                                 type="submit"
                                 size="sm"
@@ -155,7 +163,6 @@ const EditableField = ({ fieldKey, apiEndpoint, placeholder, inputType = 'line' 
                     </form>
                 )
             )}
-        </>
         </>
     );
 };
