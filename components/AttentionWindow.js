@@ -4,9 +4,9 @@ import React from 'react';
 
 export const AttentionWindow = ({ title, content, onClose }) => {
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg shadow-xl w-full max-w-md transform transition-all animate-bounce-in">
-                <div className="bg-yellow-400 rounded-t-lg px-6 py-4 flex items-center justify-between">
+                <div className="bg-lwr-orange-color-20 rounded-t-lg px-6 py-4 flex items-center justify-between">
                     <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
                     <button
                         onClick={onClose}
@@ -20,10 +20,10 @@ export const AttentionWindow = ({ title, content, onClose }) => {
                 <div className="px-6 py-4">
                     <p className="text-gray-700">{content}</p>
                 </div>
-                <div className="bg-gray-100 px-6 py-4 rounded-b-lg">
+                <div className="bg-gray-100 px-6 py-4 rounded-b-lg flex justify-center">
                     <button
                         onClick={onClose}
-                        className="w-full bg-yellow-400 text-gray-800 font-bold py-2 px-4 rounded hover:bg-yellow-500 transition-colors"
+                        className="bg-lwr-orange-color-100 text-gray-800 font-bold py-2 px-4 hover:bg-lwr-orange-color-20 rounded transition-colors"
                     >
                         Close
                     </button>

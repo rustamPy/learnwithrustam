@@ -66,7 +66,6 @@ export const StatusSelect = ({ placeholder, value, onChange, locked = undefined 
                         <MenuItem
                             key={itemValue}
                             onClick={() => handleSelect(itemValue)}
-                            disabled={locked === 'student'}
                         >
 
                             <Typography variant="h6" color="blue-gray" className="mb-1">
