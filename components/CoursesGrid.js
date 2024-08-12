@@ -4,7 +4,7 @@ import { CourseCard } from '@/components/Hero/SearchWindow';
 import { useSession } from 'next-auth/react';
 import courses from '@/public/courses.json';
 
-const CoursesGrid = ({ specificCourses, cardsPerPage }) => {
+const CoursesGrid = ({ specificCourses, cardsPerPage = 4 }) => {
     const { data: session, update } = useSession();
     const coursesPerPage = cardsPerPage;
     const [currentPage, setCurrentPage] = useState(1);
@@ -132,7 +132,7 @@ const CoursesGrid = ({ specificCourses, cardsPerPage }) => {
 
     return (
         <div className="flex flex-col p-6 items-center">
-            <div className={`grid grid-cols-${cardsPerPage || 1} md:grid-cols-${cardsPerPage || 4} 4xl:grid-cols-8 gap-6 mb-10`}>
+            <div className={`grid lg:grid-cols-${cardsPerPage || '4'} gap-6 mb-10`}>
                 {currentCourses.map(course => (
                     <div key={course.id} className="relative">
                         <CourseCard

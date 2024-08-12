@@ -101,6 +101,9 @@ export default function Profile() {
                     <div className="grid grid-cols-4 sm:grid-cols-12 gap-6">
                         <div className="col-span-4 sm:col-span-4">
                             <div className="bg-white shadow rounded-lg p-6 dark:bg-black">
+
+                                {/* Profile Window*/}
+                                <div className="relative bg-white shadow dark:shadow-lwr-shadow-orange rounded-lg p-6 dark:bg-black mb-4">
                                 <Button
                                     onClick={!isEditing ? () => setIsEditing(!isEditing) : handleSaveChanges}
                                     size="sm"
@@ -137,11 +140,12 @@ export default function Profile() {
                                     <div className="mt-6 flex flex-wrap gap-4 justify-center">
                                         <Button variant="filled" size="sm" onClick={() => signOut({ callbackUrl: '/' })} color="red">
                                             Sign out
-                                        </Button>
-                                        <a href="#" className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">Resume</a>
-                                    </div>
+                                            </Button>
+                                        </div>
                                 </div>
-                                <hr className="my-6 border-t border-gray-300" />
+
+                                </div>
+                                {/* Contacts Window*/}
                                 <div className="relative bg-white shadow rounded-lg p-6 dark:bg-black  dark:shadow-lwr-shadow-orange">
                                 <div className="flex flex-col">
                                         <span className="text-gray-700 uppercase font-bold tracking-wider mb-2 dark:text-white">Contacts:</span>
@@ -162,6 +166,7 @@ export default function Profile() {
                         </div>
                         <div className="col-span-4 sm:col-span-8">
                             <div className="relative bg-white shadow rounded-lg p-6 dark:bg-black">
+                                {/* About Me Window*/}
                                 <div className="relative bg-white shadow dark:shadow-lwr-shadow-orange rounded-lg p-6 dark:bg-black mb-4">
                                     <div className="flex justify-between items-center mb-4"> {/* Add a flex container here */}
                                         <h2 className="text-xl font-bold">About Me</h2>
@@ -181,6 +186,7 @@ export default function Profile() {
                                         setIsEditing={setIsEditing}
                                     />
                                 </div>
+                                {/* Courses Window*/}
                                 <div className="relative bg-white shadow dark:shadow-lwr-shadow-orange rounded-lg p-6 dark:bg-black">
                                 {selectedCourses.length === 0 ?
                                     <div className="flex flex-col items-center">
