@@ -4,6 +4,7 @@ import React from 'react';
 import PhoneInput from 'react-phone-number-input';
 import { useSession } from 'next-auth/react';
 import { StatusSelect } from '@/components/StatusSelect';
+import { TbHandClick } from "react-icons/tb";
 
 import 'react-phone-number-input/style.css'; // Import the default styles
 
@@ -15,17 +16,18 @@ const EditableField = ({ fieldKey, placeholder, inputType = 'line', onChange, va
 
     return (
         <>
-            {!isEditing && session?.user?.[fieldKey] ? (
+            {!isEditing && session?.user?.[fieldKey] ?
                 <span onClick={handleFieldClick} className="cursor-pointer break-words overflow-auto">
-                    {session.user[fieldKey]}
-                </span>) : (
+                    {fieldKey !== 'userStatus' ? session.user[fieldKey] : <div className='mb-4'>Click here update your profile (only for parents) </div>}
+                </span>
+                : (
                 fieldKey === 'phone' ? (
                         <>
                         <PhoneInput
                                 value={val}
                                 onChange={onChange}
                             placeholder={placeholder}
-                                className='bg-lwr-orange-color-20 rounded px-2 py-2'
+                                className='bg-lwr-orange-color-20 dark:bg-lwr-gray-color-200 rounded px-2 py-2'
                         />
                         </>
                 ) : inputType === 'statusMenu' ? (
@@ -40,15 +42,15 @@ const EditableField = ({ fieldKey, placeholder, inputType = 'line', onChange, va
                 ) : (
                                 <>
                         {inputType === 'text' ? (
-                            <textarea
-                                id="w3review"
-                                name="w3review"
+                                        <textarea
+                                            id="w3review"
+                                            name="w3review"
                                             rows="4"
                                             cols="50"
-                                placeholder={placeholder}
+                                            placeholder={placeholder}
                                             value={val}
                                             onChange={(e) => onChange(e.target.value)}
-                                            className='bg-lwr-orange-color-20 rounded px-2 py-2'
+                                            className='w-full bg-lwr-orange-color-20 dark:bg-lwr-gray-color-200 rounded px-2 py-2'
                             />
                         ) : (
                             <input
@@ -56,7 +58,7 @@ const EditableField = ({ fieldKey, placeholder, inputType = 'line', onChange, va
                                 placeholder={placeholder}
                                                 value={val}
                                                 onChange={(e) => onChange(e.target.value)}
-                                                className='bg-lwr-orange-color-20 rounded px-2 py-2 text-center'
+                                                className='bg-lwr-orange-color-20 dark:bg-lwr-gray-color-200 rounded px-2 py-2 text-center'
                             />
                                     )}
                                 </>

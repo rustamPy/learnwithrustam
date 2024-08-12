@@ -23,7 +23,7 @@ export const AttentionWindow = ({ title, content, onClose }) => {
                 <div className="bg-gray-100 px-6 py-4 rounded-b-lg flex justify-center">
                     <button
                         onClick={onClose}
-                        className="bg-lwr-orange-color-100 text-gray-800 font-bold py-2 px-4 hover:bg-lwr-orange-color-20 rounded transition-colors"
+                        className="bg-lwr-orange-color-100 dark:bg-lwr-gray-color-200 text-gray-800 dark:text-white font-bold py-2 px-4 hover:bg-lwr-orange-color-20 rounded transition-colors"
                     >
                         Close
                     </button>

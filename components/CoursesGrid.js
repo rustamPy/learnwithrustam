@@ -132,7 +132,7 @@ const CoursesGrid = ({ specificCourses, cardsPerPage }) => {
 
     return (
         <div className="flex flex-col p-6 items-center">
-            <div className={`grid grid-cols-1 sm:grid-cols-${cardsPerPage} md:grid-cols-${cardsPerPage} lg:grid-cols-${cardsPerPage} gap-6 mb-10`}>
+            <div className={`grid grid-cols-${cardsPerPage || 1} md:grid-cols-${cardsPerPage || 4} 4xl:grid-cols-8 gap-6 mb-10`}>
                 {currentCourses.map(course => (
                     <div key={course.id} className="relative">
                         <CourseCard

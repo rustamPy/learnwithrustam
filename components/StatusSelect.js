@@ -41,7 +41,7 @@ export const StatusSelect = ({ placeholder, value, onChange, locked = undefined 
             <MenuHandler>
                 <Button
                     variant="text"
-                    className="flex items-center gap-3 text-base font-normal capitalize tracking-normal"
+                    className="flex items-center gap-3 text-base font-normal capitalize tracking-normal mb-4"
                 >
                     {value || placeholder}{" "}
                     <ChevronDownIcon

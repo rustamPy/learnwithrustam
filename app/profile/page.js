@@ -100,7 +100,14 @@ export default function Profile() {
                 <div className="container mx-auto py-8">
                     <div className="grid grid-cols-4 sm:grid-cols-12 gap-6">
                         <div className="col-span-4 sm:col-span-4">
-                            <div className={`bg-white shadow rounded-lg p-6`}>
+                            <div className="bg-white shadow rounded-lg p-6 dark:bg-black">
+                                <Button
+                                    onClick={!isEditing ? () => setIsEditing(!isEditing) : handleSaveChanges}
+                                    size="sm"
+                                    className="text-xs bg-lwr-orange-color-100 px-3 py-1 rounded-md hover:bg-lwr-orange-color-200 dark:bg-lwr-blue-color-500"
+                                >
+                                    {!isEditing ? 'Update' : 'Save changes'}
+                                </Button>
                                 <div className="flex flex-col items-center">
                                     {(session.user.userStatus === 'parent' || !session.user.userStatus) && (
                                         <UpdateStatus
@@ -112,6 +119,7 @@ export default function Profile() {
                                     )}
 
                                     <div className="relative">
+
                                         <img
                                             src={session.user.image || '/default-avatar.png'}
                                             alt="User Avatar"
@@ -134,8 +142,9 @@ export default function Profile() {
                                     </div>
                                 </div>
                                 <hr className="my-6 border-t border-gray-300" />
+                                <div className="relative bg-white shadow rounded-lg p-6 dark:bg-black  dark:shadow-lwr-shadow-orange">
                                 <div className="flex flex-col">
-                                    <span className="text-gray-700 uppercase font-bold tracking-wider mb-2">Contacts:</span>
+                                        <span className="text-gray-700 uppercase font-bold tracking-wider mb-2 dark:text-white">Contacts:</span>
                                     <ul>
                                         <li className="mb-2"><b>Phone:</b> {
 
@@ -148,31 +157,40 @@ export default function Profile() {
                                         <li className="mb-2"><b>Email:</b> {session.user.email}</li>
                                     </ul>
                                 </div>
+                                </div>
                             </div>
                         </div>
                         <div className="col-span-4 sm:col-span-8">
-                            <div className="bg-white shadow rounded-lg p-6">
-                                <div className="flex justify-end">
-                                    <Button
-                                        onClick={!isEditing ? () => setIsEditing(!isEditing) : handleSaveChanges}
-                                        size="sm"
-                                        className="text-xs bg-lwr-orange-color-100 px-3 py-1 rounded-md hover:bg-lwr-orange-color-200 mt-4"
-                                    >
-                                        {!isEditing ? 'Update' : 'Save changes'}
-                                    </Button>
-                                    {open && (<AttentionWindow title={'Profile Updated'} content={'You have successfully updated your profile'} onClose={handleCloseWindow} />)}
+                            <div className="relative bg-white shadow rounded-lg p-6 dark:bg-black">
+                                <div className="relative bg-white shadow dark:shadow-lwr-shadow-orange rounded-lg p-6 dark:bg-black mb-4">
+                                    <div className="flex justify-between items-center mb-4"> {/* Add a flex container here */}
+                                        <h2 className="text-xl font-bold">About Me</h2>
+
+                                    </div>
+                                    {open && (
+                                        <AttentionWindow
+                                            title={'Profile Updated'}
+                                            content={'You have successfully updated your profile'}
+                                            onClose={handleCloseWindow}
+                                        />
+                                    )}
+                                    <AddAboutMe
+                                        value={profileData.about}
+                                        onChange={(newValue) => setProfileData((prev) => ({ ...prev, about: newValue }))}
+                                        isEditing={isEditing}
+                                        setIsEditing={setIsEditing}
+                                    />
                                 </div>
-                                <h2 className="text-xl font-bold mb-4">About Me</h2>
-                                <AddAboutMe
-                                    value={profileData.about}
-                                    onChange={(newValue) => setProfileData((prev) => ({ ...prev, about: newValue }))}
-                                    isEditing={isEditing}
-                                    setIsEditing={setIsEditing}
-                                />
+                                <div className="relative bg-white shadow dark:shadow-lwr-shadow-orange rounded-lg p-6 dark:bg-black">
                                 {selectedCourses.length === 0 ?
                                     <div className="flex flex-col items-center">
                                         <h2 className="text-xl font-bold mt-6 mb-4"> No courses added</h2>
-                                        <Image src={empty} width={200} height={200} />
+                                            <Image src={empty} width={200} height={200} className="mb-4" />
+                                            <a href="/courses">
+                                                <Button variant="filled" size="sm" className="bg-lwr-orange-color-50 dark:bg-lwr-blue-color-500">
+                                                    Explore our courses
+                                                </Button>
+                                            </a>
                                     </div>
                                     :
                                     <div className="flex flex-col items-center">
@@ -180,7 +198,7 @@ export default function Profile() {
                                         <CoursesGrid specificCourses={selectedCourses} cardsPerPage={3} />
                                     </div>
                                 }
-
+                                </div>
 
                             </div>
                         </div>
