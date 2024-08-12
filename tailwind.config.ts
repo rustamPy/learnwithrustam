@@ -5,7 +5,7 @@ module.exports = withMT({
   theme: {
     extend: {
       colors: {
-        "lwr-gray": {
+        "lwr-gray-color": {
           50: '#fcfcfc',
           60: '#f6f6f6',
           200: '#cccccc6e',
@@ -14,12 +14,14 @@ module.exports = withMT({
           500: '#262626',
           600: '#030303'
         },
-        "lwr-orange": {
+        "lwr-orange-color": {
+          20: '#fcdbaa',
           50: '#f5b14a',
           100: '#F6A426',
           200: '#db8606'
         },
-        "lwr-blue": {
+        "lwr-blue-color": {
+          20: '#8290acff',
           500: '#112346ff'
         }
       },

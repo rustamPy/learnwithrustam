@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { signIn, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import {
     Navbar,
     Collapse,
@@ -109,7 +109,7 @@ function NavListMenu() {
                 <MenuHandler>
                     <Typography as="div" variant="small" className="font-bold">
                         <ListItem
-                            className="flex items-center gap-2 py-2 pr-4 font-bold text-lwr-blue-500"
+                            className="flex items-center gap-2 py-2 pr-4 font-bold text-lwr-blue-color-500"
                             selected={isMenuOpen || isMobileMenuOpen}
                             onClick={() => setIsMobileMenuOpen((cur) => !cur)}
                         >
@@ -127,7 +127,7 @@ function NavListMenu() {
                         </ListItem>
                     </Typography>
                 </MenuHandler>
-                <MenuList style={{ border: 0 }} className="hidden max-w-screen-xl rounded-xl lg:block text-lwr-blue-500 dark:bg-lwr-gray-300">
+                <MenuList style={{ border: 0 }} className="hidden max-w-screen-xl rounded-xl lg:block text-lwr-blue-color-500 dark:bg-lwr-gray-color-300">
                     <ul className="grid grid-cols-3 gap-y-2 outline-none outline-0">
                         {renderItems}
                     </ul>
@@ -147,7 +147,7 @@ function NavList() {
                 as="a"
                 href="/"
                 variant="small"
-                className="font-bold text-lwr-blue-500"
+                className="font-bold text-lwr-blue-color-500"
             >
                 <ListItem className="flex items-center gap-2 py-2 pr-4">Home</ListItem>
             </Typography>
@@ -155,7 +155,7 @@ function NavList() {
                 as="a"
                 href="/#features"
                 variant="small"
-                className="font-bold text-lwr-blue-500"
+                className="font-bold text-lwr-blue-color-500"
             >
                 <ListItem className="flex items-center gap-2 py-2 pr-4">Features</ListItem>
             </Typography>
@@ -163,7 +163,7 @@ function NavList() {
                 as="a"
                 href="/contact"
                 variant="small"
-                className="font-bold text-lwr-blue-500"
+                className="font-bold text-lwr-blue-color-500"
             >
                 <ListItem className="flex items-center gap-2 py-2 pr-4">
                     Contact Me
@@ -173,7 +173,7 @@ function NavList() {
                 as="a"
                 href="/#together"
                 variant="small"
-                className="font-bold text-lwr-blue-500"
+                className="font-bold text-lwr-blue-color-500"
             >
                 <ListItem className="flex items-center gap-2 py-2 pr-4">Bring Together</ListItem>
             </Typography>
@@ -208,16 +208,16 @@ export default function NavbarWithMegaMenu() {
                 className={`border-0 sticky mx-auto transition-all duration-300 ${isScrolled
                     ? 'top-2 mx-auto rounded-xl px-2 py-2'
                     : 'top-0 max-w-full px-4 py-4'
-                    } dark:bg-lwr-gray-200 z-50`}
+                    } dark:bg-lwr-gray-color-200 z-50`}
             >
                 <div className="flex items-center justify-between text-blue-gray-900 dark:text-white">
                     <Typography
                         as="a"
                         href="/"
                         variant="h1"
-                        className="mr-4 cursor-pointer py-1.5 lg:ml-2 text-lwr-blue-500 text-2xl font-extrabold"
+                        className="mr-4 cursor-pointer py-1.5 lg:ml-2 text-lwr-blue-color-500 text-2xl font-extrabold"
                     >
-                        LEARN {<span className="text-lwr-orange-100">{'{W}'}</span>} RUSTAM
+                        LEARN {<span className="text-lwr-orange-color-100">{'{W}'}</span>} RUSTAM
                     </Typography>
                     <div className="hidden lg:block">
                         <NavList />
@@ -245,7 +245,7 @@ export default function NavbarWithMegaMenu() {
                     </div>
                     <IconButton
                         variant="text"
-                        className="lg:hidden dark:text-lwr-blue-500"
+                        className="lg:hidden dark:text-lwr-blue-color-500"
                         onClick={() => setOpenNav(!openNav)}
                     >
                         {openNav ? (

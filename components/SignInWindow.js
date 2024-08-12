@@ -108,7 +108,7 @@ const SignInWindow = ({ message, image_path, width }) => {
                                     (<div className="flex flex-col items-center">
                                         <AddPhoneNumber />
                                         <a href="/">
-                                            <Button variant="filled" size="sm" className="bg-lwr-orange-100 mt-4">Continue without adding phone number</Button>
+                                            <Button variant="filled" size="sm" className="bg-lwr-orange-color-100 mt-4">Continue without adding phone number</Button>
                                         </a>
                                     </div>
                                     ) :

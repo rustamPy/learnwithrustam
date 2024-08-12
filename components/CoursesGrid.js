@@ -130,9 +130,6 @@ const CoursesGrid = ({ specificCourses, cardsPerPage }) => {
 
     const paginationNumbers = getPaginationNumbers();
 
-
-    console.log(currentCourses)
-
     return (
         <div className="flex flex-col p-6 items-center">
             <div className={`grid grid-cols-1 sm:grid-cols-${cardsPerPage} md:grid-cols-${cardsPerPage} lg:grid-cols-${cardsPerPage} gap-6 mb-10`}>

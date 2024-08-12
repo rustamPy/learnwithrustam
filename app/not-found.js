@@ -7,7 +7,7 @@ const NotFound = () => {
     <section className="min-h-screen flex-grow">
     <div className="container m-auto max-w-2xl py-24">
       <div
-          className="bg-lwr-orange-100 px-6 py-24 mb-4 shadow-md rounded-md m-4 md:m-0"
+          className="bg-lwr-orange-color-100 px-6 py-24 mb-4 shadow-md rounded-md m-4 md:m-0"
       >
         <div className="flex justify-center">
             <FaExclamationTriangle className='text-8xl text-white' />
@@ -19,7 +19,7 @@ const NotFound = () => {
           </p>
           <Link
             href="/"
-              className="bg-lwr-blue-500 hover:bg-blue-800 text-white font-bold py-4 px-6 rounded"
+              className="bg-lwr-blue-color-500 hover:bg-blue-800 text-white font-bold py-4 px-6 rounded"
             >Go Home</Link>
         </div>
       </div>

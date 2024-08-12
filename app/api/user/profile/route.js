@@ -31,16 +31,12 @@ export async function PATCH(request) {
         return NextResponse.json({ error: "No valid fields provided for update" }, { status: 400 });
     }
 
-    console.log('SUKA')
-    console.log(updateData)
 
     try {
         const result = await db.collection("users").updateOne(
             { email: session.user.email }, // Use email from session to identify the user
             { $set: updateData } // Use the dynamically built update object
         );
-
-        console.log(`Result: ${result}`)
 
         // Check if a document was modified
         if (result.modifiedCount === 0) {

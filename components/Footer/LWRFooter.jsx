@@ -26,7 +26,7 @@ const currentYear = new Date().getFullYear();
 
 const LWRFooter = () => {
     return (
-        <footer className="relative w-full bg-lwr-gray-50 pt-6 border-t border-lwr-gray-60 dark:bg-lwr-gray-500 dark:border-lwr-gray-400">
+        <footer className="relative w-full bg-lwr-gray-color-50 pt-6 border-t border-lwr-gray-color-60 dark:bg-lwr-gray-color-500 dark:border-lwr-gray-color-400">
             <div className="mx-auto w-full max-w-7xl px-8">
                 <div className="grid grid-cols-1 justify-between gap-4 md:grid-cols-2">
                     <div className="flex flex-col items-start mb-6 md:mb-0">
@@ -35,7 +35,7 @@ const LWRFooter = () => {
                             href="/"
                             className="cursor-pointer py-1.5 dark:text-white text-base font-extrabold"
                         >
-                            LEARN {<span className="text-lwr-orange-100">{'{W}'}</span>} RUSTAM
+                            LEARN {<span className="text-lwr-orange-color-100">{'{W}'}</span>} RUSTAM
                         </Typography>
                         <div className="flex items-start mb-6 md:mb-0">
                             <Image src={footerIcon} alt="footericon" width={60} height={60} style={{ opacity: 0.3 }} className="mr-4" />
@@ -53,7 +53,7 @@ const LWRFooter = () => {
                             <ul key={title}>
                                 <Typography
                                     variant="small"
-                                    className="mb-3 text-base font-bold dark:text-lwr-orange-100"
+                                    className="mb-3 text-base font-bold dark:text-lwr-orange-color-100"
                                 >
                                     {title}
                                 </Typography>
@@ -64,7 +64,7 @@ const LWRFooter = () => {
                                                 <Typography
                                                     as="a"
                                                     href={element[1]}
-                                                    className="py-1.5 font-normal hover:font-semibold dark:hover:text-lwr-orange-100"
+                                                    className="py-1.5 font-normal hover:font-semibold dark:hover:text-lwr-orange-color-100"
                                                 >
                                                     {element[0]}
                                                 </Typography>
@@ -73,7 +73,7 @@ const LWRFooter = () => {
                                                 <Typography
                                                     as="a"
                                                     href='#'
-                                                    className="py-1.5 font-normal hover:font-bold dark:hover:text-lwr-orange-100"
+                                                    className="py-1.5 font-normal hover:font-bold dark:hover:text-lwr-orange-color-100"
                                                 >
                                                     {element}
                                                 </Typography>
@@ -86,7 +86,7 @@ const LWRFooter = () => {
                         ))}
                     </div>
                 </div>
-                <div className="mt-12 flex w-full flex-col items-center justify-center border-t dark:border-lwr-gray-400 py-4 md:flex-row md:justify-between">
+                <div className="mt-12 flex w-full flex-col items-center justify-center border-t dark:border-lwr-gray-color-400 py-4 md:flex-row md:justify-between">
                     <Typography
                         variant="small"
                         className="mb-4 text-center font-normal md:mb-0"

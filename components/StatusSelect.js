@@ -28,12 +28,11 @@ const menuItems = [
     }
 ];
 
-export const StatusSelect = ({ placeholder, value, onChange, onSubmit, locked = undefined }) => {
+export const StatusSelect = ({ placeholder, value, onChange, locked = undefined }) => {
     const [openMenu, setOpenMenu] = React.useState(false);
     const handleSelect = (selectedValue) => {
 
         onChange(selectedValue);
-        onSubmit({ newValue: selectedValue });
         setOpenMenu(false);
     };
 

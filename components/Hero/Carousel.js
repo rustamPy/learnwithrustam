@@ -11,9 +11,9 @@ const HeroCarousel = () => {
         <div id="together" className="py-24">
             <Typography
                 variant="h1"
-                className="mb-4 text-4xl lg:text-6xl font-extrabold tracking-tight leading-none text-lwr-gray-500 md:text-5xl dark:text-white"
+                className="mb-4 text-4xl lg:text-6xl font-extrabold tracking-tight leading-none text-lwr-gray-color-500 md:text-5xl dark:text-white"
             >
-                Let's Bring <span className="text-lwr-orange-100">Together</span>
+                Let's Bring <span className="text-lwr-orange-color-100">Together</span>
             </Typography>
 
             <Carousel loop autoplay className="rounded-xl w-full max-w-6xl mx-auto mt-9 h-[350pt]">
