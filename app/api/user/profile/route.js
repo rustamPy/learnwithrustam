@@ -31,7 +31,6 @@ export async function PATCH(request) {
         return NextResponse.json({ error: "No valid fields provided for update" }, { status: 400 });
     }
 
-
     try {
         const result = await db.collection("users").updateOne(
             { email: session.user.email }, // Use email from session to identify the user

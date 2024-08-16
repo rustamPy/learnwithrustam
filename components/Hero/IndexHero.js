@@ -19,6 +19,8 @@ const IndexHero = () => {
                 {/* Introduction */}
                 <Features />
 
+
+                <iframe src="https://open.spotify.com/embed/track/2cTJZdJuudcg4JB66koO5K?utm_source=generator" height="200" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" className='rounded-xl w-full'></iframe>
                 {/* Search Window is search engine to find the appropriate course */}
                 <SearchWindow />
 

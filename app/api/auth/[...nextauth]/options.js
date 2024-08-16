@@ -26,7 +26,6 @@ export const authOptions = {
             session.user.worktitle = user.worktitle;
             session.user.about = user.about;
             session.user.userStatus = user.userStatus;
-
             return session;
         },
     }
