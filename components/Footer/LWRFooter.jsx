@@ -6,7 +6,7 @@ import footerIcon from "@/assets/images/footer_icon.png"
 const LINKS = [
     {
         title: "Services",
-        items: [["Courses", "/courses"], "Tutoring", "Code Solutions", "Mentoring"],
+        items: [["Courses", "/courses"], ["Leetcode", "/leetcode"], "Code Solutions", "Mentoring"],
     },
     {
         title: "Company",

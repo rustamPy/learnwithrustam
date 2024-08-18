@@ -42,13 +42,14 @@ const navListMenuItems = [
     },
     {
         title: "About Me",
-        description: "Meet and learn about our dedication",
+        description: "Learn more about me",
         href: "/about",
         icon: UserGroupIcon,
     },
     {
-        title: "Blog",
-        description: "Find your answers here",
+        title: "Leetcode",
+        description: "Find Leetcode solutions by me",
+        href: "/leetcode",
         icon: Bars4Icon,
     },
     {
