@@ -4,7 +4,8 @@ import { remark } from 'remark';
 import html from 'remark-html';
 import matter from 'gray-matter';
 
-export async function getMarkdownContent(fileName) {
+
+async function getMarkdownContent(fileName) {
     const filePath = path.join(process.cwd(), 'public', 'leetcode', fileName);
     const fileContents = fs.readFileSync(filePath, 'utf8');
 
