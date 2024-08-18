@@ -11,19 +11,20 @@ import {
     Typography,
 } from '@material-tailwind/react';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { CursorArrowRaysIcon } from '@heroicons/react/24/solid';
+import { RxAvatar } from "react-icons/rx";
+
 
 
 
 const menuItems = [
     {
         title: 'Student Profile',
-        description: 'Description for Student Profile',
+        description: 'If you are a student',
         value: 'student'
     },
     {
         title: 'Parent Profile',
-        description: 'Description for Parent Profile',
+        description: 'If you are a parent',
         value: 'parent'
     }
 ];
@@ -52,13 +53,13 @@ export const StatusSelect = ({ placeholder, value, onChange, locked = undefined 
             </MenuHandler>
             <MenuList className="grid-cols-7 gap-3 overflow-visible lg:grid">
                 <Card
-                    color="gray"
-                    shadow={false}
-                    className="col-span-3 flex h-full w-full items-center justify-center rounded-2xl p-4"
+                    shadow={true}
+                    color='green'
+                    className="col-span-3 flex h-full w-full items-center justify-center rounded-2xl p-4 bg"
                 >
-                    <CursorArrowRaysIcon strokeWidth={1} className="h-10 w-10" />
-                    <Typography className="mt-5 text-center" variant="h5">
-                        Material Tailwind PRO
+                    < RxAvatar className="h-10 w-10" />
+                    <Typography className="mt-5 text-center" variant="h4">
+                        Select
                     </Typography>
                 </Card>
                 <ul className="col-span-4 flex w-full flex-col gap-1">
