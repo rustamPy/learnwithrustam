@@ -11,8 +11,8 @@ export function BannerSection() {
             {showVersion &&
                 <section className="mx-auto bg-[#cb3c3c]">
                     <div className="shadow-4xl px-4 py-2 flex flex-wrap lg:items-center lg:justify-center justify-end gap-x-6">
-                        <Typography href="https://github.com/rustamPy/learnwithrustam" variant="h6" color="white" className="text-md">
-                            beta 0.3.9 - Adding Leetcode
+                        <Typography href="https://github.com/rustamPy/learnwithrustam" color="white" className="text-md">
+                            beta 0.4.0 - Adding Learning Polish Service
                         </Typography>
                         <Button className="ml-auto" color="white" variant="text" onClick={() => setShowVersion(false)}>
                             <XMarkIcon className="text-white w-4 h-4 stroke-2" />
