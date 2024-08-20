@@ -66,19 +66,19 @@ const audioMap = {
     55: [],
     56: ['/audios/109D1; 109D2.m4a'],
     57: ['/audios/109E1.m4a'],
-    58: [],
-    59: [],
+    58: ['/audios/110A1.m4a'],
+    59: ['/audios/110A3.m4a'],
     60: [],
-    61: [],
-    62: [],
-    63: [],
-    64: [],
+    61: ['/audios/110B1.m4a'],
+    62: ['/audios/110B5.m4a'],
+    63: ['/audios/110C1.m4a', '/audios/110C3.m4a'],
+    64: ['/audios/111A1; 111A2.m4a'],
     65: [],
-    66: [],
-    67: [],
+    66: ['/audios/111A6.m4a'],
+    67: ['/audios/111B1.m4a'],
     68: [],
     69: [],
-    70: [],
+    70: ['/audios/111D1.m4a'],
     71: [],
     72: [],
     73: [],
@@ -138,6 +138,50 @@ const audioMap = {
     127: [],
     128: [],
     129: [],
+    130: [],
+    131: [],
+    132: [],
+    133: [],
+    134: [],
+    135: [],
+    136: [],
+    137: [],
+    138: [],
+    139: [],
+    140: [],
+    141: [],
+    142: [],
+    143: [],
+    144: [],
+    145: [],
+    146: [],
+    147: [],
+    148: [],
+    149: [],
+    150: [],
+    151: [],
+    152: [],
+    153: [],
+    154: [],
+    155: [],
+    156: [],
+    157: [],
+    158: [],
+    159: [],
+    160: [],
+    161: [],
+    162: [],
+    163: [],
+    164: [],
+    165: [],
+    166: [],
+    167: [],
+    168: [],
+    169: [],
+    170: [],
+    171: [],
+    172: [],
+
 
     // Add more pages and audios as needed
 };
@@ -173,6 +217,54 @@ const chapterMap = [
     },
     {
         range: [58, 63], name: 'Lekcja 10', description: 'UWIELBIAM POLSKIE JEDZENIE!'
+    },
+    {
+        range: [64, 71], name: 'Lekcja 11', description: 'RODZINA'
+    },
+    {
+        range: [72, 77], name: 'Lekcja 12', description: 'CO ROBISZ W PONIEDZIAŁEK O ÓSMEJ?'
+    },
+    {
+        range: [78, 85], name: 'Lekcja 13', description: 'GDZIE BYŁAŚ MAMI? BYŁAM W KINIE'
+    },
+    {
+        range: [86, 91], name: 'Lekcja 14', description: 'Z PRZEWODNIKIEM PO KRAKOWIE'
+    },
+    {
+        range: [92, 99], name: 'Lekcja 15', description: 'KARTON CZY PUDEŁKO?'
+    },
+    {
+        range: [100, 105], name: 'Lekcja 16', description: 'CO MA BYĆ, TO BĘDZIE'
+    },
+    {
+        range: [106, 111], name: 'Lekcja 17', description: 'PLOTKI, PLOTKI. KTO Z KIM I O CZYM?'
+    },
+    {
+        range: [112, 117], name: 'Lekcja 18', description: 'POKAŻ MI SWOJE MIESZKANIE, A POWIEM CI KIM JESTEŚ'
+    },
+    {
+        range: [118, 123], name: 'Lekcja 19', description: 'WSZĘDZIE DOBRZE, ALE W DOMU NAJLEPIEJ'
+    },
+    {
+        range: [122, 129], name: 'Lekcja 20', description: 'PODRÓŻE KSZTAŁCĄ'
+    },
+    {
+        range: [128, 137], name: 'Lekcja 21', description: 'KIEDY TO BYŁO?'
+    },
+    {
+        range: [136, 143], name: 'Lekcja 22', description: 'DOKĄD POJEDZIEMY NA WEEKEND?'
+    },
+    {
+        range: [142, 151], name: 'Lekcja 23', description: 'ZA MAŁE? ZA DUŻE? W SAM RAZ!'
+    },
+    {
+        range: [150, 159], name: 'Lekcja 24', description: 'JAK CIĘ WIDZĄ, TAK CIĘ PISZĄ'
+    },
+    {
+        range: [158, 165], name: 'Lekcja 25', description: 'ANI RĘKĄ, ANI NOGĄ…'
+    },
+    {
+        range: [164, 171], name: 'Lekcja 26', description: 'SAME PROBLEMY!'
     },
 ];
 
