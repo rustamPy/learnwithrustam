@@ -1,19 +1,17 @@
 'use client';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import PdfViewer from '@/components/PdfViewer';
 import AudioPlayer from '@/components/AudioPlayer';
-import { Typography, Card, Progress } from '@material-tailwind/react';
+import { Typography, Card, Progress, Chip } from '@material-tailwind/react';
 
-
-import { audioMap, chapterMap } from './data'
+import { audioMap, chapterMap } from './data';
 
 const pdfFile = 'book1.pdf'; // Path to your PDF file
-
-
 
 const Page = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [visibleAudio, setVisibleAudio] = useState(null);
+    const [showGuidance, setShowGuidance] = useState(false); // State for guidance visibility
 
     const totalPages = 171; // Replace with actual total pages
     const progress = (currentPage / totalPages) * 100;
@@ -25,6 +23,10 @@ const Page = () => {
 
     const toggleAudio = (index) => {
         setVisibleAudio(visibleAudio === index ? null : index);
+    };
+
+    const toggleGuidance = () => {
+        setShowGuidance(!showGuidance);
     };
 
     const currentChapter = chapterMap.find(
@@ -42,65 +44,121 @@ const Page = () => {
         : 0;
 
     return (
-        <div className="flex h-screen">
-
-            <div className="flex-[3] border-r border-gray-300 dark:border-gray-800 p-4">
-                <PdfViewer fileUrl={pdfFile} onPageChange={handlePageChange} />
-            </div>
-            <div className="flex-[1.5] p-4 overflow-y-auto">
-                <div className="w-full mb-4">
-                    <div className="mb-2 flex items-center justify-between gap-4">
-                        <Typography variant="h6">
-                            Completed
-                        </Typography>
-                        <Typography variant="h6">
-                            {progress.toPrecision(2)}%
-                        </Typography>
+        <div className="flex flex-col h-screen mb-[200px]">
+            {/* Header */}
+            <div className="w-full p-4 border-b border-gray-300 dark:border-gray-800">
+                <div className="relative">
+                    <Typography variant="h2" className="font-bold text-center text-lwr-blue-color-500 dark:text-lwr-blue-color-20">
+                        "Polski Krok po Kroku" Study Emulator
+                    </Typography>
+                    <div className="absolute top-0 right-0 flex gap-2 mt-2">
+                        <Chip
+                            value="Beta"
+                            color="orange"
+                            className="cursor-pointer"
+                        />
+                        <Chip
+                            value="Guide"
+                            color="light-blue"
+                            className="cursor-pointer"
+                            onClick={toggleGuidance}
+                        />
                     </div>
-                    <Progress value={progress} variant="gradient" />
                 </div>
-                {currentChapter ? (
-                    <Card className="bg-white p-4 dark:bg-gray-900 rounded-lg shadow-md mb-4">
-                        <Typography className="text-4xl font-bold mb-2 text-lwr-blue-color-500 dark:text-lwr-blue-color-20">{currentChapter.name}</Typography>
-                        <Typography className="text-lg font-bold  mb-4 text-lwr-blue-color-500 dark:text-lwr-blue-color-20">{currentChapter.description}</Typography>
-                        <Typography className="text-md mb-4 font-medium text-lwr-blue-color-500 dark:text-lwr-blue-color-20">Total number of audios: <span className="font-bold text-blue-600">{totalAudios}</span></Typography>
-                        {audioMap[currentPage]?.length ? (
-                            audioMap[currentPage].map((audioSrc, index) => {
-                                const audioLabel = audioSrc.split('/').pop().split('.').shift();
-                                return (
-                                    <div
-                                        key={index}
-                                        className="mb-2 p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700 shadow-sm cursor-pointer transition-colors duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                                        onClick={() => toggleAudio(index)}
-                                    >
-                                        <div className="flex items-center justify-between">
-                                            <Typography
-                                                variant="lead"
-                                                className="text-sm font-medium text-gray-800 dark:text-white"
-                                            >
-                                                {audioLabel}
-                                            </Typography>
-                                            <button
-                                                className="text-blue-500 hover:underline focus:outline-none"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    toggleAudio(index);
-                                                }}
-                                            >
-                                                {visibleAudio === index ? 'Hide' : 'Show'}
-                                            </button>
-                                        </div>
-                                        <AudioPlayer audioSrc={audioSrc} visible={visibleAudio === index} />
-                                    </div>
-                                );
-                            })
-                        ) : (
-                                <Typography className='text-lwr-blue-color-500 dark:text-lwr-blue-color-20'>No audio tasks for this page.</Typography>
-                        )}
-                    </Card>
-                ) : (
-                        <Typography className='text-lwr-blue-color-500 dark:text-lwr-blue-color-20'>No chapter information available for this page.</Typography>
+                <Typography variant="h6" className="text-center mt-2 text-gray-700 dark:text-gray-300">
+                    Listen to the audio lessons while you study
+                </Typography>
+                {showGuidance && (
+                    <div className="mt-4 text-center p-4 bg-blue-100 dark:bg-gray-800 rounded-lg">
+                        <Typography variant="h6" className="text-gray-800 dark:text-gray-300">
+                            This is a guidance section that provides tips and instructions on how to use the study emulator effectively.
+                            Click the "Guide" chip again to hide this section.
+                        </Typography>
+                        <ul className="list-disc mt-2 text-left mx-auto max-w-3xl text-gray-800 dark:text-gray-300">
+                            <li>Use the PDF viewer on the left to navigate through the pages of the textbook.</li>
+                            <li>On the right, you will find the audio tracks related to the current page.</li>
+                            <li>Click on the bar or "Show" button next to each audio label to reveal the audio player.</li>
+                            <li>You can listen to the audio while reading the corresponding text in the PDF viewer.</li>
+                            <li>Your progress through the book is tracked at the top of the right section.</li>
+                        </ul>
+                    </div>
                 )}
+            </div>
+            {/* Content */}
+            <div className="flex h-full">
+                {/* PDF Viewer */}
+                <div className="flex-[3] border-r border-gray-300 dark:border-gray-800 p-4">
+                    <PdfViewer fileUrl={pdfFile} onPageChange={handlePageChange} />
+                </div>
+                {/* Audio Viewer */}
+                <div className="flex-[1.5] p-4 overflow-y-auto">
+                    <div className="w-full mb-4">
+                        <div className="mb-2 flex items-center justify-between gap-4">
+                            <Typography variant="h6">
+                                Completed
+                            </Typography>
+                            <Typography variant="h6">
+                                {progress.toPrecision(2)}%
+                            </Typography>
+                        </div>
+                        <Progress value={progress} variant="gradient" />
+                    </div>
+                    {currentChapter ? (
+                        <Card className="bg-white p-4 dark:bg-gray-900 rounded-lg shadow-md mb-4">
+                            <div className="relative">
+                                <Typography className="text-4xl font-bold mb-2 text-lwr-blue-color-500 dark:text-lwr-blue-color-20">
+                                    {currentChapter.name}
+                                </Typography>
+                                <Chip
+                                    value="Chapter Info"
+                                    color="blue"
+                                    className="absolute top-0 right-0"
+                                />
+                            </div>
+                            <Typography className="text-lg font-bold mb-4 text-lwr-blue-color-500 dark:text-lwr-blue-color-20">
+                                {currentChapter.description}
+                            </Typography>
+                            <Typography className="text-md mb-4 font-medium text-lwr-blue-color-500 dark:text-lwr-blue-color-20">
+                                Total number of audios: <span className="font-bold text-blue-600">{totalAudios}</span>
+                            </Typography>
+                            {audioMap[currentPage]?.length ? (
+                                audioMap[currentPage].map((audioSrc, index) => {
+                                    const audioLabel = audioSrc.split('/').pop().split('.').shift();
+                                    return (
+                                        <div
+                                            key={index}
+                                            className="mb-2 p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700 shadow-sm cursor-pointer transition-colors duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                                            onClick={() => toggleAudio(index)}
+                                        >
+                                            <div className="flex items-center justify-between">
+                                                <Typography
+                                                    variant="lead"
+                                                    className="text-sm font-medium text-gray-800 dark:text-white"
+                                                >
+                                                    {audioLabel}
+                                                </Typography>
+                                                <button
+                                                    className="text-blue-500 hover:underline focus:outline-none"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        toggleAudio(index);
+                                                    }}
+                                                >
+                                                    {visibleAudio === index ? 'Hide' : 'Show'}
+                                                </button>
+                                            </div>
+                                            <AudioPlayer audioSrc={audioSrc} visible={visibleAudio === index} />
+                                        </div>
+                                    );
+                                })
+                            ) : (
+                                <Typography className='text-lwr-blue-color-500 dark:text-lwr-blue-color-20'>No audio tasks for this page.</Typography>
+                            )}
+                        </Card>
+                    ) : (
+                        <Typography className='text-lwr-blue-color-500 dark:text-lwr-blue-color-20'>No chapter information available for this page.</Typography>
+                    )}
+                </div>
             </div>
         </div>
     );
