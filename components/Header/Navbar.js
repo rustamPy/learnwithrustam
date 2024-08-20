@@ -29,6 +29,7 @@ import {
     SquaresPlusIcon,
     SunIcon,
     TagIcon,
+    LanguageIcon,
     UserGroupIcon,
 } from "@heroicons/react/24/solid";
 import ThemeToggle from '@/components/ToggleTheme';
@@ -53,9 +54,10 @@ const navListMenuItems = [
         icon: Bars4Icon,
     },
     {
-        title: "Services",
-        description: "Learn how we can help you achieve your goals.",
-        icon: SunIcon,
+        title: "Polski. Krok po Kroku",
+        description: "Audio Guide for Polish language",
+        href: "/learnpolish",
+        icon: LanguageIcon,
     },
     {
         title: "Contact",

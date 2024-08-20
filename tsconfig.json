@@ -40,7 +40,7 @@
 "app/not-found.js",
 "app/page.js"
 ,
-"components/Footer/LWRFooter.jsx"
+"components/Footer/LWRFooter.js"
 ],
   "exclude": ["node_modules"]
 }
