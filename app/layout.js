@@ -4,7 +4,6 @@ import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/api/auth/[...nextauth]/options"
 import ClientSessionProvider from './SessionProvider'
 import NavBar from '@/components/Header/Navbar';
-import Banner from '@/components/Header/Banner';
 import LWRFooter from '@/components/Footer/LWRFooter'
 
 
@@ -20,7 +19,6 @@ export default async function RootLayout({ children }) {
       </head>
       <body>
         <ClientSessionProvider session={session}>
-          <Banner />
           <NavBar />
           <main>
             {children}

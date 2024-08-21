@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
+import { debounce } from 'lodash';
 import {
     Navbar,
     Collapse,
@@ -65,6 +66,8 @@ const navListMenuItems = [
         icon: PhoneIcon,
     }
 ];
+
+import BannerSection from '@/components/Header/Banner'
 
 function NavListMenu() {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -191,11 +194,10 @@ export default function NavbarWithMegaMenu() {
     const { data: session, status } = useSession();
 
 
-    useEffect(() => {   
-
-        const handleScroll = () => {
+    useEffect(() => {
+        const handleScroll = debounce(() => {
             setIsScrolled(window.scrollY > 90);
-        };
+        }, 2);
 
         window.addEventListener('scroll', handleScroll);
 
@@ -213,7 +215,8 @@ export default function NavbarWithMegaMenu() {
                     : 'top-0 max-w-full px-4 py-4'
                     } dark:bg-lwr-gray-color-200 z-50`}
             >
-                <div className="flex items-center justify-between text-blue-gray-900 dark:text-white">
+                <BannerSection />
+                <div className="flex items-center justify-between text-blue-gray-900 dark:text-white pt-8">
                     <Typography
                         as="a"
                         href="/"

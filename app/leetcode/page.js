@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import Table from './Table';
-import { SiLeetcode } from "react-icons/si";
 
 
 export default async function QuestionsPage() {

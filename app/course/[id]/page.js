@@ -6,6 +6,7 @@ import coreItInter from '@/assets/images/cit_inter.jpg'
 import pythonEntry from '@/assets/images/python_entry.jpg'
 import placeholder from '@/assets/images/placeholder.webp'
 import { useSession } from "next-auth/react";
+import Construction from '@/components/Construction'
 
 const IMAGEMAP = {
     'General IT - Entry': coreItInter,
@@ -64,6 +65,7 @@ export default function CoursePage({ params }) {
 
     return (
         <>
+            <Construction />
             {session ? (
                 <section className="relative bg-gradient-to-r from-blue-400 to-purple-500 p-2 lg:p-8 mt-[-76px]">
                     <div className="flex flex-col items-center dark:bg-black bg-white shadow-lg rounded-lg p-6 lg:mt-16 mt-24 mb-12">

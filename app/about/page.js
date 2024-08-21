@@ -4,6 +4,7 @@ import { useSprings, animated, to as interpolate } from '@react-spring/web';
 import { useDrag } from 'react-use-gesture';
 
 import styles from './styles.module.css';
+import Construction from '@/components/Construction'
 
 const cards = [
     'https://upload.wikimedia.org/wikipedia/commons/f/f5/RWS_Tarot_08_Strength.jpg',
@@ -63,6 +64,7 @@ function Deck() {
     // Now we're just mapping the animated values to our view, that's it. Btw, this component only renders once. :-)
     return (
         <>
+            <Construction />
             {props.map(({ x, y, rot, scale }, i) => (
                 <animated.div className={styles.deck} key={i} style={{ x, y }}>
                     {/* This is the card itself, we're binding our gesture to it (and inject its index so we know which is which) */}
@@ -81,8 +83,11 @@ function Deck() {
 
 export default function App() {
     return (
+        <>
+
         <section className={`${styles.container} mt-[-60px] mb-2 bg-gradient-to-r from-blue-400 to-purple-500 p-72`}>
             <Deck />
         </section>
+        </>
     );
 }
