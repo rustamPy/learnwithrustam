@@ -215,7 +215,7 @@ export default function NavbarWithMegaMenu() {
                     : 'top-0 max-w-full px-4 py-4'
                     } dark:bg-lwr-gray-color-200 z-50`}
             >
-                <BannerSection />
+                <BannerSection isScrolled={isScrolled} />
                 <div className="flex items-center justify-between text-blue-gray-900 dark:text-white pt-8">
                     <Typography
                         as="a"

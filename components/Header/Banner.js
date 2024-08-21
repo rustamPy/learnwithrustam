@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 
 
-const BannerSection = () => {
+const BannerSection = ({ isScrolled }) => {
 
     const [commitInfo, setCommitInfo] = useState(null);
 
@@ -26,8 +26,7 @@ const BannerSection = () => {
 
     return (
         <>
-
-            <div className="absolute top-0 left-0 w-full bg-[#ff5500] rounded-tl-xl rounded-tr-xl text-white text-center py-1 text-sm font-semibold">
+            <div className={`absolute top-0 left-0 w-full bg-[#ff5500] text-white text-center py-1 text-sm font-semibold ${isScrolled && `rounded-tl-xl rounded-tr-xl`}`}>
                 <Typography variant="small" className="font-bold text-xs">
                     🚀 Beta: {commitInfo && commitInfo.message} - {commitInfo && commitInfo.date} - {commitInfo && <span className="text-gray-900"> <a href={`https://github.com/rustamPy/learnwithrustam/commit/${commitInfo.sha}`} target="blank">   view the last changes </a> </span>}
                 </Typography>
