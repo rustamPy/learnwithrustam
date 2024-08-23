@@ -48,21 +48,15 @@ const Page = () => {
             {/* Header */}
             <div className="w-full p-4 border-b border-gray-300 dark:border-gray-800">
                 <div className="relative">
-                    <Typography variant="h2" className="font-bold text-center text-lwr-blue-color-500 dark:text-lwr-blue-color-20">
-                        "Polski Krok po Kroku" Study Emulator
-                    </Typography>
-                    <div className="absolute top-0 right-0 flex gap-2 mt-2">
-                        <Chip
-                            value="Beta"
-                            color="orange"
-                            className="cursor-pointer"
-                        />
-                        <Chip
-                            value="Guide"
-                            color="light-blue"
-                            className="cursor-pointer"
-                            onClick={toggleGuidance}
-                        />
+                    <div className="flex justify-center space-x-3 mb-2">
+                        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">"Polski Krok po Kroku" Study Emulator</h1>
+                        <div className="flex items-center space-x-2">
+
+                            <Chip variant="ghost" value="New" size="sm" color="green" className="rounded-full dark:text-gray-300" />
+                            <Chip variant="ghost" value="Beta" size="sm" color="red" className="rounded-full dark:text-gray-300" ></Chip>
+
+
+                        </div>
                     </div>
                 </div>
                 <Typography variant="h6" className="text-center mt-2 text-gray-700 dark:text-gray-300">

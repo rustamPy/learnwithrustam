@@ -76,9 +76,7 @@ export default function Videos() {
                                 <h1 className="text-3xl font-bold text-gray-800 dark:text-white">{galleryConfig.title}</h1>
                                 <div className="flex items-center space-x-2">
                                     {galleryConfig.badges.map((badge, index) => (
-                                        <Chip key={index} variant="ghost" value={badge.value} size="sm" color={badge.color} className="rounded-full dark:text-gray-300" >
-                                            {badge.value}
-                                        </Chip>
+                                        <Chip key={index} variant="ghost" value={badge.value} size="sm" color={badge.color} className="rounded-full dark:text-gray-300" ></Chip>
                                     ))}
                                 </div>
                             </div>
