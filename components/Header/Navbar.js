@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import { debounce } from 'lodash';
+
 import {
     Navbar,
     Collapse,
@@ -33,6 +34,8 @@ import {
     LanguageIcon,
     UserGroupIcon,
 } from "@heroicons/react/24/solid";
+import { FiVideo } from "react-icons/fi";
+
 import ThemeToggle from '@/components/ToggleTheme';
 
 const navListMenuItems = [
@@ -41,12 +44,6 @@ const navListMenuItems = [
         description: "Find the perfect course for yourself",
         href: "/courses",
         icon: RectangleGroupIcon,
-    },
-    {
-        title: "About Me",
-        description: "Learn more about me",
-        href: "/about",
-        icon: UserGroupIcon,
     },
     {
         title: "Leetcode",
@@ -61,9 +58,10 @@ const navListMenuItems = [
         icon: LanguageIcon,
     },
     {
-        title: "Contact",
-        description: "Find the perfect solution for your needs.",
-        icon: PhoneIcon,
+        title: "IT Video Tutorials",
+        description: "Exclusive tutorials only here",
+        href: "/videos/tutorials",
+        icon: FiVideo,
     }
 ];
 
@@ -182,6 +180,14 @@ function NavList() {
                 className="font-bold text-lwr-blue-color-500"
             >
                 <ListItem className="flex items-center gap-2 py-2 pr-4">Bring Together</ListItem>
+            </Typography>
+            <Typography
+                as="a"
+                href="/about"
+                variant="small"
+                className="font-bold text-lwr-blue-color-500"
+            >
+                <ListItem className="flex items-center gap-2 py-2 pr-4">About Me</ListItem>
             </Typography>
             <NavListMenu />
         </List>

@@ -4,13 +4,11 @@
                 "id": "it",
                 "slug": "tutorials",
                 "title": "IT Tutorials",
-                "description": "This is the collection of private tutorials, This is the collection of private tutorials, This is the collection of private tutorials, This is the collection of private tutorials, ",
+                "description": "This is a collection of exclusive private tutorials, offering personalized and in-depth instruction on a variety of subjects. Each tutorial is designed to provide tailored guidance and detailed insights, ensuring a comprehensive learning experience. Explore our range of topics to enhance your skills and knowledge with expert instruction available only through this curated selection.",
                 "categories": [
                     "All",
                     "Coding",
-                    "Networking",
-                    "Cybersecurity",
-                    "Cloud Computing"
+                    "General IT"
                 ],
                 "badges": [
                     {
@@ -23,12 +21,6 @@
                     }
                 ],
                 "videos": [
-                    {
-                        "id": 1,
-                        "title": "Introduction to Programming",
-                        "category": "Programming",
-                        "url": "https://www.youtube.com/embed/QA8N4XZvRr0?si=OOQK6ngo9MDgyHUr"
-                    }
                 ]
             },
             {
@@ -39,11 +31,7 @@
                 "categories": [
                     "All",
                     "Europe",
-                    "Asia",
-                    "North America",
-                    "South America",
-                    "Africa",
-                    "Australia"
+                    "Asia"
                 ],
                 "badges": [
                     {
@@ -78,49 +66,6 @@
                         "id": 4,
                         "title": "#4 - Rome - Trip to Italian Capital",
                         "category": "Europe",
-                        "url": "https://www.youtube.com/embed/AAWKk93LttA?si=qZ_cwZsEGSim7J8J"
-                    },
-                    {
-                        "id": 5,
-                        "title": "#4 - Rome - Trip to Italian Capital",
-                        "category": "Europe",
-                        "url": "https://www.youtube.com/embed/AAWKk93LttA?si=qZ_cwZsEGSim7J8J"
-                    },
-                    {
-                        "id": 6,
-                        "title": "#4 - Rome - Trip to Italian Capital",
-                        "category": "Europe",
-                        "url": "https://www.youtube.com/embed/AAWKk93LttA?si=qZ_cwZsEGSim7J8J"
-                    },
-                    {
-                        "id": 7,
-                        "title": "#4 - Rome - Trip to Italian Capital",
-                        "category": "Europe",
-                        "url": "https://www.youtube.com/embed/AAWKk93LttA?si=qZ_cwZsEGSim7J8J"
-                    },
-                    {
-                        "id": 8,
-                        "title": "#4 - Rome - Trip to Italian Capital",
-                        "category": "Europe",
-                        "url": "https://www.youtube.com/embed/AAWKk93LttA?si=qZ_cwZsEGSim7J8J"
-                    },
-                    {
-                        "id": 9,
-                        "title": "#4 - Rome - Trip to Italian Capital",
-                        "category": "Europe",
-                        "url": "https://www.youtube.com/embed/AAWKk93LttA?si=qZ_cwZsEGSim7J8J"
-                    },
-                    {
-                        "id": 10,
-                        "title": "#4 - Rome - Trip to Italian Capital",
-                        "category": "Europe",
-                        "url": "https://www.youtube.com/embed/AAWKk93LttA?si=qZ_cwZsEGSim7J8J"
-                    },
-                    {
-                        "id": 11,
-                        "title": "#4 - Rome - Trip to Italian Capital",
-                        "category": "Europe",
-                        "details": "dsada",
                         "url": "https://www.youtube.com/embed/AAWKk93LttA?si=qZ_cwZsEGSim7J8J"
                     }
                 ]

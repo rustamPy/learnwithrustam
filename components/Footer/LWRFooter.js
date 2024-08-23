@@ -105,7 +105,7 @@ const LWRFooter = () => {
                                 />
                             </svg>
                         </Typography>
-                        <Typography as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100" key="instagram-icon">
+                        <Typography as="a" href="https://github.com/rustamPy/learnwithrustam" className="opacity-80 transition-opacity hover:opacity-100" key="github-icon">
                             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path
                                     fillRule="evenodd"
