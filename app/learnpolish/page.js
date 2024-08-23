@@ -58,6 +58,14 @@ const Page = () => {
 
                         </div>
                     </div>
+                    <div className="absolute top-0 right-0 flex gap-2 mt-2">
+                        <Chip
+                            value="Guide"
+                            color="light-blue"
+                            className="cursor-pointer"
+                            onClick={toggleGuidance}
+                        />
+                    </div>
                 </div>
                 <Typography variant="h6" className="text-center mt-2 text-gray-700 dark:text-gray-300">
                     Listen to the audio lessons while you study
