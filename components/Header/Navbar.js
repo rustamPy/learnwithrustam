@@ -179,7 +179,7 @@ function NavList() {
                 variant="small"
                 className="font-bold text-lwr-blue-color-500"
             >
-                <ListItem className="flex items-center gap-2 py-2 pr-4">Bring Together</ListItem>
+                <ListItem className="flex items-center gap-2 py-2 pr-4">Get Together</ListItem>
             </Typography>
             <Typography
                 as="a"

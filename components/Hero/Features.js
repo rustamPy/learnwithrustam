@@ -3,36 +3,36 @@ import { TbArrowsJoin2, TbPlugConnected } from "react-icons/tb";
 import { MdOutlineFollowTheSigns } from "react-icons/md";
 import { AiTwotoneBook } from "react-icons/ai";
 
-
-
-
 const features = [
     {
         name: 'Join',
         description:
-            `Open a free account on Slack using either your email address or social accounts such as Google account or Apple ID. 
-            The process will take 2-3 minutes of your time. While registering, please use your real name and surname for authenticity. Username can be whatever you prefer.`,
+            `Create a free Slack account using your email or social accounts like Google or Apple ID. 
+            It’s a quick process, taking just 2-3 minutes. Be sure to use your real name for authenticity, 
+            though you can choose any username you like.`,
         icon: TbArrowsJoin2,
     },
     {
         name: 'Connect',
         description:
-            `Once I have thoroughly assessed and evaluated your skills, 
-            I will extend an invitation for you to join the channel that best suits your current knowledge level. 
-            You can trust me to handle this properly.`,
+            `After I’ve evaluated your skills, 
+            I’ll invite you to join the channel that aligns best with your current level. 
+            You can trust that I’ll make the right choice for you.`,
         icon: TbPlugConnected,
     },
     {
         name: 'Follow',
         description:
-            `TBA`,
+            `Staying on track is key to your growth. Ensure you regularly check updates, participate in discussions, and keep up with new assignments. 
+            Engage with your peers, ask questions, and share insights—collaboration is a powerful learning tool. 
+            By following the community guidelines and actively contributing, you'll not only enhance your own learning but also support others in their journey. Stay committed, and you'll see continuous progress.`,
         icon: MdOutlineFollowTheSigns,
     },
     {
         name: 'Learn',
         description:
-            `Learning is the most important part of the journey. You will need to stay focused. 
-            Join on time, follow the instructions and complete tasks. Good luck!`,
+            `Learning is the most crucial part of this journey. Stay focused, join sessions on time, 
+            follow the instructions closely, and complete the tasks. Wishing you the best of luck!`,
         icon: AiTwotoneBook,
     },
 ]
@@ -48,21 +48,23 @@ export default function Features() {
                         Enjoy the <span className="text-lwr-orange-color-100">virtual</span> classes
                     </Typography>
                     <p className="mt-6 text-lg leading-8 text-gray-600">
-                        Quis tellus eget adipiscing convallis sit sit eget aliquet quis. Suspendisse eget egestas a elementum
-                        pulvinar et feugiat blandit at. In mi viverra elit nunc.
+                        Immerse yourself in a rich learning environment where collaboration and interaction are key.
+                        Each class is designed to be engaging and informative, providing you with the tools and knowledge needed to succeed.
+                        Take advantage of the opportunities to connect with your peers and instructors,
+                        and make the most of this virtual learning journey.
                     </p>
                 </div>
                 <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
                     <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
                         {features.map((feature) => (
                             <div key={feature.name} className="relative pl-16">
-                                <dt className="text-base font-semibold leading-7 text-gray-900 dark:text-lwr-orange-color-100">
+                                <dt className="text-base font-semibold leading-7 text-left text-gray-900 dark:text-lwr-orange-color-100">
                                     <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-lwr-blue-color-500">
                                         <feature.icon aria-hidden="true" className="h-6 w-6 text-white" />
                                     </div>
                                     {feature.name}
                                 </dt>
-                                <dd className="mt-2 text-base leading-7 text-gray-600 hover:text-lwr-orange-color-100">{feature.description}</dd>
+                                <dd className="mt-2 text-base leading-7 text-left text-gray-600 hover:text-lwr-orange-color-100">{feature.description}</dd>
                             </div>
                         ))}
                     </dl>

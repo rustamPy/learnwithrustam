@@ -5,14 +5,17 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import ClientSessionProvider from './SessionProvider';
 import NavBar from '@/components/Header/Navbar';
 import LWRFooter from '@/components/Footer/LWRFooter';
-import Head from 'next/head';
 
+export const metadata = {
+  title: 'LWR',
+  description: 'Learn with Rustam'
+};
 export default async function RootLayout({ children }) {
   const session = await getServerSession(authOptions);
 
   return (
     <html lang="en">
-      <Head>
+      <head>
         <title>LWR</title>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico" />
@@ -22,7 +25,7 @@ export default async function RootLayout({ children }) {
           href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
           rel="stylesheet"
         />
-      </Head>
+      </head>
       <body>
         <ClientSessionProvider session={session}>
           <NavBar />
