@@ -64,7 +64,6 @@ export default function Videos() {
     const endIndex = startIndex + videosPerPage;
     const currentVideos = filteredVideos.slice(startIndex, endIndex);
 
-    console.log(galleryConfig)
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -76,8 +75,8 @@ export default function Videos() {
                             <div className="flex items-center space-x-3 mb-2">
                                 <h1 className="text-3xl font-bold text-gray-800 dark:text-white">{galleryConfig.title}</h1>
                                 <div className="flex items-center space-x-2">
-                                    {galleryConfig.badges.map(badge => (
-                                        <Chip variant="ghost" value={badge.value} size="sm" color={badge.color} className="rounded-full dark:text-gray-300" >
+                                    {galleryConfig.badges.map((badge, index) => (
+                                        <Chip key={index} variant="ghost" value={badge.value} size="sm" color={badge.color} className="rounded-full dark:text-gray-300" >
                                             {badge.value}
                                         </Chip>
                                     ))}

@@ -1,7 +1,7 @@
 'use client';
 import { Typography } from "@material-tailwind/react";
 import Image from "next/image";
-import footerIcon from "@/assets/images/footer_icon.png"
+import footerIcon from "@/assets/images/footer_icon.png";
 
 const LINKS = [
     {
@@ -44,9 +44,7 @@ const LWRFooter = () => {
                             </Typography>
                         </div>
                         {/*<Typography className="text-base font-extrabold">+48 573-456-169</Typography>*/}
-
                     </div>
-
 
                     <div className="grid grid-cols-4 justify-between gap-4">
                         {LINKS.map(({ title, items }) => (
@@ -57,30 +55,25 @@ const LWRFooter = () => {
                                 >
                                     {title}
                                 </Typography>
-                                {items.map((element) => (
-                                    <>
+                                {items.map((element, index) => (
+                                    <li key={`${title}-${index}`}>
                                         {Array.isArray(element) ?
-                                            <li key={`${title}-${element[0]}`}>
-                                                <Typography
-                                                    as="a"
-                                                    href={element[1]}
-                                                    className="py-1.5 font-normal hover:font-semibold dark:hover:text-lwr-orange-color-100"
-                                                >
-                                                    {element[0]}
-                                                </Typography>
-                                            </li> :
-                                            <li key={`${title}-${element}`}>
-                                                <Typography
-                                                    as="a"
-                                                    href='#'
-                                                    className="py-1.5 font-normal hover:font-bold dark:hover:text-lwr-orange-color-100"
-                                                >
-                                                    {element}
-                                                </Typography>
-                                            </li>
+                                            <Typography
+                                                as="a"
+                                                href={element[1]}
+                                                className="py-1.5 font-normal hover:font-semibold dark:hover:text-lwr-orange-color-100"
+                                            >
+                                                {element[0]}
+                                            </Typography> :
+                                            <Typography
+                                                as="a"
+                                                href='#'
+                                                className="py-1.5 font-normal hover:font-bold dark:hover:text-lwr-orange-color-100"
+                                            >
+                                                {element}
+                                            </Typography>
                                         }
-
-                                    </>
+                                    </li>
                                 ))}
                             </ul>
                         ))}
@@ -94,7 +87,7 @@ const LWRFooter = () => {
                         &copy; {currentYear} LWR. All Rights Reserved.
                     </Typography>
                     <div className="flex gap-4 sm:justify-center">
-                        <Typography as="a" href="#" className="hover:opacity-100">
+                        <Typography as="a" href="#" className="hover:opacity-100" key="facebook-icon">
                             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path
                                     fillRule="evenodd"
@@ -103,7 +96,7 @@ const LWRFooter = () => {
                                 />
                             </svg>
                         </Typography>
-                        <Typography as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100">
+                        <Typography as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100" key="twitter-icon">
                             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path
                                     fillRule="evenodd"
@@ -112,7 +105,7 @@ const LWRFooter = () => {
                                 />
                             </svg>
                         </Typography>
-                        <Typography as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100">
+                        <Typography as="a" href="#" className="opacity-80 transition-opacity hover:opacity-100" key="instagram-icon">
                             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path
                                     fillRule="evenodd"
