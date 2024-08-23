@@ -2,11 +2,12 @@
 import { Typography } from "@material-tailwind/react";
 import Image from "next/image";
 import footerIcon from "@/assets/images/footer_icon.png";
+import { MdConstruction } from 'react-icons/md'
 
 const LINKS = [
     {
         title: "Services",
-        items: [["Courses", "/courses"], ["Leetcode", "/leetcode"], ["Learn Polish", "/learnpolish"], ["Tutorials", "/videos/tutorials"], "Mentoring"],
+        items: [["Courses", "/courses", 'c'], ["Leetcode", "/leetcode"], ["Learn Polish", "/learnpolish"], ["Tutorials", "/videos/tutorials"], "Mentoring"],
     },
     {
         title: "Company",
@@ -57,22 +58,40 @@ const LWRFooter = () => {
                                 </Typography>
                                 {items.map((element, index) => (
                                     <li key={`${title}-${index}`}>
-                                        {Array.isArray(element) ?
-                                            <Typography
-                                                as="a"
-                                                href={element[1]}
-                                                className="py-1.5 font-normal hover:font-semibold dark:hover:text-lwr-orange-color-100"
-                                            >
-                                                {element[0]}
-                                            </Typography> :
-                                            <Typography
-                                                as="a"
-                                                href='#'
-                                                className="py-1.5 font-normal hover:font-bold dark:hover:text-lwr-orange-color-100"
-                                            >
-                                                {element}
-                                            </Typography>
-                                        }
+                                        {Array.isArray(element) ? (
+                                            <>
+                                                {element.length > 0 && element[2] === 'c' ? (
+                                                    <>
+                                                        <Typography
+                                                            as="a"
+                                                            href={element[1]}
+                                                            className="py-1.5 font-normal hover:font-semibold text-red-800"
+                                                        >
+                                                            {element[0]}<MdConstruction className="text-red-800 ml-2 inline-block" /> {/* Construction cone icon */}
+
+                                                        </Typography>
+                                                    </>
+                                                ) : (
+                                                    <Typography
+                                                        as="a"
+                                                        href={element[1]}
+                                                        className="py-1.5 font-normal hover:font-semibold dark:hover:text-lwr-orange-color-100"
+                                                    >
+                                                        {element[0]}
+                                                    </Typography>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <s>
+                                                <Typography
+                                                    as="a"
+                                                        className="py-1.5 font-normal hover:font-bold dark:hover:text-lwr-orange-color-100"
+                                                        aria-disabled
+                                                    >
+                                                        {element}
+                                                    </Typography>
+                                            </s>
+                                        )}
                                     </li>
                                 ))}
                             </ul>

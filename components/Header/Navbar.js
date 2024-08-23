@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import { debounce } from 'lodash';
+import { MdConstruction } from 'react-icons/md'
+
 
 import {
     Navbar,
@@ -24,15 +26,8 @@ import {
 } from "@heroicons/react/24/outline";
 import {
     Bars4Icon,
-    GlobeAmericasIcon,
-    NewspaperIcon,
-    PhoneIcon,
     RectangleGroupIcon,
-    SquaresPlusIcon,
-    SunIcon,
-    TagIcon,
     LanguageIcon,
-    UserGroupIcon,
 } from "@heroicons/react/24/solid";
 import { FiVideo } from "react-icons/fi";
 
@@ -44,6 +39,7 @@ const navListMenuItems = [
         description: "Find the perfect course for yourself",
         href: "/courses",
         icon: RectangleGroupIcon,
+        construction: true
     },
     {
         title: "Leetcode",
@@ -71,7 +67,7 @@ function NavListMenu() {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
     const renderItems = navListMenuItems.map(
-        ({ icon, title, description, href }, key) => (
+        ({ icon, title, description, href, construction }, key) => (
             <a href={href} key={key}>
                 <MenuItem className="flex items-center gap-3 rounded-lg">
                     <div className="flex items-center justify-center rounded-lg p-2 ">
@@ -82,13 +78,22 @@ function NavListMenu() {
                         })}
                     </div>
                     <div>
+                        {construction ?
+
+                            <Typography
+                                variant="h5"
+                                className="flex items-center text-sm text-red-800 font-semibold"
+                            >
+                                {title} <MdConstruction className="text-red-800 ml-2 inline-block" />
+                            </Typography> :
+
                         <Typography
                             variant="h6"
                             color="blue-gray"
                             className="flex items-center text-sm font-bold"
                         >
                             {title}
-                        </Typography>
+                            </Typography>}
                         <Typography
                             variant="paragraph"
                             className="text-xs !font-medium text-blue-gray-500"
@@ -144,8 +149,7 @@ function NavListMenu() {
     );
 }
 
-function NavList() {
-    return (
+const NavList = () => (
         <List className="mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
             <Typography
                 as="a"
@@ -185,16 +189,15 @@ function NavList() {
                 as="a"
                 href="/about"
                 variant="small"
-                className="font-bold text-lwr-blue-color-500"
+            className="font-bold text-red-800 hover:text-red-800"
             >
-                <ListItem className="flex items-center gap-2 py-2 pr-4">About Me</ListItem>
+            <ListItem className="flex items-center gap-2 py-2 pr-4 hover:text-red-800">About Me <MdConstruction className="text-red-800 inline-block" /></ListItem>
             </Typography>
             <NavListMenu />
         </List>
-    );
-}
+);
 
-export default function NavbarWithMegaMenu() {
+const NavbarWithMegaMenu = () => {
     const [openNav, setOpenNav] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const { data: session, status } = useSession();
@@ -304,3 +307,5 @@ const UserProfile = ({ user }) => {
         </div>
     )
 }
+
+export default NavbarWithMegaMenu;
