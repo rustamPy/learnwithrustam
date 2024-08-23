@@ -32,6 +32,8 @@ import {
 import { FiVideo } from "react-icons/fi";
 
 import ThemeToggle from '@/components/ToggleTheme';
+import BannerSection from '@/components/Header/Banner'
+
 
 const navListMenuItems = [
     {
@@ -61,7 +63,6 @@ const navListMenuItems = [
     }
 ];
 
-import BannerSection from '@/components/Header/Banner'
 
 function NavListMenu() {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -199,6 +200,15 @@ const NavList = () => (
         </List>
 );
 
+
+const UserProfile = ({ user }) => {
+    return (
+        <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+            <a href="/profile"><img src={user.user?.image} width={30} style={{ borderRadius: 50 }} /></a>
+        </div>
+    )
+}
+
 const NavbarWithMegaMenu = () => {
     const [openNav, setOpenNav] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -301,13 +311,5 @@ const NavbarWithMegaMenu = () => {
     );
 }
 
-
-const UserProfile = ({ user }) => {
-    return (
-        <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-            <a href="/profile"><img src={user.user?.image} width={30} style={{ borderRadius: 50 }} /></a>
-        </div>
-    )
-}
 
 export default NavbarWithMegaMenu;
