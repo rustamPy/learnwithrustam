@@ -17,7 +17,7 @@ const Page = () => {
 
     useEffect(() => {
         const handleResize = () => {
-            setMobile(window.innerWidth <= 768);
+            setMobile(window.innerWidth <= 1153);
         };
 
         handleResize();
@@ -58,7 +58,7 @@ const Page = () => {
     if (mobile) {
         return (
             <div style={{ padding: '20px', backgroundColor: '#ffdddd', color: '#d8000c', border: '1px solid #d8000c', borderRadius: '5px' }}>
-                <p>This page is only available on a computer browser.</p>
+                <p>Oops! Looks like this page is taking a nap on mobile devices. It's only awake and active on computer screens.</p>
             </div>
         )
     }
