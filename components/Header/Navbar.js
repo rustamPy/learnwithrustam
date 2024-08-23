@@ -185,14 +185,16 @@ const NavList = () => (
             >
                 <ListItem className="flex items-center gap-2 py-2 pr-4">Get Together</ListItem>
             </Typography>
+
             <Typography
                 as="a"
                 href="/about"
                 variant="small"
-            className="font-bold text-red-800 hover:text-red-800"
+            className="font-bold text-lwr-blue-color-500"
             >
-            <ListItem className="flex items-center gap-2 py-2 pr-4 hover:text-red-800">About Me <MdConstruction className="text-red-800 inline-block" /></ListItem>
+            <ListItem className="flex items-center gap-2 py-2 pr-4">About Me</ListItem>
             </Typography>
+
             <NavListMenu />
         </List>
 );
