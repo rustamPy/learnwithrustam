@@ -98,7 +98,7 @@ export default function About() {
                             <p>Feel free to reach out for collaborations or just a friendly <i>hello</i></p>
                         </div>
                         <div className="mt-5">
-                            <a href="mailto:your.email@example.com" className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                            <a href="mailto:karimov.rustam.live@gmail.com" className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
                                 Contact Me
                             </a>
                         </div>
