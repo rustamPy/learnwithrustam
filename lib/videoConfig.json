@@ -1,0 +1,129 @@
+    {
+        "galleries": [
+            {
+                "id": "it",
+                "slug": "tutorials",
+                "title": "IT Tutorials",
+                "description": "This is the collection of private tutorials, This is the collection of private tutorials, This is the collection of private tutorials, This is the collection of private tutorials, ",
+                "categories": [
+                    "All",
+                    "Coding",
+                    "Networking",
+                    "Cybersecurity",
+                    "Cloud Computing"
+                ],
+                "badges": [
+                    {
+                        "value": "New",
+                        "color": "green"
+                    },
+                    {
+                        "value": "Beta",
+                        "color": "red"
+                    }
+                ],
+                "videos": [
+                    {
+                        "id": 1,
+                        "title": "Introduction to Programming",
+                        "category": "Programming",
+                        "url": "https://www.youtube.com/embed/QA8N4XZvRr0?si=OOQK6ngo9MDgyHUr"
+                    }
+                ]
+            },
+            {
+                "id": "travel",
+                "slug": "travel",
+                "title": "Travel Videos",
+                "description": "This is a collection of travel videos showcasing various destinations and experiences. Explore our curated selection of videos featuring breathtaking landscapes, vibrant cityscapes, cultural highlights, and insider tips to inspire your next adventure. Whether you're looking for travel guides, personal journeys, or unique locales, this collection has something to spark your wanderlust.",
+                "categories": [
+                    "All",
+                    "Europe",
+                    "Asia",
+                    "North America",
+                    "South America",
+                    "Africa",
+                    "Australia"
+                ],
+                "badges": [
+                    {
+                        "value": "New",
+                        "color": "green"
+                    },
+                    {
+                        "value": "Beta",
+                        "color": "red"
+                    }
+                ],
+                "videos": [
+                    {
+                        "id": 1,
+                        "title": "#1 - Zakopane - Trip to Mountains of Poland",
+                        "category": "Europe",
+                        "url": "https://www.youtube.com/embed/gWTHW81mGLc?si=fi_zKJv3daAQDhFc"
+                    },
+                    {
+                        "id": 2,
+                        "title": "#2 - Corfu - Trip to Greek Island",
+                        "category": "Europe",
+                        "url": "https://www.youtube.com/embed/QA8N4XZvRr0?si=2aumHXX3_1LZkX0v"
+                    },
+                    {
+                        "id": 3,
+                        "title": "#3 - Gdansk - Trip to Northern Poland",
+                        "category": "Europe",
+                        "url": "https://www.youtube.com/embed/ofpdiMkkMZw?si=pEagmcb95WLgFswP"
+                    },
+                    {
+                        "id": 4,
+                        "title": "#4 - Rome - Trip to Italian Capital",
+                        "category": "Europe",
+                        "url": "https://www.youtube.com/embed/AAWKk93LttA?si=qZ_cwZsEGSim7J8J"
+                    },
+                    {
+                        "id": 5,
+                        "title": "#4 - Rome - Trip to Italian Capital",
+                        "category": "Europe",
+                        "url": "https://www.youtube.com/embed/AAWKk93LttA?si=qZ_cwZsEGSim7J8J"
+                    },
+                    {
+                        "id": 6,
+                        "title": "#4 - Rome - Trip to Italian Capital",
+                        "category": "Europe",
+                        "url": "https://www.youtube.com/embed/AAWKk93LttA?si=qZ_cwZsEGSim7J8J"
+                    },
+                    {
+                        "id": 7,
+                        "title": "#4 - Rome - Trip to Italian Capital",
+                        "category": "Europe",
+                        "url": "https://www.youtube.com/embed/AAWKk93LttA?si=qZ_cwZsEGSim7J8J"
+                    },
+                    {
+                        "id": 8,
+                        "title": "#4 - Rome - Trip to Italian Capital",
+                        "category": "Europe",
+                        "url": "https://www.youtube.com/embed/AAWKk93LttA?si=qZ_cwZsEGSim7J8J"
+                    },
+                    {
+                        "id": 9,
+                        "title": "#4 - Rome - Trip to Italian Capital",
+                        "category": "Europe",
+                        "url": "https://www.youtube.com/embed/AAWKk93LttA?si=qZ_cwZsEGSim7J8J"
+                    },
+                    {
+                        "id": 10,
+                        "title": "#4 - Rome - Trip to Italian Capital",
+                        "category": "Europe",
+                        "url": "https://www.youtube.com/embed/AAWKk93LttA?si=qZ_cwZsEGSim7J8J"
+                    },
+                    {
+                        "id": 11,
+                        "title": "#4 - Rome - Trip to Italian Capital",
+                        "category": "Europe",
+                        "details": "dsada",
+                        "url": "https://www.youtube.com/embed/AAWKk93LttA?si=qZ_cwZsEGSim7J8J"
+                    }
+                ]
+            }
+        ]
+    }
