@@ -1,24 +1,37 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import PdfViewer from '@/components/PdfViewer';
 import AudioPlayer from '@/components/AudioPlayer';
 import { Typography, Card, Progress, Chip } from '@material-tailwind/react';
 
 import { audioMap, chapterMap } from './data';
 
-const pdfFile = 'book1.pdf'; // Path to your PDF file
+const pdfFile = 'book1.pdf';
 
 const Page = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [visibleAudio, setVisibleAudio] = useState(null);
-    const [showGuidance, setShowGuidance] = useState(false); // State for guidance visibility
+    const [showGuidance, setShowGuidance] = useState(false);
+    const [mobile, setMobile] = useState(false);
 
-    const totalPages = 171; // Replace with actual total pages
+
+    useEffect(() => {
+        const handleResize = () => {
+            setMobile(window.innerWidth <= 768);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const totalPages = 171;
     const progress = (currentPage / totalPages) * 100;
 
     const handlePageChange = ({ currentPage }) => {
         setCurrentPage(currentPage);
-        setVisibleAudio(null); // Reset visible audio on page change
+        setVisibleAudio(null);
     };
 
     const toggleAudio = (index) => {
@@ -33,7 +46,6 @@ const Page = () => {
         (chapter) => currentPage >= chapter.range[0] && currentPage <= chapter.range[1]
     );
 
-    // Calculate the total number of audios for the current chapter
     const totalAudios = currentChapter
         ? chapterMap.reduce((total, chapter) => {
             if (chapter.range[0] >= currentChapter.range[0] && chapter.range[1] <= currentChapter.range[1]) {
@@ -42,6 +54,16 @@ const Page = () => {
             return total;
         }, 0)
         : 0;
+
+    if (mobile) {
+        return (
+            <div style={{ padding: '20px', backgroundColor: '#ffdddd', color: '#d8000c', border: '1px solid #d8000c', borderRadius: '5px' }}>
+                <p>This page is only available on a computer browser.</p>
+            </div>
+        )
+    }
+
+
 
     return (
         <div className="flex flex-col h-screen mb-[200px]">
@@ -112,11 +134,6 @@ const Page = () => {
                                 <Typography className="text-4xl font-bold mb-2 text-lwr-blue-color-500 dark:text-lwr-blue-color-20">
                                     {currentChapter.name}
                                 </Typography>
-                                <Chip
-                                    value="Chapter Info"
-                                    color="blue"
-                                    className="absolute top-0 right-0"
-                                />
                             </div>
                             <Typography className="text-lg font-bold mb-4 text-lwr-blue-color-500 dark:text-lwr-blue-color-20">
                                 {currentChapter.description}
