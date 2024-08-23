@@ -67,6 +67,7 @@ const Page = () => {
                         />
                     </div>
                 </div>
+
                 <Typography variant="h6" className="text-center mt-2 text-gray-700 dark:text-gray-300">
                     Listen to the audio lessons while you study
                 </Typography>
