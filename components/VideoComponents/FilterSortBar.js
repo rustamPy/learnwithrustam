@@ -9,7 +9,7 @@ export default function FilterSortBar({
     categories
 }) {
     return (
-        <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4">
+        <div className="flex flex-col md:flex-row justify-between space-y-4 md:space-y-0 md:space-x-4">
             <div className="flex items-center space-x-2">
                 <label className="font-semibold text-gray-700 dark:text-white">Category:</label>
                 <select
