@@ -100,7 +100,7 @@ export default function Videos() {
                             </button>
                         </div>
                     </div>
-                    <SearchBar onSearch={handleSearch} />
+                    <SearchBar onSearch={handleSearch} placeholder={"Search videos"} />
                     <FilterSortBar
                         onCategoryChange={handleCategoryFilter}
                         onSortOrderChange={handleSortOrder}

@@ -6,7 +6,6 @@ export default function FilterSortBar({
     onSortOrderChange,
     selectedCategory,
     sortOrder,
-    onDateChange,
     categories,
     label
 }) {

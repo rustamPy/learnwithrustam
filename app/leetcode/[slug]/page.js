@@ -4,6 +4,12 @@ import { remark } from 'remark';
 import html from 'remark-html';
 import matter from 'gray-matter';
 
+const COLOR_MAP = {
+    'Easy': 'green-500',
+    'Medium': 'yellow-700',
+    'Hard': '#f5385d'
+}
+
 
 async function getMarkdownContent(fileName) {
     const filePath = path.join(process.cwd(), 'public', 'leetcode', fileName);
@@ -22,14 +28,14 @@ export default async function ArticlePage({ params }) {
     const { htmlContent, data } = await getMarkdownContent(`${slug}.md`);
 
     return (
-        <div className="flex flex-col items-center p-2 mb-10 font-sans">
-            <h1 className="text-5xl font-extrabold uppercase mb-6 text-center text-gray-900">
+        <div className="flex flex-col items-center mb-10 font-sans pr-10 pl-10">
+            <h1 className="text-5xl font-extrabold uppercase mb-6 text-center">
                 {data.title || slug.replace('-', ' ')}
             </h1>
-            <div className="max-w-4xl w-full bg-white p-8 rounded-lg shadow-lg">
+            <div className="w-full p-8 rounded-lg shadow-lg dark:bg-gray-900">
                 <div className="flex items-center mb-4">
                     <span className="text-lg font-medium mr-4">Difficulty:</span>
-                    <span className={`inline-block px-4 py-1 text-sm font-semibold text-white rounded-full ${getBadgeClasses(data.level)}`}>
+                    <span className={`inline-block px-4 py-1 text-sm font-semibold rounded-full bg-${COLOR_MAP[data.level]}`}>
                         {data.level || 'Unknown'}
                     </span>
                 </div>
@@ -39,15 +45,3 @@ export default async function ArticlePage({ params }) {
     );
 }
 
-function getBadgeClasses(level) {
-    switch (level?.toLowerCase()) {
-        case 'easy':
-            return 'bg-green-500';
-        case 'medium':
-            return 'bg-yellow-500';
-        case 'hard':
-            return 'bg-red-500';
-        default:
-            return 'bg-gray-500';
-    }
-}

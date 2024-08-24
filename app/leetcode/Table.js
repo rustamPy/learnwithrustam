@@ -2,26 +2,63 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { Typography } from "@material-tailwind/react";
+import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
 
 import SearchBar from '@/components/FunctionalComponents/SearchBar';
 import FilterSortBar from '@/components/FunctionalComponents/FilterSortBar';
 import Pagination from '@/components/FunctionalComponents/Pagination';
 
-export default function Table({ questions }) {
-    const [sortedQuestions, setSortedQuestions] = useState(questions);
+const Table = ({ questions }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [category, setCategory] = useState('All');
     const [sortOrder, setSortOrder] = useState('asc');
     const [currentPage, setCurrentPage] = useState(1);
     const [questionsPerPage, setQuestionsPerPage] = useState(8);
 
+    const TABLE_HEAD = ["ID", "Title", "Difficulty"];
 
+    const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
 
-    const COLOR_MAP = {
-        'Easy': 'green-500',
-        'Medium': 'yellow-700',
-        'Hard': '#f5385d'
-    }
+    const handleSort = (key) => {
+        let direction = "asc";
+        if (sortConfig.key === key && sortConfig.direction === "asc") {
+            direction = "desc";
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const sortedQuestions = [...questions]
+        .filter(question =>
+            (question.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                question.id.toString().toLowerCase().includes(searchQuery.toLowerCase())) &&
+            (category === 'All' || question.level === category)
+        )
+        .sort((a, b) => {
+            if (sortConfig.key) {
+                let aValue = a[sortConfig.key.toLowerCase()];
+                let bValue = b[sortConfig.key.toLowerCase()];
+
+                // Handle cases where aValue or bValue might be undefined
+                if (aValue === undefined) aValue = '';
+                if (bValue === undefined) bValue = '';
+
+                if (sortConfig.key.toLowerCase() === "difficulty") {
+                    const difficultyOrder = { easy: 1, medium: 2, hard: 3 };
+                    aValue = difficultyOrder[a.level.toLowerCase()] || 0;
+                    bValue = difficultyOrder[b.level.toLowerCase()] || 0;
+                }
+
+                // Sort based on direction
+                if (aValue < bValue) {
+                    return sortConfig.direction === "asc" ? -1 : 1;
+                }
+                if (aValue > bValue) {
+                    return sortConfig.direction === "asc" ? 1 : -1;
+                }
+            }
+            return 0;
+        });
 
     const handleSearch = (query) => {
         setSearchQuery(query);
@@ -42,20 +79,16 @@ export default function Table({ questions }) {
         setCurrentPage(1);
     };
 
-    const filteredQuestions = sortedQuestions
-        .filter((question) =>
-            question.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-            (category === 'All' || question.level === category)
-        )
-        .sort((a, b) =>
-            sortOrder === 'asc' ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title)
-        );
-
-    const totalPages = Math.ceil(filteredQuestions.length / questionsPerPage);
+    const totalPages = Math.ceil(sortedQuestions.length / questionsPerPage);
     const startIndex = (currentPage - 1) * questionsPerPage;
     const endIndex = startIndex + questionsPerPage;
-    const currentQuestions = filteredQuestions.slice(startIndex, endIndex);
+    const currentQuestions = sortedQuestions.slice(startIndex, endIndex);
 
+    const COLOR_MAP = {
+        'Easy': 'green-500',
+        'Medium': 'yellow-700',
+        'Hard': '#f5385d'
+    };
     return (
         <div className="container mx-auto py-8 px-4">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
@@ -73,7 +106,7 @@ export default function Table({ questions }) {
                     </div>
                 </div>
 
-                <SearchBar onSearch={handleSearch} />
+                <SearchBar onSearch={handleSearch} placeholder={"Search using question's title or number"} />
                 <FilterSortBar
                     onCategoryChange={handleCategoryFilter}
                     onSortOrderChange={handleSortOrder}
@@ -82,24 +115,59 @@ export default function Table({ questions }) {
                     categories={['All', 'Easy', 'Medium', 'Hard']}
                     label={'Level:'}
                 />
-
                 <table className="w-full border-collapse mt-5 rounded-lg overflow-hidden shadow-md">
                     <thead>
                         <tr className="bg-gray-100 dark:bg-gray-900">
-                            <th className="text-left px-4 py-2 text-sm"> Title </th>
-                            <th className="text-left px-4 py-2 text-sm"> Difficulty </th>
+                            {TABLE_HEAD.map((head) => (
+                                <th
+                                    key={head}
+                                    className="text-left px-4 py-2 text-sm cursor-pointer"
+                                    onClick={() => handleSort(head)}
+                                >
+                                    <Typography
+                                        variant="small"
+                                        color="blue-gray"
+                                        className="flex items-center justify-between gap-2 font-medium"
+                                    >
+                                        {head}
+                                        <ChevronUpDownIcon
+                                            strokeWidth={2}
+                                            className="h-4 w-4 opacity-70"
+                                        />
+                                    </Typography>
+                                </th>
+                            ))}
                         </tr>
                     </thead>
                     <tbody>
-                        {currentQuestions.map(({ slug, title, level }) => (
-                            <tr key={slug} className={`bg-${COLOR_MAP[level]}`}>
-                                <td className="px-4 py-2 border-gray-200 text-sm">
-                                    <Link href={`/leetcode/${slug}`} className="text-gray-700 no-underline">
-                                        {title}
+                        {currentQuestions.map(({ slug, id, title, level }) => (
+                            <tr
+                                key={slug}
+                                className={`transition-colors bg-${COLOR_MAP[level]} dark:bg-gray-800`}
+                            >
+                                <td className="px-4 py-2 text-sm">
+                                    <Link href={`/leetcode/${slug}`} passHref>
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal hover:underline"
+                                        >
+                                            {id}
+                                        </Typography>
                                     </Link>
                                 </td>
-                                <td className="px-4 py-2 border-gray-200 text-sm">
-                                    {level}
+                                <td className="px-4 py-2 text-sm">
+                                    <Link href={`/leetcode/${slug}`} passHref>
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal hover:underline"
+                                        >
+                                            {title}
+                                        </Typography>
+                                    </Link>
+                                </td>
+                                <td className="px-4 py-2 text-sm">{level}
                                 </td>
                             </tr>
                         ))}
@@ -117,3 +185,5 @@ export default function Table({ questions }) {
         </div>
     );
 }
+
+export default Table;
