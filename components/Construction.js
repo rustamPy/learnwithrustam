@@ -4,7 +4,7 @@ import { LuConstruction } from "react-icons/lu";
 
 const Construction = () => {
     return (
-        <div className="absolute inset-0 flex justify-center items-center bg-opacity-50 z-10">
+        <div className="mb-48 mt-48 inset-0 flex justify-center items-center bg-opacity-50">
             <div className="backdrop-blur-lg absolute inset-0"></div>
             <Typography
                 color="red"

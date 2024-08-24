@@ -22,7 +22,7 @@ export default async function ArticlePage({ params }) {
     const { htmlContent, data } = await getMarkdownContent(`${slug}.md`);
 
     return (
-        <div className="flex flex-col items-center p-8 bg-gray-100 font-sans">
+        <div className="flex flex-col items-center p-2 mb-10 font-sans">
             <h1 className="text-5xl font-extrabold uppercase mb-6 text-center text-gray-900">
                 {data.title || slug.replace('-', ' ')}
             </h1>

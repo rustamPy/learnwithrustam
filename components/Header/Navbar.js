@@ -231,7 +231,7 @@ const NavbarWithMegaMenu = () => {
         <>
             <Navbar
                 blurred
-                className={`border-0 sticky mx-auto transition-all duration-300 ${isScrolled
+                className={`border-0 sticky mx-auto transition-all duration-300 mb-10 ${isScrolled
                     ? 'top-2 mx-auto rounded-xl px-2 py-2'
                     : 'top-0 max-w-full px-4 py-4'
                     } dark:bg-lwr-gray-color-200 z-50`}

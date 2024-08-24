@@ -3,12 +3,14 @@
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import videoConfig from '@/lib/videoConfig.json';
-import SearchBar from '@/components/VideoComponents/SearchBar';
-import FilterSortBar from '@/components/VideoComponents/FilterSortBar';
-import VideoGrid from '@/components/VideoComponents/VideoGrid';
-import Pagination from '@/components/VideoComponents/Pagination';
+import SearchBar from '@/components/FunctionalComponents/SearchBar';
+import FilterSortBar from '@/components/FunctionalComponents/FilterSortBar';
+import VideoGrid from '@/components/FunctionalComponents/VideoGrid';
+import Pagination from '@/components/FunctionalComponents/Pagination';
 import { CiBoxList, CiGrid41 } from "react-icons/ci";
 import { Chip } from "@material-tailwind/react";
+import Giscus from '@giscus/react';
+
 
 export default function Videos() {
     const params = useParams();
@@ -37,7 +39,6 @@ export default function Videos() {
     };
 
     const handleDateChange = (date) => {
-        // FIX: fix it
         console.log("Date changed:", date);
     };
 
@@ -64,11 +65,9 @@ export default function Videos() {
     const endIndex = startIndex + videosPerPage;
     const currentVideos = filteredVideos.slice(startIndex, endIndex);
 
-
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <div className="container mx-auto py-8 px-4">
-
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
                     <div className="flex flex-col md:flex-row justify-between mb-8">
                         <div className="flex flex-col mb-4 md:mb-0">
@@ -83,7 +82,6 @@ export default function Videos() {
                             <p className="text-gray-600 dark:text-gray-300 max-w-xl">{galleryConfig.description}</p>
                         </div>
                         <div className="flex items-start space-x-3">
-
                             <select
                                 value={videosPerPage}
                                 onChange={handleVideosPerPageChange}
@@ -110,6 +108,7 @@ export default function Videos() {
                         sortOrder={sortOrder}
                         onDateChange={handleDateChange}
                         categories={galleryConfig.categories}
+                        label={'Categories: '}
                     />
                 </div>
                 <VideoGrid videos={currentVideos} isGridView={isGridView} />
@@ -120,6 +119,22 @@ export default function Videos() {
                         onPageChange={setCurrentPage}
                     />
                 </div>
+                <Giscus
+                    id="comments"
+                    repo="rustamPy/learnwithrustam"
+                    repoId="R_kgDOL8nujg"
+                    category="General"
+                    categoryId="DIC_kwDOL8nujs4Ch5W3"
+                    mapping="pathname"
+                    term="Welcome to @giscus/react component!"
+                    reactionsEnabled="1"
+                    emitMetadata="0"
+                    inputPosition="top"
+                    theme="light"
+                    lang="en"
+                    loading="lazy"
+                />
+
             </div>
         </div>
     );

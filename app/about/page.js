@@ -4,6 +4,7 @@ import Image from 'next/image';
 import aboutme from '@/assets/images/about/about_me.jpeg';
 import { FaDownload } from 'react-icons/fa';
 import { Typography } from '@material-tailwind/react';
+import Title from '@/components/Title'
 
 export default function About() {
     const [activeTab, setActiveTab] = useState('about');
@@ -12,7 +13,9 @@ export default function About() {
     const projects = [];
 
     return (
-        <div className="bg-gray-100 dark:bg-gray-800 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+        <div className=" min-h-screen mt-[-50px] py-12 px-4 sm:px-6 lg:px-8">
+            <Title value={'About me'}>
+
             <div className="max-w-4xl mx-auto">
                 <div className="bg-white dark:bg-gray-900 shadow-xl rounded-lg overflow-hidden relative">
                     <Typography variant="h6" className='absolute top-4 right-4 bg-indigo-600 dark:bg-indigo-700 text-white px-4 py-2 rounded-md hover:bg-indigo-700 dark:hover:bg-indigo-800 transition duration-300 flex items-center'>
@@ -110,6 +113,7 @@ export default function About() {
                     </div>
                 </div>
             </div>
+            </Title>
         </div>
     );
 }
