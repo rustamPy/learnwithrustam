@@ -5,10 +5,9 @@ module.exports = withMT({
   theme: {
     extend: {
       boxShadow: {
-        // Add custom shadow colors
         'lwr-shadow-orange': '0 1px 5px 2px #ffecd0, 0 2px 4px -1px rgba(59, 130, 246, 0.06)',
         'lwr-shadow-red': '0 4px 6px -1px rgba(239, 68, 68, 0.5), 0 2px 4px -1px rgba(239, 68, 68, 0.06)',
-        // Add more custom shadows as needed
+        'inner': 'inset 0 12px 24px rgba(0, 0, 0, 0.1)',
       },
       colors: {
         "lwr-gray-color": {

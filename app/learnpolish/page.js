@@ -57,7 +57,7 @@ const Page = () => {
 
     if (mobile) {
         return (
-            <div style={{ padding: '20px', backgroundColor: '#ffdddd', color: '#d8000c', border: '1px solid #d8000c', borderRadius: '5px' }}>
+            <div className="p-5 bg-red-100 text-red-800 border border-red-800 shadow-inner">
                 <p>Oops! Looks like this page is taking a nap on mobile devices. It's only awake and active on computer screens.</p>
             </div>
         )
