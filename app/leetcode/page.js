@@ -4,7 +4,7 @@ import matter from 'gray-matter';
 import Table from './Table';
 
 
-export const QuestionsPage = async () => {
+const QuestionsPage = async () => {
     const questions = getQuestions();
 
     const sortedQuestions = questions.sort((a, b) => a.title.localeCompare(b.title));
@@ -35,3 +35,5 @@ const getQuestions = () => {
         };
     });
 }
+
+export default QuestionsPage;
