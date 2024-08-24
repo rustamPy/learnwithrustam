@@ -1,7 +1,6 @@
 'use client';
 import React from "react";
 import { signIn, useSession } from "next-auth/react";
-// @components
 import {
     Card,
     Button,
@@ -14,7 +13,6 @@ import Image from "next/image";
 import { AddPhoneNumber } from '@/components/UserProfileUtils'
 
 
-// @icons
 import GithubLogo from '@/assets/images/github-mark.png';
 const SignInWindow = ({ message, image_path, width }) => {
     const { data: session, status } = useSession();

@@ -98,8 +98,14 @@ export default function About() {
                             <p>Feel free to reach out for collaborations or just a friendly <i>hello</i></p>
                         </div>
                         <div className="mt-5">
-                            <a href="mailto:karimov.rustam.live@gmail.com" className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                                Contact Me
+                            <a href="mailto:karimov.rustam.live@gmail.com" className="inline-flex items-center justify-center px-2 py-1 mr-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                                Email
+                            </a>
+                            <a href="https://t.me/RustamIsHere" className="inline-flex items-center justify-center px-2 py-1 mr-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                                Telegram
+                            </a>
+                            <a href="https://api.whatsapp.com/send?phone=+48573456169&text=Hello there," className="inline-flex items-center justify-center px-2 py-1 mr-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
+                                WhatsApp
                             </a>
                         </div>
                     </div>

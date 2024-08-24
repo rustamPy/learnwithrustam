@@ -11,15 +11,10 @@ export async function PATCH(request) {
     }
 
     const client = await clientPromise;
-    const db = client.db("test"); // Ensure the correct database is used
+    const db = client.db("test");
 
-    // Extract fields to update from the request body
     const { worktitle, phone, courses, about, userStatus } = await request.json();
-
-
-    // Build the update object dynamically
     const updateData = {};
-
 
     if (worktitle) updateData.worktitle = worktitle;
     if (phone) updateData.phone = phone;
@@ -33,11 +28,10 @@ export async function PATCH(request) {
 
     try {
         const result = await db.collection("users").updateOne(
-            { email: session.user.email }, // Use email from session to identify the user
-            { $set: updateData } // Use the dynamically built update object
+            { email: session.user.email },
+            { $set: updateData }
         );
 
-        // Check if a document was modified
         if (result.modifiedCount === 0) {
             return NextResponse.json({ error: "User not found or data not changed" }, { status: 404 });
         }

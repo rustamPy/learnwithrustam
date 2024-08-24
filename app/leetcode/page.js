@@ -4,10 +4,9 @@ import matter from 'gray-matter';
 import Table from './Table';
 
 
-export default async function QuestionsPage() {
+export const QuestionsPage = async () => {
     const questions = getQuestions();
 
-    // In the server component, you can sort the questions as needed
     const sortedQuestions = questions.sort((a, b) => a.title.localeCompare(b.title));
 
     return (
@@ -19,8 +18,7 @@ export default async function QuestionsPage() {
     );
 }
 
-// This function will run on the server-side only
-function getQuestions() {
+const getQuestions = () => {
     const directoryPath = path.join(process.cwd(), 'public', 'leetcode');
     const filenames = fs.readdirSync(directoryPath);
 

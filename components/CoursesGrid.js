@@ -17,7 +17,6 @@ const CoursesGrid = ({ specificCourses, cardsPerPage = 4 }) => {
     }, [session]);
 
     // Calculate total number of pages
-
     let totalPages = 0;
     if (!specificCourses) {
         totalPages = Math.ceil(courses.length / coursesPerPage);

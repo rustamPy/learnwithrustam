@@ -9,7 +9,7 @@ async function getMarkdownContent(fileName) {
     const filePath = path.join(process.cwd(), 'public', 'leetcode', fileName);
     const fileContents = fs.readFileSync(filePath, 'utf8');
 
-    const { data, content } = matter(fileContents); // Extract front matter
+    const { data, content } = matter(fileContents);
 
     const processedContent = await remark().use(html).process(content);
     const htmlContent = processedContent.toString();
@@ -39,7 +39,6 @@ export default async function ArticlePage({ params }) {
     );
 }
 
-// Function to return different badge classes based on difficulty level
 function getBadgeClasses(level) {
     switch (level?.toLowerCase()) {
         case 'easy':
