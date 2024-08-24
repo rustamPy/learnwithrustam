@@ -10,6 +10,12 @@ import FilterSortBar from '@/components/FunctionalComponents/FilterSortBar';
 import Pagination from '@/components/FunctionalComponents/Pagination';
 
 
+const COLOR_MAP = {
+    'Easy': 'green-500',
+    'Medium': 'blue-500',
+    'Hard': 'red-500'
+};
+
 const TableHead = ({ columns, onSort }) => (
     <thead>
         <tr className="bg-gray-100 dark:bg-gray-900">
@@ -35,9 +41,12 @@ const TableHead = ({ columns, onSort }) => (
     </thead>
 );
 
-const TableBody = ({ questions, colorMap }) => (
+const TableBody = ({ questions, colorMap }) => {
+    console.log(questions)
+
+    return (
     <tbody>
-        {questions.map(({ slug, id, title, level }) => (
+            {questions.map(({ slug, title, level }) => (
             <tr
                 key={slug}
                 className={`transition-colors bg-${colorMap[level]} text-gray-800`}
@@ -48,7 +57,7 @@ const TableBody = ({ questions, colorMap }) => (
                             variant="small"
                             className="font-normal hover:underline font-semibold"
                         >
-                            {id}
+                                {slug}
                         </Typography>
                     </Link>
                 </td>
@@ -66,7 +75,8 @@ const TableBody = ({ questions, colorMap }) => (
             </tr>
         ))}
     </tbody>
-);
+    )
+};
 
 const NoQuestions = () => (
     <div className="flex flex-col items-center justify-center">
@@ -108,7 +118,7 @@ const Table = ({ questions }) => {
     const sortedQuestions = [...questions]
         .filter(question =>
             (question.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                question.id.toString().toLowerCase().includes(searchQuery.toLowerCase())) &&
+                question.slug.toString().toLowerCase().includes(searchQuery.toLowerCase())) &&
             (category === 'All' || question.level === category) &&
             (selectedTopics.length === 0 || selectedTopics.some(topic => question.topics.includes(topic)))
         )
@@ -160,11 +170,6 @@ const Table = ({ questions }) => {
     const endIndex = startIndex + questionsPerPage;
     const currentQuestions = sortedQuestions.slice(startIndex, endIndex);
 
-    const COLOR_MAP = {
-        'Easy': 'green-500',
-        'Medium': 'yellow-700',
-        'Hard': '#f5385d'
-    };
 
     return (
         <div className="container mx-auto py-8 px-4">

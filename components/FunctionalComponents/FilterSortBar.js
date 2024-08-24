@@ -27,9 +27,9 @@ const FilterSortBar = ({
     const [tallerBox, setTallerBox] = useState(false);
 
     const COLOR_MAP = {
-        'Easy': '#00b8a2',
-        'Medium': '#fec01d',
-        'Hard': '#f5385d'
+        'Easy': 'green-500',
+        'Medium': 'blue-500',
+        'Hard': 'red-500'
     };
 
     const filteredTopics = allTopics.filter(topic =>
@@ -64,7 +64,7 @@ const FilterSortBar = ({
                         >
                             {categories.map((category) => (
                                 <Option key={category} value={category} className="text-sm mb-1">
-                                    <span style={{ color: COLOR_MAP[category] || 'inherit' }}>{category}</span>
+                                    <span className={`text-${COLOR_MAP[category]}`}>{category}</span>
                                 </Option>
                             ))}
                         </Select>

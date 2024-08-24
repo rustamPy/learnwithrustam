@@ -31,7 +31,6 @@ const getQuestions = () => {
 
         return {
             slug: filename.replace('.md', ''),
-            id: filename.replace('.md', ''),
             topics: data.topics,
             title: data.title || filename.replace('.md', '').replace('-', ' '),
             level: data.level || 'Unknown',
