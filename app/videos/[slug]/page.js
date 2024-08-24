@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
+import { Select, Option } from "@material-tailwind/react";
 import videoConfig from '@/lib/videoConfig.json';
 import SearchBar from '@/components/FunctionalComponents/SearchBar';
 import FilterSortBar from '@/components/FunctionalComponents/FilterSortBar';
@@ -9,7 +10,7 @@ import VideoGrid from '@/components/FunctionalComponents/VideoGrid';
 import Pagination from '@/components/FunctionalComponents/Pagination';
 import { CiBoxList, CiGrid41 } from "react-icons/ci";
 import { Chip } from "@material-tailwind/react";
-import Giscus from '@giscus/react';
+import Giscus from '@/components/Giscus';
 
 
 export default function Videos() {
@@ -46,8 +47,8 @@ export default function Videos() {
         setIsGridView(!isGridView);
     };
 
-    const handleVideosPerPageChange = (e) => {
-        setVideosPerPage(Number(e.target.value));
+    const handleVideosPerPageChange = (value) => {
+        setVideosPerPage(Number(value));
         setCurrentPage(1);
     };
 
@@ -66,9 +67,9 @@ export default function Videos() {
     const currentVideos = filteredVideos.slice(startIndex, endIndex);
 
     return (
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div className="min-h-screen">
             <div className="container mx-auto py-8 px-4">
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
+                <div className="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
                     <div className="flex flex-col md:flex-row justify-between mb-8">
                         <div className="flex flex-col mb-4 md:mb-0">
                             <div className="flex items-center space-x-3 mb-2">
@@ -82,18 +83,23 @@ export default function Videos() {
                             <p className="text-gray-600 dark:text-gray-300 max-w-xl">{galleryConfig.description}</p>
                         </div>
                         <div className="flex items-start space-x-3">
-                            <select
-                                value={videosPerPage}
-                                onChange={handleVideosPerPageChange}
-                                className="px-3 py-1.5 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                            <Select
+                                value={`${videosPerPage}`}
+                                onChange={value => handleVideosPerPageChange(value)}
+                                color="brown"
+                                className="text-xs bg-gray-200 dark:bg-gray-900 dark:text-gray-200"
+                                labelProps={{
+                                    className: "text-gray-700 dark:text-gray-200"
+                                }}
+                                label='Videos per page'
                             >
-                                <option value="8">8 per page</option>
-                                <option value="16">16 per page</option>
-                                <option value="24">24 per page</option>
-                            </select>
+                                <Option value="8" className='mb-1'>8 per page</Option>
+                                <Option value="16" className='mb-1'>16 per page</Option>
+                                <Option value="24" className='mb-1'>24 per page</Option>
+                            </Select>
                             <button
                                 onClick={handleViewToggle}
-                                className="text p-2 rounded-md transition duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600"
+                                className="text p-2 rounded-md transition duration-300 bg-gray-200 dark:bg-gray-900 dark:text-gray-200 border border-gray-400 dark:border-gray-400"
                                 aria-label={isGridView ? "Switch to list view" : "Switch to grid view"}
                             >
                                 {isGridView ? <CiBoxList /> : <CiGrid41 />}
@@ -108,7 +114,8 @@ export default function Videos() {
                         sortOrder={sortOrder}
                         onDateChange={handleDateChange}
                         categories={galleryConfig.categories}
-                        label={'Categories: '}
+                        label={'Categories'}
+                        showTopicFilter={false}
                     />
                 </div>
                 <VideoGrid videos={currentVideos} isGridView={isGridView} />
@@ -119,22 +126,7 @@ export default function Videos() {
                         onPageChange={setCurrentPage}
                     />
                 </div>
-                <Giscus
-                    id="comments"
-                    repo="rustamPy/learnwithrustam"
-                    repoId="R_kgDOL8nujg"
-                    category="General"
-                    categoryId="DIC_kwDOL8nujs4Ch5W3"
-                    mapping="pathname"
-                    term="Welcome to @giscus/react component!"
-                    reactionsEnabled="1"
-                    emitMetadata="0"
-                    inputPosition="top"
-                    theme="light"
-                    lang="en"
-                    loading="lazy"
-                />
-
+                <Giscus />
             </div>
         </div>
     );

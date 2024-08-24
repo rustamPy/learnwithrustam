@@ -4,10 +4,75 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Typography } from "@material-tailwind/react";
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
-
+import { Select, Option } from "@material-tailwind/react";
 import SearchBar from '@/components/FunctionalComponents/SearchBar';
 import FilterSortBar from '@/components/FunctionalComponents/FilterSortBar';
 import Pagination from '@/components/FunctionalComponents/Pagination';
+
+
+const TableHead = ({ columns, onSort }) => (
+    <thead>
+        <tr className="bg-gray-100 dark:bg-gray-900">
+            {columns.map((head) => (
+                <th
+                    key={head}
+                    className="text-left px-4 py-2 text-sm cursor-pointer"
+                    onClick={() => onSort(head)}
+                >
+                    <Typography
+                        variant="small"
+                        className="flex items-center justify-between gap-2 font-medium"
+                    >
+                        {head}
+                        <ChevronUpDownIcon
+                            strokeWidth={2}
+                            className="h-4 w-4 opacity-70"
+                        />
+                    </Typography>
+                </th>
+            ))}
+        </tr>
+    </thead>
+);
+
+const TableBody = ({ questions, colorMap }) => (
+    <tbody>
+        {questions.map(({ slug, id, title, level }) => (
+            <tr
+                key={slug}
+                className={`transition-colors bg-${colorMap[level]} text-gray-800`}
+            >
+                <td className="px-4 py-2 text-sm">
+                    <Link href={`/leetcode/${slug}`} passHref>
+                        <Typography
+                            variant="small"
+                            className="font-normal hover:underline font-semibold"
+                        >
+                            {id}
+                        </Typography>
+                    </Link>
+                </td>
+                <td className="px-4 py-2 text-sm">
+                    <Link href={`/leetcode/${slug}`} passHref>
+                        <Typography
+                            variant="small"
+                            className="font-normal hover:underline font-semibold"
+                        >
+                            {title}
+                        </Typography>
+                    </Link>
+                </td>
+                <td className="px-4 py-2 text-sm">{level}</td>
+            </tr>
+        ))}
+    </tbody>
+);
+
+const NoQuestions = () => (
+    <div className="flex flex-col items-center justify-center">
+        <Typography className="text-base font-semibold">No questions available</Typography>
+    </div>
+);
 
 const Table = ({ questions }) => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -18,14 +83,14 @@ const Table = ({ questions }) => {
     const [selectedTopics, setSelectedTopics] = useState([]);
 
     const allTopics = [...new Set(questions.flatMap(q => q.topics))];
-    console.log(allTopics)
+
     const handleTopicChange = (topic) => {
         setSelectedTopics(prev =>
             prev.includes(topic)
                 ? prev.filter(t => t !== topic)
                 : [...prev, topic]
         );
-        setCurrentPage(1);  // Reset to first page when changing topics
+        setCurrentPage(1);
     };
 
     const TABLE_HEAD = ["ID", "Title", "Difficulty"];
@@ -52,7 +117,6 @@ const Table = ({ questions }) => {
                 let aValue = a[sortConfig.key.toLowerCase()];
                 let bValue = b[sortConfig.key.toLowerCase()];
 
-                // Handle cases where aValue or bValue might be undefined
                 if (aValue === undefined) aValue = '';
                 if (bValue === undefined) bValue = '';
 
@@ -62,7 +126,6 @@ const Table = ({ questions }) => {
                     bValue = difficultyOrder[b.level.toLowerCase()] || 0;
                 }
 
-                // Sort based on direction
                 if (aValue < bValue) {
                     return sortConfig.direction === "asc" ? -1 : 1;
                 }
@@ -87,8 +150,8 @@ const Table = ({ questions }) => {
         setSortOrder(order);
     };
 
-    const handleQuestionsPerPageChange = (e) => {
-        setQuestionsPerPage(Number(e.target.value));
+    const handleQuestionsPerPageChange = (value) => {
+        setQuestionsPerPage(Number(value));
         setCurrentPage(1);
     };
 
@@ -102,20 +165,26 @@ const Table = ({ questions }) => {
         'Medium': 'yellow-700',
         'Hard': '#f5385d'
     };
+
     return (
         <div className="container mx-auto py-8 px-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
                 <div className="flex flex-col md:flex-row justify-between mb-8">
-                    <h1 className="text-3xl font-bold text-gray-800 dark:text-white">LeetCode Questions</h1>
-                    <div className="flex items-start space-x-3">
-                        <select
-                            value={questionsPerPage}
-                            onChange={handleQuestionsPerPageChange}
-                            className="px-3 py-1.5 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                    <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Tasks</h1>
+                    <div className="flex items-start space-x-3 mt-4 sm:mt-0">
+                        <Select
+                            value={`${questionsPerPage}`}
+                            onChange={value => handleQuestionsPerPageChange(value)}
+                            color="blue"
+                            className="text-xs bg-gray-200 dark:bg-gray-900 dark:text-gray-200"
+                            labelProps={{
+                                className: "text-gray-700 dark:text-gray-200"
+                            }}
+                            label='Tasks per page'
                         >
-                            <option value="8">8 per page</option>
-                            <option value="16">16 per page</option>
-                        </select>
+                            <Option value="8" className='mb-1'>8 per page</Option>
+                            <Option value="16" className='mb-1'>16 per page</Option>
+                        </Select>
                     </div>
                 </div>
 
@@ -128,69 +197,20 @@ const Table = ({ questions }) => {
                     sortOrder={sortOrder}
                     selectedTopics={selectedTopics}
                     categories={['All', 'Easy', 'Medium', 'Hard']}
-                    label={'Level: '}
+                    label={'Level'}
                     showSortOrder={false}
                     showTopicFilter={true}
                     allTopics={allTopics}
                 />
-                <table className="w-full border-collapse mt-5 rounded-lg overflow-hidden shadow-md">
-                    <thead>
-                        <tr className="bg-gray-100 dark:bg-gray-900">
-                            {TABLE_HEAD.map((head) => (
-                                <th
-                                    key={head}
-                                    className="text-left px-4 py-2 text-sm cursor-pointer"
-                                    onClick={() => handleSort(head)}
-                                >
-                                    <Typography
-                                        variant="small"
-                                        color="blue-gray"
-                                        className="flex items-center justify-between gap-2 font-medium"
-                                    >
-                                        {head}
-                                        <ChevronUpDownIcon
-                                            strokeWidth={2}
-                                            className="h-4 w-4 opacity-70"
-                                        />
-                                    </Typography>
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentQuestions.map(({ slug, id, title, level }) => (
-                            <tr
-                                key={slug}
-                                className={`transition-colors bg-${COLOR_MAP[level]} dark:bg-gray-800`}
-                            >
-                                <td className="px-4 py-2 text-sm">
-                                    <Link href={`/leetcode/${slug}`} passHref>
-                                        <Typography
-                                            variant="small"
-                                            color="blue-gray"
-                                            className="font-normal hover:underline"
-                                        >
-                                            {id}
-                                        </Typography>
-                                    </Link>
-                                </td>
-                                <td className="px-4 py-2 text-sm">
-                                    <Link href={`/leetcode/${slug}`} passHref>
-                                        <Typography
-                                            variant="small"
-                                            color="blue-gray"
-                                            className="font-normal hover:underline"
-                                        >
-                                            {title}
-                                        </Typography>
-                                    </Link>
-                                </td>
-                                <td className="px-4 py-2 text-sm">{level}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+
+                {currentQuestions.length === 0 ? (
+                    <NoQuestions />
+                ) : (
+                        <table className="w-full border-collapse mt-5 rounded-lg overflow-hidden shadow-md">
+                            <TableHead columns={TABLE_HEAD} onSort={handleSort} sortConfig={sortConfig} />
+                            <TableBody questions={currentQuestions} colorMap={COLOR_MAP} />
+                        </table>
+                )}
 
                 <div className="mt-8">
                     <Pagination

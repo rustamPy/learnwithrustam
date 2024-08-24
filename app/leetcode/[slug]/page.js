@@ -4,6 +4,8 @@ import { remark } from 'remark';
 import html from 'remark-html';
 import matter from 'gray-matter';
 
+import Giscus from '@/components/Giscus'
+
 const COLOR_MAP = {
     'Easy': 'green-500',
     'Medium': 'yellow-700',
@@ -41,6 +43,7 @@ export default async function ArticlePage({ params }) {
                 </div>
                 <div className="prose lg:prose-xl" dangerouslySetInnerHTML={{ __html: htmlContent }} />
             </div>
+            <Giscus />
         </div>
     );
 }
