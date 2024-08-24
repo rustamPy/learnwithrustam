@@ -15,6 +15,18 @@ const Table = ({ questions }) => {
     const [sortOrder, setSortOrder] = useState('asc');
     const [currentPage, setCurrentPage] = useState(1);
     const [questionsPerPage, setQuestionsPerPage] = useState(8);
+    const [selectedTopics, setSelectedTopics] = useState([]);
+
+    const allTopics = [...new Set(questions.flatMap(q => q.topics))];
+    console.log(allTopics)
+    const handleTopicChange = (topic) => {
+        setSelectedTopics(prev =>
+            prev.includes(topic)
+                ? prev.filter(t => t !== topic)
+                : [...prev, topic]
+        );
+        setCurrentPage(1);  // Reset to first page when changing topics
+    };
 
     const TABLE_HEAD = ["ID", "Title", "Difficulty"];
 
@@ -32,7 +44,8 @@ const Table = ({ questions }) => {
         .filter(question =>
             (question.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 question.id.toString().toLowerCase().includes(searchQuery.toLowerCase())) &&
-            (category === 'All' || question.level === category)
+            (category === 'All' || question.level === category) &&
+            (selectedTopics.length === 0 || selectedTopics.some(topic => question.topics.includes(topic)))
         )
         .sort((a, b) => {
             if (sortConfig.key) {
@@ -110,10 +123,15 @@ const Table = ({ questions }) => {
                 <FilterSortBar
                     onCategoryChange={handleCategoryFilter}
                     onSortOrderChange={handleSortOrder}
+                    onTopicChange={handleTopicChange}
                     selectedCategory={category}
                     sortOrder={sortOrder}
+                    selectedTopics={selectedTopics}
                     categories={['All', 'Easy', 'Medium', 'Hard']}
-                    label={'Level:'}
+                    label={'Level: '}
+                    showSortOrder={false}
+                    showTopicFilter={true}
+                    allTopics={allTopics}
                 />
                 <table className="w-full border-collapse mt-5 rounded-lg overflow-hidden shadow-md">
                     <thead>
