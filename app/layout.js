@@ -17,7 +17,6 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <head>
         <title>LWR</title>
-        <script defer src="https://cdn.commento.io/js/commento.js"></script>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

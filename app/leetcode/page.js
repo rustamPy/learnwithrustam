@@ -1,16 +1,14 @@
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
+import { Suspense } from 'react';
 import Table from './Table';
 import Title from '@/components/Title';
 import GroupCard from './GroupCard';
 import LeetCodeStats from './LeetCodeStats';
+import { getQuestions } from '@/lib/questions';
 
-const QuestionsPage = async () => {
-    const questions = getQuestions();
+async function QuestionsContent() {
+    const questions = await getQuestions();
 
     const groupMap = {};
-
     questions.forEach((question) => {
         (question.groups || []).forEach((group) => {
             if (!groupMap[group]) {
@@ -31,48 +29,48 @@ const QuestionsPage = async () => {
         .slice(0, 3);
 
     const totalQuestions = questions.length;
+    const countByDifficulties = calculateCountByDifficulties(questions);
     const averageDifficulty = calculateAverageDifficulty(questions);
     const topicsSet = new Set(questions.flatMap(q => q.topics));
 
     const stats = {
         totalQuestions,
         averageDifficulty,
+        countByDifficulties,
         uniqueTopics: topicsSet.size,
     };
 
     return (
-        <Title value={'LeetCode Questions'}>
+        <>
             <LeetCodeStats stats={stats} />
             <GroupCard groups={topGroups} />
             <Table questions={questions} />
-        </Title>
+        </>
     );
 }
 
-const getQuestions = () => {
-    const directoryPath = path.join(process.cwd(), 'public', 'leetcode');
-    const filenames = fs.readdirSync(directoryPath);
-
-    return filenames.map((filename) => {
-        const filePath = path.join(directoryPath, filename);
-        const fileContents = fs.readFileSync(filePath, 'utf8');
-
-        const { data } = matter(fileContents);
-
-        return {
-            slug: filename.replace('.md', ''),
-            topics: data.topics || [],
-            title: data.title || filename.replace('.md', '').replace('-', ' '),
-            level: data.level || 'Unknown',
-            groups: data.groups || [],
-        };
-    });
+const calculateCountByDifficulties = (questions) => {
+    const difficultyLevels = { Easy: 0, Medium: 0, Hard: 0 };
+    questions.map(q => {
+        difficultyLevels[q.level] += 1;
+    })
+    return difficultyLevels;
 }
 
 const calculateAverageDifficulty = (questions) => {
-    const difficultyLevels = { Easy: 1, Medium: 2, Hard: 3 };
+    const difficultyLevels = { Easy: 3, Medium: 6, Hard: 9 };
     const totalDifficulty = questions.reduce((sum, q) => sum + (difficultyLevels[q.level] || 0), 0);
     return (totalDifficulty / questions.length).toFixed(1);
 };
 
-export default QuestionsPage;
+export default function QuestionsPage() {
+    return (
+        <Title value={'LeetCode Questions'}>
+            <div className="container mx-auto px-4 py-8">
+                <Suspense fallback={<div>Loading...</div>}>
+                    <QuestionsContent />
+                </Suspense>
+            </div>
+        </Title>
+    );
+}

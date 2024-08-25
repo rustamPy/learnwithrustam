@@ -11,10 +11,11 @@ import Pagination from '@/components/FunctionalComponents/Pagination';
 
 
 const COLOR_MAP = {
-    'Easy': 'green-500',
-    'Medium': 'blue-500',
-    'Hard': 'red-500'
+    'Easy': 'lwr-leetcode-easy-100',
+    'Medium': 'lwr-leetcode-medium-100',
+    'Hard': 'lwr-leetcode-hard-100'
 };
+
 
 const TableHead = ({ columns, onSort }) => (
     <thead>
@@ -48,13 +49,13 @@ const TableBody = ({ questions, colorMap }) => {
             {questions.map(({ slug, title, level }) => (
             <tr
                 key={slug}
-                className={`transition-colors bg-${colorMap[level]} text-gray-800`}
+                    className={`bg-${colorMap[level]} text-gray-900`}
             >
                 <td className="px-4 py-2 text-sm">
                     <Link href={`/leetcode/${slug}`} passHref>
                         <Typography
                             variant="small"
-                            className="font-normal hover:underline font-semibold"
+                                className={`font-normal hover:underline font-semibold`}
                         >
                                 {slug}
                         </Typography>
@@ -172,6 +173,9 @@ const Table = ({ questions }) => {
 
     return (
         <div className="container mx-auto py-8 px-4">
+            <span className='bg-lwr-leetcode-easy-100'></span>
+            <span className='bg-lwr-leetcode-medium-100'></span>
+            <span className='bg-lwr-leetcode-hard-100'></span>
             <div className="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
                 <div className="flex flex-col md:flex-row justify-between mb-8">
                     <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Tasks</h1>
