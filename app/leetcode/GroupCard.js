@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Card, CardBody, CardHeader, Typography, Button } from "@material-tailwind/react";
 
 const GroupCard = ({ groups }) => {
-    // State to track expanded questions
     const [expandedGroup, setExpandedGroup] = useState(false);
 
     const handleExpandToggle = () => {

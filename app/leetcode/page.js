@@ -9,7 +9,6 @@ import LeetCodeStats from './LeetCodeStats';
 const QuestionsPage = async () => {
     const questions = getQuestions();
 
-    // Group questions by group names
     const groupMap = {};
 
     questions.forEach((question) => {
@@ -27,7 +26,6 @@ const QuestionsPage = async () => {
         count: groupMap[group].length,
     }));
 
-    // Sort and get the top 3 groups
     const topGroups = groupedArray
         .sort((a, b) => b.count - a.count)
         .slice(0, 3);
