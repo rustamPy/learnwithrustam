@@ -27,9 +27,9 @@ const FilterSortBar = ({
     const [tallerBox, setTallerBox] = useState(false);
 
     const COLOR_MAP = {
-        'Easy': 'green-500',
-        'Medium': 'blue-500',
-        'Hard': 'red-500'
+        'Easy': 'lwr-leetcode-easy-100',
+        'Medium': 'lwr-leetcode-medium-100',
+        'Hard': 'lwr-leetcode-hard-100'
     };
 
     const filteredTopics = allTopics.filter(topic =>
@@ -57,13 +57,16 @@ const FilterSortBar = ({
                             value={selectedCategory}
                             label={label}
                             onChange={(value) => onCategoryChange(value)}
-                            className="text-xs bg-gray-200 dark:bg-gray-900 text-gray-700 dark:text-gray-200"
+                            className="text-xs bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-200"
                             labelProps={{
                                 className: "text-gray-700 dark:text-gray-200"
                             }}
+                            menuProps={{
+                                className: "bg-white dark:bg-gray-900 border-none"
+                            }}
                         >
                             {categories.map((category) => (
-                                <Option key={category} value={category} className="text-sm mb-1">
+                                <Option key={category} value={category} className="text-sm font-semibold mb-1 dark:focus:bg-gray-700">
                                     <span className={`text-${COLOR_MAP[category]}`}>{category}</span>
                                 </Option>
                             ))}
@@ -91,7 +94,7 @@ const FilterSortBar = ({
                     </div>
                 )}
                 {showTopicFilter && (
-                    <div className="flex items-center space-x-1 relative">
+                    <div className="flex items-center relative">
                         <button
                             className="flex items-center rounded px-3 py-1.5 text-left cursor-pointer focus:outline-none whitespace-nowrap bg-gray-100 dark:bg-[#303030] hover:bg-gray-200 text-gray-700 dark:text-gray-300"
                             onClick={() => setIsTopicBoxOpen(!isTopicBoxOpen)}

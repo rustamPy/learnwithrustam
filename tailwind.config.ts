@@ -28,6 +28,15 @@ module.exports = withMT({
         "lwr-blue-color": {
           20: '#8290acff',
           500: 'rgba(17, 35, 70, 1)'
+        },
+        "lwr-leetcode-easy": {
+          100: "#0f9b0f"
+        },
+        "lwr-leetcode-medium": {
+          100: "#e8cf13"
+        },
+        "lwr-leetcode-hard": {
+          100: "#df3832"
         }
       },
       fontFamily: {

@@ -11,7 +11,6 @@ const CGiscus = () => {
     });
 
     useEffect(() => {
-        // Update the theme in localStorage whenever the theme state changes
         if (typeof window !== 'undefined') {
             localStorage.setItem('theme', theme);
         }
