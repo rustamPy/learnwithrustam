@@ -2,19 +2,51 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import Table from './Table';
-
-import Title from '@/components/Title'
-
+import Title from '@/components/Title';
+import GroupCard from './GroupCard';
+import LeetCodeStats from './LeetCodeStats';
 
 const QuestionsPage = async () => {
     const questions = getQuestions();
 
-    const sortedQuestions = questions.sort((a, b) => a.title.localeCompare(b.title));
+    // Group questions by group names
+    const groupMap = {};
+
+    questions.forEach((question) => {
+        (question.groups || []).forEach((group) => {
+            if (!groupMap[group]) {
+                groupMap[group] = [];
+            }
+            groupMap[group].push(question);
+        });
+    });
+
+    const groupedArray = Object.keys(groupMap).map((group) => ({
+        name: group,
+        questions: groupMap[group],
+        count: groupMap[group].length,
+    }));
+
+    // Sort and get the top 3 groups
+    const topGroups = groupedArray
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 3);
+
+    const totalQuestions = questions.length;
+    const averageDifficulty = calculateAverageDifficulty(questions);
+    const topicsSet = new Set(questions.flatMap(q => q.topics));
+
+    const stats = {
+        totalQuestions,
+        averageDifficulty,
+        uniqueTopics: topicsSet.size,
+    };
 
     return (
         <Title value={'LeetCode Questions'}>
-            <img src='https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTRvanZzbGw4bWxlcWcwNnZtc3BlcnhkM3RhMzMzMTlxZ2NmaDFwNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/bGgsc5mWoryfgKBx1u/giphy.gif' />
-            <Table questions={sortedQuestions} />
+            <LeetCodeStats stats={stats} />
+            <GroupCard groups={topGroups} />
+            <Table questions={questions} />
         </Title>
     );
 }
@@ -31,11 +63,18 @@ const getQuestions = () => {
 
         return {
             slug: filename.replace('.md', ''),
-            topics: data.topics,
+            topics: data.topics || [],
             title: data.title || filename.replace('.md', '').replace('-', ' '),
             level: data.level || 'Unknown',
+            groups: data.groups || [],
         };
     });
 }
+
+const calculateAverageDifficulty = (questions) => {
+    const difficultyLevels = { Easy: 1, Medium: 2, Hard: 3 };
+    const totalDifficulty = questions.reduce((sum, q) => sum + (difficultyLevels[q.level] || 0), 0);
+    return (totalDifficulty / questions.length).toFixed(1);
+};
 
 export default QuestionsPage;

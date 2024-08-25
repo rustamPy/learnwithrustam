@@ -42,7 +42,6 @@ const TableHead = ({ columns, onSort }) => (
 );
 
 const TableBody = ({ questions, colorMap }) => {
-    console.log(questions)
 
     return (
     <tbody>

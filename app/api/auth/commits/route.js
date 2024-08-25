@@ -11,9 +11,6 @@ export async function GET() {
             }
         });
 
-        console.log(process.env.GITHUB_ACCESS_TOKEN)
-        console.log("dsada")
-        console.log(response)
 
 
         if (!response.ok) throw new Error('Network response was not ok');

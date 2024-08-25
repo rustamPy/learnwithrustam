@@ -39,10 +39,6 @@ export default function Videos() {
         setSortOrder(order);
     };
 
-    const handleDateChange = (date) => {
-        console.log("Date changed:", date);
-    };
-
     const handleViewToggle = () => {
         setIsGridView(!isGridView);
     };
@@ -112,7 +108,6 @@ export default function Videos() {
                         onSortOrderChange={handleSortOrder}
                         selectedCategory={category}
                         sortOrder={sortOrder}
-                        onDateChange={handleDateChange}
                         categories={galleryConfig.categories}
                         label={'Categories'}
                         showTopicFilter={false}
