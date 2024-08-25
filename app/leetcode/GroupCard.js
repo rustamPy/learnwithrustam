@@ -57,13 +57,10 @@ const GroupCard = ({ groups }) => {
                                             <a href={`/leetcode/${q.slug}`}>{q.title}</a>
                                         </Typography>
                                     ))}
-                                    {groups.map(group => {
+                                    {groups.map((group, key) => {
                                         const visibleQuestions = expandedGroup ? group.questions : group.questions.slice(0, 3);
-                                        console.log(visibleQuestions)
-                                        console.log(group)
-                                        console.log(expandedGroup)
                                         return (
-                                            <div>
+                                            <div key={key}>
                                                 {!expandedGroup && visibleQuestions.length <= group.questions.length ? (
                                                     <span
                                                         className="inline-flex items-center px-2 whitespace-nowrap text-xs leading-6 rounded-full bg-blue-200 hover:bg-blue-300 cursor-pointer transition-all m-1"
