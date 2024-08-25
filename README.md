@@ -1,6 +1,6 @@
 # Learn with Rustam (LWR) - [link](https://learnwithrustam-exp.vercel.app)
 
-![Version](https://img.shields.io/badge/version-0.1-blue)
+![Version](https://img.shields.io/badge/version-0.5-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Node.js](https://img.shields.io/badge/node-22.0.2-brightgreen)
 ![React](https://img.shields.io/badge/react-%5E18-blue)
