@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
     try {
-        const response = await fetch('https://api.github.com/repos/rustamPy/learnwithrustam/commits?sha=beta_0_3_1', {
+        const response = await fetch('https://api.github.com/repos/rustamPy/learnwithrustam/commits', {
             headers: {
                 'Authorization': `token ${process.env.GITHUB_ACCESS_TOKEN}`,
                 'Accept': 'application/vnd.github.v3+json'
