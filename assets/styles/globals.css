@@ -2,15 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    scroll-behavior: smooth;
+}
+
 .phone-input .react-phone-number-input__icon {
     width: 16px;
-    /* Adjust width */
     height: 16px;
-    /* Adjust height */
 }
 
 .phone-input .react-phone-number-input__icon img {
     width: 100%;
-    /* Ensure the image fits within the icon */
     height: 100%;
+}
+
+.rainbow-text {
+    background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
 }

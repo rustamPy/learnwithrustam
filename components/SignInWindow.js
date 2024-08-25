@@ -1,7 +1,6 @@
 'use client';
 import React from "react";
 import { signIn, useSession } from "next-auth/react";
-// @components
 import {
     Card,
     Button,
@@ -11,10 +10,9 @@ import {
 } from "@material-tailwind/react";
 import Image from "next/image";
 
-import AddPhone from '@/components/AddPhone'
+import { AddPhoneNumber } from '@/components/UserProfileUtils'
 
 
-// @icons
 import GithubLogo from '@/assets/images/github-mark.png';
 const SignInWindow = ({ message, image_path, width }) => {
     const { data: session, status } = useSession();
@@ -98,7 +96,7 @@ const SignInWindow = ({ message, image_path, width }) => {
                                 <img src={'imgs/welcome_1.png'} width={"150px"} alt="welcome_1" />
 
                                 <Typography variant="h4" className="text-gray-900 md:max-w-sm dark:text-white">
-                                    Welcome,
+                                    Hey there,
                                 </Typography>
                                 <Typography variant="h2" color="blue" textGradient className="md:max-w-sm dark:text-white">
                                     {session.user?.name}
@@ -106,15 +104,15 @@ const SignInWindow = ({ message, image_path, width }) => {
 
                                 {!session.user.phone ?
                                     (<div className="flex flex-col items-center">
-                                        <Typography>
-                                            Before we continue, you need to add your phone number:
-                                        </Typography>
-                                        <AddPhone />
+                                        <AddPhoneNumber />
+                                        <a href="/">
+                                            <Button variant="filled" size="sm" className="bg-lwr-orange-color-100 mt-4">Continue without adding phone number</Button>
+                                        </a>
                                     </div>
                                     ) :
                                     <>
 
-                                        <Typography variant="lead" className="mb-2">
+                                        <Typography variant="lead" className="mb-2 dark:text-white">
                                             You can now view course details, register for them, and directly reach out to me.
                                         </Typography>
                                         <a href="/">

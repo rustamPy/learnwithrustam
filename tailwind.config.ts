@@ -4,15 +4,67 @@ module.exports = withMT({
   content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      boxShadow: {
+        'lwr-shadow-orange': '0 1px 5px 2px #ffecd0, 0 2px 4px -1px rgba(59, 130, 246, 0.06)',
+        'lwr-shadow-red': '0 4px 6px -1px rgba(239, 68, 68, 0.5), 0 2px 4px -1px rgba(239, 68, 68, 0.06)',
+        'inner': 'inset 0 12px 24px rgba(0, 0, 0, 0.1)',
+      },
       colors: {
-        'lwr-dark-blue': '#112346ff',
-        'lwr-light-grey': '#cccccc6e',
-        'lwr-solid-grey': '#cccccc',
-        'lwr-orange-100': '#F6A426',
-        'lwr-orange-200': '#db8606'
+        "lwr-gray-color": {
+          50: '#fcfcfc',
+          60: '#f6f6f6',
+          200: '#cccccc6e',
+          300: '#cccccc',
+          400: '#303030',
+          500: '#262626',
+          600: '#030303'
+        },
+        "lwr-orange-color": {
+          20: '#fcdbaa',
+          50: '#f5b14a',
+          100: '#F6A426',
+          200: '#db8606'
+        },
+        "lwr-blue-color": {
+          20: '#8290acff',
+          500: 'rgba(17, 35, 70, 1)'
+        }
       },
       fontFamily: {
-        sans: ['Montserrat', 'sans-serif'],
+        body: [
+          'Montserrat',
+          'ui-sans-serif',
+          'system-ui',
+          '-apple-system',
+          'system-ui',
+          'Segoe UI',
+          'Roboto',
+          'Helvetica Neue',
+          'Arial',
+          'Noto Sans',
+          'sans-serif',
+          'Apple Color Emoji',
+          'Segoe UI Emoji',
+          'Segoe UI Symbol',
+          'Noto Color Emoji'
+        ],
+        sans: [
+          'Montserrat',
+          'ui-sans-serif',
+          'system-ui',
+          '-apple-system',
+          'system-ui',
+          'Segoe UI',
+          'Roboto',
+          'Helvetica Neue',
+          'Arial',
+          'Noto Sans',
+          'sans-serif',
+          'Apple Color Emoji',
+          'Segoe UI Emoji',
+          'Segoe UI Symbol',
+          'Noto Color Emoji'
+        ]
       },
     },
   },

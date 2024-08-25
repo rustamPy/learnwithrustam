@@ -10,7 +10,7 @@ import {
     Button,
 } from "@material-tailwind/react";
 
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import coreItInter from '@/assets/images/cit_inter.jpg'
 import pythonEntry from '@/assets/images/python_entry.jpg'
 import placeholder from '@/assets/images/placeholder.webp'
@@ -56,7 +56,7 @@ const SearchWindow = () => {
     };
 
     return (
-        <section className="bg-lwr-dark-blue dark:bg-black py-20 mb-4 mt-10 br-10 rounded-2xl">
+        <section className="bg-lwr-blue-color-500 dark:bg-black py-20 mb-4 mt-10 br-10 rounded-2xl">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
                 <div className="text-center">
                     <h1 className="text-4xl font-extrabold text-white sm:text-5xl md:text-6xl">
@@ -129,7 +129,7 @@ const SearchFunc = ({ onSearch }) => {
                 </div>
                 <button
                     type="submit"
-                    className="bg-lwr-orange-100 hover:bg-lwr-orange-200 md:ml-4 mt-4 md:mt-0 w-full md:w-auto px-6 py-3 rounded-lg bg-blue-500 text-white focus:outline-none focus:ring focus:ring-blue-500"
+                    className="bg-lwr-orange-color-100 hover:bg-lwr-orange-color-200 md:ml-4 mt-4 md:mt-0 w-full md:w-auto px-6 py-3 rounded-lg bg-blue-500 text-white focus:outline-none focus:ring focus:ring-blue-500"
                 >
                     Search
                 </button>

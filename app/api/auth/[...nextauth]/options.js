@@ -23,6 +23,9 @@ export const authOptions = {
             session.user.id = user.id;
             session.user.phone = user.phone;
             session.user.courses = user.courses;
+            session.user.worktitle = user.worktitle;
+            session.user.about = user.about;
+            session.user.userStatus = user.userStatus;
             return session;
         },
     }

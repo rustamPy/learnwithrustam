@@ -2,171 +2,217 @@
 
 import { useSession, signOut } from "next-auth/react";
 import { useState, useEffect } from "react";
-
+import Image from "next/image";
+import empty from "@/public/imgs/empty.png"
+import SignInWindow from '@/components/SignInWindow';
+import CoursesGrid from '@/components/CoursesGrid';
+import { AttentionWindow } from '@/components/AttentionWindow'
 
 import {
-    Typography,
     Button,
-    CardBody,
-    CardFooter,
-    CardHeader,
-    Card
 } from "@material-tailwind/react";
 
-import Phone from '@/components/AddPhone'
+import { AddPhoneNumber, AddWorkTitle, AddAboutMe, UpdateStatus } from '@/components/UserProfileUtils'
 
 import 'react-phone-number-input/style.css'
-import { CourseCard } from '@/components/Hero/SearchWindow'
 import coursesData from '@/public/courses.json'
 
+const StatusBadge = ({ status }) => {
+    const bgColor = status === 'student' ? 'bg-green-500' : 'bg-red-500';
+    return (
+        <span className={`absolute bottom-0 right-0 px-2 py-1 text-xs font-bold text-white rounded-full ${bgColor}`}>
+            {status}
+        </span>
+    );
+};
+
 export default function Profile() {
-    const { data: session } = useSession();
-    const [selectedCourses, setSelectedCourses] = useState([1, 2, 3, 4]);
-    const [loading, setLoading] = useState(true);
+    const { data: session, update } = useSession();
+    const [selectedCourses, setSelectedCourses] = useState([]);
+    const [profileData, setProfileData] = useState({
+        phone: '',
+        worktitle: '',
+        about: '',
+        userStatus: '',
+    });
+    const [message, setMessage] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
+    const [open, setOpen] = useState(false)
+
+
 
 
     useEffect(() => {
-        if (session && session.user?.courses) {
+        if (session && session.user) {
+            const { phone, worktitle, about, userStatus } = session.user;
+            setProfileData({ phone, worktitle, about, userStatus });
             const user_courses = session.user?.courses;
-            setSelectedCourses(coursesData.filter(course => user_courses.includes(course.id)));
-            setLoading(false);
-        }
-    }, [])
 
+            user_courses && setSelectedCourses(coursesData.filter(course => user_courses.includes(course.id)));
+        }
+    }, [session]);
 
     if (!session) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-gray-100">
-                <div className="text-center">
-                    <h1 className="text-2xl font-bold mb-4">You are not authenticated</h1>
-                    <a href="/signin" className="text-blue-500 hover:underline">
-                        Sign In
-                    </a>
-                </div>
+            <div className="flex items-center justify-center bg-gray-100">
+                <SignInWindow message={'Please, sign-in to continue'}
+                    image_path={'/imgs/login_1.png'}
+                    width={"100px"} />
             </div>
         );
     }
 
+    const handleSaveChanges = async () => {
+        try {
+            const response = await fetch('/api/user/profile', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(profileData),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setMessage(`Error: ${data.error || 'An unknown error occurred'}`);
+            } else {
+                setMessage(data.message || 'Update successful');
+                await update();
+                setIsEditing(false);
+                setOpen(!open)
+            }
+        } catch (error) {
+            setMessage('Error updating data');
+        }
+    }
+
+    const handleCloseWindow = () => {
+        setOpen(!open);
+    }
+
+
+
     return (
-        <div className="flex flex-col p-10 items-center justify-center min-h-screen bg-lwr-orange-100 m-10 rounded-lg">
-            <div className="w-full max-w-xl bg-white shadow-lg rounded-lg p-6">
-                <div className="flex items-center mb-4">
-                    <img
-                        src={session.user.image || '/default-avatar.png'}
-                        alt="User Avatar"
-                        className="w-16 h-16 rounded-full border-2 border-gray-300"
-                    />
-                    <div className="ml-4">
-                        <h1 className="text-3xl font-semibold text-gray-900">{session.user.name}</h1>
-                        <p className="text-gray-600">{session.user.email}</p>
+
+        <>
+            <div className="bg-gradient-to-r from-[#e7cfbe] to-[#bec4d9] dark:bg-gradient-to-r dark:from-[#e7cfbe5f] dark:to-[#bec4d964] ">
+                <div className="container mx-auto py-8">
+                    <div className="grid grid-cols-4 sm:grid-cols-12 gap-6">
+                        <div className="col-span-4 sm:col-span-4">
+                            <div className="bg-white shadow rounded-lg p-6 dark:bg-black">
+
+                                {/* Profile Window*/}
+                                <div className="relative bg-white shadow dark:shadow-lwr-shadow-orange rounded-lg p-6 dark:bg-black mb-4">
+                                <Button
+                                    onClick={!isEditing ? () => setIsEditing(!isEditing) : handleSaveChanges}
+                                    size="sm"
+                                    className="text-xs bg-lwr-orange-color-100 px-3 py-1 rounded-md hover:bg-lwr-orange-color-200 dark:bg-lwr-blue-color-500"
+                                >
+                                    {!isEditing ? 'Update' : 'Save changes'}
+                                </Button>
+                                <div className="flex flex-col items-center">
+                                    {(session.user.userStatus === 'parent' || !session.user.userStatus) && (
+                                        <UpdateStatus
+                                            value={profileData.userStatus}
+                                            onChange={(newValue) => setProfileData((prev) => ({ ...prev, userStatus: newValue }))}
+                                            isEditing={isEditing}
+                                            setIsEditing={setIsEditing}
+                                        />
+                                    )}
+
+                                    <div className="relative">
+
+                                        <img
+                                            src={session.user.image || '/default-avatar.png'}
+                                            alt="User Avatar"
+                                            className={`w-32 h-32 rounded-full border-2 border-${session && session.user.userStatus == 'student' ? 'green-500' : 'red-500'}`}
+                                        />
+                                        <StatusBadge status={session.user.userStatus} />
+                                    </div>
+                                    <h1 className="text-xl font-bold">{session.user.name}</h1>
+                                    <AddWorkTitle
+                                        value={profileData.worktitle}
+                                        onChange={(newValue) => setProfileData((prev) => ({ ...prev, worktitle: newValue }))}
+                                        isEditing={isEditing}
+                                        setIsEditing={setIsEditing}
+                                    />
+                                    <div className="mt-6 flex flex-wrap gap-4 justify-center">
+                                        <Button variant="filled" size="sm" onClick={() => signOut({ callbackUrl: '/' })} color="red">
+                                            Sign out
+                                            </Button>
+                                        </div>
+                                </div>
+
+                                </div>
+                                {/* Contacts Window*/}
+                                <div className="relative bg-white shadow rounded-lg p-6 dark:bg-black  dark:shadow-lwr-shadow-orange">
+                                <div className="flex flex-col">
+                                        <span className="text-gray-700 uppercase font-bold tracking-wider mb-2 dark:text-white">Contacts:</span>
+                                    <ul>
+                                        <li className="mb-2"><b>Phone:</b> {
+
+                                            <AddPhoneNumber
+                                                value={profileData.phone}
+                                                onChange={(newValue) => setProfileData((prev) => ({ ...prev, phone: newValue }))}
+                                                isEditing={isEditing}
+                                                setIsEditing={setIsEditing}
+                                            />}</li>
+                                        <li className="mb-2"><b>Email:</b> {session.user.email}</li>
+                                    </ul>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-span-4 sm:col-span-8">
+                            <div className="relative bg-white shadow rounded-lg p-6 dark:bg-black">
+                                {/* About Me Window*/}
+                                <div className="relative bg-white shadow dark:shadow-lwr-shadow-orange rounded-lg p-6 dark:bg-black mb-4">
+                                    <div className="flex justify-between items-center mb-4"> {/* Add a flex container here */}
+                                        <h2 className="text-xl font-bold">About Me</h2>
+
+                                    </div>
+                                    {open && (
+                                        <AttentionWindow
+                                            title={'Profile Updated'}
+                                            content={'You have successfully updated your profile'}
+                                            onClose={handleCloseWindow}
+                                        />
+                                    )}
+                                    <AddAboutMe
+                                        value={profileData.about}
+                                        onChange={(newValue) => setProfileData((prev) => ({ ...prev, about: newValue }))}
+                                        isEditing={isEditing}
+                                        setIsEditing={setIsEditing}
+                                    />
+                                </div>
+                                {/* Courses Window*/}
+                                <div className="relative bg-white shadow dark:shadow-lwr-shadow-orange rounded-lg p-6 dark:bg-black">
+                                {selectedCourses.length === 0 ?
+                                    <div className="flex flex-col items-center">
+                                        <h2 className="text-xl font-bold mt-6 mb-4"> No courses added</h2>
+                                            <Image src={empty} width={200} height={200} className="mb-4" />
+                                            <a href="/courses">
+                                                <Button variant="filled" size="sm" className="bg-lwr-orange-color-50 dark:bg-lwr-blue-color-500">
+                                                    Explore our courses
+                                                </Button>
+                                            </a>
+                                    </div>
+                                    :
+                                    <div className="flex flex-col items-center">
+                                        <h2 className="text-xl font-bold mt-6 mb-4">{`Selected courses (${selectedCourses.length})`}</h2>
+                                        <CoursesGrid specificCourses={selectedCourses} cardsPerPage={3} />
+                                    </div>
+                                }
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <ul className="list-disc list-inside mb-6">
-                    <li className="text-lg font-medium text-gray-900">Name: {session.user.name}</li>
-                    <li className="text-lg font-medium text-gray-900">Email: {session.user.email}</li>
-                    <Phone showNumber={true} />
-                </ul>
-                <button
-                    onClick={() => signOut({ callbackUrl: '/' })}
-                    className="w-full py-2 px-4 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
-                >
-                    Sign Out
-                </button>
             </div>
-            <div style={{ flexDirection: "column" }} className="p-6 flex items-center lg:mr-24 lg:ml-24">
-                <Typography variant="h1" color="white">
-                    Selected Courses:
-                </Typography>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
-                    {loading ?
-                        selectedCourses.map(v => (
-                            <div key={v} className="max-w-full animate-pulse">
-                                <Card className="mt-6 animate-pulse w-64">
-                                    <CardHeader
-                                        shadow={false}
-                                        floated={false}
-                                        className="relative grid h-56 place-items-center bg-gray-300"
-                                    >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth={2}
-                                            stroke="currentColor"
-                                            className="h-12 text-gray-500"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-                                            />
-                                        </svg>
-                                    </CardHeader>
-                                    <CardBody>
-                                        <Typography
-                                            as="div"
-                                            variant="h1"
-                                            className="mb-4 h-3 rounded-full bg-gray-300"
-                                        >
-                                            &nbsp;
-                                        </Typography>
-                                        <Typography
-                                            as="div"
-                                            variant="paragraph"
-                                            className="mb-2 h-2 w-full rounded-full bg-gray-300"
-                                        >
-                                            &nbsp;
-                                        </Typography>
-                                        <Typography
-                                            as="div"
-                                            variant="paragraph"
-                                            className="mb-2 h-2 w-full rounded-full bg-gray-300"
-                                        >
-                                            &nbsp;
-                                        </Typography>
-                                        <Typography
-                                            as="div"
-                                            variant="paragraph"
-                                            className="mb-2 h-2 w-full rounded-full bg-gray-300"
-                                        >
-                                            &nbsp;
-                                        </Typography>
-                                        <Typography
-                                            as="div"
-                                            variant="paragraph"
-                                            className="mb-2 h-2 w-full rounded-full bg-gray-300"
-                                        >
-                                            &nbsp;
-                                        </Typography>
-                                    </CardBody>
-                                    <CardFooter className="pt-0">
-                                        <Button
-                                            disabled
-                                            tabIndex={-1}
-                                            className="h-8 bg-gray-300 shadow-none hover:shadow-none"
-                                        >
-                                            &nbsp;
-                                        </Button>
-                                    </CardFooter>
-                                </Card>
-                            </div>
-                        ))
-                        :
-                        selectedCourses.map(course => (
-                            <div key={course.id} className="relative">
-                                <CourseCard
-                                    id={course.id}
-                                    title={course.title}
-                                    desc={course.desc}
-                                    price={course.price}
-                                    options={course.options}
-                                />
-                            </div>
-                        ))
+        </>
 
-                    }
-                </div>
-            </div>
-        </div>
+
     );
-}
+};

@@ -1,5 +1,3 @@
-// pages/terms-and-privacy.js
-
 import React from 'react';
 
 const TermsAndPrivacy = () => {

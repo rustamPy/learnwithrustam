@@ -1,10 +1,10 @@
 # Learn with Rustam (LWR) - [link](https://learnwithrustam-exp.vercel.app)
 
-![Version](https://img.shields.io/badge/version-0.1.-blue)
+![Version](https://img.shields.io/badge/version-0.1-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Node.js](https://img.shields.io/badge/node-%3E%3D%2014.0.0-brightgreen)
-![React](https://img.shields.io/badge/react-%5E17.0.0-blue)
-![Next.js](https://img.shields.io/badge/next-%5E12.0.0-lightgrey)
+![Node.js](https://img.shields.io/badge/node-22.0.2-brightgreen)
+![React](https://img.shields.io/badge/react-%5E18-blue)
+![Next.js](https://img.shields.io/badge/next-14.2.3-lightgrey)
 
 Learn with Rustam (LWR) is an innovative online platform offering interactive courses and educational content designed to make learning accessible and engaging for everyone. Whether you're looking to master a new skill or explore a new subject, LWR provides a wide variety of courses across different disciplines, allowing users to learn at their own pace while saving their progress.
 
@@ -12,7 +12,7 @@ Learn with Rustam (LWR) is an innovative online platform offering interactive co
 
 ## Table of Contents
 
-- [Learn with Rustam (LWR)](#learn-with-rustam-lwr)
+- [Learn with Rustam (LWR) - link](#learn-with-rustam-lwr---link)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
   - [Installation](#installation)
@@ -21,6 +21,9 @@ Learn with Rustam (LWR) is an innovative online platform offering interactive co
   - [Contributing](#contributing)
   - [License](#license)
   - [Contact](#contact)
+  - [Hosted on Vercel](#hosted-on-vercel)
+  - [Frontend: React/Tailwind](#frontend-reacttailwind)
+  - [Backend: Next.js](#backend-nextjs)
 
 ## Features
 
@@ -132,3 +135,8 @@ This project is licensed under the MIT License. See the LICENSE file for details
 For any inquiries or feedback, please contact us at:
 
 **Email**: karimov.rustam.live@gmail.com
+
+
+## Hosted on Vercel
+## Frontend: React/Tailwind
+## Backend: Next.js
