@@ -2,8 +2,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PdfViewer from '@/components/PdfViewer';
-import AudioPlayer from '@/components/AudioPlayer';
-import { Typography, Progress, Chip } from '@material-tailwind/react';
+import { Typography, Card, Progress, Chip, Button } from '@material-tailwind/react';
 
 import { audioMap, chapterMap } from './data';
 
@@ -95,7 +94,7 @@ const Page = () => {
                             <span className="relative">Study Emulator</span>
                         </span>
                     </p>
-                    <p className="max-w-4xl mt-4 mx-auto text-xl text-gray-500 dark:text-gray-300">Dive into learning Polish with an interactive study simulator.</p>
+                    <p className="max-w-4xl mt-4 mx-auto text-xl text-gray-500 dark:text-gray-300">Immerse yourself in Polish language learning with our interactive study emulator.</p>
                     <button onClick={handleGetStartedClick} className={`bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-700 hover:to-purple-700 dark:from-lwr-orange-color-100 dark:to-lwr-blue-color-500 dark:hover:from-lwr-orange-color-200 dark:hover:to-lwr-blue-color-600 inline-block px-8 py-4 mt-8 text-white font-semibold rounded-2xl`}>
                         {!isContentVisible ? 'Get Started' : 'Continue Learning'}
                     </button>
@@ -117,6 +116,7 @@ const Page = () => {
                                 <div className="w-full p-4 border-b border-gray-300 dark:border-gray-800">
                                     <div className="relative">
                                         <div className="flex justify-center space-x-3 mb-2">
+                                            <h1 className="text-3xl font-bold text-gray-800 dark:text-white">"Polski Krok po Kroku" Study Emulator</h1>
                                             <div className="flex items-center space-x-2">
                                                 <Chip variant="ghost" value="New" size="sm" color="green" className="rounded-full dark:text-gray-300" />
                                                 <Chip variant="ghost" value="Beta" size="sm" color="red" className="rounded-full dark:text-gray-300" />
@@ -169,15 +169,63 @@ const Page = () => {
                                                     {progress.toPrecision(2)}%
                                                 </Typography>
                                             </div>
-                                            <Progress value={progress} variant="gradient" color="amber" />
+                                            <Progress value={progress} color="amber" />
                                         </div>
                                         {currentChapter ? (
-                                            <AudioPlayer
-                                                audioMap={audioMap}
-                                                currentPage={currentPage}
-                                                visibleAudio={visibleAudio}
-                                                toggleAudio={toggleAudio}
-                                            />
+                                            <Card className="bg-white p-4 dark:bg-gray-900 rounded-lg shadow-md mb-4">
+                                                <div className="relative">
+                                                    <Typography className="text-4xl font-bold mb-2 text-gray-800 dark:text-gray-300">
+                                                        {currentChapter.name}
+                                                    </Typography>
+                                                </div>
+                                                <Typography className="text-lg font-bold mb-4 text-gray-800 dark:text-gray-300">
+                                                    {currentChapter.description}
+                                                </Typography>
+                                                <Typography className="text-md mb-4 font-medium text-gray-800 dark:text-gray-300">
+                                                    Total number of audios: <span className="font-bold text-blue-600">{totalAudios}</span>
+                                                </Typography>
+                                                {audioMap[currentPage]?.length ? (
+                                                    audioMap[currentPage].map((audioSrc, index) => {
+                                                        const audioLabel = audioSrc.split('/').pop().split('.').shift();
+                                                        return (
+                                                            <div
+                                                                key={index}
+                                                                className="mb-2 p-3 border border-gray-200 dark:border-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800 shadow-sm cursor-pointer transition-colors duration-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                                                                onClick={() => toggleAudio(index)}
+                                                            >
+                                                                <div className="flex items-center justify-between" >
+                                                                    <Typography
+                                                                        variant="h6"
+                                                                        className="font-medium text-gray-800 dark:text-gray-200"
+                                                                    >
+                                                                        {audioLabel}
+                                                                    </Typography>
+                                                                    <Button
+                                                                        size="sm"
+                                                                        variant="text"
+                                                                        color="blue"
+                                                                        onClick={() => toggleAudio(index)}
+                                                                    >
+                                                                        {visibleAudio === index ? 'Hide' : 'Show'}
+                                                                    </Button>
+                                                                </div>
+                                                                {visibleAudio === index && (
+                                                                    <audio
+                                                                        src={audioSrc}
+                                                                        controls
+                                                                        style={{ width: '100%' }}
+                                                                        autoPlay={true}
+                                                                    >
+                                                                        Your browser does not support the audio element.
+                                                                    </audio>
+                                                                )}
+                                                            </div>
+                                                        );
+                                                    })
+                                                ) : (
+                                                    <Typography className='text-lwr-blue-color-500 dark:text-lwr-blue-color-20'>No audio tasks for this page.</Typography>
+                                                )}
+                                            </Card>
                                         ) : (
                                             <Typography className='text-lwr-blue-color-500 dark:text-lwr-blue-color-20'>No chapter information available for this page.</Typography>
                                         )}
