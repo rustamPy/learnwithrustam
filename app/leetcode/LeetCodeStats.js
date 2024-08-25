@@ -99,7 +99,7 @@ export function LeetCodeStatsSection({ stats }) {
                                     {Object.keys(stats.countByDifficulties).map(difficulty => {
                                         const count = stats.countByDifficulties[difficulty]
                                         return (
-                                            <span className={`text-lwr-leetcode-${difficulty.toLowerCase()}-100`}>
+                                            <span key={difficulty} className={`text-lwr-leetcode-${difficulty.toLowerCase()}-100`}>
                                                 {difficulty} question{count > 1 ? 's' : ''}: {count}
                                             </span>
                                         )
