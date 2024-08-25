@@ -28,8 +28,6 @@ function StatsCard({ count, title, description, children }) {
 }
 
 export function LeetCodeStatsSection({ stats }) {
-
-    Object.keys(stats.countByDifficulties).map(difficulty => { console.log(difficulty) })
     return (
         <>
             <div className="grid mt-16 w-full lg:h-[54rem] md:h-[34rem] place-items-center bg-center bg-contain bg-no-repeat">
@@ -43,11 +41,11 @@ export function LeetCodeStatsSection({ stats }) {
                         className="mx-auto my-6 w-full leading-snug lg:!text-5xl dark:text-gray-300"
                     >
                         Discover a new level of{" "}
-                        <span className="text-green-500 leading-snug ">
+                        <span className="text-lwr-orange-color-100 leading-snug ">
                             insight
                         </span>{" "}
                         and{" "}
-                        <span className="leading-snug text-green-500">
+                        <span className="leading-snug text-lwr-orange-color-100">
                             challenge
                         </span>{" "}
                         through our curated LeetCode tasks.
@@ -58,11 +56,11 @@ export function LeetCodeStatsSection({ stats }) {
                     >
                         I’ve gathered and solved a variety of tasks to provide you with valuable insights and solutions.
                     </Typography>
-                    <div className="mb-80">
+                    <div>
                         <img
                             src="/imgs/leetcode1.png"
                             alt="LeetCode Tasks"
-                            className="w-auto h-auto mb-80"
+                            className="w-auto h-auto"
                         />
                     </div>
                 </div>
@@ -70,6 +68,9 @@ export function LeetCodeStatsSection({ stats }) {
 
             {/* Statistics Section */}
             <section className="lg:py-28 py-10 px-8 container mx-auto mt-2">
+                <span className="text-lwr-leetcode-easy-100"></span>
+                <span className="text-lwr-leetcode-medium-100"></span>
+                <span className="text-lwr-leetcode-hard-100"></span>
                 <div className="grid gap-10 lg:grid-cols-1 lg:gap-24 xl:grid-cols-2 items-center">
                     <Card
                         className="bg-gray-100/50 py-24 text-center"
@@ -77,13 +78,13 @@ export function LeetCodeStatsSection({ stats }) {
                     >
                         <Typography
                             variant="h1"
-                            className="!text-blue-500 !leading-snug text-5xl"
+                            className="text-blue-500 dark:text-purple-900 leading-snug text-5xl"
                         >
                             {stats.totalQuestions}
                         </Typography>
                         <Typography
                             variant="h5"
-                            className="mt-2 font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent"
+                            className="mt-2 font-bold bg-gradient-to-r from-blue-500 to-purple-500 dark:from-blue-700 dark:to-purple-700 bg-clip-text text-transparent"
                         >
                             LeetCode Task{stats.totalQuestions > 1 ? 's' : ''}
                         </Typography>

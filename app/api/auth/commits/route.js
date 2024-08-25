@@ -1,5 +1,3 @@
-// /app/api/commits/route.js
-
 import { NextResponse } from 'next/server';
 
 export async function GET() {
@@ -10,8 +8,6 @@ export async function GET() {
                 'Accept': 'application/vnd.github.v3+json'
             }
         });
-
-
 
         if (!response.ok) throw new Error('Network response was not ok');
 

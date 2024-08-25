@@ -1,11 +1,8 @@
 import { Suspense } from 'react';
-import Table from './Table';
-import Title from '@/components/Title';
-import GroupCard from './GroupCard';
-import LeetCodeStats from './LeetCodeStats';
+import Page from './LeetCodePage'
 import { getQuestions } from '@/lib/questions';
 
-async function QuestionsContent() {
+const QuestionsContent = async () => {
     const questions = await getQuestions();
 
     const groupMap = {};
@@ -41,11 +38,7 @@ async function QuestionsContent() {
     };
 
     return (
-        <>
-            <LeetCodeStats stats={stats} />
-            <GroupCard groups={topGroups} />
-            <Table questions={questions} />
-        </>
+        <Page questions={questions} topGroups={topGroups} stats={stats} />
     );
 }
 
@@ -63,14 +56,14 @@ const calculateAverageDifficulty = (questions) => {
     return (totalDifficulty / questions.length).toFixed(1);
 };
 
-export default function QuestionsPage() {
+const QuestionsPage = () => {
     return (
-        <Title value={'LeetCode Questions'}>
-            <div className="container mx-auto px-4 py-8">
-                <Suspense fallback={<div>Loading...</div>}>
-                    <QuestionsContent />
-                </Suspense>
-            </div>
-        </Title>
+        <div className="container mx-auto px-4 py-8">
+            <Suspense fallback={<div>Loading...</div>}>
+                <QuestionsContent />
+            </Suspense>
+        </div>
     );
 }
+
+export default QuestionsPage;

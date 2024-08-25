@@ -27,7 +27,8 @@ module.exports = withMT({
         },
         "lwr-blue-color": {
           20: '#8290acff',
-          500: 'rgba(17, 35, 70, 1)'
+          500: 'rgba(17, 35, 70, 1)',
+          600: 'rgba(9, 23, 52, 1)'
         },
         "lwr-leetcode-easy": {
           100: "#0f9b0f"
