@@ -33,7 +33,7 @@ const GroupCard = ({ groups }) => {
     };
 
     return (
-        <section className="px-2 py-4">
+        <section className="container mx-auto py-8 px-4">
             <Card shadow={false} className="border border-gray-300">
                 <CardHeader
                     shadow={false}

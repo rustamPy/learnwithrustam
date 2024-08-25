@@ -72,7 +72,7 @@ const Page = ({ questions, topGroups, stats }) => {
                                 initial={{ opacity: 0, y: 200 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -100 }}
-                                transition={{ duration: 3.5 }}
+                                transition={{ duration: 2.5 }}
                                 className='w-full'
                             >
                                 <GroupCard groups={topGroups} />
@@ -82,7 +82,7 @@ const Page = ({ questions, topGroups, stats }) => {
                                 initial={{ opacity: 0, y: 200 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -100 }}
-                                transition={{ duration: 5 }}
+                                transition={{ duration: 3.5 }}
                                 className='w-full'
                             >
                                 <Table questions={questions} />
