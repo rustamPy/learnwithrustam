@@ -58,11 +58,9 @@ const calculateAverageDifficulty = (questions) => {
 
 const QuestionsPage = () => {
     return (
-        <div className="container mx-auto px-4 py-8">
-            <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div>Loading...</div>}>
                 <QuestionsContent />
-            </Suspense>
-        </div>
+        </Suspense>
     );
 }
 

@@ -1,5 +1,5 @@
 import { Typography } from '@material-tailwind/react';
-import { LuConstruction } from "react-icons/lu";
+import { MdConstruction } from 'react-icons/md'
 
 
 const Construction = () => {
@@ -12,7 +12,7 @@ const Construction = () => {
             >
                 Under Construction
 
-                <LuConstruction size={60} />
+                <MdConstruction size={60} />
             </Typography>
 
         </div>
