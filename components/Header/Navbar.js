@@ -37,13 +37,6 @@ import BannerSection from '@/components/Header/Banner'
 
 const RESOURCES = [
     {
-        title: "Courses",
-        description: "Find the perfect course for yourself",
-        href: "/courses",
-        icon: RectangleGroupIcon,
-        construction: true
-    },
-    {
         title: "Leetcode",
         description: "Find Leetcode solutions by me",
         href: "/leetcode",
@@ -71,6 +64,10 @@ const NAVITEMS = [
     {
         title: "Features",
         href: "#features"
+    },
+    {
+        title: "Courses",
+        href: "#courses"
     },
     {
         title: "Get Together",

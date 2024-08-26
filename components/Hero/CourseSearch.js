@@ -82,7 +82,7 @@ const SearchWindow = () => {
     const allTopics = [...new Set(filteredCourses.flatMap(c => c.topics))];
 
     return (
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-16">
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-16 scroll-mt-32" id="courses">
 
             <div className="flex flex-col md:flex-row justify-between mb-8">
                 <Typography className="mt-4 text-4xl font-extrabold text-gray-900 dark:text-gray-100 sm:text-5xl lg:text-6xl">
