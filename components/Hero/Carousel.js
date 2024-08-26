@@ -55,14 +55,7 @@ const HeroCarousel = () => {
                                     color="white"
                                     className="mb-4 text-3xl md:text-4xl lg:text-5xl"
                                 >
-                                    Meet Our Instructors
-                                </Typography>
-                                <Typography
-                                    variant="lead"
-                                    color="white"
-                                    className="mb-12 opacity-80"
-                                >
-                                    Learn from industry experts with years of experience in their fields.
+                                    Backstage Photos
                                 </Typography>
                             </div>
                         </div>
