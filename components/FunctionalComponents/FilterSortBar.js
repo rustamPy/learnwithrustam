@@ -49,6 +49,7 @@ const FilterSortBar = ({
 
     return (
         <div className="flex flex-col space-y-3">
+            <span className='text-blue-500'> </span>
             <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-3">
                 {showCategoryFilter && (
                     <div className="flex items-center space-x-1">
@@ -66,8 +67,8 @@ const FilterSortBar = ({
                             }}
                         >
                             {categories.map((category) => (
-                                <Option key={category} value={category} className="text-sm font-semibold mb-1 dark:focus:bg-gray-700">
-                                    <span className={`text-${COLOR_MAP[category]}`}>{category}</span>
+                                <Option key={category} value={category} className="text-sm font-semibold mb-1 dark:focus:bg-gray-700 text-gray-800 dark:text-blue-500">
+                                    <span className={`text-${COLOR_MAP[category] ? COLOR_MAP[category] : ''} dark:text-${COLOR_MAP[category] ? COLOR_MAP[category] : ''}`}>{category}</span>
                                 </Option>
                             ))}
                         </Select>
@@ -84,9 +85,12 @@ const FilterSortBar = ({
                             labelProps={{
                                 className: "text-gray-700 dark:text-gray-200"
                             }}
+                            menuProps={{
+                                className: "bg-white dark:bg-gray-900 border-none"
+                            }}
                         >
                             {sortOptions.map((option) => (
-                                <Option key={option.value} value={option.value} className="text-sm">
+                                <Option key={option.value} value={option.value} className="text-sm text-gray-800 dark:text-purple-400 mb-1 font-semibold ">
                                     {option.label}
                                 </Option>
                             ))}
