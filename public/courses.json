@@ -1,16 +1,435 @@
   [
     {
       "id": 0,
-      "category": "python",
-      "level": "intermediate",
+      "category": "general",
+      "level": "beginner",
       "duration": [
         "4",
         "months"
       ],
+      "topics": [
+        "Computer Basics",
+        "Operating Systems",
+        "Networking Fundamentals",
+        "Cybersecurity Basics",
+        "Software Applications",
+        "Hardware Troubleshooting",
+        "Customer Support",
+        "Data Backup and Recovery",
+        "IT Terminology",
+        "Basic Programming Concepts"
+      ],
       "status": true,
-      "title": "Python Entry",
+      "title": "Core IT - Entry",
+      "desc": "This course is designed to provide you with a solid foundation in Information Technology (IT) concepts and practices. It serves as an essential stepping stone for individuals who are new to the world of IT.",
+      "overview": "The concept of an IT entry-level may not be applicable in the traditional sense. At this age, the focus should be on introducing children to basic computer literacy and technology concepts in a fun and engaging manner. Some suitable activities and learning experiences for a kid to explore the world of IT include:",
+      "format": "The course is conducted entirely online through the Slack platform. The lessons will be hands-on and highly engaging and interactive. One group will have maximum 5 students . Each lesson has a duration of approximately 50 minutes , which is roughly equivalent to one hour, twice per week. The Python - Entry course typically spans a period of 2 months, although the exact duration may vary from one student to another. Each student will receive personalized attention and support throughout the course.",
+      "materials": "Given that the lessons will be held online, as previously mentioned, course materials will be accessible through screen sharing. These materials consist of PowerPoint presentations that are regularly updated with the latest information. The key essentials for students will include owning a laptop and having a notebook at their disposal. The software they are going to use during lessons will be absolutely free to use.",
+      "assessments": "Quizzes: (every week) Regular quizzes will be administered to assess students' comprehension of course material and to reinforce key concepts. These quizzes will typically cover recent topics and serve as a form of ongoing assessment.",
+      "contents": [
+        {
+          "title": "Introduce the world of programming and Python as a programming language",
+          "details": [
+            "a",
+            "b"
+          ]
+        }
+      ],
+      "instructor": "Rustam Karimov",
+      "price": [
+        "₼",
+        "NA",
+        "month"
+      ],
+      "options": {
+        "plus": [
+          "TBA"
+        ],
+        "minus": [
+          "TBA"
+        ]
+      }
+    },
+    {
+      "id": 1,
+      "category": "general",
+      "level": "medium",
+      "duration": [
+        "3",
+        "months"
+      ],
+      "topics": [
+        "Computer Basics",
+        "Operating Systems",
+        "Networking Fundamentals",
+        "Cybersecurity Basics",
+        "Software Applications",
+        "Customer Support",
+        "Data Backup and Recovery",
+        "IT Terminology",
+        "Advanced Networking Concepts",
+        "Network Security",
+        "Server Administration",
+        "Database Management",
+        "Advanced Operating Systems",
+        "Virtualization and Cloud Computing",
+        "IT Project Management",
+        "Scripting and Automation",
+        "Troubleshooting and Diagnostics",
+        "Backup and Disaster Recovery",
+        "IT Governance and Compliance",
+        "Advanced Cybersecurity",
+        "IT Infrastructure Management",
+        "Advanced Networking Concepts",
+        "Network Security",
+        "Server Administration",
+        "Database Management",
+        "Advanced Operating Systems",
+        "Virtualization and Cloud Computing",
+        "IT Project Management",
+        "Scripting and Automation",
+        "Troubleshooting and Diagnostics",
+        "Backup and Disaster Recovery",
+        "IT Governance and Compliance",
+        "Advanced Cybersecurity",
+        "IT Infrastructure Management",
+        "Performance Monitoring and Optimization",
+        "Service Management (e.g., ITIL)",
+        "Systems Integration",
+        "Data Warehousing and Business Intelligence",
+        "Advanced Security Protocols",
+        "Incident Response and Management",
+        "Advanced Cloud Services (e.g., AWS, Azure)",
+        "Endpoint Management"
+      ],
+      "status": true,
+      "title": "Core IT - Intermediate",
+      "desc": "This course covers a range of more complex topics and subjects to build upon the foundational knowledge gained in the Entry level of IT.",
+      "overview": "The Core IT - Intermediate level course covers a range of advanced topics and subjects to build upon the foundational knowledge gained in the Entry level. Here is a lesson plan with some of the topics and subjects typically covered in this course:",
+      "format": "The course is conducted entirely online through the Slack platform. The lessons will be hands-on and highly engaging and interactive. One group will have maximum 5 students . Each lesson has a duration of approximately 50 minutes , which is roughly equivalent to one hour, twice per week. The Python - Entry course typically spans a period of 2 months, although the exact duration may vary from one student to another. Each student will receive personalized attention and support throughout the course.",
+      "materials": "Given that the lessons will be held online, as previously mentioned, course materials will be accessible through screen sharing. These materials consist of PowerPoint presentations that are regularly updated with the latest information. The key essentials for students will include owning a laptop and having a notebook at their disposal. The software they are going to use during lessons will be absolutely free to use.",
+      "assessments": "Quizzes: (every week) Regular quizzes will be administered to assess students' comprehension of course material and to reinforce key concepts. These quizzes will typically cover recent topics and serve as a form of ongoing assessment.",
+      "contents": [
+        {
+          "title": "Introduce the world of programming and Python as a programming language",
+          "details": [
+            "a",
+            "b"
+          ]
+        }
+      ],
+      "instructor": "Rustam Karimov",
+      "price": [
+        "₼",
+        "NA",
+        "month"
+      ],
+      "options": {
+        "plus": [
+          "TBA"
+        ],
+        "minus": [
+          "TBA"
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "category": "python",
+      "level": "medium",
+      "duration": [
+        "4",
+        "months"
+      ],
+      "topics": [
+        "Introduction to Python",
+        "Basic Syntax",
+        "Variables and Data Types",
+        "Operators",
+        "Control Flow",
+        "Functions",
+        "Lists and Tuples",
+        "Dictionaries and Sets",
+        "File Handling",
+        "Error Handling",
+        "Modules and Libraries",
+        "Basic Object-Oriented Programming"
+      ],
+      "status": true,
+      "title": "Python - Entry",
       "desc": "This course serves as an entrance to coding and software development through the Python. It encompasses the fundamental principles of the Python programming language and delves into the core concepts of Object-Oriented Programming (OOP).",
       "overview": "Here's a broad lesson plan with overarching objectives for an entry-level Python programming course. This plan is intended to span multiple sessions and can be adapted to fit the specific needs and pace of each student:",
+      "format": "The course is conducted entirely online through the Slack platform. The lessons will be hands-on and highly engaging and interactive. One group will have maximum 5 students . Each lesson has a duration of approximately 50 minutes , which is roughly equivalent to one hour, twice per week. The Python - Entry course typically spans a period of 2 months, although the exact duration may vary from one student to another. Each student will receive personalized attention and support throughout the course.",
+      "materials": "Given that the lessons will be held online, as previously mentioned, course materials will be accessible through screen sharing. These materials consist of PowerPoint presentations that are regularly updated with the latest information. The key essentials for students will include owning a laptop and having a notebook at their disposal. The software they are going to use during lessons will be absolutely free to use.",
+      "assessments": "Quizzes: (every week) Regular quizzes will be administered to assess students' comprehension of course material and to reinforce key concepts. These quizzes will typically cover recent topics and serve as a form of ongoing assessment.",
+      "contents": [
+        {
+          "title": "Introduce the world of programming and Python as a programming language",
+          "details": [
+            "a",
+            "b"
+          ]
+        }
+      ],
+      "instructor": "Rustam Karimov",
+      "price": [
+        "₼",
+        "NA",
+        "month"
+      ],
+      "options": {
+        "plus": [
+          "TBA"
+        ],
+        "minus": [
+          "TBA"
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "category": "python",
+      "level": "medium",
+      "duration": [
+        "5",
+        "months"
+      ],
+      "topics": [
+        "List Comprehensions",
+        "Dictionary Comprehensions",
+        "Set Comprehensions",
+        "Lambda Functions",
+        "Higher-Order Functions",
+        "Map, Filter, and Reduce",
+        "Decorators",
+        "Generators",
+        "Coroutines",
+        "Context Managers",
+        "Alghorithms",
+        "Leetcode",
+        "Error Handling and Exceptions",
+        "Custom Exceptions",
+        "Regular Expressions",
+        "File I/O",
+        "Working with JSON",
+        "Working with CSV Files",
+        "Working with XML",
+        "Datetime Module",
+        "Time Module",
+        "Unit Testing",
+        "Mocking in Tests",
+        "Profiling and Optimization",
+        "Debugging Techniques",
+        "Logging",
+        "Command-Line Arguments",
+        "Argparse Module",
+        "Subprocess Module",
+        "Threads and Concurrency",
+        "Multiprocessing",
+        "Asynchronous Programming",
+        "Asyncio Library",
+        "Networking with Sockets",
+        "HTTP Requests with Requests Library",
+        "Working with APIs",
+        "Web Scraping with BeautifulSoup",
+        "Web Scraping with Scrapy",
+        "Database Connectivity",
+        "SQL with SQLite",
+        "ORM with SQLAlchemy",
+        "NoSQL Databases (e.g., MongoDB)",
+        "Object-Oriented Programming (OOP)",
+        "Inheritance",
+        "Polymorphism",
+        "Encapsulation",
+        "Abstract Classes",
+        "Interfaces",
+        "Metaclasses",
+        "Descriptors",
+        "Data Classes",
+        "Type Hints and Annotations",
+        "Static and Class Methods",
+        "Property Decorators",
+        "Design Patterns",
+        "Singleton Pattern",
+        "Factory Pattern",
+        "Strategy Pattern",
+        "Observer Pattern",
+        "Command Pattern",
+        "Functional Programming Concepts",
+        "Partial Functions",
+        "Currying",
+        "Memoization",
+        "Python Iterators",
+        "Python Generators",
+        "Comprehensions in Depth",
+        "Contextlib Module",
+        "Concurrency with Threading",
+        "Concurrency with Asyncio",
+        "Context Managers for Resource Management",
+        "Custom Context Managers",
+        "Working with Zip Files",
+        "File System Operations",
+        "Pathlib Module",
+        "Creating and Using Modules",
+        "Packaging Python Code",
+        "Virtual Environments",
+        "Dependency Management with Pip",
+        "Managing Project Dependencies",
+        "Building and Distributing Packages",
+        "Static Code Analysis",
+        "Linting Tools (e.g., Flake8)",
+        "Code Formatting (e.g., Black)",
+        "Documentation with Docstrings",
+        "Type Checking with MyPy",
+        "Refactoring Code",
+        "Version Control with Git",
+        "Python Package Index (PyPI)",
+        "Creating and Using REST APIs",
+        "Web Frameworks (e.g., Flask, Django)",
+        "Template Engines",
+        "Session Management",
+        "User Authentication",
+        "ORM Concepts",
+        "AJAX and JavaScript Integration",
+        "Handling Web Forms",
+        "Deploying Python Applications"
+      ],
+      "status": true,
+      "title": "Python - Intermediate",
+      "desc": "TBA",
+      "overview": "TBA",
+      "format": "The course is conducted entirely online through the Slack platform. The lessons will be hands-on and highly engaging and interactive. One group will have maximum 5 students . Each lesson has a duration of approximately 50 minutes , which is roughly equivalent to one hour, twice per week. The Python - Entry course typically spans a period of 2 months, although the exact duration may vary from one student to another. Each student will receive personalized attention and support throughout the course.",
+      "materials": "Given that the lessons will be held online, as previously mentioned, course materials will be accessible through screen sharing. These materials consist of PowerPoint presentations that are regularly updated with the latest information. The key essentials for students will include owning a laptop and having a notebook at their disposal. The software they are going to use during lessons will be absolutely free to use.",
+      "assessments": "Quizzes: (every week) Regular quizzes will be administered to assess students' comprehension of course material and to reinforce key concepts. These quizzes will typically cover recent topics and serve as a form of ongoing assessment.",
+      "contents": [
+        {
+          "title": "Introduce the world of programming and Python as a programming language",
+          "details": [
+            "a",
+            "b"
+          ]
+        }
+      ],
+      "instructor": "Rustam Karimov",
+      "price": [
+        "₼",
+        "NA",
+        "month"
+      ],
+      "options": {
+        "plus": [
+          "TBA"
+        ],
+        "minus": [
+          "TBA"
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "category": "python",
+      "level": "hard",
+      "duration": [
+        "12",
+        "months"
+      ],
+      "topics": [
+        "MetaProgramming",
+        "Descriptors",
+        "Alghorithms",
+        "Metaclasses",
+        "Advanced Decorators",
+        "Context Managers and Custom Context Managers",
+        "Concurrency and Parallelism",
+        "Asynchronous Programming with Asyncio",
+        "Advanced Use of Coroutines",
+        "Event-Driven Programming",
+        "Multiprocessing",
+        "GIL (Global Interpreter Lock) Understanding",
+        "Thread Safety",
+        "Advanced Generators",
+        "Yield from and Delegating Generators",
+        "Custom Iterators",
+        "Functional Programming Techniques",
+        "Advanced Functional Programming",
+        "Lazy Evaluation",
+        "Memoization and Caching",
+        "Design Patterns",
+        "Creational Patterns",
+        "Structural Patterns",
+        "Behavioral Patterns",
+        "Custom Context Managers",
+        "Contextlib Module",
+        "Reflection and Introspection",
+        "Dynamic Code Execution",
+        "Code Injection and Execution",
+        "Advanced Exception Handling",
+        "Custom Exception Classes",
+        "Exception Hierarchy",
+        "Logging Configuration and Handlers",
+        "Debugging Techniques",
+        "Profiling and Performance Optimization",
+        "Memory Management",
+        "Garbage Collection",
+        "Advanced File Handling",
+        "File System Watching",
+        "Complex Data Structures",
+        "Immutable Data Structures",
+        "Advanced Data Classes",
+        "Typed Containers",
+        "Advanced ORM Techniques",
+        "Database Transactions",
+        "Database Schema Migration",
+        "Advanced SQL Queries",
+        "NoSQL Advanced Usage",
+        "Advanced API Design and Development",
+        "GraphQL",
+        "WebSockets",
+        "Advanced Web Framework Usage",
+        "Performance Tuning in Web Frameworks",
+        "Security Best Practices",
+        "Cryptography and Secure Coding",
+        "User Authentication and Authorization",
+        "OAuth and JWT",
+        "Deploying and Scaling Python Applications",
+        "Containerization with Docker",
+        "Continuous Integration/Continuous Deployment (CI/CD)",
+        "Serverless Architectures",
+        "Cloud Computing with Python",
+        "Integration with Cloud Services",
+        "Advanced Testing Techniques",
+        "Behavior-Driven Development (BDD)",
+        "Property-Based Testing",
+        "Test Automation",
+        "Mocking and Patching",
+        "Integration Testing",
+        "Advanced Networking",
+        "Custom Network Protocols",
+        "Network Security and Encryption",
+        "Advanced Web Scraping",
+        "Distributed Systems",
+        "Data Pipelines and ETL",
+        "Data Science and Machine Learning Integration",
+        "Big Data Processing",
+        "Parallel Processing for Data Tasks",
+        "Advanced Scripting and Automation",
+        "Metaprogramming with AST (Abstract Syntax Trees)",
+        "Dynamic Class Creation",
+        "Aspect-Oriented Programming (AOP)",
+        "Python Internals and CPython",
+        "Understanding Python Bytecode",
+        "Embedding Python in Other Applications",
+        "Extending Python with C/C++",
+        "Creating Python C Extensions",
+        "Writing Python Modules in C",
+        "Profiling Python Code with Cython",
+        "Advanced Memory Management",
+        "Interprocess Communication (IPC)"
+      ],
+      "status": true,
+      "title": "Python - Advanced",
+      "desc": "TBA",
+      "overview": "TBA",
       "format": "The course is conducted entirely online through the Slack platform. The lessons will be hands-on and highly engaging and interactive. One group will have maximum 5 students . Each lesson has a duration of approximately 50 minutes , which is roughly equivalent to one hour, twice per week. The Python - Entry course typically spans a period of 2 months, although the exact duration may vary from one student to another. Each student will receive personalized attention and support throughout the course.",
       "materials": "Given that the lessons will be held online, as previously mentioned, course materials will be accessible through screen sharing. These materials consist of PowerPoint presentations that are regularly updated with the latest information. The key essentials for students will include owning a laptop and having a notebook at their disposal. The software they are going to use during lessons will be absolutely free to use.",
       "assessments": "Quizzes: (every week) Regular quizzes will be administered to assess students' comprehension of course material and to reinforce key concepts. These quizzes will typically cover recent topics and serve as a form of ongoing assessment.",

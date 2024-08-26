@@ -5,21 +5,24 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 const FilterSortBar = ({
     onCategoryChange,
-    onSortOrderChange,
-    onTopicChange,
     selectedCategory,
-    sortOrder,
-    selectedTopics = [],
     categories,
     label,
     showCategoryFilter = true,
-    showSortOrder = true,
+
     showTopicFilter = true,
+    allTopics = [],
+    selectedTopics = [],
+    onTopicChange,
+
+    showSortOrder = true,
+    sortOrder,
     sortOptions = [
         { value: 'asc', label: 'Title (A-Z)' },
         { value: 'desc', label: 'Title (Z-A)' }
     ],
-    allTopics = [],
+    onSortOrderChange,
+
     itemsCount = 0
 }) => {
     const [searchTopic, setSearchTopic] = useState('');
@@ -28,6 +31,7 @@ const FilterSortBar = ({
     const [tallerBox, setTallerBox] = useState(false);
     const COLOR_MAP = {
         'Easy': 'lwr-leetcode-easy-100',
+        "Beginner": 'lwr-leetcode-easy-100',
         'Medium': 'lwr-leetcode-medium-100',
         'Hard': 'lwr-leetcode-hard-100'
     };
@@ -67,7 +71,7 @@ const FilterSortBar = ({
                             }}
                         >
                             {categories.map((category) => (
-                                <Option key={category} value={category} className="text-sm font-semibold mb-1 dark:focus:bg-gray-700 text-gray-800 dark:text-blue-500">
+                                <Option key={category} value={category} className="text-sm text-left font-semibold mb-1 dark:focus:bg-gray-700 text-gray-800 dark:text-blue-500">
                                     <span className={`text-${COLOR_MAP[category] ? COLOR_MAP[category] : ''} dark:text-${COLOR_MAP[category] ? COLOR_MAP[category] : ''}`}>{category}</span>
                                 </Option>
                             ))}
@@ -81,13 +85,14 @@ const FilterSortBar = ({
                             value={sortOrder}
                             onChange={(value) => onSortOrderChange(value)}
                             label="Sort by"
-                            className="text-xs bg-gray-200 dark:bg-gray-900 text-gray-700 dark:text-gray-200"
+                            className={`text-xs bg-gray-200 dark:bg-gray-900 text-gray-700 ${itemsCount === 1 ? "dark:text-gray-600" : "dark:text-gray-200"}`}
                             labelProps={{
                                 className: "text-gray-700 dark:text-gray-200"
                             }}
                             menuProps={{
                                 className: "bg-white dark:bg-gray-900 border-none"
                             }}
+                            disabled={itemsCount === 1}
                         >
                             {sortOptions.map((option) => (
                                 <Option key={option.value} value={option.value} className="text-sm text-gray-800 dark:text-purple-400 mb-1 font-semibold ">
@@ -99,20 +104,33 @@ const FilterSortBar = ({
                 )}
                 {showTopicFilter && (
                     <div className="flex items-center relative">
-                        <button
-                            className="flex items-center rounded px-3 py-1.5 border border-blue-gray-200 text-left cursor-pointer focus:outline-none whitespace-nowrap bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 text-gray-700 dark:text-gray-300"
-                            onClick={() => setIsTopicBoxOpen(!isTopicBoxOpen)}
-                        >
-                            <div>
-                                <span>Topics</span>
-                                <span className="ml-2 h-[18px] rounded-full px-1.5 text-center text-xs leading-normal bg-gray-200 text-gray-800">
-                                    {selectedTopics.length}
-                                </span>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" className={`w-4.5 h-4.5 ml-3 pointer-events-none transition-transform ${isTopicBoxOpen ? 'rotate-180' : ''}`}>
-                                <path fillRule="evenodd" d="M4.929 7.913l7.078 7.057 7.064-7.057a1 1 0 111.414 1.414l-7.77 7.764a1 1 0 01-1.415 0L3.515 9.328a1 1 0 011.414-1.414z" clipRule="evenodd"></path>
-                            </svg>
-                        </button>
+                        {!(allTopics[0] == undefined) ? (
+                            <button
+                                className="flex items-center text-sm rounded-lg px-3 py-2.5 border border-blue-gray-200 text-left cursor-pointer focus:outline-none whitespace-nowrap bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 text-gray-700 dark:text-gray-300"
+                                onClick={() => setIsTopicBoxOpen(!isTopicBoxOpen)}>
+                                <div>
+                                    <span>Topics</span>
+                                    <span className="ml-2 h-[18px] rounded-full px-1.5 text-center text-xs leading-normal bg-gray-200 text-gray-800">
+                                        {selectedTopics.length}
+                                    </span>
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" className={`w-4.5 h-4.5 ml-3 pointer-events-none transition-transform ${isTopicBoxOpen ? 'rotate-180' : ''}`}>
+                                    <path fillRule="evenodd" d="M4.929 7.913l7.078 7.057 7.064-7.057a1 1 0 111.414 1.414l-7.77 7.764a1 1 0 01-1.415 0L3.515 9.328a1 1 0 011.414-1.414z" clipRule="evenodd"></path>
+                                </svg>
+                            </button>
+                        ) : (
+                            <button
+                                className="flex items-center text-sm rounded-lg px-3 py-2.5 text-left cursor-not-allowed focus:outline-none whitespace-nowrap bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 text-gray-800 dark:text-gray-600"
+                                disabled>
+                                <div>
+                                    <span>No available topic</span>
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" className={`w-4.5 h-4.5 ml-3 pointer-events-none transition-transform ${isTopicBoxOpen ? 'rotate-180' : ''}`}>
+                                    <path fillRule="evenodd" d="M4.929 7.913l7.078 7.057 7.064-7.057a1 1 0 111.414 1.414l-7.77 7.764a1 1 0 01-1.415 0L3.515 9.328a1 1 0 011.414-1.414z" clipRule="evenodd"></path>
+                                </svg>
+                            </button>
+                        )}
+
                         {isTopicBoxOpen && (
                             <div className={`absolute top-full left-0 z-10 p-2 rounded-lg bg-white dark:bg-gray-900 shadow-lg w-80 ${tallerBox ? 'h-80' : 'h-64'}`}>
                                 <div className="relative mb-4 dark:text-white">
@@ -158,7 +176,7 @@ const FilterSortBar = ({
                         )}
                     </div>
                 )}
-                {itemsCount > 0 && (<div className='flex items-center space-x-1 w-54 bg-gray-100 p-2 dark:bg-gray-900 rounded-md'>Selected item{itemsCount > 0 ? 's' : ''}: <span className='font-bold ml-2'>{itemsCount}</span></div>)}
+                {itemsCount > 0 && (<div className='flex items-center text-sm space-x-1 w-54 bg-gray-100 p-2 dark:bg-gray-900 rounded-md'>Selected item{itemsCount > 0 ? 's' : ''}: <span className='font-bold ml-2'>{itemsCount}</span></div>)}
             </div>
         </div>
     );

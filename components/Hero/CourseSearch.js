@@ -18,6 +18,7 @@ const SearchWindow = () => {
     const [sortOrder, setSortOrder] = useState('asc');
     const [selectedTopics, setSelectedTopics] = useState([]);
 
+
     const filterAndSortCourses = useCallback((query) => {
         let filtered = coursesData;
 
@@ -81,6 +82,8 @@ const SearchWindow = () => {
 
     const allTopics = [...new Set(filteredCourses.flatMap(c => c.topics))];
 
+    console.log(currentQuestions)
+
     return (
         <div className="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6 scroll-mt-[450px] sm:scroll-mt-32 mb-16" id="courses">
 
@@ -119,7 +122,7 @@ const SearchWindow = () => {
                 selectedCategory={category}
                 sortOrder={sortOrder}
                 selectedTopics={selectedTopics}
-                categories={['All', 'Beginner', 'Intermediate', 'Advanced']}
+                categories={['All', 'Beginner', 'Medium', 'Hard']}
                 label='Level'
                 showSortOrder={true}
                 showTopicFilter={true}
