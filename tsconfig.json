@@ -28,7 +28,7 @@
     ".next/types/**/*.ts",
     "config/database.js"
 ,
-"components/Hero/SearchWindow.js",
+"components/Hero/CourseSearch.js",
 "components/Hero/IndexHero.ks",
 "components/Hero/Carousel.js",
 "components/Header/Banner.js",

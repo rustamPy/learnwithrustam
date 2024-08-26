@@ -4,7 +4,7 @@ import React from 'react';
 import Introduction from '@/components/Hero/Introduction';
 import HeroCarousel from '@/components/Hero/Carousel';
 import Features from '@/components/Hero/Features';
-import SearchWindow from '@/components/Hero/SearchWindow';
+import CourseSearch from '@/components/Hero/CourseSearch';
 
 const Index = () => (
   <div className='text-center m-9 mt-6'>
@@ -15,7 +15,7 @@ const Index = () => (
     <Features />
 
     {/* Search Window Section for course search */}
-    <SearchWindow />
+    <CourseSearch />
 
     {/* Hero Carousel Section with images */}
     <HeroCarousel />
