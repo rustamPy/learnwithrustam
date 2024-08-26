@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes';
 
 
 const CGiscus = () => {
-    const { theme, setTheme } = useTheme();
+    const { theme } = useTheme();
 
     return (
         <div className='mt-16 w-full'>
