@@ -158,7 +158,7 @@ const FilterSortBar = ({
                         )}
                     </div>
                 )}
-                {itemsCount > 0 && (<div className='flex items-center space-x-1 w-54 bg-gray-100 p-2 dark:bg-gray-900 rounded-md'>Selected items: <span className='font-bold ml-2'>{itemsCount}</span></div>)}
+                {itemsCount > 0 && (<div className='flex items-center space-x-1 w-54 bg-gray-100 p-2 dark:bg-gray-900 rounded-md'>Selected item{itemsCount > 0 ? 's' : ''}: <span className='font-bold ml-2'>{itemsCount}</span></div>)}
             </div>
         </div>
     );
