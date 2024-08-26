@@ -2,16 +2,21 @@
 import { useState, useEffect } from "react";
 
 import Image from "next/image";
-import coreItInter from '@/assets/images/cit_inter.jpg'
-import pythonEntry from '@/assets/images/python_entry.jpg'
+import coreItEntry from '@/assets/images/courseThumbnails/cit_base.jpg';
+import coreItInter from '@/assets/images/courseThumbnails/cit_inter.jpg';
+import pythonEntry from '@/assets/images/courseThumbnails/python_entry.jpg';
+import pythonInter from '@/assets/images/courseThumbnails/python_inter.jpg';
+import pythonAdvanced from '@/assets/images/courseThumbnails/python_advanced.jpg';
 import placeholder from '@/assets/images/placeholder.webp'
 import { useSession } from "next-auth/react";
 
 const IMAGEMAP = {
-    'General IT - Entry': coreItInter,
-    'Python Entry': pythonEntry,
-}
-
+    'Core IT - Entry': coreItEntry,
+    'Core IT - Intermediate': coreItInter,
+    'Python - Entry': pythonEntry,
+    'Python - Intermediate': pythonInter,
+    'Python - Advanced': pythonAdvanced
+};
 import SignInWindow from "@/components/SignInWindow";
 import { Typography } from "@material-tailwind/react";
 
