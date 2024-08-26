@@ -173,9 +173,10 @@ function ResourcesMenu() {
 
 const NavList = () => (
         <List className="mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
-        {NAVITEMS.map(item => {
+        {NAVITEMS.map((item, key) => {
             return (
                 <Typography
+                    key={key}
                     as="a"
                     href={item.href}
                     variant="small"
