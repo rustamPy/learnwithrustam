@@ -5,16 +5,27 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import ClientSessionProvider from './SessionProvider';
 import NavBar from '@/components/Header/Navbar';
 import LWRFooter from '@/components/Footer/LWRFooter';
+import { ThemeProvider } from 'next-themes'
 
 export const metadata = {
   title: 'LWR',
   description: 'Learn with Rustam'
 };
+
+
+const Theme = ({ children }) => {
+  return (
+    <ThemeProvider attribute="class">
+      {children}
+    </ThemeProvider>
+  )
+}
+
 export default async function RootLayout({ children }) {
   const session = await getServerSession(authOptions);
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <title>LWR</title>
         <link rel="icon" href="/favicon.ico" />
@@ -27,11 +38,13 @@ export default async function RootLayout({ children }) {
         />
       </head>
       <body>
+        <Theme>
         <ClientSessionProvider session={session}>
           <NavBar />
           <main>{children}</main>
           <LWRFooter />
         </ClientSessionProvider>
+        </Theme>
       </body>
     </html>
   );

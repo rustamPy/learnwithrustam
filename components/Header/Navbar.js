@@ -1,10 +1,10 @@
 'use client';
-import React, { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
-import { signOut } from "next-auth/react";
+import React, { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import { debounce } from 'lodash';
-import { MdConstruction } from 'react-icons/md'
-import Logo from '@/components/Logo'
+import { MdConstruction } from 'react-icons/md';
+import Logo from '@/components/Logo';
 
 import {
     Navbar,
@@ -18,72 +18,70 @@ import {
     MenuHandler,
     MenuList,
     MenuItem,
-} from "@material-tailwind/react";
+} from '@material-tailwind/react';
 import {
     ChevronDownIcon,
     Bars3Icon,
     XMarkIcon,
-} from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/outline';
 import {
     Bars4Icon,
     RectangleGroupIcon,
     LanguageIcon,
-} from "@heroicons/react/24/solid";
-import { FiVideo } from "react-icons/fi";
+} from '@heroicons/react/24/solid';
+import { FiVideo } from 'react-icons/fi';
 
-import ThemeToggle from '@/components/ToggleTheme';
-import BannerSection from '@/components/Header/Banner'
-
+import ThemeToggle from '@/components/ThemeToggle'; // Adjust import if needed
+import BannerSection from '@/components/Header/Banner';
 
 const RESOURCES = [
     {
-        title: "Leetcode",
-        description: "Find Leetcode solutions by me",
-        href: "/leetcode",
+        title: 'Leetcode',
+        description: 'Find Leetcode solutions by me',
+        href: '/leetcode',
         icon: Bars4Icon,
     },
     {
-        title: "Polski. Krok po Kroku",
-        description: "Audio Guide for Polish language",
-        href: "/learnpolish",
+        title: 'Polski. Krok po Kroku',
+        description: 'Audio Guide for Polish language',
+        href: '/learnpolish',
         icon: LanguageIcon,
     },
     {
-        title: "IT Video Tutorials",
-        description: "Exclusive tutorials only here",
-        href: "/videos/tutorials",
+        title: 'IT Video Tutorials',
+        description: 'Exclusive tutorials only here',
+        href: '/videos/tutorials',
         icon: FiVideo,
-    }
+    },
 ];
 
 const NAVITEMS = [
     {
-        title: "Home",
-        href: "/"
+        title: 'Home',
+        href: '/',
     },
     {
-        title: "Features",
-        href: "/#features"
+        title: 'Features',
+        href: '/#features',
     },
     {
-        title: "Courses",
-        href: "/#courses"
+        title: 'Courses',
+        href: '/#courses',
     },
     {
-        title: "Get Together",
-        href: "/#together"
+        title: 'Get Together',
+        href: '/#together',
     },
     {
-        title: "About Me",
-        href: "/about"
+        title: 'About Me',
+        href: '/about',
     },
     {
-        title: "Contact Me",
-        href: "#",
-        construction: 1
-    }
-]
-
+        title: 'Contact Me',
+        href: '#',
+        construction: 1,
+    },
+];
 
 function ResourcesMenu() {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -93,32 +91,31 @@ function ResourcesMenu() {
         ({ icon, title, description, href, construction }, key) => (
             <a href={href} key={key}>
                 <MenuItem className="flex items-center gap-3 rounded-lg dark:hover:bg-gray-700">
-                    <div className="flex items-center justify-center rounded-lg p-2 ">
+                    <div className="flex items-center justify-center rounded-lg p-2">
                         {React.createElement(icon, {
                             strokeWidth: 2,
-                            className: "h-6 text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1 w-6",
+                            className: 'h-6 text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1 w-6',
                         })}
                     </div>
                     <div>
-                        {construction ?
+                        {construction ? (
                             <Typography
                                 variant="h5"
                                 className="flex items-center text-sm text-red-800 font-semibold"
                             >
                                 {title} <MdConstruction className="text-red-800 ml-2 inline-block" />
                             </Typography>
-
-                            :
-
-                        <Typography
+                        ) : (
+                            <Typography
                                 variant="h6"
                                 className="flex items-center text-sm font-bold text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1"
-                        >
-                            {title}
-                            </Typography>}
+                                >
+                                    {title}
+                            </Typography>
+                        )}
                         <Typography
                             variant="paragraph"
-                            className="text-xs font-medium text-lwr-general-blue-light-theme-color-2 dark:text-lwr-general-gray-dark-theme-color-2  "
+                            className="text-xs font-medium text-lwr-general-blue-light-theme-color-2 dark:text-lwr-general-gray-dark-theme-color-2"
                         >
                             {description}
                         </Typography>
@@ -147,19 +144,17 @@ function ResourcesMenu() {
                             Resources
                             <ChevronDownIcon
                                 strokeWidth={2.5}
-                                className={`hidden h-3 w-3 transition-transform lg:block ${isMenuOpen ? "rotate-180" : ""
-                                    }`}
+                                className={`hidden h-3 w-3 transition-transform lg:block ${isMenuOpen ? 'rotate-180' : ''}`}
                             />
                             <ChevronDownIcon
                                 strokeWidth={2.5}
-                                className={`block h-3 w-3 transition-transform lg:hidden ${isMobileMenuOpen ? "rotate-180" : ""
-                                    }`}
+                                className={`block h-3 w-3 transition-transform lg:hidden ${isMobileMenuOpen ? 'rotate-180' : ''}`}
                             />
                         </ListItem>
                     </Typography>
                 </MenuHandler>
                 <MenuList style={{ border: 0 }} className="hidden max-w-screen-xl rounded-xl dark:border-none lg:block dark:bg-lwr-general-gray-dark-theme-color-3 dark:text-red-500">
-                    <ul className="grid grid-cols-3 gap-y-2 outline-none outline-0 ">
+                    <ul className="grid grid-cols-3 gap-y-2 outline-none outline-0">
                         {renderItems}
                     </ul>
                 </MenuList>
@@ -172,45 +167,38 @@ function ResourcesMenu() {
 }
 
 const NavList = ({ closeNavbar }) => (
-        <List className="mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
-        {NAVITEMS.map((item, key) => {
-            return (
-                <Typography
-                    key={key}
-                    as="a"
-                    href={item.href}
-                    variant="small"
-                    className="font-bold text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1"
+    <List className="mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
+        {NAVITEMS.map((item, key) => (
+            <Typography
+                key={key}
+                as="a"
+                href={item.href}
+                variant="small"
+                className="font-bold text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1"
+            >
+                <ListItem
+                    onClick={closeNavbar}
+                    className={`flex items-center gap-2 py-2 pr-4 ${item.construction ? 'text-red-800 hover:text-red-800 dark:hover:bg-red-900 dark:hover:text-lwr-general-gray-dark-theme-color-1' : 'dark:hover:bg-gray-700 dark:hover:text-lwr-general-gray-dark-theme-color-1'}`}
                 >
-                    <ListItem
-                        onClick={closeNavbar}
-                        className={`flex items-center gap-2 py-2 pr-4 ${item.construction ? 'text-red-800 hover:text-red-800 dark:hover:bg-red-900 dark:hover:text-lwr-general-gray-dark-theme-color-1' : 'dark:hover:bg-gray-700 dark:hover:text-lwr-general-gray-dark-theme-color-1'}`}>
-                        {item.construction && <MdConstruction className="text-red-800 inline-block" />}
-                        {item.title}
-                    </ListItem>
-                </Typography>
-            )
-        })}
+                    {item.construction && <MdConstruction className="text-red-800 inline-block" />}
+                    {item.title}
+                </ListItem>
+            </Typography>
+        ))}
         <ResourcesMenu />
-        </List>
+    </List>
 );
 
-
-const UserProfile = ({ user }) => {
-    return (
-        <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-            <a href="/profile"><img src={user.user?.image} width={30} style={{ borderRadius: 50 }} /></a>
-        </div>
-    )
-}
-
+const UserProfile = ({ user }) => (
+    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+        <a href="/profile"><img src={user.user?.image} width={30} style={{ borderRadius: 50 }} /></a>
+    </div>
+);
 
 const NavbarWithMegaMenu = () => {
     const [openNav, setOpenNav] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const { data: session, status } = useSession();
-
-
 
     useEffect(() => {
         const handleScroll = debounce(() => {
@@ -228,10 +216,10 @@ const NavbarWithMegaMenu = () => {
         <>
             <Navbar
                 blurred
-                className={`border-0 sticky mx-auto transition-all duration-300 mb-10 ${isScrolled
+                className={`border-0 sticky mx-auto transition-all duration-300 ${isScrolled
                     ? 'top-2 mx-auto rounded-xl px-2 py-2'
                     : 'top-0 max-w-full px-4 py-4'
-                    } dark:bg-lwr-navbar-dark-theme-color z-20`}
+                    } dark:bg-lwr-navbar-dark-theme-color z-50`}
             >
                 <BannerSection isScrolled={isScrolled} />
                 <div className="flex items-center justify-between text-lwr-logo-light-theme-color dark:text-lwr-logo-dark-theme-color pt-8">
@@ -241,7 +229,7 @@ const NavbarWithMegaMenu = () => {
                     </div>
                     <div className="hidden gap-2 lg:flex">
                         {
-                            status === "loading" || status === "authenticated" ? (
+                            status === 'loading' || status === 'authenticated' ? (
                                 <>
                                     <UserProfile user={session} />
                                     <Button variant="filled" size="sm" onClick={() => signOut({ callbackUrl: '/' })}>
@@ -276,7 +264,7 @@ const NavbarWithMegaMenu = () => {
                     <NavList closeNavbar={() => setOpenNav(false)} />
                     <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
                         {
-                            status === "loading" || status === "authenticated" ? (
+                            status === 'loading' || status === 'authenticated' ? (
                                 <>
                                     <UserProfile user={session} />
                                     <Button variant="filled" size="sm" onClick={() => signOut({ callbackUrl: '/' })}>
@@ -299,7 +287,6 @@ const NavbarWithMegaMenu = () => {
             </Navbar>
         </>
     );
-}
-
+};
 
 export default NavbarWithMegaMenu;

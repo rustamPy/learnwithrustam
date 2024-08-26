@@ -26,7 +26,7 @@ const Page = ({ questions, topGroups, stats }) => {
     };
 
     return (
-        <div className="flex flex-col items-center py-4">
+        <div className="flex flex-col items-center py-4 mt-16">
             <section className="w-full max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
                 <div className="space-y-8">
                     <h2 className="text-lg font-semibold text-lwr-orange-color-200 dark:text-lwr-orange-color-100 tracking-wide uppercase">Check the solutions Today</h2>

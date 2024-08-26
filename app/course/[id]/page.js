@@ -1,188 +1,349 @@
 'use client';
-import { useState, useEffect } from "react";
-
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import Head from 'next/head';
+import SignInWindow from "@/components/SignInWindow";
+import { Typography, Button, Accordion, AccordionHeader, AccordionBody, Chip, Spinner } from "@material-tailwind/react";
+import { motion } from "framer-motion";
+
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { twilight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+const pythonAdvancedCode = `
+def advanced_sort(data):
+    return sorted(data, key=lambda x: (-x['priority'], x['name']))
+
+data = [
+    {'name': 'Task1', 'priority': 3},
+    {'name': 'Task2', 'priority': 1},
+    {'name': 'Task3', 'priority': 2},
+]
+sorted_data = advanced_sort(data)
+print(sorted_data)
+`;
+
+
 import coreItEntry from '@/assets/images/courseThumbnails/cit_base.jpg';
 import coreItInter from '@/assets/images/courseThumbnails/cit_inter.jpg';
 import pythonEntry from '@/assets/images/courseThumbnails/python_entry.jpg';
 import pythonInter from '@/assets/images/courseThumbnails/python_inter.jpg';
 import pythonAdvanced from '@/assets/images/courseThumbnails/python_advanced.jpg';
-import placeholder from '@/assets/images/placeholder.webp'
-import { useSession } from "next-auth/react";
+
 
 const IMAGEMAP = {
     'Core IT - Entry': coreItEntry,
     'Core IT - Intermediate': coreItInter,
     'Python - Entry': pythonEntry,
     'Python - Intermediate': pythonInter,
-    'Python - Advanced': pythonAdvanced
+    'Python - Advanced': pythonAdvanced,
 };
-import SignInWindow from "@/components/SignInWindow";
-import { Typography } from "@material-tailwind/react";
 
 
-export default function CoursePage({ params }) {
+function HeroSection({ course }) {
+    const [isHovered, setIsHovered] = useState(false);
+    const bgImage = IMAGEMAP[course.title] || '/imgs/placeholder.jpg';
+    const [mainTitle, subTitle] = course.title.split(' - ');
+
+    const scrollToDetails = useCallback(() => {
+        const detailsSection = document.getElementById('course-details');
+        if (detailsSection) {
+            const targetPosition = detailsSection.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({
+                top: targetPosition - 100,
+                behavior: 'smooth'
+            });
+        }
+    }, []);
+
+    return (
+        <div className="relative h-screen bg-cover bg-center dark:bg-gray-900" style={{ backgroundImage: `url(${bgImage.src})` }}>
+            <div className="absolute inset-0 bg-white dark:bg-black bg-opacity-85 dark:bg-opacity-80 flex items-center justify-center">
+                <div className="text-center">
+                    <motion.div
+                        initial={{ opacity: 0, y: -50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <Typography className="text-4xl font-extrabold text-gray-900 dark:text-white sm:text-5xl lg:text-6xl">
+                            {mainTitle}
+                            <span className="px-2 py-1 relative inline-block">
+                                <svg className="stroke-current bottom-0 absolute text-blue-300 -translate-x-2" viewBox="0 0 410 18" xmlns="http://www.w3.org/2000/svg">
+                                    <motion.path
+                                        d="M6 6.4c16.8 16.8 380.8-11.2 397.6 5.602"
+                                        strokeWidth="12"
+                                        fill="none"
+                                        fillRule="evenodd"
+                                        strokeLinecap="round"
+                                        initial={{ pathLength: 0 }}
+                                        animate={{ pathLength: 1 }}
+                                        transition={{ duration: 1.5, ease: "easeInOut" }}
+                                    />
+                                </svg>
+                                <motion.span
+                                    className="relative"
+                                    onMouseEnter={() => setIsHovered(true)}
+                                    onMouseLeave={() => setIsHovered(false)}
+                                    animate={{
+                                        scale: isHovered ? 1.1 : 1,
+                                        color: isHovered ? "#f49446ff" : "currentColor"
+                                    }}
+                                >
+                                    {subTitle}
+                                </motion.span>
+                            </span>
+                        </Typography>
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                    >
+                        <Typography className="mt-6 font-bold text-xl text-gray-800 dark:text-gray-200">
+                            Master {course.title} with our comprehensive course
+                        </Typography>
+                    </motion.div>
+                    <motion.div
+                        className="mt-8"
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.4 }}
+                    >
+                        <Button size="lg" ripple="light" className="mr-4 bg-lwr-general-blue-light-theme-color-1 dark:bg-lwr-general-gray-dark-theme-color-1 text-gray-200 dark:text-gray-800" onClick={() => alert('TEST')}>
+                            Register
+                        </Button>
+                        <Button color="blue" size="lg" ripple="light" variant="outlined" className="dark:border-lwr-general-gray-dark-theme-color-1 text-gray-800 dark:text-gray-200" onClick={scrollToDetails}>
+                            Preview Course
+                        </Button>
+                    </motion.div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function Sidebar({ course }) {
+    return (
+        <div className="lg:w-1/3 top-24">
+            <Image src={IMAGEMAP[course.title] || '/imgs/placeholder.jpg'} alt={course.title} width={300} height={200} className="rounded-lg mb-4" />
+            <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+                <Typography variant="h6" color="blue" className="mb-2">Course Details</Typography>
+                <CourseDetail label="Level" value={course.level} valueClass="bg-blue-100 text-blue-800 dark:bg-blue-500 dark:text-white" />
+                <CourseDetail label="Duration" value={course.duration} valueClass="bg-green-100 text-green-800 dark:bg-green-500 dark:text-white" />
+                <p><strong>Instructor:</strong> {course.instructor}</p>
+            </div>
+        </div>
+    );
+}
+
+function CourseDetail({ label, value, valueClass }) {
+    return (
+        <div className="flex justify-between mb-2">
+            <span className="font-bold">{label}:</span>
+            <Chip value={value} className={`rounded-full ${valueClass}`} />
+        </div>
+    );
+}
+
+function CourseContent({ course }) {
+    return (
+        <div className="lg:w-2/3">
+            <Section title="Course Overview">
+                <p className="text-gray-700 dark:text-gray-300">{course.overview}</p>
+                {course.title === 'Python - Advanced' && (
+                    <div className="mt-4">
+                        <Typography variant="h6" color="blue" className="mb-2">Sample Code</Typography>
+                        <SyntaxHighlighter language="python" style={twilight} >
+                            {pythonAdvancedCode}
+                        </SyntaxHighlighter>
+                    </div>
+                )}
+            </Section>
+            <Section title="Course Contents">
+                <Accordion>
+                    {course.contents.map((content, index) => (
+                        <AccordionItem key={index} title={content.title} details={content.details} />
+                    ))}
+                </Accordion>
+            </Section>
+            <Section title="Course Format and Structure">
+                <p className="text-gray-700 dark:text-gray-300">{course.format}</p>
+            </Section>
+            <Section title="Course Materials and Resources">
+                <p className="text-gray-700 dark:text-gray-300">{course.materials}</p>
+            </Section>
+            <Section title="Assessment and Grading">
+                <p className="text-gray-700 dark:text-gray-300">{course.assessments}</p>
+            </Section>
+        </div>
+    );
+}
+
+function Section({ title, children }) {
+    return (
+        <section className="mb-8">
+            <Typography variant="h4" color="blue" className="mb-4">{title}</Typography>
+            {children}
+        </section>
+    );
+}
+
+function AccordionItem({ title, details }) {
+    const [open, setOpen] = useState(false);
+    return (
+        <Accordion open={open} className="mb-2">
+            <AccordionHeader onClick={() => setOpen(!open)} className="py-4">
+                {title}
+            </AccordionHeader>
+            <AccordionBody>
+                <ul className="list-disc pl-6 text-gray-700 dark:text-gray-300">
+                    {details.map((detail, index) => (
+                        <li key={index}>{detail}</li>
+                    ))}
+                </ul>
+            </AccordionBody>
+        </Accordion>
+    );
+}
+
+function FloatingEnrollButton() {
+    return (
+        <Button color="blue" className="fixed bottom-20 right-4 z-10" onClick={() => alert('Enrollment process initiated!')}>
+            Enroll Now
+        </Button>
+    );
+}
+
+function RelatedCourses() {
+    return (
+        <section className="bg-gray-100 dark:bg-gray-800 py-12">
+            <div className="container mx-auto">
+                <Typography variant="h4" color="blue" className="mb-8 text-center">Related Courses</Typography>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <RelatedCourse title="Related Course 1" />
+                    <RelatedCourse title="Related Course 2" />
+                    <RelatedCourse title="Related Course 3" />
+                </div>
+            </div>
+        </section>
+    );
+}
+
+function RelatedCourse({ title }) {
+    return (
+        <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+            {title}
+        </div>
+    );
+}
+
+function FAQSection() {
+    const faqs = [
+        { question: "How long do I have access to the course?", answer: "You have lifetime access to the course materials." },
+        { question: "Is there a money-back guarantee?", answer: "Yes, we offer a 30-day money-back guarantee." },
+        { question: "How do I get help if I'm stuck?", answer: "We provide support through our community forum and weekly Q&A sessions." },
+    ];
+
+    return (
+        <section className="py-12">
+            <div className="container mx-auto">
+                <Typography variant="h4" color="blue" className="mb-8 text-center">Frequently Asked Questions</Typography>
+                <Accordion>
+                    {faqs.map((faq, index) => (
+                        <AccordionItem key={index} title={faq.question} details={[faq.answer]} />
+                    ))}
+                </Accordion>
+            </div>
+        </section>
+    );
+}
+
+function ErrorDisplay({ error }) {
+    return (
+        <div className="flex flex-col text-center items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
+            <img src="/imgs/not_found_1.png" alt="not_found_1" width={200} />
+            <Typography variant="h1" color="red" textGradient={true}>
+                {error}
+            </Typography>
+        </div>
+    );
+}
+
+function LoadingDisplay() {
+    return (
+        <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
+            <Spinner color="amber" className="h-16 w-16 text-blue-500" />
+        </div>
+    );
+}
+
+const CoursePage = ({ params }) => {
     const { data: session } = useSession();
     const { id } = params;
     const [course, setCourse] = useState(null);
     const [error, setError] = useState(null);
-    const [title, setTitle] = useState('')
-    const bgimage = IMAGEMAP[title] || placeholder;
+    const [scrollProgress, setScrollProgress] = useState(0);
 
-    useEffect(() => {
-        async function fetchCourse() {
-            try {
-                const response = await fetch(`/api/courses?id=${id}`);
-                if (!response.ok) {
-                    throw new Error(`Course/${id} not found`);
-                }
-                const data = await response.json();
-                setTitle(data.title)
-                setCourse(data);
-            } catch (error) {
-                setError(error.message);
+    const fetchCourse = useCallback(async () => {
+        try {
+            const response = await fetch(`/api/courses?id=${id}`);
+            if (!response.ok) {
+                throw new Error(`Course/${id} not found`);
             }
+            const data = await response.json();
+            setCourse(data);
+        } catch (error) {
+            setError(error.message);
         }
-        fetchCourse();
     }, [id]);
 
+    useEffect(() => {
+        fetchCourse();
 
-    if (error) {
-        return (
-            <div className="flex flex-col text-center items-center justify-center min-h-screen bg-gray-100 p-4">
-                <img src="/imgs/not_found_1.png" alt="not_found_1" width={"200px"} />
-                <Typography variant="h1" color="red" textGradient="true">
-                    {error}
-                </Typography>
-                <p className="text-red-500"></p>
-            </div>
-        );
-    }
+        const handleScroll = () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            setScrollProgress(scrollPercent);
+        };
 
-    if (!course) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-                <p>Loading...</p>
-            </div>
-        );
-    }
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [fetchCourse]);
+
+    if (error) return <ErrorDisplay error={error} />;
+    if (!course) return <LoadingDisplay />;
 
     return (
         <>
-            {session ? (
-                <section className="relative bg-gradient-to-r from-blue-400 to-purple-500 p-2 lg:p-8 mt-[-76px]">
-                    <div className="flex flex-col items-center dark:bg-black bg-white shadow-lg rounded-lg p-6 lg:mt-16 mt-24 mb-12">
-                        <Image
-                            src={bgimage}
-                            alt={course.title}
-                            className="w-90 lg:w-80 mb-4 rounded-lg"
-                        />
-                        <div className="">
-                            {/* Course Title */}
-                            <h4 className="text-lg font-semibold mb-2 text-center">
-                                <i className="fa-solid fa-monument"></i> Course Title:
-                            </h4>
-                            <div className="text-4xl font-bold mb-4 text-center">
-                                <p>
-                                    <span className="text-red-500">{course.title}</span>
-                                </p>
-                            </div>
-
-                            <div className="flex justify-center mb-4 space-x-2">
-                                <span className="bg-blue-500 text-white py-1 px-3 rounded-full text-sm font-semibold">
-                                    {course.level}
-                                </span>
-                                <span className="bg-gray-300 text-gray-800 py-1 px-3 rounded-full text-sm font-semibold">
-                                    {course.duration}
-                                </span>
-                            </div>
-
-                            {/* Course Overview */}
-                            <h4 className="text-lg font-semibold mb-2">
-                                <i className="fa-regular fa-eye text-black"></i> Course Overview:
-                            </h4>
-                            <p className="mb-4">{course.overview}</p>
-
-                            <ol className="list-decimal list-inside mb-4 space-y-4">
-                                {course.contents.map((content, index) => (
-                                    <li key={index}>
-                                        <h5 className="font-semibold">{content.title}</h5>
-                                        <ul className="list-inside ml-6 space-y-2">
-                                            {content.details.map((detail, i) => (
-                                                <li key={i}>{detail}</li>
-                                            ))}
-                                        </ul>
-                                    </li>
-                                ))}
-                            </ol>
-
-                            <h4 className="text-lg font-semibold mb-2">
-                                <i className="fa-solid fa-computer"></i> Course Format and Structure:
-                            </h4>
-                            <p className="mb-4">{course?.format}</p>
-
-                            <h4 className="text-lg font-semibold mb-2">
-                                <i className="fa-solid fa-book"></i> Course Materials and Resources:
-                            </h4>
-                            <p className="mb-4">{course?.materials}</p>
-
-                            <h4 className="text-lg font-semibold mb-2">
-                                <i className="fa-solid fa-cubes-stacked"></i> Assessment and Grading:
-                            </h4>
-                            <p className="mb-4">{course?.assessments}</p>
-
-                            <h4 className="text-lg font-semibold mb-2">
-                                <i className="fa-solid fa-hat-wizard"></i> Enrollment Information:
-                            </h4>
-                            <p className="mb-4">
-                                To enroll in the course, please get in touch with me through either WhatsApp, Telegram, or Email
-                                (buttons are <a href="#connect" className="text-blue-500 underline">below</a>).
-                            </p>
-
-                            {/* Instructor Information */}
-                            <h4 className="text-lg font-semibold mb-2">
-                                <i className="fa-solid fa-person-chalkboard"></i> Instructor Information:
-                            </h4>
-                            <div className="text-center mb-4">
-                                <p>{course.instructor}</p>
-                            </div>
-
-                            <hr className="my-4" />
-
-                            <p className="text-center text-uppercase font-bold mb-4">
-                                Interested? <br />Contact me using:
-                            </p>
-                            <div id="connect" className="text-center space-x-4">
-                                <a
-                                    href={`https://api.whatsapp.com/send?phone=+48573456169&text=I'm interested in ${course.title}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-green-500 hover:text-green-700"
-                                >
-                                    <i className="fa-brands fa-whatsapp text-2xl"></i>
-                                </a>
-                                <a
-                                    href={`https://t.me/CrazyNutG`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-500 hover:text-blue-700"
-                                >
-                                    <i className="fa-brands fa-telegram text-2xl"></i>
-                                </a>
-                                <a
-                                    href={`mailto:kerimov.rustam@live.ru?subject=Course%20Info&body=I would like to ask questions about ${course.title}:`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-gray-800 hover:text-gray-600"
-                                >
-                                    <i className="fa-solid fa-envelope text-2xl"></i>
-                                </a>
-                            </div>
+            <Head>
+                <title>{course.title} | Course Details</title>
+                <meta name="description" content={course.overview} />
+            </Head>
+            {!session ? (
+                <div className="min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
+                    <div
+                        className="fixed top-0 left-0 w-full h-2 bg-lwr-general-blue-light-theme-color-1 dark:bg-lwr-orange-color-200 z-50"
+                        style={{ width: `${scrollProgress}%` }}
+                    />
+                    <HeroSection course={course} />
+                    <main className="container mx-auto mt-24 px-4 py-8" id="course-details">
+                        <div className="flex flex-col lg:flex-row gap-8">
+                            <Sidebar course={course} />
+                            <CourseContent course={course} />
                         </div>
-                    </div>
-                </section>) : <SignInWindow message={"The course details are not available for non-authorized users, please, sign-in first!"}
+                    </main>
+                    <FloatingEnrollButton />
+                    <RelatedCourses />
+                    <FAQSection />
+                </div>
+            ) : (
+                <SignInWindow message={"The course details are not available for non-authorized users, please, sign-in first!"}
                     image_path={'/imgs/login_2.png'}
-                    width={"150px"} />}
+                    width={"150px"} />)}
         </>
     );
 }
+
+
+export default CoursePage;

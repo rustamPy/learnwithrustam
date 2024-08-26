@@ -33,7 +33,7 @@
 "components/Hero/Carousel.js",
 "components/Header/Banner.js",
 "components/Header/Navbar.js",
-"components/ToggleTheme.js",
+"components/ThemeToggle.js",
 "components/Footer.js",
 "app/layout.js",
 "app/loading.js",
