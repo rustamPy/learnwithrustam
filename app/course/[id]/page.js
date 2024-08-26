@@ -116,17 +116,17 @@ export default function CoursePage({ params }) {
                             <h4 className="text-lg font-semibold mb-2">
                                 <i className="fa-solid fa-computer"></i> Course Format and Structure:
                             </h4>
-                            <p className="mb-4">{course.format}</p>
+                            <p className="mb-4">{course?.format}</p>
 
                             <h4 className="text-lg font-semibold mb-2">
                                 <i className="fa-solid fa-book"></i> Course Materials and Resources:
                             </h4>
-                            <p className="mb-4">{course.materials}</p>
+                            <p className="mb-4">{course?.materials}</p>
 
                             <h4 className="text-lg font-semibold mb-2">
                                 <i className="fa-solid fa-cubes-stacked"></i> Assessment and Grading:
                             </h4>
-                            <p className="mb-4">{course.assessments}</p>
+                            <p className="mb-4">{course?.assessments}</p>
 
                             <h4 className="text-lg font-semibold mb-2">
                                 <i className="fa-solid fa-hat-wizard"></i> Enrollment Information:

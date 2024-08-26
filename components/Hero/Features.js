@@ -45,15 +45,21 @@ const Features = () => {
                         Each class is designed to be engaging and informative, providing you with the tools and knowledge needed to succeed.
                     </p>
                 </div>
-                <div className="mx-auto mt-8 max-w-2xl lg:max-w-4xl">
+                <div className="mx-auto mt-8 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-4xl">
                     <Stepper activeStep={activeStep}>
                         {features.map((feature, index) => (
-                            <Step key={feature.name} onClick={() => handleStepClick(index)} completed={index < activeStep} className={`w-40 cursor-pointer bg-lwr-orange-color-100`}>
+                            <Step
+                                key={feature.name}
+                                onClick={() => handleStepClick(index)}
+                                completed={index < activeStep}
+                                className={`w-16 sm:w-40 cursor-pointer bg-lwr-orange-color-100 text-xs sm:text-sm`}
+                            >
                                 {feature.name}
                             </Step>
                         ))}
                     </Stepper>
                 </div>
+
                 <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
                     <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
                         {features.map((feature, index) => (

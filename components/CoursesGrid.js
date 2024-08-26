@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { CourseCard } from '@/components/Hero/SearchWindow';
+import CourseCard from '@/components/CourseCard';
 import { useSession } from 'next-auth/react';
 import courses from '@/public/courses.json';
 
@@ -16,7 +16,6 @@ const CoursesGrid = ({ specificCourses, cardsPerPage = 4 }) => {
         }
     }, [session]);
 
-    // Calculate total number of pages
     let totalPages = 0;
     if (!specificCourses) {
         totalPages = Math.ceil(courses.length / coursesPerPage);
@@ -25,7 +24,6 @@ const CoursesGrid = ({ specificCourses, cardsPerPage = 4 }) => {
     }
 
 
-    // Calculate the courses to display on the current page
     const startIndex = (currentPage - 1) * coursesPerPage;
     let currentCourses = undefined;
     if (!specificCourses) {

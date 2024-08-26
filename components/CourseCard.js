@@ -14,17 +14,12 @@ const IMAGEMAP = {
     'Python Entry': pythonEntry,
 };
 
-const CourseCard = ({ id, title, desc, price, options, size }) => {
-    const SIZE_MAP = {
-        'sm': 'w-64',
-        'md': 'w-80',
-        'lg': 'w-96',
-    };
+const CourseCard = ({ id, title, desc, price, options }) => {
     const bgimage = IMAGEMAP[title] || placeholder;
     const { data: session } = useSession();
 
     return (
-        <Card key={id} variant="gradient" className={`mt-4 flex flex-col ${SIZE_MAP[size]} mr-4 mb-4 bg-white dark:bg-gray-700`}>
+        <Card key={id} variant="gradient" className={`mt-4 flex flex-col mr-4 mb-4 bg-white dark:bg-gray-700`}>
             <CardHeader floated={false} className="aspect-square">
                 <Image
                     src={bgimage}
