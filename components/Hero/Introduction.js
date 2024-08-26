@@ -39,7 +39,7 @@ const NewCourseAlert = () => (
 );
 
 const Description = () => (
-    <p className="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
+    <p className="mb-8 text-lg font-normal lg:text-xl sm:px-16 xl:px-48 text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1">
         Our website provides comprehensive online IT classes designed for learners of all levels, from beginners to advanced professionals.
         With a wide range of topics, including data structures, programming, algorithms, and data science,
         our classes offer flexible learning tailored to your schedule and goals.

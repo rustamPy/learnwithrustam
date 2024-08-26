@@ -3,7 +3,7 @@ import { Typography } from "@material-tailwind/react";
 import Image from "next/image";
 import footerIcon from "@/assets/images/footer_icon.png";
 import { MdConstruction } from 'react-icons/md'
-
+import Logo from '@/components/Logo'
 const LINKS = [
     {
         title: "Services",
@@ -31,13 +31,7 @@ const LWRFooter = () => {
             <div className="mx-auto w-full max-w-7xl px-8">
                 <div className="grid grid-cols-1 justify-between gap-4 md:grid-cols-2">
                     <div className="flex flex-col items-start mb-6 md:mb-0">
-                        <Typography
-                            as="a"
-                            href="/"
-                            className="cursor-pointer py-1.5 dark:text-white text-base font-extrabold"
-                        >
-                            LEARN {<span className="text-lwr-orange-color-100">{'{W}'}</span>} RUSTAM
-                        </Typography>
+                        <Logo variant={'sm'} />
                         <div className="flex items-start mb-6 md:mb-0">
                             <Image src={footerIcon} alt="footericon" width={60} height={60} style={{ opacity: 0.3 }} className="mr-4" />
                             <Typography variant="small" className="max-w-64">

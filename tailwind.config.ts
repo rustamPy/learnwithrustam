@@ -13,7 +13,7 @@ module.exports = withMT({
         "lwr-gray-color": {
           50: '#fcfcfc',
           60: '#f6f6f6',
-          200: '#cccccc6e',
+          200: '#6666666e',
           300: '#cccccc',
           400: '#303030',
           500: '#262626',
@@ -25,11 +25,26 @@ module.exports = withMT({
           100: '#F6A426',
           200: '#db8606'
         },
+        "lwr-logo-light-theme-color": '#091734ff',
+        "lwr-logo-dark-theme-color": "#f4f4f4",
+        "lwr-navbar-dark-theme-color": '#6666666e',
         "lwr-blue-color": {
           20: '#8290acff',
-          500: 'rgba(17, 35, 70, 1)',
-          600: 'rgba(9, 23, 52, 1)'
+          500: '#a4acbc',
+          600: '#091734ff'
         },
+
+        "lwr-general-blue-light-theme-color": {
+          1: '#0b2251ff',
+          2: '#052564ff',
+        },
+
+        "lwr-general-gray-dark-theme-color": {
+          1: '#dcdcdcff',
+          2: '#e9e9e9ff',
+          3: '#363636'
+        },
+
         "lwr-leetcode-easy": {
           100: "#0f9b0f"
         },

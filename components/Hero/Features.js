@@ -34,16 +34,16 @@ const Features = () => {
     };
 
     return (
-        <div id="features" className="py-32">
+        <div id="features" className="scroll-mt-32 mb-16">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="mx-auto max-w-2xl lg:text-center">
                     <Typography className="mb-4 text-4xl lg:text-6xl font-extrabold tracking-tight leading-none text-lwr-gray-color-500 md:text-5xl dark:text-white">
                         Enjoy the <span className="text-lwr-orange-color-100">virtual</span> classes
                     </Typography>
-                    <p className="mt-6 text-lg leading-8 text-gray-600">
+                    <Typography className="mt-6 text-lg font-normal lg:text-xl text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1">
                         Immerse yourself in a rich learning environment where collaboration and interaction are key.
                         Each class is designed to be engaging and informative, providing you with the tools and knowledge needed to succeed.
-                    </p>
+                    </Typography>
                 </div>
                 <div className="mx-auto mt-8 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-4xl">
                     <Stepper activeStep={activeStep}>
@@ -74,13 +74,13 @@ const Features = () => {
 
 const FeatureItem = ({ name, description, icon: Icon, active }) => (
     <div className={`relative pl-16 pb-[50px] pt-[10px] ${active ? 'bg-gray-100 dark:bg-gray-800 rounded-lg' : ''}`}>
-        <dt className="text-base font-semibold leading-7 text-left text-gray-900 dark:text-lwr-orange-color-100 flex items-center">
-            <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-lwr-blue-color-500 m-2">
+        <dt className="text-base font-semibold leading-7 text-left text-gray-900 text-lwr-orange-color-100 flex items-center">
+            <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-lwr-blue-color-600 m-2">
                 <Icon className="h-6 w-6 text-white" />
             </div>
             {name}
         </dt>
-        <dd className="mt-2 text-base leading-7 text-left text-gray-600">{description}</dd>
+        <dd className="mt-2 text-base leading-7 text-left text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1">{description}</dd>
     </div>
 );
 

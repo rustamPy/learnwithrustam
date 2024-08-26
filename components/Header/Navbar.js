@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import { debounce } from 'lodash';
 import { MdConstruction } from 'react-icons/md'
-
+import Logo from '@/components/Logo'
 
 import {
     Navbar,
@@ -35,7 +35,7 @@ import ThemeToggle from '@/components/ToggleTheme';
 import BannerSection from '@/components/Header/Banner'
 
 
-const navListMenuItems = [
+const RESOURCES = [
     {
         title: "Courses",
         description: "Find the perfect course for yourself",
@@ -63,41 +63,65 @@ const navListMenuItems = [
     }
 ];
 
+const NAVITEMS = [
+    {
+        title: "Home",
+        href: "/"
+    },
+    {
+        title: "Features",
+        href: "#features"
+    },
+    {
+        title: "Get Together",
+        href: "#together"
+    },
+    {
+        title: "About Me",
+        href: "/about"
+    },
+    {
+        title: "Contact Me",
+        href: "#",
+        construction: 1
+    }
+]
 
-function NavListMenu() {
+
+function ResourcesMenu() {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-    const renderItems = navListMenuItems.map(
+
+    const renderItems = RESOURCES.map(
         ({ icon, title, description, href, construction }, key) => (
             <a href={href} key={key}>
-                <MenuItem className="flex items-center gap-3 rounded-lg">
+                <MenuItem className="flex items-center gap-3 rounded-lg dark:hover:bg-gray-700">
                     <div className="flex items-center justify-center rounded-lg p-2 ">
-                        {" "}
                         {React.createElement(icon, {
                             strokeWidth: 2,
-                            className: "h-6 text-gray-900 w-6",
+                            className: "h-6 text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1 w-6",
                         })}
                     </div>
                     <div>
                         {construction ?
-
                             <Typography
                                 variant="h5"
                                 className="flex items-center text-sm text-red-800 font-semibold"
                             >
                                 {title} <MdConstruction className="text-red-800 ml-2 inline-block" />
-                            </Typography> :
+                            </Typography>
+
+                            :
 
                         <Typography
-                            variant="h6"
-                            color="blue-gray"
-                            className="flex items-center text-sm font-bold"
+                                variant="h6"
+                                className="flex items-center text-sm font-bold text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1"
                         >
                             {title}
                             </Typography>}
                         <Typography
                             variant="paragraph"
-                            className="text-xs !font-medium text-blue-gray-500"
+                            className="text-xs font-medium text-lwr-general-blue-light-theme-color-2 dark:text-lwr-general-gray-dark-theme-color-2  "
                         >
                             {description}
                         </Typography>
@@ -119,7 +143,7 @@ function NavListMenu() {
                 <MenuHandler>
                     <Typography as="div" variant="small" className="font-bold">
                         <ListItem
-                            className="flex items-center gap-2 py-2 pr-4 font-bold text-lwr-blue-color-500"
+                            className="flex items-center gap-2 py-2 pr-4 font-bold text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1 dark:hover:bg-gray-700"
                             selected={isMenuOpen || isMobileMenuOpen}
                             onClick={() => setIsMobileMenuOpen((cur) => !cur)}
                         >
@@ -137,8 +161,8 @@ function NavListMenu() {
                         </ListItem>
                     </Typography>
                 </MenuHandler>
-                <MenuList style={{ border: 0 }} className="hidden max-w-screen-xl rounded-xl lg:block text-lwr-blue-color-500 dark:bg-lwr-gray-color-300">
-                    <ul className="grid grid-cols-3 gap-y-2 outline-none outline-0">
+                <MenuList style={{ border: 0 }} className="hidden max-w-screen-xl rounded-xl dark:border-none lg:block dark:bg-lwr-general-gray-dark-theme-color-3 dark:text-red-500">
+                    <ul className="grid grid-cols-3 gap-y-2 outline-none outline-0 ">
                         {renderItems}
                     </ul>
                 </MenuList>
@@ -152,52 +176,19 @@ function NavListMenu() {
 
 const NavList = () => (
         <List className="mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
-            <Typography
-                as="a"
-                href="/"
-                variant="small"
-                className="font-bold text-lwr-blue-color-500"
-            >
-                <ListItem className="flex items-center gap-2 py-2 pr-4">Home</ListItem>
-            </Typography>
-            <Typography
-                as="a"
-                href="/#features"
-                variant="small"
-                className="font-bold text-lwr-blue-color-500"
-            >
-                <ListItem className="flex items-center gap-2 py-2 pr-4">Features</ListItem>
-            </Typography>
-
-
-            <Typography
-                as="a"
-            href="/#together"
-                variant="small"
-                className="font-bold text-lwr-blue-color-500"
-            >
-            <ListItem className="flex items-center gap-2 py-2 pr-4">Get Together</ListItem>
-            </Typography>
-
-            <Typography
-                as="a"
-            href="/about"
-                variant="small"
-            className="font-bold text-lwr-blue-color-500"
-            >
-            <ListItem className="flex items-center gap-2 py-2 pr-4">About Me</ListItem>
-            </Typography>
-
-        <Typography
-            as="a"
-            href="/contact"
-            variant="small"
-            className="font-bold text-lwr-blue-color-500"
-        >
-            <ListItem className="flex items-center gap-2 py-2 pr-4 text-red-800 hover:text-red-800">Contact Me <MdConstruction className="text-red-800 inline-block" /></ListItem>
-        </Typography>
-
-            <NavListMenu />
+        {NAVITEMS.map(item => {
+            return (
+                <Typography
+                    as="a"
+                    href={item.href}
+                    variant="small"
+                    className="font-bold text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1"
+                >
+                    <ListItem className={`flex items-center gap-2 py-2 pr-4 ${item.construction ? 'text-red-800 hover:text-red-800 dark:hover:bg-red-900 dark:hover:text-lwr-general-gray-dark-theme-color-1' : 'dark:hover:bg-gray-700 dark:hover:text-lwr-general-gray-dark-theme-color-1'}`}>{item.construction && <MdConstruction className="text-red-800 inline-block" />}{item.title}</ListItem>
+                </Typography>
+            )
+        })}
+        <ResourcesMenu />
         </List>
 );
 
@@ -209,6 +200,7 @@ const UserProfile = ({ user }) => {
         </div>
     )
 }
+
 
 const NavbarWithMegaMenu = () => {
     const [openNav, setOpenNav] = useState(false);
@@ -235,18 +227,11 @@ const NavbarWithMegaMenu = () => {
                 className={`border-0 sticky mx-auto transition-all duration-300 mb-10 ${isScrolled
                     ? 'top-2 mx-auto rounded-xl px-2 py-2'
                     : 'top-0 max-w-full px-4 py-4'
-                    } dark:bg-lwr-gray-color-200 z-50`}
+                    } dark:bg-lwr-navbar-dark-theme-color z-50`}
             >
                 <BannerSection isScrolled={isScrolled} />
-                <div className="flex items-center justify-between text-blue-gray-900 dark:text-white pt-8">
-                    <Typography
-                        as="a"
-                        href="/"
-                        variant="h1"
-                        className="mr-4 cursor-pointer py-1.5 lg:ml-2 text-lwr-blue-color-500 text-2xl font-extrabold"
-                    >
-                        LEARN {<span className="text-lwr-orange-color-100">{'{W}'}</span>} RUSTAM
-                    </Typography>
+                <div className="flex items-center justify-between text-lwr-logo-light-theme-color dark:text-lwr-logo-dark-theme-color pt-8">
+                    <Logo variant={'lg'} customClass="lg:ml-2" />
                     <div className="hidden lg:block">
                         <NavList />
                     </div>

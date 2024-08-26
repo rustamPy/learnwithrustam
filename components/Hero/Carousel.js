@@ -14,7 +14,7 @@ const images = [
 
 const HeroCarousel = () => {
     return (
-        <div id="together" className="py-24">
+        <div id="together" className="scroll-mt-32 mb-16">
             <Typography
                 variant="h1"
                 className="mb-4 text-4xl lg:text-6xl font-extrabold tracking-tight leading-none text-lwr-gray-color-500 md:text-5xl dark:text-white"
