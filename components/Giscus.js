@@ -1,23 +1,14 @@
 'use client';
 import Giscus from '@giscus/react';
 import { useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
+
 
 const CGiscus = () => {
-    const [theme, setTheme] = useState(() => {
-        if (typeof window !== 'undefined') {
-            return localStorage.getItem('theme') || 'light';
-        }
-        return 'light';
-    });
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('theme', theme);
-        }
-    }, [theme]);
-
+    const { theme, setTheme } = useTheme();
 
     return (
+        <div className='mt-16 w-full'>
         <Giscus
             id="comments"
             repo="rustamPy/learnwithrustam"
@@ -29,10 +20,11 @@ const CGiscus = () => {
             reactionsEnabled="0"
             emitMetadata="1"
             inputPosition="top"
-            theme={theme}
+                theme={theme === 'dark' ? 'dark' : 'light'}
             lang="en"
             loading="lazy"
         />
+        </div>
     );
 }
 
