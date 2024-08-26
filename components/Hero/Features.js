@@ -34,7 +34,7 @@ const Features = () => {
     };
 
     return (
-        <div id="features" className="scroll-mt-32 mb-16">
+        <div id="features" className="scroll-mt-[450px] sm:scroll-mt-32 mb-16">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="mx-auto max-w-2xl lg:text-center">
                     <Typography className="mb-4 text-4xl lg:text-6xl font-extrabold tracking-tight leading-none text-lwr-gray-color-500 md:text-5xl dark:text-white">

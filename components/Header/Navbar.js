@@ -63,15 +63,15 @@ const NAVITEMS = [
     },
     {
         title: "Features",
-        href: "#features"
+        href: "/#features"
     },
     {
         title: "Courses",
-        href: "#courses"
+        href: "/#courses"
     },
     {
         title: "Get Together",
-        href: "#together"
+        href: "/#together"
     },
     {
         title: "About Me",
@@ -171,7 +171,7 @@ function ResourcesMenu() {
     );
 }
 
-const NavList = () => (
+const NavList = ({ closeNavbar }) => (
         <List className="mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
         {NAVITEMS.map((item, key) => {
             return (
@@ -182,7 +182,12 @@ const NavList = () => (
                     variant="small"
                     className="font-bold text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1"
                 >
-                    <ListItem className={`flex items-center gap-2 py-2 pr-4 ${item.construction ? 'text-red-800 hover:text-red-800 dark:hover:bg-red-900 dark:hover:text-lwr-general-gray-dark-theme-color-1' : 'dark:hover:bg-gray-700 dark:hover:text-lwr-general-gray-dark-theme-color-1'}`}>{item.construction && <MdConstruction className="text-red-800 inline-block" />}{item.title}</ListItem>
+                    <ListItem
+                        onClick={closeNavbar}
+                        className={`flex items-center gap-2 py-2 pr-4 ${item.construction ? 'text-red-800 hover:text-red-800 dark:hover:bg-red-900 dark:hover:text-lwr-general-gray-dark-theme-color-1' : 'dark:hover:bg-gray-700 dark:hover:text-lwr-general-gray-dark-theme-color-1'}`}>
+                        {item.construction && <MdConstruction className="text-red-800 inline-block" />}
+                        {item.title}
+                    </ListItem>
                 </Typography>
             )
         })}
@@ -206,6 +211,7 @@ const NavbarWithMegaMenu = () => {
     const { data: session, status } = useSession();
 
 
+
     useEffect(() => {
         const handleScroll = debounce(() => {
             setIsScrolled(window.scrollY > 90);
@@ -225,7 +231,7 @@ const NavbarWithMegaMenu = () => {
                 className={`border-0 sticky mx-auto transition-all duration-300 mb-10 ${isScrolled
                     ? 'top-2 mx-auto rounded-xl px-2 py-2'
                     : 'top-0 max-w-full px-4 py-4'
-                    } dark:bg-lwr-navbar-dark-theme-color z-50`}
+                    } dark:bg-lwr-navbar-dark-theme-color z-20`}
             >
                 <BannerSection isScrolled={isScrolled} />
                 <div className="flex items-center justify-between text-lwr-logo-light-theme-color dark:text-lwr-logo-dark-theme-color pt-8">
@@ -267,7 +273,7 @@ const NavbarWithMegaMenu = () => {
                     </IconButton>
                 </div>
                 <Collapse open={openNav}>
-                    <NavList />
+                    <NavList closeNavbar={() => setOpenNav(false)} />
                     <div className="flex w-full flex-nowrap items-center gap-2 lg:hidden">
                         {
                             status === "loading" || status === "authenticated" ? (
