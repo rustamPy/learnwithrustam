@@ -3,7 +3,7 @@ import { PiVideoCameraSlashLight } from "react-icons/pi";
 import { Typography } from "@material-tailwind/react";
 
 
-export default function VideoGrid({ videos, isGridView }) {
+const VideoGrid = ({ videos, isGridView }) => {
     {
         if (videos.length == 0) {
             return (
@@ -66,3 +66,5 @@ export default function VideoGrid({ videos, isGridView }) {
         );
     }
 }
+
+export default VideoGrid;

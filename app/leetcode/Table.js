@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Typography } from "@material-tailwind/react";
+import { Typography, Select, Option } from "@material-tailwind/react";
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
-import { Select, Option } from "@material-tailwind/react";
 import SearchBar from '@/components/FunctionalComponents/SearchBar';
 import FilterSortBar from '@/components/FunctionalComponents/FilterSortBar';
 import Pagination from '@/components/FunctionalComponents/Pagination';

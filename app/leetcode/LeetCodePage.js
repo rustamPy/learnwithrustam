@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Table from './Table';
 import GroupCard from './GroupCard';
 import LeetCodeStats from './LeetCodeStats';
+import { Typography } from '@material-tailwind/react';
 
 const Page = ({ questions, topGroups, stats }) => {
     const [isContentVisible, setContentVisible] = useState(false);
@@ -36,7 +37,7 @@ const Page = ({ questions, topGroups, stats }) => {
                         <img src="/imgs/leetcode_icon4.png" className="absolute transform translate-x-16 rounded-full w-20 h-20 md:w-24 md:h-24 border-4 border-white" />
                         <img src="/imgs/leetcode_icon5.png" className="rounded-full w-24 h-24 md:w-28 md:h-28 border-4 border-white relative" />
                     </div>
-                    <p className="mt-4 text-4xl font-extrabold text-gray-900 dark:text-gray-100 sm:text-5xl lg:text-6xl">
+                    <Typography className="mt-4 text-4xl font-extrabold text-gray-900 dark:text-gray-100 sm:text-5xl lg:text-6xl">
                         LeetCode
                         <span className="px-2 py-1 relative inline-block">
                             <svg className="stroke-current bottom-0 absolute text-blue-300 -translate-x-2" viewBox="0 0 410 18" xmlns="http://www.w3.org/2000/svg">
@@ -44,7 +45,7 @@ const Page = ({ questions, topGroups, stats }) => {
                             </svg>
                             <span className="relative">Solutions</span>
                         </span>
-                    </p>
+                    </Typography>
                     <p className="max-w-4xl mt-4 mx-auto text-xl text-gray-500 dark:text-gray-300">Discover a new level of insight and challenge through our curated LeetCode tasks.</p>
                     <button onClick={handleGetStartedClick} className={`bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-700 hover:to-purple-700 dark:from-lwr-orange-color-100 dark:to-lwr-blue-color-500 dark:hover:from-lwr-orange-color-200 dark:hover:to-lwr-blue-color-600 inline-block px-8 py-4 mt-8 text-white font-semibold rounded-2xl`}>
                         {!isContentVisible ? 'Get Started' : 'Welcome'}

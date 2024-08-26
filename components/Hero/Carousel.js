@@ -1,10 +1,16 @@
-import { Carousel, Button, Typography } from "@material-tailwind/react";
+import React from 'react';
+import { Carousel, Typography } from "@material-tailwind/react";
 import Image from 'next/image';
 
-import img1 from '@/assets/images/about/me.jpg'
-import img2 from '@/assets/images/about/me2.jpg'
-import img3 from '@/assets/images/about/me_group.jpg'
+import img1 from '@/assets/images/about/me.jpg';
+import img2 from '@/assets/images/about/me2.jpg';
+import img3 from '@/assets/images/about/me_group.jpg';
 
+const images = [
+    { src: img1, alt: "Instructor 1" },
+    { src: img2, alt: "Instructor 2" },
+    { src: img3, alt: "Group of instructors" },
+];
 
 const HeroCarousel = () => {
     return (
@@ -16,36 +22,55 @@ const HeroCarousel = () => {
                 Let's Get <span className="text-lwr-orange-color-100">Together</span>
             </Typography>
 
-            <Carousel loop autoplay className="rounded-xl w-full max-w-6xl mx-auto mt-9 h-[350pt]">
-
-                <Image
-                    src={img1}
-                    alt="image 1"
-                    width={0}
-                    height={0}
-                    sizes="100vw"
-                    className="h-full w-full object-cover"
-                />
-                <Image
-                    src={img2}
-                    alt="image 2"
-                    width={0}
-                    height={0}
-                    sizes="100vw"
-                    className="h-full w-full object-cover"
-                />
-                <Image
-                    src={img3}
-                    alt="image 3"
-                    width={0}
-                    height={0}
-                    sizes="100vw"
-                    className="h-full w-full object-cover"
-                />
+            <Carousel
+                className="rounded-xl w-full max-w-6xl mx-auto mt-9"
+                autoplay
+                loop
+                navigation={({ setActiveIndex, activeIndex, length }) => (
+                    <div className="absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2">
+                        {new Array(length).fill("").map((_, i) => (
+                            <span
+                                key={i}
+                                className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${activeIndex === i ? "w-8 bg-white" : "w-4 bg-white/50"
+                                    }`}
+                                onClick={() => setActiveIndex(i)}
+                            />
+                        ))}
+                    </div>
+                )}
+            >
+                {images.map((image, index) => (
+                    <div key={index} className="relative h-[350pt]">
+                        <Image
+                            src={image.src}
+                            alt={image.alt}
+                            layout="fill"
+                            objectFit="cover"
+                            className="rounded-xl"
+                        />
+                        <div className="absolute inset-0 grid h-full w-full place-items-center bg-black/75">
+                            <div className="w-3/4 text-center md:w-2/4">
+                                <Typography
+                                    variant="h1"
+                                    color="white"
+                                    className="mb-4 text-3xl md:text-4xl lg:text-5xl"
+                                >
+                                    Meet Our Instructors
+                                </Typography>
+                                <Typography
+                                    variant="lead"
+                                    color="white"
+                                    className="mb-12 opacity-80"
+                                >
+                                    Learn from industry experts with years of experience in their fields.
+                                </Typography>
+                            </div>
+                        </div>
+                    </div>
+                ))}
             </Carousel>
         </div>
-
     );
-}
+};
 
 export default HeroCarousel;

@@ -37,6 +37,8 @@ const QuestionsContent = async () => {
         uniqueTopics: topicsSet.size,
     };
 
+    console.log(questions)
+
     return (
         <Page questions={questions} topGroups={topGroups} stats={stats} />
     );
@@ -59,7 +61,7 @@ const calculateAverageDifficulty = (questions) => {
 const QuestionsPage = () => {
     return (
         <Suspense fallback={<div>Loading...</div>}>
-                <QuestionsContent />
+            <QuestionsContent />
         </Suspense>
     );
 }

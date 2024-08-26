@@ -7,8 +7,8 @@
                 "description": "This is a collection of exclusive private tutorials, offering personalized and in-depth instruction on a variety of subjects. Each tutorial is designed to provide tailored guidance and detailed insights, ensuring a comprehensive learning experience. Explore our range of topics to enhance your skills and knowledge with expert instruction available only through this curated selection.",
                 "categories": [
                     "All",
-                    "Coding",
-                    "General IT"
+                    "XYZ",
+                    "ZYX"
                 ],
                 "badges": [
                     {
@@ -20,8 +20,7 @@
                         "color": "red"
                     }
                 ],
-                "videos": [
-                ]
+                "videos": []
             },
             {
                 "id": "travel",

@@ -19,13 +19,13 @@ const FilterSortBar = ({
         { value: 'asc', label: 'Title (A-Z)' },
         { value: 'desc', label: 'Title (Z-A)' }
     ],
-    allTopics = []
+    allTopics = [],
+    itemsCount = 0
 }) => {
     const [searchTopic, setSearchTopic] = useState('');
     const [showAllTopics, setShowAllTopics] = useState(false);
     const [isTopicBoxOpen, setIsTopicBoxOpen] = useState(false);
     const [tallerBox, setTallerBox] = useState(false);
-
     const COLOR_MAP = {
         'Easy': 'lwr-leetcode-easy-100',
         'Medium': 'lwr-leetcode-medium-100',
@@ -96,7 +96,7 @@ const FilterSortBar = ({
                 {showTopicFilter && (
                     <div className="flex items-center relative">
                         <button
-                            className="flex items-center rounded px-3 py-1.5 text-left cursor-pointer focus:outline-none whitespace-nowrap bg-gray-100 dark:bg-[#303030] hover:bg-gray-200 text-gray-700 dark:text-gray-300"
+                            className="flex items-center rounded px-3 py-1.5 border border-blue-gray-200 text-left cursor-pointer focus:outline-none whitespace-nowrap bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 text-gray-700 dark:text-gray-300"
                             onClick={() => setIsTopicBoxOpen(!isTopicBoxOpen)}
                         >
                             <div>
@@ -110,7 +110,7 @@ const FilterSortBar = ({
                             </svg>
                         </button>
                         {isTopicBoxOpen && (
-                            <div className={`absolute top-full left-0 z-10 p-2 rounded-lg bg-white dark:bg-[#303030] shadow-lg w-80 ${tallerBox ? 'h-80' : 'h-64'}`}>
+                            <div className={`absolute top-full left-0 z-10 p-2 rounded-lg bg-white dark:bg-gray-900 shadow-lg w-80 ${tallerBox ? 'h-80' : 'h-64'}`}>
                                 <div className="relative mb-4 dark:text-white">
                                     <div className='absolute inset-y-1.5 ml-2 flex items-center text-gray-6 dark:text-dark-gray-6 pointer-events-none left-0'>
                                         <MagnifyingGlassIcon className="h-5 w-5 dark:text-white" />
@@ -119,7 +119,7 @@ const FilterSortBar = ({
                                         type="text"
                                         placeholder="Filter topics"
                                         onChange={(e) => setSearchTopic(e.target.value)}
-                                        className='block w-full box-border bg-gray-100 focus:bg-gray-200 dark:bg-gray-800 dark:focus:bg-gray-900 dark:placeholder:text-gray-500 text-sm rounded-md outline-none border-none py-1.5 pl-9 pr-3 mb-4'
+                                        className='block w-full box-border bg-gray-100 focus:bg-gray-200 dark:bg-gray-800 dark:focus:bg-gray-700 dark:placeholder:text-gray-500 text-sm rounded-md outline-none border-none py-1.5 pl-9 pr-3 mb-4'
                                     />
                                 </div>
                                 <div className={`flex flex-wrap gap-1 ${tallerBox ? 'max-h-56' : 'max-h-40'} overflow-auto`}>
@@ -154,6 +154,7 @@ const FilterSortBar = ({
                         )}
                     </div>
                 )}
+                {itemsCount > 0 && (<div className='flex items-center space-x-1 w-54 bg-gray-100 p-2 dark:bg-gray-900 rounded-md'>Selected items: <span className='font-bold ml-2'>{itemsCount}</span></div>)}
             </div>
         </div>
     );

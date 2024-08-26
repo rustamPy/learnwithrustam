@@ -1,6 +1,6 @@
 'use client';
 
-export default function Pagination({ currentPage, totalPages, onPageChange }) {
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     return (
         <div className="flex justify-center space-x-2">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -18,3 +18,5 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         </div>
     );
 }
+
+export default Pagination;

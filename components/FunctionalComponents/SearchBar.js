@@ -1,6 +1,6 @@
 'use client';
 
-export default function SearchBar({ placeholder, onSearch }) {
+const SearchBar = ({ placeholder, onSearch }) => {
     return (
         <div className="mb-6">
             <input
@@ -12,3 +12,5 @@ export default function SearchBar({ placeholder, onSearch }) {
         </div>
     );
 }
+
+export default SearchBar;
