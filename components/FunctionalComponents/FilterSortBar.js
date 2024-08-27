@@ -14,6 +14,7 @@ const FilterSortBar = ({
     allTopics = [],
     selectedTopics = [],
     onTopicChange,
+    onTopicReset,
 
     showSortOrder = true,
     sortOrder,
@@ -41,6 +42,8 @@ const FilterSortBar = ({
     );
 
     const visibleTopics = showAllTopics ? filteredTopics : filteredTopics.slice(0, 10);
+
+    console.log(allTopics)
 
     const handleTopicClick = (topic) => {
         onTopicChange(topic);
@@ -132,7 +135,7 @@ const FilterSortBar = ({
                         )}
 
                         {isTopicBoxOpen && (
-                            <div className={`absolute top-full left-0 z-10 p-2 rounded-lg bg-white dark:bg-gray-900 shadow-lg w-80 ${tallerBox ? 'h-80' : 'h-64'}`}>
+                            <div className={`absolute top-full left-0 z-10 p-2 rounded-lg bg-white dark:bg-gray-900 shadow-lg w-80 h-auto max-h-[28rem]`}>
                                 <div className="relative mb-4 dark:text-white">
                                     <div className='absolute inset-y-1.5 ml-2 flex items-center text-gray-6 dark:text-dark-gray-6 pointer-events-none left-0'>
                                         <MagnifyingGlassIcon className="h-5 w-5 dark:text-white" />
@@ -144,7 +147,7 @@ const FilterSortBar = ({
                                         className='block w-full box-border bg-gray-100 focus:bg-gray-200 dark:bg-gray-800 dark:focus:bg-gray-700 dark:placeholder:text-gray-500 text-sm rounded-md outline-none border-none py-1.5 pl-9 pr-3 mb-4'
                                     />
                                 </div>
-                                <div className={`flex flex-wrap gap-1 ${tallerBox ? 'max-h-56' : 'max-h-40'} overflow-auto`}>
+                                <div className={`flex flex-wrap gap-1 max-h-[20rem] overflow-auto mb-8`}>
                                     {visibleTopics.map((topic) => (
                                         topic && typeof topic === 'string' ? (
                                             <span
@@ -156,7 +159,7 @@ const FilterSortBar = ({
                                             </span>
                                         ) : null
                                     ))}
-                                    {!showAllTopics && filteredTopics.length > visibleTopics.length ? (
+                                    {!showAllTopics ? (
                                         <span
                                             className="inline-flex items-center px-2 whitespace-nowrap text-xs leading-6 rounded-full bg-blue-200 dark:bg-blue-700 hover:bg-blue-300 hover:dark:bg-blue-800 cursor-pointer transition-all m-1"
                                             onClick={() => handleExpandTopics()}
@@ -171,6 +174,19 @@ const FilterSortBar = ({
                                             Show Less
                                         </span>
                                     ) : null}
+                                </div>
+                                <div className="absolute bottom-2 right-2">
+                                    <button
+                                        onClick={() => {
+                                            onTopicReset();
+                                            setSearchTopic('');
+                                            setShowAllTopics(false);
+                                            setTallerBox(false);
+                                        }}
+                                        className="px-3 py-1 text-xs font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-200"
+                                    >
+                                        Reset
+                                    </button>
                                 </div>
                             </div>
                         )}

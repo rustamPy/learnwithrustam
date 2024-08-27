@@ -16,6 +16,7 @@ const SearchWindow = () => {
     const [questionsPerPage, setQuestionsPerPage] = useState(ITEMS_PER_PAGE);
     const [category, setCategory] = useState('All');
     const [sortOrder, setSortOrder] = useState('asc');
+    const [allTopics, setAllTopics] = useState([...new Set(filteredCourses.flatMap(c => c.topics))])
     const [selectedTopics, setSelectedTopics] = useState([]);
 
 
@@ -26,7 +27,6 @@ const SearchWindow = () => {
             filtered = filtered.filter(course => course.level?.toLowerCase() === category.toLowerCase());
         }
 
-        console.log(query)
         if (query) {
             const lowercasedQuery = query.toLowerCase();
             filtered = filtered.filter(course =>
@@ -77,12 +77,13 @@ const SearchWindow = () => {
         );
     };
 
+    const handleResetTopics = () => {
+        setSelectedTopics([])
+    }
+
     const totalPages = Math.ceil(filteredCourses.length / questionsPerPage);
     const currentQuestions = filteredCourses.slice((currentPage - 1) * questionsPerPage, currentPage * questionsPerPage);
 
-    const allTopics = [...new Set(filteredCourses.flatMap(c => c.topics))];
-
-    console.log(currentQuestions)
 
     return (
         <div className="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6 scroll-mt-[450px] sm:scroll-mt-32 mb-16" id="courses">
@@ -106,9 +107,9 @@ const SearchWindow = () => {
                         labelProps={{ className: "text-gray-700 dark:text-gray-200" }}
                         label='Courses per page'
                     >
-                        <Option value="4" className='mb-1'>4 per page</Option>
-                        <Option value="8" className='mb-1'>8 per page</Option>
-                        <Option value="16" className='mb-1'>16 per page</Option>
+                        <Option value="4" className='mb-1' disabled={!(filteredCourses.length >= 4)}>4 per page</Option>
+                        <Option value="8" className='mb-1' disabled={!(filteredCourses.length >= 5)}>8 per page</Option>
+                        <Option value="16" className='mb-1' disabled={!(filteredCourses.length >= 9)}>16 per page</Option>
                     </Select>
                 </div>
             </div>
@@ -119,14 +120,15 @@ const SearchWindow = () => {
                 onCategoryChange={handleCategoryFilter}
                 onSortOrderChange={handleSortOrder}
                 onTopicChange={handleTopicChange}
+                onTopicReset={handleResetTopics}
                 selectedCategory={category}
                 sortOrder={sortOrder}
-                selectedTopics={selectedTopics}
                 categories={['All', 'Beginner', 'Medium', 'Hard']}
                 label='Level'
                 showSortOrder={true}
                 showTopicFilter={true}
                 allTopics={allTopics}
+                selectedTopics={selectedTopics}
                 itemsCount={filteredCourses.length}
             />
 
