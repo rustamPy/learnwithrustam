@@ -37,7 +37,7 @@ const SearchWindow = () => {
 
         if (selectedTopics.length > 0) {
             filtered = filtered.filter(course =>
-                selectedTopics.every(topic => course?.topics?.includes(topic))
+                selectedTopics.some(topic => course?.topics?.includes(topic))
             );
         }
 
