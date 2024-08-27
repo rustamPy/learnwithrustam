@@ -93,7 +93,7 @@ const SignInWindow = ({ message, image_path, width }) => {
                             className="md:px-24 md:py-14 py-8 border border-gray-300 dark:bg-gray-800 dark:border-none"
                         >
                             <CardHeader shadow={false} floated={false} className="flex flex-col items-center text-center dark:bg-gray-800">
-                                <img src={'imgs/welcome_1.png'} width={"150px"} alt="welcome_1" />
+                                <img src={'/imgs/welcome_1.png'} width={"150px"} alt="welcome_1" />
 
                                 <Typography variant="h4" className="text-gray-900 md:max-w-sm dark:text-white">
                                     Hey there,
@@ -111,7 +111,6 @@ const SignInWindow = ({ message, image_path, width }) => {
                                     </div>
                                     ) :
                                     <>
-
                                         <Typography variant="lead" className="mb-2 dark:text-white">
                                             You can now view course details, register for them, and directly reach out to me.
                                         </Typography>
