@@ -1,14 +1,17 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Select, Option } from "@material-tailwind/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { IoWarningOutline } from "react-icons/io5";
+
 
 const FilterSortBar = ({
+
+    showCategoryFilter = true,
     onCategoryChange,
     selectedCategory,
     categories,
     label,
-    showCategoryFilter = true,
 
     showTopicFilter = true,
     allTopics = [],
@@ -51,6 +54,22 @@ const FilterSortBar = ({
         setShowAllTopics(!showAllTopics);
         setTallerBox(!tallerBox);
     }
+
+    const topicBoxRef = useRef(null);
+
+    const handleClickOutside = (event) => {
+        if (topicBoxRef.current && !topicBoxRef.current.contains(event.target)) {
+            setIsTopicBoxOpen(false);
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
 
     return (
         <div className="flex flex-col space-y-3">
@@ -133,7 +152,7 @@ const FilterSortBar = ({
                         )}
 
                         {isTopicBoxOpen && (
-                            <div className={`absolute top-full left-0 z-10 p-2 rounded-lg bg-white dark:bg-gray-900 shadow-lg w-80 h-auto max-h-[28rem]`}>
+                            <div className={`absolute top-full left-0 z-10 p-2 rounded-lg bg-white dark:bg-gray-900 shadow-lg w-80 h-auto max-h-[28rem]`} ref={topicBoxRef}>
                                 <div className="relative mb-4 dark:text-white">
                                     <div className='absolute inset-y-1.5 ml-2 flex items-center text-gray-6 dark:text-dark-gray-6 pointer-events-none left-0'>
                                         <MagnifyingGlassIcon className="h-5 w-5 dark:text-white" />
@@ -148,9 +167,7 @@ const FilterSortBar = ({
                                 <div className={`flex flex-wrap gap-1 max-h-[20rem] overflow-auto mb-8`}>
                                     {visibleTopics.length === 0 ? (
                                         <div className="flex items-center justify-center w-full h-20 text-gray-500 dark:text-gray-400">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                            </svg>
+                                            <IoWarningOutline className='w-5 h-5 mr-2' />
                                             <span className="text-sm font-medium">No topics available</span>
                                         </div>
                                     ) : (
