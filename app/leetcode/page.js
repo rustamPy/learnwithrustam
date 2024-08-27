@@ -37,7 +37,6 @@ const QuestionsContent = async () => {
         uniqueTopics: topicsSet.size,
     };
 
-    console.log(questions)
 
     return (
         <Page questions={questions} topGroups={topGroups} stats={stats} />

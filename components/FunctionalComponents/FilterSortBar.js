@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Select, Option } from "@material-tailwind/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
@@ -42,8 +42,6 @@ const FilterSortBar = ({
     );
 
     const visibleTopics = showAllTopics ? filteredTopics : filteredTopics.slice(0, 10);
-
-    console.log(allTopics)
 
     const handleTopicClick = (topic) => {
         onTopicChange(topic);
@@ -148,32 +146,49 @@ const FilterSortBar = ({
                                     />
                                 </div>
                                 <div className={`flex flex-wrap gap-1 max-h-[20rem] overflow-auto mb-8`}>
-                                    {visibleTopics.map((topic) => (
-                                        topic && typeof topic === 'string' ? (
-                                            <span
-                                                key={topic}
-                                                onClick={() => handleTopicClick(topic)}
-                                                className={`inline-flex items-center px-2 whitespace-nowrap text-xs leading-6 rounded-full ${selectedTopics.includes(topic) ? 'bg-blue-500 dark:bg-blue-600 text-gray-300' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'} cursor-pointer transition-all m-1`}
-                                            >
-                                                {topic}
-                                            </span>
-                                        ) : null
-                                    ))}
-                                    {!showAllTopics ? (
-                                        <span
-                                            className="inline-flex items-center px-2 whitespace-nowrap text-xs leading-6 rounded-full bg-blue-200 dark:bg-blue-700 hover:bg-blue-300 hover:dark:bg-blue-800 cursor-pointer transition-all m-1"
-                                            onClick={() => handleExpandTopics()}
-                                        >
-                                            +{filteredTopics.length - visibleTopics.length} more
-                                        </span>
-                                    ) : showAllTopics ? (
-                                        <span
-                                            className="inline-flex items-center px-2 whitespace-nowrap text-xs leading-6 rounded-full bg-blue-200 dark:bg-blue-700 hover:bg-blue-300 hover:dark:bg-blue-800 cursor-pointer transition-all m-1"
-                                            onClick={() => handleExpandTopics()}
-                                        >
-                                            Show Less
-                                        </span>
-                                    ) : null}
+                                    {visibleTopics.length === 0 ? (
+                                        <div className="flex items-center justify-center w-full h-20 text-gray-500 dark:text-gray-400">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                            </svg>
+                                            <span className="text-sm font-medium">No topics available</span>
+                                        </div>
+                                    ) : (
+                                        <>
+                                                {visibleTopics.map((topic) => (
+                                                    topic && typeof topic === 'string' && (
+                                                        <span
+                                                            key={topic}
+                                                            onClick={() => handleTopicClick(topic)}
+                                                            className={`inline-flex items-center px-2 whitespace-nowrap text-xs leading-6 rounded-full ${selectedTopics.includes(topic) ? 'bg-blue-500 dark:bg-blue-600 text-gray-300' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'} cursor-pointer transition-all m-1`}
+                                                        >
+                                                            {topic}
+                                                        </span>
+                                                    )
+                                                ))}
+
+                                                {filteredTopics.length > 10 ? (
+                                                    !showAllTopics && (filteredTopics.length > visibleTopics.length) ? (
+                                                        <span
+                                                            className="inline-flex items-center px-2 whitespace-nowrap text-xs leading-6 rounded-full bg-blue-200 dark:bg-blue-700 hover:bg-blue-300 hover:dark:bg-blue-800 cursor-pointer transition-all m-1"
+                                                            onClick={() => handleExpandTopics()}
+                                                        >
+                                                            +{filteredTopics.length - visibleTopics.length} more
+                                                        </span>
+                                                    ) : (
+                                                        <span
+                                                            className="inline-flex items-center px-2 whitespace-nowrap text-xs leading-6 rounded-full bg-blue-200 dark:bg-blue-700 hover:bg-blue-300 hover:dark:bg-blue-800 cursor-pointer transition-all m-1"
+                                                            onClick={() => handleExpandTopics()}
+                                                        >
+                                                            Show Less
+                                                        </span>
+                                                )
+                                            ) : (
+                                                ''
+                                            )}
+                                        </>
+                                    )}
+
                                 </div>
                                 <div className="absolute bottom-2 right-2">
                                     <button
@@ -197,6 +212,5 @@ const FilterSortBar = ({
         </div>
     );
 }
-
 
 export default FilterSortBar;

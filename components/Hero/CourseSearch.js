@@ -107,9 +107,9 @@ const SearchWindow = () => {
                         labelProps={{ className: "text-gray-700 dark:text-gray-200" }}
                         label='Courses per page'
                     >
-                        <Option value="4" className='mb-1' disabled={!(filteredCourses.length >= 4)}>4 per page</Option>
-                        <Option value="8" className='mb-1' disabled={!(filteredCourses.length >= 5)}>8 per page</Option>
-                        <Option value="16" className='mb-1' disabled={!(filteredCourses.length >= 9)}>16 per page</Option>
+                        <Option value="4" className='mb-1' disabled={!(filteredCourses.length > 4)}>4 per page</Option>
+                        <Option value="8" className='mb-1' disabled={!(filteredCourses.length > 4)}>8 per page</Option>
+                        <Option value="16" className='mb-1' disabled={!(filteredCourses.length > 8)}>16 per page</Option>
                     </Select>
                 </div>
             </div>

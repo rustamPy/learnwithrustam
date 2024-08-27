@@ -7,11 +7,6 @@ const AudioPlayer = ({ audioMap, currentPage, visibleAudio, toggleAudio }) => {
     const [playbackSpeed, setPlaybackSpeed] = useState(1);
     const [loop, setLoop] = useState(false);
 
-    console.log(playbackSpeed)
-
-    console.log(audioMap);
-    console.log(currentPage);
-
     const currentPageAudios = audioMap[currentPage] || [];
 
     return (
