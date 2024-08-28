@@ -3,6 +3,7 @@ import { Typography, Stepper, Step } from '@material-tailwind/react';
 import { TbArrowsJoin2, TbPlugConnected } from "react-icons/tb";
 import { MdOutlineFollowTheSigns } from "react-icons/md";
 import { AiTwotoneBook } from "react-icons/ai";
+
 const features = [
     {
         name: 'Join',
@@ -51,7 +52,7 @@ const Features = () => {
                             <Step
                                 key={feature.name}
                                 onClick={() => handleStepClick(index)}
-                                completed={index < activeStep}
+                                {...(index < activeStep ? { completed: true } : {})}
                                 className={`w-16 sm:w-40 cursor-pointer bg-lwr-orange-color-100 text-xs sm:text-sm`}
                             >
                                 {feature.name}

@@ -46,8 +46,7 @@ const CourseCard = ({ id, title, desc, price, options, level = '' }) => {
                 <Image
                     src={bgimage}
                     alt={title}
-                    layout="fill"
-                    objectFit="cover"
+                    style={{ objectFit: 'cover', layout: 'fill' }}
                     className="absolute top-0 left-0 w-full h-full transition-transform duration-300 ease-in-out transform hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black opacity-10 hover:opacity-0 transition-opacity duration-300"></div>

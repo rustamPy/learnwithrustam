@@ -58,15 +58,15 @@ const FilterSortBar = ({
     const topicBoxRef = useRef(null);
 
     const handleClickOutside = (event) => {
-        if (topicBoxRef.current && !topicBoxRef.current.contains(event.target)) {
+        if (!topicBoxRef?.current?.contains(event.target)) {
             setIsTopicBoxOpen(false);
         }
     }
 
     useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('mouseup', handleClickOutside);
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('mouseup', handleClickOutside);
         };
     }, []);
 
@@ -127,7 +127,7 @@ const FilterSortBar = ({
                         {!(allTopics[0] == undefined) ? (
                             <button
                                 className="flex items-center text-sm rounded-lg px-3 py-2.5 border border-blue-gray-200 text-left cursor-pointer focus:outline-none whitespace-nowrap bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 text-gray-700 dark:text-gray-300"
-                                onClick={() => setIsTopicBoxOpen(!isTopicBoxOpen)}>
+                                onClick={() => setIsTopicBoxOpen(prev => !prev)}>
                                 <div>
                                     <span>Topics</span>
                                     <span className="ml-2 h-[18px] rounded-full px-1.5 text-center text-xs leading-normal bg-gray-200 text-gray-800">
@@ -152,7 +152,7 @@ const FilterSortBar = ({
                         )}
 
                         {isTopicBoxOpen && (
-                            <div className={`absolute top-full left-0 z-10 p-2 rounded-lg bg-white dark:bg-gray-900 shadow-lg w-80 h-auto max-h-[28rem]`} ref={topicBoxRef}>
+                            <div ref={topicBoxRef} className={`absolute top-full left-0 z-10 p-2 rounded-lg bg-white dark:bg-gray-900 shadow-lg w-80 h-auto max-h-[28rem]`}>
                                 <div className="relative mb-4 dark:text-white">
                                     <div className='absolute inset-y-1.5 ml-2 flex items-center text-gray-6 dark:text-dark-gray-6 pointer-events-none left-0'>
                                         <MagnifyingGlassIcon className="h-5 w-5 dark:text-white" />

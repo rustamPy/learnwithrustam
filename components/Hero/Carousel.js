@@ -44,8 +44,8 @@ const HeroCarousel = () => {
                         <Image
                             src={image.src}
                             alt={image.alt}
-                            layout="fill"
-                            objectFit="cover"
+                            priority={true}
+                            style={{ objectFit: 'cover', layout: 'fill' }}
                             className="rounded-xl"
                         />
                         <div className="absolute inset-0 grid h-full w-full place-items-center bg-black/75">
