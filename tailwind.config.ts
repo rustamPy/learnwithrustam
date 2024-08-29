@@ -56,23 +56,7 @@ module.exports = withMT({
         }
       },
       fontFamily: {
-        body: [
-          'Montserrat',
-          'ui-sans-serif',
-          'system-ui',
-          '-apple-system',
-          'system-ui',
-          'Segoe UI',
-          'Roboto',
-          'Helvetica Neue',
-          'Arial',
-          'Noto Sans',
-          'sans-serif',
-          'Apple Color Emoji',
-          'Segoe UI Emoji',
-          'Segoe UI Symbol',
-          'Noto Color Emoji'
-        ],
+        light: ['"Times New Roman"', 'serif'],
         sans: [
           'Montserrat',
           'ui-sans-serif',
