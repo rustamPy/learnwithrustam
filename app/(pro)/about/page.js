@@ -29,7 +29,7 @@ export default function About() {
                             <div className="p-8 dark:text-gray-200">
                                 <div className="uppercase tracking-wide text-sm text-indigo-500 dark:text-indigo-300 font-semibold">Software Engineer/Tutor/Influencer</div>
                                 <a href="https://www.linkedin.com/in/rustam-karimov-7293315b/" className="block mt-1 text-lg leading-tight font-medium text-black dark:text-white hover:underline" target='_blank'>Rustam Karimov</a>
-                                <p className="mt-2 text-gray-500 dark:text-gray-400">A proficient software engineer with a robust aptitude for defining project structures, designing, and implementing relevant solutions to address challenges. With years of experience in the field, I demonstrate the capability to collaborate within a team, exhibit keen attention to detail, and possess solid analytical and programming skills.</p>
+                                <p className="mt-2 text-gray-700 dark:text-gray-400 text-left">A proficient software engineer with a robust aptitude for defining project structures, designing, and implementing relevant solutions to address challenges. With years of experience in the field, I demonstrate the capability to collaborate within a team, exhibit keen attention to detail, and possess solid analytical and programming skills.</p>
                             </div>
                         </div>
 

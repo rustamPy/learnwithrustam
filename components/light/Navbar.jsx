@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
 import { FaStar } from "react-icons/fa";
+import { MdVerifiedUser } from "react-icons/md";
+
 
 const Navbar = () => {
     const pathname = usePathname();
@@ -18,7 +20,7 @@ const Navbar = () => {
 
     return (
         <>
-            <nav className="bg-gray-200 p-4">
+            <nav className="bg-gray-200 p-4 sticky top-0 z-50">
                 <div className="container mx-auto flex justify-between items-center">
                     <div>
                         <Link href="/light">L{`{W}`}R</Link>
@@ -29,7 +31,14 @@ const Navbar = () => {
                             <Link href={goPro()}>
                                 Switch to Pro
                             </Link>
-                            <FaStar className="ml-2" />
+                            <FaStar className="ml-1" />
+                        </div>
+                        <div className="px-3 flex flex-row items-center text-blue-800">
+
+                            <Link href={"/light/people"}>
+                                GQ - Gentlemen's Quarterly
+                            </Link>
+                            <MdVerifiedUser className="ml-1" />
                         </div>
                     </div>
                 </div>
