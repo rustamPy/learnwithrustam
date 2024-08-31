@@ -37,10 +37,10 @@ const FlippableCard = ({ frontImage, backImage, frontText, backText, frontTitle,
                         <div className="w-1/2 h-full relative">
                             <Image
                                 src={backImage}
+                                width={400}
+                                height={400}
                                 alt="Prodigy"
-                                layout="fill"
-                                objectFit="cover"
-                                className="rounded-xl"
+                                className="rounded"
                             />
                         </div>
                         <div className="absolute bottom-4 right-4">
@@ -56,13 +56,13 @@ const FlippableCard = ({ frontImage, backImage, frontText, backText, frontTitle,
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <div className="w-1/2 h-full relative overflow-hidden">
+                            <div className="w-1/2 h-full relative">
                             <Image
                                 src={frontImage}
+                                    width={400}
+                                    height={400}
                                 alt="Prodigy"
-                                layout="fill"
-                                objectFit="cover"
-                                className="rounded-xl"
+                                    className="rounded"
                             />
                         </div>
                         <div className="w-1/2 h-full bg-white p-6 flex flex-col overflow-scroll">
