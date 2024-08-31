@@ -143,11 +143,7 @@ const TeymPage = () => {
 
                     <p className="mb-3">
                     </p>
-                    <p className="mb-3">
-                        Əlavə olaraq, layihə idarəetmə proseslərinizin təkmilləşdirilməsi üçün müxtəlif vasitələrdən istifadə edin. Bu, layihə tapşırıqlarınızı izləməyi və komanda üzvləri arasında daha yaxşı əlaqə qurmağı təmin edəcək.
-                        Daha ətraflı məlumat üçün <Link href="https://www.chess.com/member/killer1996" target="blank" className="text-blue-500 hover:underline">klikləyin! </Link>
-
-                    </p>
+                    <p>Teymur Abdullayev və onun nailiyyətləri haqqında daha ətraflı məlumat əldə etmək üçün <a href="https://www.chess.com/member/killer1996" target="_blank" className="text-blue-500 hover:underline">Chess.com profilini ziyarət edin</a>.</p>
                 </div>
                 <br />
                 <hr />
@@ -189,9 +185,9 @@ const TeymPage = () => {
 
                     <p className="mb-3">
                     </p>
-                    <p className="mb-3">
-                        Additionally, use various tools to improve your project management processes. This will help you track project tasks and ensure better communication among team members. For more detailed information, <a href="https://www.chess.com/member/killer1996" target="blank" className="text-blue-500 hover:underline">click here!</a>
-                    </p>
+
+                    <p>To learn more about Teymur Abdullayev and his achievements, <a href="https://www.chess.com/member/killer1996" target="_blank" className="text-blue-500 hover:underline">visit his Chess.com profile</a>.</p>
+
                 </div>
             </div>
 
