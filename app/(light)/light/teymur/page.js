@@ -98,8 +98,8 @@ const FlippableCard = () => {
 
 const TeymPage = () => {
     return (
-        <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md m-10">
-            <h1 className="text-4xl font-bold text-green-600 mb-4 flex items-center">Chess Prodigy - Teymur Abddullayev <MdVerified className="text-3xl text-[#1BABEF] ml-2" /></h1>
+        <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md m-10 flex flex-col items-center">
+            <h1 className="text-4xl font-bold text-green-600 mb-4 flex items-center">Chess Prodigy - Teymur  Abddullayev </h1>
 
             <FlippableCard />
 
