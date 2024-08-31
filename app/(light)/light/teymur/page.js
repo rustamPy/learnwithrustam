@@ -5,7 +5,6 @@ import Teymur2 from './teymur2.jpg'
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from "react";
 import { GiClick } from "react-icons/gi";
-import { MdVerified } from "react-icons/md";
 
 
 
@@ -98,7 +97,7 @@ const FlippableCard = () => {
 
 const TeymPage = () => {
     return (
-        <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md m-10 flex flex-col items-center">
+        <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg m-10 flex flex-col items-center">
             <h1 className="text-4xl font-bold text-green-600 mb-4 flex items-center">Chess Prodigy - Teymur  Abddullayev </h1>
 
             <FlippableCard />
