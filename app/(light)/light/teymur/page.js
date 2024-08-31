@@ -104,60 +104,10 @@ const TeymPage = () => {
             <FlippableCard />
 
             <div className="mt-8">
-
-                <div id="EN">
-                    <p className="leading-relaxed text-xl">
-                        <span className="font-bold">EN:</span> Azerbaijani prodigy chess player, known for his strategic brilliance and deep understanding of the game. His ability to think several moves ahead and anticipate his opponents' strategies sets him apart as a very strong competitor. Teymur’s analytical skills and creative approach in chess have earned him recognition in many tournaments, where he consistently demonstrates extraordinary intelligence and mastery of the game.
-                    </p>
-
-                    <p className="mb-3">
-                        Teymur Abdullayev is a talented chess player renowned for his strategic depth and excellent understanding of the game. He distinguishes himself by being able to think several moves ahead during play and by anticipating his opponents' strategies. His unique approach and innovative strategies have established him as a true genius in the chess world.
-                    </p>
-
-                    <div className="grid grid-cols-1 md:gap-6 md:grid-cols-2">
-                        <p class="mb-3 text-gray-700 dark:text-gray-300">
-                            Azerbaijani prodigy chess player Teymur Abdullayev is known for his strategic brilliance and deep understanding of the game. His ability to think several moves ahead and to mislead opponents with unexpected moves sets him apart as a strong and strategically minded player. Teymur has affirmed his position through victories in various international tournaments and has successfully competed against many chess masters.
-                        </p>
-
-                        <p class="mb-3 text-gray-700 dark:text-gray-300">
-                            Teymur Abdullayev has proudly represented the Samux region of Azerbaijan, making this region known internationally. Samux, famous for its rich history and cultural heritage, has benefited from Teymur’s chess achievements in gaining international recognition. He received his education at School Number 1 in Samux, where he developed his skills in chess and other intellectual games.
-                        </p>
-
-                        <blockquote className="mb-3 border-l-4 border-gray-500 pl-4 text-gray-500">
-                            <p className="italic">
-                                "For me, this is not just a game! Chess is an integral part of my life. Every move presents a new challenge, and every strategic decision expands my intellectual boundaries. Every moment at the chessboard is both a struggle and a creative arena for me."
-                            </p>
-                            <svg class="w-8 h-8 mt-2 text-gray-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 14">
-                                <path d="M6 0H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3H2a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3h-1a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Z" />
-                            </svg>
-                            <p className="font-bold text-gray-700 text-xl">
-                                Teymur Abdullayev
-                            </p>
-                        </blockquote>
-
-                        <p class="mb-3 text-gray-700 dark:text-gray-300">
-                            It is worth emphasizing that chess is not just a game for Teymur but an integral part of his life. Each move on the chessboard represents both a challenge and a creative arena for him. His strategic and analytical thinking provides him with significant advantages both at the chessboard and in daily life. His years at the Samux school laid a solid foundation for the development of modern chess strategies and his recognition for innovative playstyle.
-                        </p>
-                    </div>
-
-                    <p className="mb-3">
-                    </p>
-                    <p className="mb-3">
-                        Additionally, use various tools to improve your project management processes. This will help you track project tasks and ensure better communication among team members. For more detailed information, <a href="https://www.chess.com/member/killer1996" target="blank" className="text-blue-500 hover:underline">click here!</a>
-                    </p>
-                </div>
-
-
-                <br />
-                <hr />
-                <br />
-
-
-
                 <div className="text-gray-700" id="AZ">
                     <p className="leading-relaxed text-xl">
-                    <span className="font-bold">AZ:</span>Azərbaycanlı olduqca istedadlı şahmatçı, strateji dahiliyi və oyunu dərin başa düşməsi ilə tanınır. Onun bir neçə gediş irəlidə düşünə bilmə qabiliyyəti və rəqiblərinin strategiyalarını əvvəlcədən görməsi onu çox güclü bir rəqib kimi fərqləndirir. Teymurun analitik bacarıqları və şahmatda yaradıcı yanaşması ona bir çox turnirlərdə tanınma qazandırıb, burada o, daim qeyri-adi zəka və oyuna mükəmməl hakim olduğunu nümayiş etdirir.
-                </p>
+                        <span className="font-bold">AZ:</span>Azərbaycanlı olduqca istedadlı şahmatçı, strateji dahiliyi və oyunu dərin başa düşməsi ilə tanınır. Onun bir neçə gediş irəlidə düşünə bilmə qabiliyyəti və rəqiblərinin strategiyalarını əvvəlcədən görməsi onu çox güclü bir rəqib kimi fərqləndirir. Teymurun analitik bacarıqları və şahmatda yaradıcı yanaşması ona bir çox turnirlərdə tanınma qazandırıb, burada o, daim qeyri-adi zəka və oyuna mükəmməl hakim olduğunu nümayiş etdirir.
+                    </p>
 
                     <p className="mb-3">
                         Teymur Abdullayev, strateji dərinliyi və mükəmməl oyun anlayışı ilə tanınan istedadlı bir şahmatçıdır. O, oyun zamanı bir neçə gediş irəlidə düşünmə qabiliyyəti ilə fərqlənir və rəqiblərinin strategiyalarını qabaqcadan görmə bacarığına malikdir. Onun bu unikal yanaşması və innovativ strategiyaları onu şahmat aləmində əsl bir dahi kimi tanıtmışdır.
@@ -199,7 +149,50 @@ const TeymPage = () => {
 
                     </p>
                 </div>
+                <br />
+                <hr />
+                <br />
+                <div className="text-gray-900" id="EN">
+                    <p className="leading-relaxed text-xl">
+                        <span className="font-bold">EN:</span> Azerbaijani prodigy chess player, known for his strategic brilliance and deep understanding of the game. His ability to think several moves ahead and anticipate his opponents' strategies sets him apart as a very strong competitor. Teymur’s analytical skills and creative approach in chess have earned him recognition in many tournaments, where he consistently demonstrates extraordinary intelligence and mastery of the game.
+                    </p>
 
+                    <p className="mb-3">
+                        Teymur Abdullayev is a talented chess player renowned for his strategic depth and excellent understanding of the game. He distinguishes himself by being able to think several moves ahead during play and by anticipating his opponents' strategies. His unique approach and innovative strategies have established him as a true genius in the chess world.
+                    </p>
+
+                    <div className="grid grid-cols-1 md:gap-6 md:grid-cols-2">
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">
+                            Azerbaijani prodigy chess player Teymur Abdullayev is known for his strategic brilliance and deep understanding of the game. His ability to think several moves ahead and to mislead opponents with unexpected moves sets him apart as a strong and strategically minded player. Teymur has affirmed his position through victories in various international tournaments and has successfully competed against many chess masters.
+                        </p>
+
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">
+                            Teymur Abdullayev has proudly represented the Samux region of Azerbaijan, making this region known internationally. Samux, famous for its rich history and cultural heritage, has benefited from Teymur’s chess achievements in gaining international recognition. He received his education at School Number 1 in Samux, where he developed his skills in chess and other intellectual games.
+                        </p>
+
+                        <blockquote className="mb-3 border-l-4 border-gray-500 pl-4 text-gray-500">
+                            <p className="italic">
+                                "For me, this is not just a game! Chess is an integral part of my life. Every move presents a new challenge, and every strategic decision expands my intellectual boundaries. Every moment at the chessboard is both a struggle and a creative arena for me."
+                            </p>
+                            <svg class="w-8 h-8 mt-2 text-gray-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 14">
+                                <path d="M6 0H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3H2a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3h-1a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Z" />
+                            </svg>
+                            <p className="font-bold text-gray-700 text-xl">
+                                Teymur Abdullayev
+                            </p>
+                        </blockquote>
+
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">
+                            It is worth emphasizing that chess is not just a game for Teymur but an integral part of his life. Each move on the chessboard represents both a challenge and a creative arena for him. His strategic and analytical thinking provides him with significant advantages both at the chessboard and in daily life. His years at the Samux school laid a solid foundation for the development of modern chess strategies and his recognition for innovative playstyle.
+                        </p>
+                    </div>
+
+                    <p className="mb-3">
+                    </p>
+                    <p className="mb-3">
+                        Additionally, use various tools to improve your project management processes. This will help you track project tasks and ensure better communication among team members. For more detailed information, <a href="https://www.chess.com/member/killer1996" target="blank" className="text-blue-500 hover:underline">click here!</a>
+                    </p>
+                </div>
             </div>
 
             <div className="flex flex-row mt-8">
