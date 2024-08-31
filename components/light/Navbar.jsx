@@ -3,11 +3,21 @@ import Link from "next/link";
 import { usePathname } from 'next/navigation';
 import { FaStar } from "react-icons/fa";
 import { MdVerifiedUser } from "react-icons/md";
+import React, { useState } from 'react';
 
+import {
+    Navbar,
+    Collapse,
+    IconButton
+} from '@material-tailwind/react';
+import {
+    Bars3Icon,
+    XMarkIcon,
+} from '@heroicons/react/24/outline';
 
-const Navbar = () => {
+const NavBar = () => {
     const pathname = usePathname();
-
+    const [openNav, setOpenNav] = useState(false)
     const goPro = () => {
         let updated = pathname.replace('/light', '')
         if (!updated) {
@@ -16,36 +26,62 @@ const Navbar = () => {
         return updated
     }
 
-    console.log(pathname)
-
     return (
         <>
-            <nav className="bg-gray-200 p-4 sticky top-0 z-50">
+            <Navbar variant="gradient" className={`bg-gray-100 border-0 sticky mx-auto z-50 text-black top-0 w-full mx-auto rounded-xl px-2 py-2`}>
                 <div className="container mx-auto flex justify-between items-center">
-                    <div>
-                        <Link href="/light">L{`{W}`}R</Link>
-                    </div>
-                    <div className="flex flex-row">
-                        <Link href="/light/leetcode" className="text-black px-3">Leetcode</Link>
-                        <div className="px-3 flex flex-row items-center text-yellow-800">
-                            <Link href={goPro()}>
-                                Switch to Pro
-                            </Link>
-                            <FaStar className="ml-1" />
-                        </div>
-                        <div className="px-3 flex flex-row items-center text-blue-800">
+                    <Link href="/light" className="ml-4">L{`{W}`}R</Link>
+                    <div className="hidden lg:block">
+                        <div className="mb-6 p-0 flex lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
+                            <Link href="/light/leetcode" className="text-black px-3">Leetcode</Link>
+                            <div className="px-3 flex flex-row items-center text-yellow-800">
+                                <Link href={goPro()}>
+                                    Switch to Pro
+                                </Link>
+                                <FaStar className="ml-1" />
+                            </div>
+                            <div className="px-3 flex flex-row items-center text-blue-800">
 
-                            <Link href={"/light/people"}>
-                                GQ - Gentlemen's Quarterly
-                            </Link>
-                            <MdVerifiedUser className="ml-1" />
+                                <Link href={"/light/people"}>
+                                    GQ - Gentlemen's Quarterly
+                                </Link>
+                                <MdVerifiedUser className="ml-1" />
+                            </div>
                         </div>
                     </div>
+
+                    <IconButton
+                        variant="text"
+                        className="lg:hidden "
+                        onClick={() => setOpenNav(!openNav)}
+                    >
+                        {openNav ? (
+                            <XMarkIcon className="h-6 w-6" strokeWidth={2} />
+                        ) : (
+                            <Bars3Icon className="h-6 w-6" strokeWidth={2} />
+                        )}
+                    </IconButton>
                 </div>
-            </nav>
+                <Collapse open={openNav}>
+                    <Link href="/light/leetcode" className="text-black px-3">Leetcode</Link>
+                    <div className="px-3 flex flex-row items-left text-yellow-800">
+                        <Link href={goPro()}>
+                            Switch to Pro
+                        </Link>
+                        <FaStar className="ml-1" />
+                    </div>
+                    <div className="px-3 flex flex-row items-center text-blue-800">
+
+                        <Link href={"/light/people"}>
+                            GQ - Gentlemen's Quarterly
+                        </Link>
+                        <MdVerifiedUser className="ml-1" />
+                    </div>
+                </Collapse>
+            </Navbar>
         </>
 
     )
 }
 
-export default Navbar;
+export default NavBar;

@@ -202,7 +202,6 @@ const NavbarWithMegaMenu = () => {
     const { data: session, status } = useSession();
 
     const pathname = usePathname();
-    console.log(pathname)
     const goLight = () => {
         return '/light' + pathname
     }

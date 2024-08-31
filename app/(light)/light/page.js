@@ -2,7 +2,7 @@ import coursesData from '@/public/courses.json';
 import Link from 'next/link';
 const LearnWithRustamPage = () => {
     return (
-        <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto">
                 <h1 className="text-4xl font-bold text-center mb-8 underline">
                     Learn with Rustam - light version
