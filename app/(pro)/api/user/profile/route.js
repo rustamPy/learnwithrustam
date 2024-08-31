@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import clientPromise from "@/lib/mongodb";
 import { NextResponse } from "next/server";
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
+import { authOptions } from '@/app/(pro)/api/auth/[...nextauth]/options';
 
 export async function PATCH(request) {
     const session = await getServerSession(authOptions);
