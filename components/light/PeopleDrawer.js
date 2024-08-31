@@ -14,19 +14,19 @@ import SalmanFront from '@/app/(light)/light/people/salman/salman.jpg';
 const people = [
     {
         name: "Rasul Karimov",
-        role: "ML Research Engineer",
+        role: "<Nerdy by Nature>",
         imageSrc: RasulFront,
         profileUrl: "/light/people/rasul"
     },
     {
         name: "Salman Abdullayev",
-        role: "iOS Developer",
+        role: "<Swift Swami>",
         imageSrc: SalmanFront,
         profileUrl: "/light/people/salman"
     },
     {
         name: "Teymur Abdullayev",
-        role: "Chess Player",
+        role: "<Rook ‘n’ Roller>",
         imageSrc: TeymurFront,
         profileUrl: "/light/people/teymur"
     },
