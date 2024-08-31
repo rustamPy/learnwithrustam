@@ -4,11 +4,12 @@ import { usePathname } from 'next/navigation';
 import { FaStar } from "react-icons/fa";
 import { MdVerifiedUser } from "react-icons/md";
 import React, { useState } from 'react';
-
+import PeopleDrawer from './PeopleDrawer'
 import {
     Navbar,
     Collapse,
-    IconButton
+    IconButton,
+    Button
 } from '@material-tailwind/react';
 import {
     Bars3Icon,
@@ -18,6 +19,9 @@ import {
 const NavBar = () => {
     const pathname = usePathname();
     const [openNav, setOpenNav] = useState(false)
+
+    const [openDrawer, setOpenDrawer] = useState(false)
+
     const goPro = () => {
         let updated = pathname.replace('/light', '')
         if (!updated) {
@@ -42,10 +46,9 @@ const NavBar = () => {
                             </div>
                             <div className="px-3 flex flex-row items-center text-blue-800">
 
-                                <Link href={"/light/people"}>
-                                    GQ - Gentlemen's Quarterly
-                                </Link>
-                                <MdVerifiedUser className="ml-1" />
+                                <Button className="p-2 text-[8px]" color="blue" onClick={() => setOpenDrawer(true)}>
+                                    GQ - Gentlemen's Quarterly 
+                                </Button>
                             </div>
                         </div>
                     </div>
@@ -72,13 +75,14 @@ const NavBar = () => {
                     </div>
                     <div className="px-3 flex flex-row items-center text-blue-800">
 
-                        <Link href={"/light/people"}>
+                        <Button className="p-2 text-[8px]" color="blue" onClick={() => setOpenDrawer(true)}>
                             GQ - Gentlemen's Quarterly
-                        </Link>
+                        </Button>
                         <MdVerifiedUser className="ml-1" />
                     </div>
                 </Collapse>
             </Navbar>
+            <PeopleDrawer open={openDrawer} setOpen={setOpenDrawer} />
         </>
 
     )

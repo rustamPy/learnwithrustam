@@ -254,7 +254,7 @@ const NavbarWithMegaMenu = () => {
                             )
                         }
                         <ThemeToggle />
-                        <a href={goLight()} className='text-xs'>Switch to Simple</a>
+                        <a href={goLight()} className='text-xs mr-4 text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1'>Simple</a>
 
                     </div>
                     <IconButton
@@ -291,7 +291,7 @@ const NavbarWithMegaMenu = () => {
                             )
                         }
                         <ThemeToggle />
-                        <a href={goLight()}>Switch to Simple</a>
+                        <a href={goLight()} className='text-xs mr-4 text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1'>Simple</a>
                     </div>
                 </Collapse>
             </Navbar>
