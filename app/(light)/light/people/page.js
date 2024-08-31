@@ -8,7 +8,7 @@ import { Typography } from '@material-tailwind/react';
 const people = [
     {
         name: "Rasul Karimov",
-        role: "ML Researcher",
+        role: "ML Research Engineer",
         imageSrc: RasulFront,
         profileUrl: "/light/people/rasul"
     },

@@ -17,10 +17,6 @@ const RasulPage = () =>
                 <p className="leading-relaxed text-2xl">
                     Rəsul Kərimov proqramlaşdırma sahəsində yüksək bilik və təcrübəyə malikdir. Onun analitik düşüncə tərzi və yaradıcı yanaşmaları onu bu sahədə tanınmış bir mütəxəssis etmişdir.
                 </p>
-
-
-
-
                 <div className="grid grid-cols-1 md:gap-6 md:grid-cols-2">
                     <p>
                         Gəncə şəhərində doğulmuş və uzun illər Rusiyanın Moskva şəhərində yaşamışdır. Rəsul, ShareChat-də Machine Learning Engineer olaraq çalışan müddətində istifadəçi iştirakını və məzmun tövsiyəsini artıran alqoritmlərin inkişafı üzərində çalışmışdır. Yandex-də Machine Learning Engineer kimi, axtarış mühərriklərinin alqoritmlərini və tövsiyə sistemlərini yaxşılaşdırmaq məqsədilə müxtəlif ML layihələrində iştirak etmişdir. Skolkovo Elmi və Texnologiya İnstitutunda Deep Learning Engineer olaraq, kompüter görmə və təbii dil işləmə sahələrində dərin öyrənmə modelləri üzərində işləmişdir. Samsung Electronics-də Deep Learning Researcher olaraq, görüntü və danışıq tanıma texnologiyalarını inkişaf etdirmək məqsədilə dərin öyrənmə texnikaları üzərində işləməyə davam etmişdir.
