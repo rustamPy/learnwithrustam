@@ -6,18 +6,20 @@ import {
 } from "@material-tailwind/react";
 
 import Image from 'next/image';
-import RasulFront from '@/app/(light)/light/people/rasul/rasul.jpeg';
+//import RasulFront from '@/app/(light)/light/people/rasul/rasul.jpeg';
 import TeymurFront from '@/app/(light)/light/people/teymur/teymur.jpg';
 import SalmanFront from '@/app/(light)/light/people/salman/salman.jpg';
 
 
 const people = [
+    /*
     {
         name: "Rasul Karimov",
         role: "<Nerdy by Nature>",
         imageSrc: RasulFront,
         profileUrl: "/light/people/rasul"
     },
+    */
     {
         name: "Salman Abdullayev",
         role: "<Swift Swami>",

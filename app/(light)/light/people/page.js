@@ -1,17 +1,17 @@
 'use client';
 import Image from 'next/image';
-import RasulFront from './rasul/rasul.jpeg';
+//import RasulFront from './rasul/rasul.jpeg';
 import TeymurFront from './teymur/teymur.jpg';
 import SalmanFront from './salman/salman.jpg';
 import { Typography } from '@material-tailwind/react';
 
 const people = [
-    {
+    /*{
         name: "Rasul Karimov",
         role: "ML Research Engineer",
         imageSrc: RasulFront,
         profileUrl: "/light/people/rasul"
-    },
+    },*/
     {
         name: "Salman Abdullayev",
         role: "iOS Developer",
