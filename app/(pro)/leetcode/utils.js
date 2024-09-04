@@ -12,6 +12,9 @@ export const fetchEachQuestionMD = async (slug) => {
         const dataReponse = await response.json();
         const question = dataReponse.questions.filter(q => q.slug === slug)[0]
 
+        console.log('GO')
+        console.log(question)
+
 
         const markdown = question.html;
         const { content } = matter(markdown);
@@ -21,6 +24,7 @@ export const fetchEachQuestionMD = async (slug) => {
         return {
             title: question.title || slug.replace('-', ' '),
             level: question.level || 'Unknown',
+            tests: question.tests || 'Unknown',
             content: htmlContent
         };
     } catch (error) {

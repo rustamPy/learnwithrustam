@@ -23,7 +23,7 @@ const FlippableCard = ({ frontImage, backImage, frontText, backText, frontTitle,
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <div className="w-1/2 h-full bg-white p-6 flex flex-col overflow-scroll">
+                        <div className="w-1/2 h-full bg-white p-6 flex flex-col overflow-scroll z-20">
                             <img
                                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Flag_of_Azerbaijan.svg/2880px-Flag_of_Azerbaijan.svg.png"
                                 alt="Azerbaijan Flag"
@@ -65,7 +65,7 @@ const FlippableCard = ({ frontImage, backImage, frontText, backText, frontTitle,
                                     className="rounded"
                             />
                         </div>
-                        <div className="w-1/2 h-full bg-white p-6 flex flex-col overflow-scroll">
+                            <div className="w-1/2 h-full bg-white p-6 flex flex-col overflow-scroll z-20">
                             <img
                                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Flag_of_Azerbaijan.svg/2880px-Flag_of_Azerbaijan.svg.png"
                                 alt="Azerbaijan Flag"
