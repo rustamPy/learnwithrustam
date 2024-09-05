@@ -1,8 +1,12 @@
-export const STANDARD = `_CLASS_DEFINITION_
+export const PYTHON_BASE = (func, params, tests, name) => {
+    return (
+
+        `${func}
 
 if __name__ == '__main__':
     import json
-    tests = _TEST_
+    params = ${params}
+    tests = ${tests}
     
     o = Solution()
     for test_index in range(len(tests)):
@@ -14,15 +18,19 @@ if __name__ == '__main__':
                 raise ValueError("The number of params and test is not matching")
             
             # Call the function with the input parameters
-            check = o.sample(*tests[test_index][:-1])
+            check = o.${name}(*tests[test_index][:-1])
 
             bl = check == target
+            tests[test_index].append(check)
             tests[test_index].append(bl)
+            
         except Exception as e:
             tests[test_index].append(str(e))
 
     print(tests)
-`;
+`
+    )
+};
 
 export const QUESTIONS_MAP = {
     'python': (name, params) => `class Solution:

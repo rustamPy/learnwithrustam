@@ -10,11 +10,8 @@ export const fetchEachQuestionMD = async (slug) => {
             throw new Error('Failed to fetch data');
         }
         const dataReponse = await response.json();
-        const question = dataReponse.questions.filter(q => q.slug === slug)[0]
 
-        console.log('GO')
-        console.log(question)
-
+        const question = dataReponse.questions.map(o => o.question).filter(o => o.slug === `${slug}`)[0]
 
         const markdown = question.html;
         const { content } = matter(markdown);
@@ -22,7 +19,7 @@ export const fetchEachQuestionMD = async (slug) => {
         const htmlContent = processedContent.toString();
 
         return {
-            title: question.title || slug.replace('-', ' '),
+            title: question.title,
             level: question.level || 'Unknown',
             tests: question.tests || 'Unknown',
             content: htmlContent
@@ -41,11 +38,35 @@ export const fetchAllQuestions = async () => {
         const data = await response.json();
 
         return {
-            questions: data.questions,
+            questions: data.questions.map(o => o.question),
             stats: data.stats,
             topGroups: data.topGroups
         }
     } catch (error) {
         console.error('Error fetching data:', error);
+    }
+}
+
+export const fetchEachTest = async (slug) => {
+
+    try {
+        const response = await fetch('/api/leetcode');
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+        const dataReponse = await response.json();
+
+        const test = dataReponse.questions.map(o => o.tests).filter(o => o.slug === `${slug}`)[0]
+        const markdown = test.content;
+        const { content } = matter(markdown);
+        const processedContent = await remark().use(html).process(content);
+        const htmlContent = processedContent.toString();
+
+        return {
+            params: test.params || 'NA',
+            content: htmlContent
+        };
+    } catch (error) {
+        console.error('Error fetching or processing markdown:', error);
     }
 }

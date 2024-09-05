@@ -4,17 +4,21 @@ export async function GET(request) {
     try {
 
         const questions = await getQuestions();
-
         const groupMap = {};
-        questions.forEach((question) => {
-            (question.groups || []).forEach((group) => {
+        questions.forEach(({ question }) => {
+
+
+            if (!question.groups) {
+                return;
+            }
+
+            (question.groups || []).forEach(group => {
                 if (!groupMap[group]) {
                     groupMap[group] = [];
                 }
                 if (!groupMap[group].includes(question)) {
                     groupMap[group].push(question);
                 }
-
             });
         });
 

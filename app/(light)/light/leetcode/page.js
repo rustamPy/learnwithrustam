@@ -11,7 +11,6 @@ const SimplePage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [questionsPerPage] = useState(10);
 
-
     useEffect(() => {
         async function fetchData() {
             try {
@@ -21,7 +20,7 @@ const SimplePage = () => {
                 }
 
                 const data = await response.json();
-                setQuestions(data.questions);
+                setQuestions(data.questions.map(o => o.question));
                 setStats(data.stats);
                 setTopGroups(data.topGroups);
             } catch (error) {
@@ -32,11 +31,14 @@ const SimplePage = () => {
         fetchData();
     }, []);
 
-    const filteredQuestions = questions.filter(question =>
-        (question.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            question.slug.toString().toLowerCase().includes(searchQuery.toLowerCase())) &&
+    const filteredQuestions = questions.filter((question) => {
+        return (
+            (question?.title?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
+                question?.slug?.toString()?.toLowerCase().includes(searchQuery?.toLowerCase())) &&
         (category === 'All' || question.level === category)
-    );
+
+        )
+    });
 
     const indexOfLastQuestion = currentPage * questionsPerPage;
     const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;

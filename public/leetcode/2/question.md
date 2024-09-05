@@ -3,6 +3,16 @@ title: Add Two Numbers
 level: Medium
 topics: ["Linked List", "Math", "Recursion"]
 groups: ['Dynamic Programming - Essentials']
+tests:  
+    - input: [[2, 7, 11, 15], 4]
+      output: [true]
+      metadata: [2, 1]
+    - input: [[3, 2, 4], 3]
+      output: [true]
+      metadata: [2, 1]
+    - input: [[3, 3], 5]
+      output: [true]
+      metadata: [2, 1]
 
 ---
 You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
