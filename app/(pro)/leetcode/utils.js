@@ -21,7 +21,6 @@ export const fetchEachQuestionMD = async (slug) => {
         return {
             title: question.title,
             level: question.level || 'Unknown',
-            tests: question.tests || 'Unknown',
             content: htmlContent
         };
     } catch (error) {
