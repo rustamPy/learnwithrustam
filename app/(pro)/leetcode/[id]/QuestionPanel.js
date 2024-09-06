@@ -72,29 +72,6 @@ const QuestionPanel = ({ question }) => {
 
     const toggleBookmark = useCallback(() => {
         setIsBookmarked(prev => !prev);
-        // Here you would typically also update this in your backend or local storage
-    }, []);
-
-    const renderDifficulty = useCallback((level) => {
-        return (
-            <Chip
-                value={level}
-                color={colors[level] || 'blue'}
-                variant="outlined"
-                className="ml-2 text-xs font-semibold"
-            />
-        );
-    }, []);
-
-    const renderTags = useCallback((tags) => {
-        return tags.map((tag, index) => (
-            <Chip
-                key={index}
-                value={tag}
-                color="blue-gray"
-                className="mr-2 mb-2 text-xs w-max"
-            />
-        ));
     }, []);
 
     const additionalButtons = [
@@ -108,8 +85,8 @@ const QuestionPanel = ({ question }) => {
         <Panel minSize={20} defaultSize={30}>
             <WindowPanel
                 tabs={[
-                    { name: 'Description', icon: <BsFileText />, color: "text-blue-500" },
-                    { name: 'Editorial', icon: <FaRegLightbulb />, color: "text-yellow-500" }
+                    { name: 'Description', icon: <BsFileText />, color: "text-blue-800" },
+                    { name: 'Editorial', icon: <FaRegLightbulb />, color: "text-yellow-800" }
                 ]}
             >
                 {/* Scrollable Content Area */}
@@ -157,10 +134,6 @@ const QuestionPanel = ({ question }) => {
                                         </Button>
                                     </Tooltip>
                                 </div>
-                            </div>
-
-                            <div className="mb-4">
-                                    {renderTags(question.topics || [])}
                             </div>
 
                                 <div

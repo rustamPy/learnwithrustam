@@ -1,34 +1,28 @@
 'use client';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
+import { Panel } from 'react-resizable-panels';
+import { PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import Editor from '@monaco-editor/react';
-import { Spinner, Select, Option, Tooltip, Button } from '@material-tailwind/react';
+import { Spinner, Select, Option, Tooltip } from '@material-tailwind/react';
 import { QUESTIONS_MAP, BASES } from './utils';
 import { GoDotFill, GoPlus } from "react-icons/go";
 import { RiCloseCircleFill } from "react-icons/ri";
 import { GrPowerReset } from "react-icons/gr";
-import { TiMediaPlay } from "react-icons/ti";
-import { GrTest } from "react-icons/gr";
 import { IoCodeSlash } from "react-icons/io5";
-import { TbSourceCode } from "react-icons/tb";
 import { WindowPanel, CustomSkeleton } from './Components';
 import { languages } from './Components';
 import { useTheme } from 'next-themes';
+import { TiMediaPlay } from 'react-icons/ti';
+import { GrTest } from 'react-icons/gr';
+import { TbSourceCode } from 'react-icons/tb';
 
-const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
+const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, setLongCode, isRunning, output, error, runCode, evaluatedTestCase, printOutput, setPrintOutput, status }) => {
     const [shortCode, setShortCode] = useState('');
     const [currentShort, setCurrentShort] = useState('');
-    const [longCode, setLongCode] = useState('');
     const [language, setLanguage] = useState(languages[0]);
-    const [output, setOutput] = useState(null);
-    const [printOutput, setPrintOutput] = useState([]);
-    const [error, setError] = useState(null);
-    const [status, setStatus] = useState(null);
-    const [isRunning, setIsRunning] = useState(false);
     const editorRef = useRef(null);
     const [testCase, setTestCase] = useState(tests);
     const [dumpTestCase, setDumpTestCase] = useState(dumpTests);
-    const [evaluatedTestCase, setEvaluatedTestCase] = useState(dumpTestCase);
     const [displayingTestCase, setDisplayingTestCase] = useState(0);
     const [hoverStates, setHoverStates] = useState({});
     const [savingStatus, setSavingStatus] = useState('')
@@ -42,7 +36,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
         } else {
             setLongCode(shortCodeValue);
         }
-    }, [longCode]);
+    }, [longCode, setLongCode]);
 
     useEffect(() => {
         // Load saved code from local storage when component mounts
@@ -51,7 +45,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
             setCurrentShort(savedCode);
             updateLongCode(savedCode);
         }
-    }, [question]);
+    }, [question, updateLongCode]);
 
     useEffect(() => {
         handleSetLangSample();
@@ -86,7 +80,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
             setCurrentShort("Error");
             setLongCode("Error");
         }
-    }, [language, question, testCase, testParams, toCamelCase, currentShort]);
+    }, [language, question, testCase, testParams, toCamelCase, currentShort, setLongCode]);
 
     const handleEditorDidMount = (editor, monaco) => {
         editorRef.current = editor;
@@ -105,93 +99,6 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
         }
     }, []);
 
-    const runCode = useCallback(async () => {
-        setIsRunning(true);
-        setOutput('Running...');
-        setError(null);
-        setEvaluatedTestCase(dumpTestCase);
-
-        try {
-            const createResponse = await fetch('http://127.0.0.1:2358/submissions', {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json',
-                    'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
-                    'x-rapidapi-key': 'ec77f5a774msh4fc4c1c656aba38p1a4647jsna78adfa32e18',
-                },
-                body: JSON.stringify({
-                    language_id: language.id,
-                    source_code: longCode.replace('${tests}', JSON.stringify(testCase)),
-                    stdin: '',
-                }),
-            });
-
-            if (!createResponse.ok) {
-                throw new Error(`HTTP error! status: ${createResponse.status}`);
-            }
-
-            const { token } = await createResponse.json();
-
-            let getResponseData;
-            do {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                const getResponse = await fetch(`http://127.0.0.1:2358/submissions/${token}`, {
-                    method: 'GET',
-                    headers: {
-                        'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
-                        'x-rapidapi-key': 'ec77f5a774msh4fc4c1c656aba38p1a4647jsna78adfa32e18',
-                    },
-                });
-
-                if (!getResponse.ok) {
-                    throw new Error(`HTTP error! status: ${getResponse.status}`);
-                }
-
-                getResponseData = await getResponse.json();
-            } while (getResponseData.status && getResponseData.status.id <= 2);
-
-            if (getResponseData.stdout) {
-                const jsonOutput = getResponseData.stdout
-                    .replace(/None/g, 'null')
-                    .replace(/True/g, 'true')
-                    .replace(/False/g, 'false');
-
-                try {
-                    const parsedOutput = JSON.parse(jsonOutput);
-                    if (parsedOutput.print_output || parsedOutput.test_results) {
-                        handlePassConditions(parsedOutput.test_results);
-                        setOutput(parsedOutput.test_results);
-                        setPrintOutput(parsedOutput.print_output);
-                    } else {
-                        handlePassConditions(parsedOutput);
-                        setOutput(parsedOutput);
-                    }
-                } catch (parseError) {
-                    console.error('JSON parsing error:', parseError);
-                    setError(`Error parsing output: ${jsonOutput}`);
-                }
-            } else if (getResponseData.stderr) {
-                setError(getResponseData.stderr);
-            } else if (getResponseData.compile_output) {
-                setError(getResponseData.compile_output);
-            } else if (getResponseData.message) {
-                setError(getResponseData.message);
-            } else {
-                setError(JSON.stringify(getResponseData, null, 2));
-            }
-        } catch (error) {
-            console.error('Full error:', error);
-            setError('Error: ' + error.message);
-        } finally {
-            setIsRunning(false);
-        }
-    }, [language.id, longCode, testCase, dumpTestCase]);
-
-    const handlePassConditions = useCallback((outputArr) => {
-        const allFalse = outputArr.every(subArr => Array.isArray(subArr) && subArr[subArr.length - 1] === false);
-        const allTrue = outputArr.every(subArr => Array.isArray(subArr) && subArr[subArr.length - 1] === true);
-        setStatus(allFalse ? 'Wrong Answers' : allTrue ? 'Right Answers' : 'Mixed Results');
-    }, []);
 
     const handleChangeTestCases = useCallback((event, testCaseIndex, inputIndex) => {
         const updatedTestCases = JSON.parse(JSON.stringify(testCase));
@@ -234,7 +141,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
         setSavingStatus('Saving...')
         localStorage.setItem(`code_${question?.title}`, value)
         setSavingStatus('Saved')
-    }, [longCode, question]);
+    }, [question, updateLongCode]);
 
     const handleResetShortCode = useCallback(() => {
         setCurrentShort(shortCode);
@@ -246,7 +153,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
 
     console.log(savingStatus)
 
-
+    console.log('got')
     console.log(output)
 
     return (
@@ -270,19 +177,6 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                             onClick={handleResetShortCode}
                                         >
                                             <GrPowerReset className='cursor-pointer' />
-                                        </button>
-                                    </Tooltip>
-                                </div>
-                                <div className="ml-auto">
-                                    <Tooltip content={`Run the code`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
-                                        <button
-                                            className="px-4 py-2 rounded-md text-gray-800 hover:text-gray-900 hover:bg-gray-200 dark:text-gray-50 dark:hover:text-gray-400 dark:text-gray-50 dark:hover:bg-gray-700"
-                                            onClick={runCode}
-                                        >
-                                            <div className='flex items-center'>
-                                                <TiMediaPlay className='cursor-pointer mr-1' />
-                                                <p className='dark:hover:text-gray-200'>Run</p>
-                                            </div>
                                         </button>
                                     </Tooltip>
                                 </div>
