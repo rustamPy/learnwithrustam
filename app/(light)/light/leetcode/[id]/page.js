@@ -140,7 +140,7 @@ const CodeEditorRunner = ({ params }) => {
         setActiveTab("output");
 
         try {
-            const createResponse = await fetch('http://192.168.0.66:2358/submissions', {
+            const createResponse = await fetch('http://127.0.0.1:2358/submissions', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json',
@@ -163,7 +163,7 @@ const CodeEditorRunner = ({ params }) => {
             let getResponseData;
             do {
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                const getResponse = await fetch(`http://192.168.0.66:2358/submissions/${token}`, {
+                const getResponse = await fetch(`http://127.0.0.1:2358/submissions/${token}`, {
                     method: 'GET',
                     headers: {
                         'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
@@ -271,7 +271,6 @@ const CodeEditorRunner = ({ params }) => {
     };
 
 
-    console.log(question)
 
     return (
         <div className="flex flex-col h-screen">
