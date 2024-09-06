@@ -29,7 +29,6 @@ function StatsCard({ count, title, description, children }) {
 
 export function LeetCodeStatsSection({ stats }) {
 
-    console.log(stats)
     return (
         <>
             <div className="grid mt-16 w-full lg:h-[54rem] md:h-[34rem] place-items-center bg-center bg-contain bg-no-repeat">

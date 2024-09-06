@@ -6,6 +6,8 @@ import { fetchEachQuestionMD, fetchEachTest } from '@/app/(pro)/leetcode/utils';
 import { Spinner, Select, Option, Tooltip } from '@material-tailwind/react';
 import { TiMediaPlay } from 'react-icons/ti';
 
+import MiniNavbar from '@/components/pro/Header/MiniNavbar';
+
 import CodeEditor from './CodeEditor';
 import QuestionPanel from './QuestionPanel';
 import { LoadingDisplay } from './Components';
@@ -34,8 +36,6 @@ const CodeEditorRunner = ({ params }) => {
     const [error, setError] = useState(null);
     const [isRunning, setIsRunning] = useState(false);
 
-    console.log(longCode)
-    console.log(output)
 
     const convertTestCase = (testString, params) => {
         let lines = testString.trim().split('\n').map(str => str.replace(/^<p>/, '').replace(/<\/p>$/, ''));
@@ -122,7 +122,6 @@ const CodeEditorRunner = ({ params }) => {
                 }
 
                 getResponseData = await getResponse.json();
-                console.log(getResponseData)
 
             } while (getResponseData.status && getResponseData.status.id <= 2);
             if (getResponseData.stdout) {
@@ -133,7 +132,6 @@ const CodeEditorRunner = ({ params }) => {
 
                 try {
                     const parsedOutput = JSON.parse(jsonOutput);
-                    console.log(parsedOutput)
                     if (parsedOutput.print_output || parsedOutput.test_results) {
                         handlePassConditions(parsedOutput.test_results);
                         setOutput(parsedOutput.test_results);
@@ -174,24 +172,27 @@ const CodeEditorRunner = ({ params }) => {
     }
 
     return (
-        <div className="flex flex-col h-screen overflow-hidden max-h-full pb-1 mt-2">
-            <div className="flex justify-center items-center bg-gray-100 m-auto w-max px-4 py-2 rounded-xl">
-                <div className="flex items-center">
-                    <Tooltip content="Run the code" placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
-                        <button
-                            className="flex items-center rounded-md text-gray-800 hover:text-gray-900 hover:bg-gray-200 dark:text-gray-50 dark:hover:text-gray-400 dark:hover:bg-gray-700"
-                            onClick={runCode}
-                        >
-                            <TiMediaPlay className="cursor-pointer mr-1" />
-                            <span className="dark:hover:text-gray-200">Run</span>
-                        </button>
-                    </Tooltip>
+        <div className="flex flex-col h-screen overflow-hidden max-h-full pb-1 mt-2 px-2">
+            <MiniNavbar>
+                <div className="flex justify-center items-center bg-gray-100 m-auto w-max px-4 py-2 rounded-xl">
+                    <div className="flex items-center">
+                        <Tooltip content="Run the code" placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
+                            <button
+                                className="flex items-center rounded-md text-gray-800 hover:text-gray-900 hover:bg-gray-200 dark:text-gray-50 dark:hover:text-gray-400 dark:hover:bg-gray-700"
+                                onClick={runCode}
+                            >
+                                <TiMediaPlay className="cursor-pointer mr-1" />
+                                <span className="dark:hover:text-gray-200">Run</span>
+                            </button>
+                        </Tooltip>
+                    </div>
+                    <PiLineVertical className='text-gray-300 dark:text-gray-500' />
+                    <div className="flex items-center">
+                        <p className="text-gray-800 dark:text-gray-50">Time</p>
+                    </div>
                 </div>
-                <PiLineVertical className='text-gray-300 dark:text-gray-500' />
-                <div className="flex items-center">
-                    <p className="text-gray-800 dark:text-gray-50">Time</p>
-                </div>
-            </div>
+            </MiniNavbar>
+
             <PanelGroup direction="horizontal" className="flex-1" autoSaveId="persistence">
                 <QuestionPanel question={question} />
 

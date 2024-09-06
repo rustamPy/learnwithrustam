@@ -151,11 +151,6 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, setLongC
     }, [shortCode, question, updateLongCode]);
 
 
-    console.log(savingStatus)
-
-    console.log('got')
-    console.log(output)
-
     return (
         <Panel minSize={40} defaultSize={70}>
             <PanelGroup direction="vertical">
