@@ -31,6 +31,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
     const [evaluatedTestCase, setEvaluatedTestCase] = useState(dumpTestCase);
     const [displayingTestCase, setDisplayingTestCase] = useState(0);
     const [hoverStates, setHoverStates] = useState({});
+    const [savingStatus, setSavingStatus] = useState('')
 
     const updateLongCode = useCallback((shortCodeValue) => {
         const mainIndex = longCode.indexOf("if __name__ == '__main__':");
@@ -230,8 +231,9 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
         updateLongCode(value);
         setPrintOutput([]);
 
-        // Save to local storage
-        localStorage.setItem(`code_${question?.title}`, value);
+        setSavingStatus('Saving...')
+        localStorage.setItem(`code_${question?.title}`, value)
+        setSavingStatus('Saved')
     }, [longCode, question]);
 
     const handleResetShortCode = useCallback(() => {
@@ -241,6 +243,8 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
         localStorage.removeItem(`code_${question?.title}`);
     }, [shortCode, question, updateLongCode]);
 
+
+    console.log(savingStatus)
 
 
     console.log(output)
@@ -290,8 +294,13 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                     value={currentShort}
                                     onChange={handleOnEditorChange}
                                     onMount={handleEditorDidMount}
-                                    theme="vs-dark"
-                                    options={{ minimap: { enabled: false } }}
+                                    theme="vs-light"
+                                    options={{
+                                        minimap: { enabled: true },
+                                        readOnly: false,
+                                        lineNumbers: "on",
+                                        renderWhitespace: "all"
+                                    }}
                                     loading={<CustomSkeleton />}
                                 />
                             </div>
@@ -353,15 +362,17 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                     {dumpTestCase[displayingTestCase] && (
                                         <div className="grid grid-cols-1 gap-4">
                                             <div>
-                                                <p className="font-bold">Inputs:</p>
                                                 <div className="flex flex-col gap-2">
                                                     {dumpTestCase[displayingTestCase].slice(0, -1).map((inputValue, inputIndex) => (
-                                                        <input
-                                                            key={`${displayingTestCase}-input-${inputIndex}`}
-                                                            value={inputValue}
-                                                            onChange={(event) => handleChangeTestCases(event, displayingTestCase, inputIndex)}
-                                                            className="border border-gray-300 rounded-md px-2 py-1"
-                                                        />
+                                                        <>
+                                                            <p>{testParams[inputIndex]}:</p>
+                                                            <input
+                                                                key={`${displayingTestCase}-input-${inputIndex}`}
+                                                                value={inputValue}
+                                                                onChange={(event) => handleChangeTestCases(event, displayingTestCase, inputIndex)}
+                                                                className="border border-gray-300 rounded-md px-2 py-1"
+                                                            />
+                                                        </>
                                                     ))}
                                                 </div>
                                             </div>
@@ -421,12 +432,16 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                                                     <p className="font-bold">Inputs:</p>
                                                                     <div className="flex flex-col gap-2">
                                                                         {dumpTestCase[displayingTestCase].slice(0, -1).map((inputValue, inputIndex) => (
-                                                                            <input
-                                                                                key={`output-${displayingTestCase}-input-${inputIndex}`}
-                                                                                value={inputValue}
-                                                                                className="border border-gray-300 rounded-md px-2 py-1"
-                                                                                disabled
-                                                                            />
+
+                                                                            <>
+                                                                                <p>{testParams[inputIndex]}</p>
+                                                                                <input
+                                                                                    key={`output-${displayingTestCase}-input-${inputIndex}`}
+                                                                                    value={inputValue}
+                                                                                    className="border border-gray-300 rounded-md px-2 py-1"
+                                                                                    disabled
+                                                                                />
+                                                                            </>
                                                                         ))}
                                                                     </div>
                                                                 </div>

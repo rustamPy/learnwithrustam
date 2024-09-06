@@ -25,18 +25,18 @@ export const WindowPanel = memo(({ tabs = [], children, activeTab = false }) => 
     }, [activeTab]); // Adding activeTab as a dependency ensures dynamic updates
 
     return (
-        <div className="bg-gray-50 rounded-lg m-1 h-[calc(100%-8px)] overflow-auto">
-            <div className='flex bg-gray-200 p-2 sticky top-0 z-10 '>
+        <div className="bg-gray-50 dark:bg-gray-900 rounded-lg m-1 h-[calc(100%-8px)] overflow-auto">
+            <div className='flex bg-gray-200 dark:bg-gray-700 p-2 sticky top-0 z-10'>
                 {safeTabs.map((t, index) => (
                     <div key={`${index}-tab-container`} className="flex items-center">
                         <div
-                            className={`flex items-center rounded ${selectedTab === index ? 'text-gray-900' : 'text-gray-500'} hover:bg-gray-100 cursor-pointer`}
+                            className={`flex items-center rounded ${selectedTab === index ? 'text-gray-900' : 'text-gray-500'} hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer`}
                             onClick={() => setSelectedTab(index)}
                         >
                             {t.icon && <div className={t.color}>{t.icon}</div>}
-                            <Typography className="w-max rounded text-xs p-1 center">{t.name}</Typography>
+                            <Typography className="font-semibold w-max rounded text-xs p-1 center dark:text-white ">{t.name}</Typography>
                         </div>
-                        {index < safeTabs.length - 1 && <PiLineVertical className='text-gray-300' />}
+                        {index < safeTabs.length - 1 && <PiLineVertical className='text-gray-300 dark:text-gray-500' />}
                     </div>
                 ))}
             </div>

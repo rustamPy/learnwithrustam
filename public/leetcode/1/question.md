@@ -3,6 +3,7 @@ title: Two Sum
 level: Easy
 topics: ["Array", "Hash Table"]
 groups: ['Dynamic Programming - Essentials', 'Math']
+hint: "Do it"
 ---
 
 ## Problem Statement

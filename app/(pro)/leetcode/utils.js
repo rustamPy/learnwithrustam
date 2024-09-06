@@ -20,6 +20,9 @@ export const fetchEachQuestionMD = async (slug) => {
 
         return {
             title: question.title,
+            topics: question.topics,
+            groups: question.groups,
+            hint: question.hint,
             level: question.level || 'Unknown',
             content: htmlContent
         };

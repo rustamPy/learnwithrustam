@@ -47,6 +47,8 @@ const QuestionPanel = ({ question }) => {
         ));
     }, []);
 
+    console.log(question)
+
     return (
         <Panel minSize={20} defaultSize={30}>
             <WindowPanel
@@ -63,11 +65,11 @@ const QuestionPanel = ({ question }) => {
                         </div>
                     ) : (
                         <>
-                            <div className="flex items-center justify-between mb-4">
-                                <h1 className="text-2xl font-bold text-gray-900">{question.title}</h1>
-                                <div className="flex items-center">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">{question.title}</h1>
+                                    <div className="flex items-center dark:text-gray-100">
                                     {renderDifficulty(question.level)}
-                                    <Tooltip content={isBookmarked ? "Remove Bookmark" : "Bookmark Question"}>
+                                        <Tooltip placement="bottom" className="shadow text-[10px] font-normal bg-gray-200 text-gray-800" content={isBookmarked ? "Remove Bookmark" : "Bookmark Question"}>
                                         <Button
                                             color="blue-gray"
                                             variant="text"
@@ -80,9 +82,9 @@ const QuestionPanel = ({ question }) => {
                                 </div>
                             </div>
                             <div className="mb-4">
-                                {renderTags(question.tags || [])}
+                                    {renderTags(question.topics || [])}
                             </div>
-                            <div className="prose max-w-full text-gray-700 leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: question?.content }} />
+                                <div className="prose max-w-full text-gray-700 dark:text-gray-100 leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: question?.content }} />
                             {question.hint && (
                                 <div className="mt-4">
                                     <Button

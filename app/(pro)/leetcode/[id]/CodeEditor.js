@@ -13,6 +13,7 @@ import { IoCodeSlash } from "react-icons/io5";
 import { TbSourceCode } from "react-icons/tb";
 import { WindowPanel, CustomSkeleton } from './Components';
 import { languages } from './Components';
+import { useTheme } from 'next-themes';
 
 const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
     const [shortCode, setShortCode] = useState('');
@@ -24,13 +25,14 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
     const [error, setError] = useState(null);
     const [status, setStatus] = useState(null);
     const [isRunning, setIsRunning] = useState(false);
-    const [activeTab, setActiveTab] = useState('default');
     const editorRef = useRef(null);
     const [testCase, setTestCase] = useState(tests);
     const [dumpTestCase, setDumpTestCase] = useState(dumpTests);
     const [evaluatedTestCase, setEvaluatedTestCase] = useState(dumpTestCase);
     const [displayingTestCase, setDisplayingTestCase] = useState(0);
     const [hoverStates, setHoverStates] = useState({});
+    const [savingStatus, setSavingStatus] = useState('')
+    const { theme } = useTheme();
 
     const updateLongCode = useCallback((shortCodeValue) => {
         const mainIndex = longCode.indexOf("if __name__ == '__main__':");
@@ -107,7 +109,6 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
         setIsRunning(true);
         setOutput('Running...');
         setError(null);
-        setActiveTab("output");
         setEvaluatedTestCase(dumpTestCase);
 
         try {
@@ -230,8 +231,9 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
         updateLongCode(value);
         setPrintOutput([]);
 
-        // Save to local storage
-        localStorage.setItem(`code_${question?.title}`, value);
+        setSavingStatus('Saving...')
+        localStorage.setItem(`code_${question?.title}`, value)
+        setSavingStatus('Saved')
     }, [longCode, question]);
 
     const handleResetShortCode = useCallback(() => {
@@ -242,6 +244,8 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
     }, [shortCode, question, updateLongCode]);
 
 
+    console.log(savingStatus)
+
 
     console.log(output)
 
@@ -250,19 +254,19 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
             <PanelGroup direction="vertical">
                 <Panel minSize={30} defaultSize={50}>
                     <WindowPanel tabs={[{ name: 'Code', icon: <IoCodeSlash />, color: 'text-green-500' }]}>
-                        <div className="bg-gray-100 rounded-lg m-1 flex flex-col h-full">
+                        <div className="bg-gray-100 dark:bg-gray-900 rounded-lg m-1 flex flex-col h-full">
                             <div className="flex items-center p-4 border-b">
                                 <div className='w-54 mr-2'>
-                                    <Select value={language.id.toString()} onChange={handleLanguageChange} label="Language" className='text-xs'>
+                                    <Select value={language.id.toString()} onChange={handleLanguageChange} label="Language" className='text-xs dark:text-gray-50'>
                                         {languages.map((lang) => (
                                             <Option key={lang.id} value={lang.id.toString()} className='text-xs'>{lang.name}</Option>
                                         ))}
                                     </Select>
                                 </div>
                                 <div className='mr-2'>
-                                    <Tooltip content={`Reset the current code`} placement="bottom" className="shadow text-[10px] font-normal bg-gray-200 text-gray-800">
+                                    <Tooltip content={`Reset the current code`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
                                         <button
-                                            className="text-sm px-4 py-2 rounded-md text-gray-800 hover:text-gray-700"
+                                            className="text-sm px-4 py-2 rounded-md text-gray-800 hover:text-gray-70 dark:text-gray-50 dark:hover:text-gray-400"
                                             onClick={handleResetShortCode}
                                         >
                                             <GrPowerReset className='cursor-pointer' />
@@ -270,14 +274,14 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                     </Tooltip>
                                 </div>
                                 <div className="ml-auto">
-                                    <Tooltip content={`Run the code`} placement="bottom" className="shadow text-[10px] font-normal bg-gray-200 text-gray-800">
+                                    <Tooltip content={`Run the code`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
                                         <button
-                                            className="px-4 py-2 rounded-md text-gray-800 hover:text-gray-900 hover:bg-gray-200"
+                                            className="px-4 py-2 rounded-md text-gray-800 hover:text-gray-900 hover:bg-gray-200 dark:text-gray-50 dark:hover:text-gray-400 dark:text-gray-50 dark:hover:bg-gray-700"
                                             onClick={runCode}
                                         >
                                             <div className='flex items-center'>
                                                 <TiMediaPlay className='cursor-pointer mr-1' />
-                                                <p>Run</p>
+                                                <p className='dark:hover:text-gray-200'>Run</p>
                                             </div>
                                         </button>
                                     </Tooltip>
@@ -290,9 +294,15 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                     value={currentShort}
                                     onChange={handleOnEditorChange}
                                     onMount={handleEditorDidMount}
-                                    theme="vs-dark"
-                                    options={{ minimap: { enabled: false } }}
+                                    theme={theme === 'dark' ? 'vs-dark' : 'vs-light'}
+                                    options={{
+                                        minimap: { enabled: true },
+                                        readOnly: false,
+                                        lineNumbers: "on",
+                                        renderWhitespace: "all"
+                                    }}
                                     loading={<CustomSkeleton />}
+
                                 />
                             </div>
                         </div>
@@ -335,7 +345,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                                     )}
                                                 </div>
                                             ))}
-                                            <Tooltip content={`Clone the current test Case ${displayingTestCase + 1}`} placement="bottom" className="shadow text-[10px] font-normal bg-gray-200 text-gray-800">
+                                            <Tooltip content={`Clone the current test Case ${displayingTestCase + 1}`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
                                                 <button
                                                     className="text-sm px-4 py-2 rounded-md text-gray-800 hover:text-gray-700"
                                                     onClick={cloneTestCase}
@@ -353,15 +363,17 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                     {dumpTestCase[displayingTestCase] && (
                                         <div className="grid grid-cols-1 gap-4">
                                             <div>
-                                                <p className="font-bold">Inputs:</p>
                                                 <div className="flex flex-col gap-2">
                                                     {dumpTestCase[displayingTestCase].slice(0, -1).map((inputValue, inputIndex) => (
-                                                        <input
-                                                            key={`${displayingTestCase}-input-${inputIndex}`}
-                                                            value={inputValue}
-                                                            onChange={(event) => handleChangeTestCases(event, displayingTestCase, inputIndex)}
-                                                            className="border border-gray-300 rounded-md px-2 py-1"
-                                                        />
+                                                        <>
+                                                            <p>{testParams[inputIndex]}:</p>
+                                                            <input
+                                                                key={`${displayingTestCase}-input-${inputIndex}`}
+                                                                value={inputValue}
+                                                                onChange={(event) => handleChangeTestCases(event, displayingTestCase, inputIndex)}
+                                                                className="border border-gray-300 rounded-md px-2 py-1"
+                                                            />
+                                                        </>
                                                     ))}
                                                 </div>
                                             </div>
@@ -421,12 +433,16 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                                                     <p className="font-bold">Inputs:</p>
                                                                     <div className="flex flex-col gap-2">
                                                                         {dumpTestCase[displayingTestCase].slice(0, -1).map((inputValue, inputIndex) => (
-                                                                            <input
-                                                                                key={`output-${displayingTestCase}-input-${inputIndex}`}
-                                                                                value={inputValue}
-                                                                                className="border border-gray-300 rounded-md px-2 py-1"
-                                                                                disabled
-                                                                            />
+
+                                                                            <>
+                                                                                <p>{testParams[inputIndex]}</p>
+                                                                                <input
+                                                                                    key={`output-${displayingTestCase}-input-${inputIndex}`}
+                                                                                    value={inputValue}
+                                                                                    className="border border-gray-300 rounded-md px-2 py-1"
+                                                                                    disabled
+                                                                                />
+                                                                            </>
                                                                         ))}
                                                                     </div>
                                                                 </div>
