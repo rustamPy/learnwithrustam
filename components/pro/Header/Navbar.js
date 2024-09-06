@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { useNavbarVisibility } from './NavbarVisibilityContext';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
@@ -197,6 +198,7 @@ const UserProfile = ({ user }) => (
 );
 
 const NavbarWithMegaMenu = () => {
+    const { isNavbarVisible } = useNavbarVisibility(); // Use the context hook
     const [openNav, setOpenNav] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const { data: session, status } = useSession();
@@ -219,6 +221,8 @@ const NavbarWithMegaMenu = () => {
         };
     }, []);
 
+    if (!isNavbarVisible) return null; // Conditionally render the Navbar 
+
     return (
         <>
             <Navbar
@@ -226,7 +230,7 @@ const NavbarWithMegaMenu = () => {
                 className={`border-0 sticky mx-auto transition-all duration-300 ${isScrolled
                     ? 'top-2 mx-auto rounded-xl px-2 py-2'
                     : 'top-0 max-w-full px-4 py-4'
-                    } dark:bg-lwr-navbar-dark-theme-color z-50`}
+                    } dark:bg-lwr-navbar-dark-theme-color z-50 overflow-y-auto pb-2`}
             >
                 <BannerSection isScrolled={isScrolled} />
                 <div className="flex items-center justify-between text-lwr-logo-light-theme-color dark:text-lwr-logo-dark-theme-color pt-8">

@@ -1,7 +1,7 @@
 'use client';
-import React, { useState, useEffect, use } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavbarVisibility } from '@/components/pro/Header/NavbarVisibilityContext'; // Import the context provider
 import { PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { Button } from '@material-tailwind/react';
 import { fetchEachQuestionMD, fetchEachTest } from '@/app/(pro)/leetcode/utils';
 import CodeEditor from './CodeEditor';
 import QuestionPanel from './QuestionPanel'
@@ -15,6 +15,7 @@ const CodeEditorRunner = ({ params }) => {
     const [tests, setTestCase] = useState([]);
     const [dumpTestCase, setDumpTestCase] = useState([]);
     const [testParams, setTestParams] = useState([]);
+    const { setIsNavbarVisible } = useNavbarVisibility(); // Use the context hook
 
     const convertTestCase = (testString, params) => {
         let lines = testString.trim().split('\n').map(str => str.replace(/^<p>/, '').replace(/<\/p>$/, ''));
@@ -52,13 +53,22 @@ const CodeEditorRunner = ({ params }) => {
         fetchData();
     }, [id]);
 
+    useEffect(() => {
+        // Hide Navbar when this page loads
+        setIsNavbarVisible(false);
+
+        // Show Navbar again when leaving this page
+        return () => setIsNavbarVisible(true);
+    }, [setIsNavbarVisible]);
+
     // Render CodeEditor only if all data is available
     if (!question || testParams.length === 0 || tests.length === 0 || dumpTestCase.length === 0) {
         return <LoadingDisplay />
     }
 
     return (
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col h-screen overflow-hidden max-h-full pb-1">
+            <div className='text-center'>Hello</div>
             <PanelGroup direction="horizontal" className="flex-1" autoSaveId="persistence">
                 <QuestionPanel question={question} />
 

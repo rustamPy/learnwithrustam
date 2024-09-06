@@ -25,7 +25,7 @@ export const WindowPanel = memo(({ tabs = [], children, activeTab = false }) => 
     }, [activeTab]); // Adding activeTab as a dependency ensures dynamic updates
 
     return (
-        <div className="bg-gray-50 dark:bg-gray-900 rounded-lg m-1 h-[calc(100%-8px)] overflow-auto">
+        <div className="bg-gray-50 dark:bg-gray-900 rounded-lg m-1 h-[calc(100%-8px)] overflow-auto pb-8">
             <div className='flex bg-gray-200 dark:bg-gray-700 p-2 sticky top-0 z-10'>
                 {safeTabs.map((t, index) => (
                     <div key={`${index}-tab-container`} className="flex items-center">

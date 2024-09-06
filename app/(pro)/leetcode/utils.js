@@ -23,6 +23,7 @@ export const fetchEachQuestionMD = async (slug) => {
             topics: question.topics,
             groups: question.groups,
             hint: question.hint,
+            companies: question.companies,
             level: question.level || 'Unknown',
             content: htmlContent
         };

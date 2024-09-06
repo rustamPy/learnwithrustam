@@ -255,7 +255,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                 <Panel minSize={30} defaultSize={50}>
                     <WindowPanel tabs={[{ name: 'Code', icon: <IoCodeSlash />, color: 'text-green-500' }]}>
                         <div className="bg-gray-100 dark:bg-gray-900 rounded-lg m-1 flex flex-col h-full">
-                            <div className="flex items-center p-4 border-b">
+                            <div className="flex items-center p-4 border-b h-16">
                                 <div className='w-54 mr-2'>
                                     <Select value={language.id.toString()} onChange={handleLanguageChange} label="Language" className='text-xs dark:text-gray-50'>
                                         {languages.map((lang) => (

@@ -4,6 +4,7 @@ level: Easy
 topics: ["Array", "Hash Table"]
 groups: ['Dynamic Programming - Essentials', 'Math']
 hint: "Do it"
+companies: ['Facebook']
 ---
 
 ## Problem Statement

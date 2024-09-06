@@ -1,3 +1,4 @@
+// RootLayout.js
 import React from 'react';
 import '@/assets/styles/globals.css';
 import { getServerSession } from 'next-auth/next';
@@ -5,27 +6,27 @@ import { authOptions } from '@/app/(pro)/api/auth/[...nextauth]/options';
 import ClientSessionProvider from './SessionProvider';
 import NavBar from '@/components/pro/Header/Navbar';
 import LWRFooter from '@/components/pro/Footer/LWRFooter';
-import { ThemeProvider } from 'next-themes'
+import { ThemeProvider } from 'next-themes';
+import { NavbarVisibilityProvider } from '@/components/pro/Header/NavbarVisibilityContext'; // Import the context provider
 
 export const metadata = {
   title: 'LWR',
   description: 'Learn with Rustam'
 };
 
-
 const Theme = ({ children }) => {
   return (
     <ThemeProvider attribute="class">
       {children}
     </ThemeProvider>
-  )
+  );
 }
 
 export default async function RootLayout({ children }) {
   const session = await getServerSession(authOptions);
 
   return (
-    <html lang="en" >
+    <html lang="en">
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico" />
@@ -38,11 +39,13 @@ export default async function RootLayout({ children }) {
       </head>
       <body>
         <Theme>
-          <ClientSessionProvider session={session}>
-            <NavBar visible={true} />
-            <main>{children}</main>
-            <LWRFooter visible={true} />
-          </ClientSessionProvider>
+          <NavbarVisibilityProvider>
+            <ClientSessionProvider session={session}>
+              <NavBar />
+              {children}
+              <LWRFooter />
+            </ClientSessionProvider>
+          </NavbarVisibilityProvider>
         </Theme>
       </body>
     </html>
