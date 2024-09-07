@@ -1,37 +1,31 @@
 'use client';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
+import { Panel } from 'react-resizable-panels';
+import { PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import Editor from '@monaco-editor/react';
-import { Spinner, Select, Option, Tooltip, Button } from '@material-tailwind/react';
+import { Spinner, Select, Option, Tooltip } from '@material-tailwind/react';
 import { QUESTIONS_MAP, BASES } from './utils';
 import { GoDotFill, GoPlus } from "react-icons/go";
 import { RiCloseCircleFill } from "react-icons/ri";
 import { GrPowerReset } from "react-icons/gr";
-import { TiMediaPlay } from "react-icons/ti";
-import { GrTest } from "react-icons/gr";
 import { IoCodeSlash } from "react-icons/io5";
-import { TbSourceCode } from "react-icons/tb";
 import { WindowPanel, CustomSkeleton } from './Components';
 import { languages } from './Components';
+import { useTheme } from 'next-themes';
+import { GrTest } from 'react-icons/gr';
+import { TbSourceCode } from 'react-icons/tb';
 
-const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
+const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, setLongCode, isRunning, output, error, runCode, evaluatedTestCase, printOutput, setPrintOutput, status }) => {
     const [shortCode, setShortCode] = useState('');
     const [currentShort, setCurrentShort] = useState('');
-    const [longCode, setLongCode] = useState('');
     const [language, setLanguage] = useState(languages[0]);
-    const [output, setOutput] = useState(null);
-    const [printOutput, setPrintOutput] = useState([]);
-    const [error, setError] = useState(null);
-    const [status, setStatus] = useState(null);
-    const [isRunning, setIsRunning] = useState(false);
-    const [activeTab, setActiveTab] = useState('default');
     const editorRef = useRef(null);
     const [testCase, setTestCase] = useState(tests);
     const [dumpTestCase, setDumpTestCase] = useState(dumpTests);
-    const [evaluatedTestCase, setEvaluatedTestCase] = useState(dumpTestCase);
     const [displayingTestCase, setDisplayingTestCase] = useState(0);
     const [hoverStates, setHoverStates] = useState({});
     const [savingStatus, setSavingStatus] = useState('')
+    const { theme } = useTheme();
 
     const updateLongCode = useCallback((shortCodeValue) => {
         const mainIndex = longCode.indexOf("if __name__ == '__main__':");
@@ -41,7 +35,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
         } else {
             setLongCode(shortCodeValue);
         }
-    }, [longCode]);
+    }, [longCode, setLongCode]);
 
     useEffect(() => {
         // Load saved code from local storage when component mounts
@@ -50,7 +44,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
             setCurrentShort(savedCode);
             updateLongCode(savedCode);
         }
-    }, [question]);
+    }, [question, updateLongCode]);
 
     useEffect(() => {
         handleSetLangSample();
@@ -85,7 +79,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
             setCurrentShort("Error");
             setLongCode("Error");
         }
-    }, [language, question, testCase, testParams, toCamelCase, currentShort]);
+    }, [language, question, testCase, testParams, toCamelCase, currentShort, setLongCode]);
 
     const handleEditorDidMount = (editor, monaco) => {
         editorRef.current = editor;
@@ -104,94 +98,6 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
         }
     }, []);
 
-    const runCode = useCallback(async () => {
-        setIsRunning(true);
-        setOutput('Running...');
-        setError(null);
-        setActiveTab("output");
-        setEvaluatedTestCase(dumpTestCase);
-
-        try {
-            const createResponse = await fetch('http://127.0.0.1:2358/submissions', {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json',
-                    'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
-                    'x-rapidapi-key': 'ec77f5a774msh4fc4c1c656aba38p1a4647jsna78adfa32e18',
-                },
-                body: JSON.stringify({
-                    language_id: language.id,
-                    source_code: longCode.replace('${tests}', JSON.stringify(testCase)),
-                    stdin: '',
-                }),
-            });
-
-            if (!createResponse.ok) {
-                throw new Error(`HTTP error! status: ${createResponse.status}`);
-            }
-
-            const { token } = await createResponse.json();
-
-            let getResponseData;
-            do {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                const getResponse = await fetch(`http://127.0.0.1:2358/submissions/${token}`, {
-                    method: 'GET',
-                    headers: {
-                        'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
-                        'x-rapidapi-key': 'ec77f5a774msh4fc4c1c656aba38p1a4647jsna78adfa32e18',
-                    },
-                });
-
-                if (!getResponse.ok) {
-                    throw new Error(`HTTP error! status: ${getResponse.status}`);
-                }
-
-                getResponseData = await getResponse.json();
-            } while (getResponseData.status && getResponseData.status.id <= 2);
-
-            if (getResponseData.stdout) {
-                const jsonOutput = getResponseData.stdout
-                    .replace(/None/g, 'null')
-                    .replace(/True/g, 'true')
-                    .replace(/False/g, 'false');
-
-                try {
-                    const parsedOutput = JSON.parse(jsonOutput);
-                    if (parsedOutput.print_output || parsedOutput.test_results) {
-                        handlePassConditions(parsedOutput.test_results);
-                        setOutput(parsedOutput.test_results);
-                        setPrintOutput(parsedOutput.print_output);
-                    } else {
-                        handlePassConditions(parsedOutput);
-                        setOutput(parsedOutput);
-                    }
-                } catch (parseError) {
-                    console.error('JSON parsing error:', parseError);
-                    setError(`Error parsing output: ${jsonOutput}`);
-                }
-            } else if (getResponseData.stderr) {
-                setError(getResponseData.stderr);
-            } else if (getResponseData.compile_output) {
-                setError(getResponseData.compile_output);
-            } else if (getResponseData.message) {
-                setError(getResponseData.message);
-            } else {
-                setError(JSON.stringify(getResponseData, null, 2));
-            }
-        } catch (error) {
-            console.error('Full error:', error);
-            setError('Error: ' + error.message);
-        } finally {
-            setIsRunning(false);
-        }
-    }, [language.id, longCode, testCase, dumpTestCase]);
-
-    const handlePassConditions = useCallback((outputArr) => {
-        const allFalse = outputArr.every(subArr => Array.isArray(subArr) && subArr[subArr.length - 1] === false);
-        const allTrue = outputArr.every(subArr => Array.isArray(subArr) && subArr[subArr.length - 1] === true);
-        setStatus(allFalse ? 'Wrong Answers' : allTrue ? 'Right Answers' : 'Mixed Results');
-    }, []);
 
     const handleChangeTestCases = useCallback((event, testCaseIndex, inputIndex) => {
         const updatedTestCases = JSON.parse(JSON.stringify(testCase));
@@ -234,7 +140,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
         setSavingStatus('Saving...')
         localStorage.setItem(`code_${question?.title}`, value)
         setSavingStatus('Saved')
-    }, [longCode, question]);
+    }, [question, updateLongCode]);
 
     const handleResetShortCode = useCallback(() => {
         setCurrentShort(shortCode);
@@ -248,36 +154,24 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
         <Panel minSize={40} defaultSize={70}>
             <PanelGroup direction="vertical">
                 <Panel minSize={30} defaultSize={50}>
+                    {/* Code Editor */}
                     <WindowPanel tabs={[{ name: 'Code', icon: <IoCodeSlash />, color: 'text-green-500' }]}>
-                        <div className="bg-gray-100 rounded-lg m-1 flex flex-col h-full">
-                            <div className="flex items-center p-4 border-b">
+                        <div className="bg-gray-100 dark:bg-gray-900 rounded-lg m-1 flex flex-col h-full">
+                            <div className="flex items-center p-4 border-b h-16">
                                 <div className='w-54 mr-2'>
-                                    <Select value={language.id.toString()} onChange={handleLanguageChange} label="Language" className='text-xs'>
+                                    <Select value={language.id.toString()} onChange={handleLanguageChange} label="Language" className='text-xs dark:text-gray-50'>
                                         {languages.map((lang) => (
                                             <Option key={lang.id} value={lang.id.toString()} className='text-xs'>{lang.name}</Option>
                                         ))}
                                     </Select>
                                 </div>
                                 <div className='mr-2'>
-                                    <Tooltip content={`Reset the current code`} placement="bottom" className="shadow text-[10px] font-normal bg-gray-200 text-gray-800">
+                                    <Tooltip content={`Reset the current code`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
                                         <button
-                                            className="text-sm px-4 py-2 rounded-md text-gray-800 hover:text-gray-700"
+                                            className="text-sm px-4 py-2 rounded-md text-gray-800 hover:text-gray-70 dark:text-gray-50 dark:hover:text-gray-400"
                                             onClick={handleResetShortCode}
                                         >
                                             <GrPowerReset className='cursor-pointer' />
-                                        </button>
-                                    </Tooltip>
-                                </div>
-                                <div className="ml-auto">
-                                    <Tooltip content={`Run the code`} placement="bottom" className="shadow text-[10px] font-normal bg-gray-200 text-gray-800">
-                                        <button
-                                            className="px-4 py-2 rounded-md text-gray-800 hover:text-gray-900 hover:bg-gray-200"
-                                            onClick={runCode}
-                                        >
-                                            <div className='flex items-center'>
-                                                <TiMediaPlay className='cursor-pointer mr-1' />
-                                                <p>Run</p>
-                                            </div>
                                         </button>
                                     </Tooltip>
                                 </div>
@@ -289,7 +183,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                     value={currentShort}
                                     onChange={handleOnEditorChange}
                                     onMount={handleEditorDidMount}
-                                    theme="vs-light"
+                                    theme={theme === 'dark' ? 'vs-dark' : 'vs-light'}
                                     options={{
                                         minimap: { enabled: true },
                                         readOnly: false,
@@ -297,6 +191,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                         renderWhitespace: "all"
                                     }}
                                     loading={<CustomSkeleton />}
+
                                 />
                             </div>
                         </div>
@@ -304,6 +199,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                 </Panel>
                 <PanelResizeHandle className="h-1 mr-8 ml-8 center bg-gray-400 hover:bg-blue-500 rounded-full cursor-ns-resize" />
                 <Panel minSize={20} defaultSize={50}>
+                    {/* Test Editor */}
                     <WindowPanel
                         tabs={[
                             { name: 'Default Test Cases', icon: <GrTest />, color: 'text-green-500' },
@@ -339,7 +235,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                                     )}
                                                 </div>
                                             ))}
-                                            <Tooltip content={`Clone the current test Case ${displayingTestCase + 1}`} placement="bottom" className="shadow text-[10px] font-normal bg-gray-200 text-gray-800">
+                                            <Tooltip content={`Clone the current test Case ${displayingTestCase + 1}`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
                                                 <button
                                                     className="text-sm px-4 py-2 rounded-md text-gray-800 hover:text-gray-700"
                                                     onClick={cloneTestCase}

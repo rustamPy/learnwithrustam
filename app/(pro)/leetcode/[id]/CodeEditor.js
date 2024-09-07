@@ -4,7 +4,7 @@ import { Panel } from 'react-resizable-panels';
 import { PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import Editor from '@monaco-editor/react';
 import { Spinner, Select, Option, Tooltip } from '@material-tailwind/react';
-import { QUESTIONS_MAP, BASES } from './utils';
+import { QUESTIONS_MAP, BASES, SPECIFIC_DT } from './utils';
 import { GoDotFill, GoPlus } from "react-icons/go";
 import { RiCloseCircleFill } from "react-icons/ri";
 import { GrPowerReset } from "react-icons/gr";
@@ -12,12 +12,10 @@ import { IoCodeSlash } from "react-icons/io5";
 import { WindowPanel, CustomSkeleton } from './Components';
 import { languages } from './Components';
 import { useTheme } from 'next-themes';
-import { TiMediaPlay } from 'react-icons/ti';
 import { GrTest } from 'react-icons/gr';
 import { TbSourceCode } from 'react-icons/tb';
 
-const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, setLongCode, isRunning, output, error, runCode, evaluatedTestCase, printOutput, setPrintOutput, status }) => {
-    const [shortCode, setShortCode] = useState('');
+const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, shortCode, setShortCode, setLongCode, isRunning, output, error, runCode, evaluatedTestCase, printOutput, setPrintOutput, status, testFunction }) => {
     const [currentShort, setCurrentShort] = useState('');
     const [language, setLanguage] = useState(languages[0]);
     const editorRef = useRef(null);
@@ -39,6 +37,10 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, setLongC
     }, [longCode, setLongCode]);
 
     useEffect(() => {
+        updateLongCode(localStorage.getItem(`code_${question?.title}`));
+    }, [])
+
+    useEffect(() => {
         // Load saved code from local storage when component mounts
         const savedCode = localStorage.getItem(`code_${question?.title}`);
         if (savedCode) {
@@ -57,12 +59,16 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, setLongC
         ).join('');
     }, []);
 
+
+
+
     const handleSetLangSample = useCallback(() => {
         try {
             const functionName = toCamelCase(question?.title) || '';
             const params = testParams || [];
             const shortCodeTemplate = QUESTIONS_MAP[language?.monacoId](functionName, params);
-            const longCodeTemplate = BASES[language?.monacoId](shortCodeTemplate, JSON.stringify(params), JSON.stringify(testCase), functionName);
+            const specificDt = SPECIFIC_DT[testFunction] && SPECIFIC_DT[testFunction](JSON.stringify(testCase))
+            const longCodeTemplate = BASES[language?.monacoId](shortCodeTemplate, JSON.stringify(params), JSON.stringify(testCase), functionName, specificDt);
             if (shortCodeTemplate && longCodeTemplate) {
                 setShortCode(shortCodeTemplate);
                 // Only set currentShort if it's not already set (i.e., not loaded from local storage)
@@ -85,6 +91,8 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, setLongC
     const handleEditorDidMount = (editor, monaco) => {
         editorRef.current = editor;
     };
+
+    console.log(status)
 
     const handleLanguageChange = useCallback((value) => {
         const selectedLanguage = languages.find(lang => lang.id.toString() === value);
@@ -151,10 +159,12 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, setLongC
     }, [shortCode, question, updateLongCode]);
 
 
+
     return (
         <Panel minSize={40} defaultSize={70}>
             <PanelGroup direction="vertical">
                 <Panel minSize={30} defaultSize={50}>
+                    {/* Code Editor */}
                     <WindowPanel tabs={[{ name: 'Code', icon: <IoCodeSlash />, color: 'text-green-500' }]}>
                         <div className="bg-gray-100 dark:bg-gray-900 rounded-lg m-1 flex flex-col h-full">
                             <div className="flex items-center p-4 border-b h-16">
@@ -199,6 +209,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, setLongC
                 </Panel>
                 <PanelResizeHandle className="h-1 mr-8 ml-8 center bg-gray-400 hover:bg-blue-500 rounded-full cursor-ns-resize" />
                 <Panel minSize={20} defaultSize={50}>
+                    {/* Test Editor */}
                     <WindowPanel
                         tabs={[
                             { name: 'Default Test Cases', icon: <GrTest />, color: 'text-green-500' },
@@ -254,7 +265,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, setLongC
                                             <div>
                                                 <div className="flex flex-col gap-2">
                                                     {dumpTestCase[displayingTestCase].slice(0, -1).map((inputValue, inputIndex) => (
-                                                        <>
+                                                        <div key={`${displayingTestCase}-input-${inputIndex}`}>
                                                             <p>{testParams[inputIndex]}:</p>
                                                             <input
                                                                 key={`${displayingTestCase}-input-${inputIndex}`}
@@ -262,7 +273,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, setLongC
                                                                 onChange={(event) => handleChangeTestCases(event, displayingTestCase, inputIndex)}
                                                                 className="border border-gray-300 rounded-md px-2 py-1"
                                                             />
-                                                        </>
+                                                        </div>
                                                     ))}
                                                 </div>
                                             </div>
@@ -310,7 +321,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, setLongC
                                                                     onClick={() => setDisplayingTestCase(index)}
                                                                 >
                                                                     <div className="flex items-center">
-                                                                        <GoDotFill className={`mr-2 ${output && output.length >= 4 && output[index][4] === true ? 'text-green-500' : 'text-red-500'}`} />
+                                                                        <GoDotFill className={`mr-2 ${status === 'Wrong Answers' ? 'text-red-500' : status === 'Right Answers' ? 'text-green-500' : 'text-red-500'}`} />
                                                                         <span>Case {index + 1}</span>
                                                                     </div>
                                                                 </button>

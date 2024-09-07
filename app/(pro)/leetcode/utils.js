@@ -2,6 +2,14 @@ import { remark } from 'remark';
 import html from 'remark-html';
 import matter from 'gray-matter';
 
+
+export const COLOR_MAP = {
+    'Easy': 'lwr-leetcode-easy-100',
+    'Medium': 'lwr-leetcode-medium-100',
+    'Hard': 'lwr-leetcode-hard-100'
+};
+
+
 export const fetchEachQuestionMD = async (slug) => {
 
     try {
@@ -24,6 +32,7 @@ export const fetchEachQuestionMD = async (slug) => {
             groups: question.groups,
             hint: question.hint,
             companies: question.companies,
+            slug: question.slug,
             level: question.level || 'Unknown',
             content: htmlContent
         };
@@ -67,6 +76,7 @@ export const fetchEachTest = async (slug) => {
 
         return {
             params: test.params || 'NA',
+            testFunction: test.testFunction || false,
             content: htmlContent
         };
     } catch (error) {

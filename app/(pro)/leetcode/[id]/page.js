@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useNavbarVisibility } from '@/components/pro/Header/NavbarVisibilityContext';
 import { PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { fetchEachQuestionMD, fetchEachTest } from '@/app/(pro)/leetcode/utils';
-import { Spinner, Select, Option, Tooltip } from '@material-tailwind/react';
+import { Tooltip } from '@material-tailwind/react';
 import { TiMediaPlay } from 'react-icons/ti';
 
 import MiniNavbar from '@/components/pro/Header/MiniNavbar';
@@ -18,24 +18,24 @@ import { PiLineVertical } from 'react-icons/pi';
 const CodeEditorRunner = ({ params }) => {
     const { id } = params;
     const [question, setQuestion] = useState('');
-
-    const [language, setLanguage] = useState(languages[0]);
+    const [language, _] = useState(languages[0]);
     const [printOutput, setPrintOutput] = useState([]);
     const [status, setStatus] = useState(null);
 
-
-
     const [tests, setTestCase] = useState([]);
+    const [testFunction, setTestFunction] = useState(null);
+
     const [dumpTestCase, setDumpTestCase] = useState([]);
     const [testParams, setTestParams] = useState([]);
     const [evaluatedTestCase, setEvaluatedTestCase] = useState(dumpTestCase);
 
     const { setIsNavbarVisible } = useNavbarVisibility();
     const [longCode, setLongCode] = useState('');
+    const [shortCode, setShortCode] = useState('');
+
     const [output, setOutput] = useState(null);
     const [error, setError] = useState(null);
     const [isRunning, setIsRunning] = useState(false);
-
 
     const convertTestCase = (testString, params) => {
         let lines = testString.trim().split('\n').map(str => str.replace(/^<p>/, '').replace(/<\/p>$/, ''));
@@ -53,6 +53,11 @@ const CodeEditorRunner = ({ params }) => {
         return result;
     };
 
+    const convertTestFunction = (testFunction, tests) => {
+        return testFunction.replace('#TESTS', JSON.stringify(tests));
+    }
+
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -62,8 +67,13 @@ const CodeEditorRunner = ({ params }) => {
                 const params = fetchedTest.params;
                 const convertedTestCase = convertTestCase(fetchedTest.content, params);
 
-                setQuestion(fetchedQuestion);
+                if (fetchedTest.testFunction) {
+                    const convertedTestFunction = convertTestFunction(fetchedTest.testFunction, convertedTestCase);
+                    setTestFunction(fetchedTest.testFunction);
+                }
+
                 setTestCase(convertedTestCase);
+                setQuestion(fetchedQuestion);
                 setTestParams(params);
                 setDumpTestCase(convertedTestCase.slice(0, 3));
             } catch (error) {
@@ -85,6 +95,11 @@ const CodeEditorRunner = ({ params }) => {
         setEvaluatedTestCase(dumpTestCase);
 
         try {
+            const codeToRun = testFunction ? `${shortCode}\n\n${longCode}` : longCode;
+
+            console.log(codeToRun)
+
+
             const createResponse = await fetch('http://127.0.0.1:2358/submissions', {
                 method: 'POST',
                 headers: {
@@ -94,10 +109,12 @@ const CodeEditorRunner = ({ params }) => {
                 },
                 body: JSON.stringify({
                     language_id: language.id,
-                    source_code: longCode.replace('${tests}', JSON.stringify(tests)),
+                    source_code: longCode || codeToRun,
                     stdin: '',
                 }),
             });
+
+
 
             if (!createResponse.ok) {
                 throw new Error(`HTTP error! status: ${createResponse.status}`);
@@ -124,6 +141,7 @@ const CodeEditorRunner = ({ params }) => {
                 getResponseData = await getResponse.json();
 
             } while (getResponseData.status && getResponseData.status.id <= 2);
+
             if (getResponseData.stdout) {
                 const jsonOutput = getResponseData.stdout
                     .replace(/None/g, 'null')
@@ -132,6 +150,7 @@ const CodeEditorRunner = ({ params }) => {
 
                 try {
                     const parsedOutput = JSON.parse(jsonOutput);
+                    console.log(parsedOutput)
                     if (parsedOutput.print_output || parsedOutput.test_results) {
                         handlePassConditions(parsedOutput.test_results);
                         setOutput(parsedOutput.test_results);
@@ -159,7 +178,7 @@ const CodeEditorRunner = ({ params }) => {
         } finally {
             setIsRunning(false);
         }
-    }, [longCode, tests, dumpTestCase]);
+    }, [longCode, testFunction, language.id, dumpTestCase]);
 
     const handlePassConditions = useCallback((outputArr) => {
         const allFalse = outputArr.every(subArr => Array.isArray(subArr) && subArr[subArr.length - 1] === false);
@@ -205,6 +224,8 @@ const CodeEditorRunner = ({ params }) => {
                     tests={tests}
                     longCode={longCode}
                     setLongCode={setLongCode}
+                    shortCode={shortCode}
+                    setShortCode={setShortCode}
                     isRunning={isRunning}
                     output={output}
                     error={error}
@@ -212,6 +233,7 @@ const CodeEditorRunner = ({ params }) => {
                     printOutput={printOutput}
                     setPrintOutput={setPrintOutput}
                     status={status}
+                    testFunction={testFunction}
                 />
             </PanelGroup>
         </div>

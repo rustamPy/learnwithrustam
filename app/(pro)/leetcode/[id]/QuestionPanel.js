@@ -1,7 +1,6 @@
 'use client';
 import React, { useState, useCallback, useRef } from 'react';
 import {
-    Chip,
     Button,
     Tooltip,
     Accordion,
@@ -14,6 +13,9 @@ import { MdWork } from "react-icons/md";
 import { MdOutlineTopic } from "react-icons/md";
 import { Panel } from 'react-resizable-panels';
 import { WindowPanel, CustomSkeleton } from './Components';
+import { COLOR_MAP } from '@/app/(pro)/leetcode/utils'
+import { FaHatWizard } from "react-icons/fa6";
+
 
 const QuestionPanel = ({ question }) => {
     const colors = {
@@ -81,12 +83,13 @@ const QuestionPanel = ({ question }) => {
         { name: 'Hint', icon: <FaRegLightbulb />, content: question.hint, href: 'hint' },
     ];
 
+
     return (
         <Panel minSize={20} defaultSize={30}>
             <WindowPanel
                 tabs={[
                     { name: 'Description', icon: <BsFileText />, color: "text-blue-800" },
-                    { name: 'Editorial', icon: <FaRegLightbulb />, color: "text-yellow-800" }
+                    { name: 'Editorial', icon: <FaHatWizard />, color: "text-yellow-800" }
                 ]}
             >
                 {/* Scrollable Content Area */}
@@ -100,15 +103,15 @@ const QuestionPanel = ({ question }) => {
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="flex flex-col">
                                         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mb-2">
-                                            {question.title}
+                                            {question.slug}. {question.title}
                                         </h1>
                                         {/* Additional Buttons */}
                                         <div className="flex">
                                             {additionalButtons.map((b, idx) => (
-                                                <div key={idx} className="w-max rounded-full text-[11px] p-1.5 bg-gray-300 dark:bg-gray-800 text-gray-800 dark:text-gray-300 mr-2">
+                                                <div key={idx} className="w-max rounded-full text-[11px] p-1.5 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300 mr-2">
                                                     <div className="flex flex-row items-center">
                                                         <div className={`text-[15px] ${b.icon ? 'mr-1' : ''}`}>{b.icon}</div>
-                                                        <div className={`${colors[b.name] ? `text-${colors[b.name]}-800` : ''}`}>
+                                                        <div className={`${COLOR_MAP[b.name] ? `text-${COLOR_MAP[b.name]} font-semibold` : ''}`}>
                                                             <a onClick={() => scrollToAccordion(b.href)} className='cursor-pointer'>{b.name}</a>
                                                         </div>
                                                     </div>
