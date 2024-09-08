@@ -3,8 +3,9 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useNavbarVisibility } from '@/components/pro/Header/NavbarVisibilityContext';
 import { PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { fetchEachQuestionMD, fetchEachTest } from '@/app/(pro)/leetcode/utils';
-import { Tooltip } from '@material-tailwind/react';
-import { TiMediaPlay } from 'react-icons/ti';
+
+
+
 
 import MiniNavbar from '@/components/pro/Header/MiniNavbar';
 
@@ -12,7 +13,6 @@ import CodeEditor from './CodeEditor';
 import QuestionPanel from './QuestionPanel';
 import { LoadingDisplay, languages } from './Components';
 
-import { PiLineVertical } from 'react-icons/pi';
 
 import { convertTestCase, BASE_CODE, SPECIFIC_BASE_CODE, toCamelCase } from './utils'
 
@@ -44,16 +44,47 @@ const CodeEditorRunner = ({ params }) => {
     const [error, setError] = useState(null);
     const [isRunning, setIsRunning] = useState(false);
 
+    const [isTimerVisible, setIsTimerVisible] = useState(false);
+    const [timer, setTimer] = useState(0);
+    const [isTimerRunning, setIsTimerRunning] = useState(false);
+
+
+
+    useEffect(() => {
+        const savedTimer = localStorage.getItem('timer');
+        if (savedTimer && !isNaN(savedTimer)) {
+            setTimer(parseInt(savedTimer, 10));  // Parse the saved string as an integer
+        }
+    }, []);
+
+    useEffect(() => {
+        if (timer > 0) {  // Only save the timer when it has a valid value
+            localStorage.setItem('timer', timer.toString());
+        }
+    }, [timer]);
+
+    useEffect(() => {
+        let interval = null;
+        if (isTimerRunning) {
+            interval = setInterval(() => {
+                setTimer((prev) => prev + 1);
+            }, 1000);
+        } else if (!isTimerRunning && timer !== 0) {
+            clearInterval(interval);
+        }
+        return () => clearInterval(interval);
+    }, [isTimerRunning, timer]);
+
+    console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
+    console.log(errorOutput)
+    const handleStartStopTimer = () => setIsTimerRunning(!isTimerRunning);
+    const handleResetTimer = () => setTimer(0);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const fetchedQuestion = await fetchEachQuestionMD(id);
                 const fetchedTest = await fetchEachTest(id);
-
-
-                console.log('FETCHED CONTENT - TEST')
-                console.log(fetchedTest.content)
                 const params = fetchedTest.params;
                 const types = fetchedTest.types || [];
                 const convertedInputs = convertTestCase(fetchedTest.content, params, types);
@@ -202,25 +233,16 @@ const CodeEditorRunner = ({ params }) => {
 
     return (
         <div className="flex flex-col h-screen overflow-hidden max-h-full pb-1 mt-2 px-2">
-            <MiniNavbar>
-                <div className="flex justify-center items-center bg-gray-100 m-auto w-max px-4 py-2 rounded-xl">
-                    <div className="flex items-center">
-                        <Tooltip content="Run the code" placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
-                            <button
-                                className="flex items-center rounded-md text-gray-800 hover:text-gray-900 hover:bg-gray-200 dark:text-gray-50 dark:hover:text-gray-400 dark:hover:bg-gray-700"
-                                onClick={runCode}
-                            >
-                                <TiMediaPlay className="cursor-pointer mr-1" />
-                                <span className="dark:hover:text-gray-200">Run</span>
-                            </button>
-                        </Tooltip>
-                    </div>
-                    <PiLineVertical className='text-gray-300 dark:text-gray-500' />
-                    <div className="flex items-center">
-                        <p className="text-gray-800 dark:text-gray-50">Time</p>
-                    </div>
-                </div>
-            </MiniNavbar>
+            <MiniNavbar
+                isTimerVisible={isTimerVisible}
+                setIsTimerVisible={setIsTimerVisible}
+                handleResetTimer={handleResetTimer}
+                isTimerRunning={isTimerRunning}
+                timer={timer}
+                runCode={runCode}
+                isRunning={isRunning}
+                handleStartStopTimer={handleStartStopTimer}
+            />
 
             <PanelGroup direction="horizontal" className="flex-1" autoSaveId="persistence">
                 <QuestionPanel question={question} />

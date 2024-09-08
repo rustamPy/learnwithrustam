@@ -191,7 +191,7 @@ if __name__ == '__main__':
         "expected_outputs": expected_outputs,
         "user_outputs" : user_outputs,
         "test_results": tests,
-        "error_output": error_outputs
+        "error_outputs": error_outputs
     }
 
     # Print the JSON-encoded final output
