@@ -4,7 +4,7 @@ import { Panel } from 'react-resizable-panels';
 import { PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import Editor from '@monaco-editor/react';
 import { Spinner, Select, Option, Tooltip } from '@material-tailwind/react';
-import { QUESTIONS_MAP, BASES, SPECIFIC_DT } from './utils';
+import { SHORT_CODE, BASE_CODE, SPECIFIC_BASE_CODE } from './utils';
 import { GoDotFill, GoPlus } from "react-icons/go";
 import { RiCloseCircleFill } from "react-icons/ri";
 import { GrPowerReset } from "react-icons/gr";
@@ -15,29 +15,41 @@ import { useTheme } from 'next-themes';
 import { GrTest } from 'react-icons/gr';
 import { TbSourceCode } from 'react-icons/tb';
 
-const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, shortCode, setShortCode, setLongCode, isRunning, output, error, runCode, evaluatedTestCase, printOutput, setPrintOutput, status, testFunction }) => {
+const CodeEditor = ({
+    question,
+    inputs,
+    setInputs,
+    defaultInputs,
+    expectedOutput,
+    userOutput,
+    inputParams,
+    shortCode,
+    setShortCode,
+    isRunning,
+    output,
+    error,
+    evaluatedTestCase,
+    printOutput,
+    setPrintOutput,
+    status,
+    testFunction,
+    setBaseCode
+}) => {
     const [currentShort, setCurrentShort] = useState('');
     const [language, setLanguage] = useState(languages[0]);
     const editorRef = useRef(null);
-    const [testCase, setTestCase] = useState(tests);
-    const [dumpTestCase, setDumpTestCase] = useState(dumpTests);
+    const [dumpTestCase, setDumpTestCase] = useState(defaultInputs);
     const [displayingTestCase, setDisplayingTestCase] = useState(0);
     const [hoverStates, setHoverStates] = useState({});
     const [savingStatus, setSavingStatus] = useState('')
     const { theme } = useTheme();
 
-    const updateLongCode = useCallback((shortCodeValue) => {
-        const mainIndex = longCode.indexOf("if __name__ == '__main__':");
-        if (mainIndex !== -1) {
-            const newLongCode = shortCodeValue + longCode.slice(mainIndex);
-            setLongCode(newLongCode);
-        } else {
-            setLongCode(shortCodeValue);
-        }
-    }, [longCode, setLongCode]);
+
+    console.log(`inputs: ${inputs}`)
+
 
     useEffect(() => {
-        updateLongCode(localStorage.getItem(`code_${question?.title}`));
+        setShortCode(localStorage.getItem(`code_${question?.title}`));
     }, [])
 
     useEffect(() => {
@@ -45,13 +57,12 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, shortCod
         const savedCode = localStorage.getItem(`code_${question?.title}`);
         if (savedCode) {
             setCurrentShort(savedCode);
-            updateLongCode(savedCode);
         }
-    }, [question, updateLongCode]);
+    }, [question]);
 
     useEffect(() => {
         handleSetLangSample();
-    }, [language, testCase]);
+    }, [language, inputs]); 
 
     const toCamelCase = useCallback((str) => {
         return str?.split(' ').map((word, index) =>
@@ -60,39 +71,43 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, shortCod
     }, []);
 
 
-
-
     const handleSetLangSample = useCallback(() => {
         try {
+
             const functionName = toCamelCase(question?.title) || '';
-            const params = testParams || [];
-            const shortCodeTemplate = QUESTIONS_MAP[language?.monacoId](functionName, params);
-            const specificDt = SPECIFIC_DT[testFunction] && SPECIFIC_DT[testFunction](JSON.stringify(testCase))
-            const longCodeTemplate = BASES[language?.monacoId](shortCodeTemplate, JSON.stringify(params), JSON.stringify(testCase), functionName, specificDt);
-            if (shortCodeTemplate && longCodeTemplate) {
+            const functionParams = inputParams || [];
+
+            // Read function short code
+            const shortCodeTemplate = SHORT_CODE[language?.monacoId](functionName, functionParams);
+
+            // Read function base code
+            const baseCodeTemplate = BASE_CODE[language?.monacoId](JSON.stringify(functionParams), JSON.stringify(inputs), functionName);
+
+            // Read function specific base code
+            const specificBaseCodeTemplate = SPECIFIC_BASE_CODE[language?.monacoId] && SPECIFIC_BASE_CODE[language?.monacoId][testFunction] && SPECIFIC_BASE_CODE[language?.monacoId][testFunction](JSON.stringify(inputs), functionName, JSON.stringify(functionParams))
+
+
+            setBaseCode(testFunction ? specificBaseCodeTemplate : baseCodeTemplate)
+
+            if (shortCodeTemplate && (baseCodeTemplate || specificBaseCodeTemplate)) {
                 setShortCode(shortCodeTemplate);
                 // Only set currentShort if it's not already set (i.e., not loaded from local storage)
                 if (!currentShort) {
                     setCurrentShort(shortCodeTemplate);
                 }
-                setLongCode(longCodeTemplate);
             } else {
                 setCurrentShort("");
-                setLongCode("");
                 console.warn(`No template found for language: ${language?.monacoId}`);
             }
         } catch (error) {
             console.error("Error loading data: ", error);
             setCurrentShort("Error");
-            setLongCode("Error");
         }
-    }, [language, question, testCase, testParams, toCamelCase, currentShort, setLongCode]);
+    }, [language, question, inputs, inputParams, toCamelCase, currentShort]);
 
     const handleEditorDidMount = (editor, monaco) => {
         editorRef.current = editor;
     };
-
-    console.log(status)
 
     const handleLanguageChange = useCallback((value) => {
         const selectedLanguage = languages.find(lang => lang.id.toString() === value);
@@ -107,9 +122,8 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, shortCod
         }
     }, []);
 
-
     const handleChangeTestCases = useCallback((event, testCaseIndex, inputIndex) => {
-        const updatedTestCases = JSON.parse(JSON.stringify(testCase));
+        const updatedTestCases = JSON.parse(JSON.stringify(inputs));
         const updatedDumpTestCases = JSON.parse(JSON.stringify(dumpTestCase));
 
         let newValue = event.target.value.replace(/[^0-9,.-]/g, '');
@@ -118,45 +132,44 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, shortCod
         updatedTestCases[testCaseIndex][inputIndex] = valueArray;
         updatedDumpTestCases[testCaseIndex][inputIndex] = newValue;
 
-        setTestCase(updatedTestCases);
+        setInputs(updatedTestCases);
         setDumpTestCase(updatedDumpTestCases);
-    }, [testCase, dumpTestCase]);
+    }, [inputs, dumpTestCase]);
 
     const removeTestCases = useCallback((testCaseIndex) => {
         if (dumpTestCase.length > 1) {
-            const updatedTestCases = testCase.filter((_, index) => index !== testCaseIndex);
+            const updatedTestCases = inputs.filter((_, index) => index !== testCaseIndex);
             const updatedDumpTestCases = dumpTestCase.filter((_, index) => index !== testCaseIndex);
-            setTestCase(updatedTestCases);
+            setInputs(updatedTestCases);
             setDumpTestCase(updatedDumpTestCases);
             setDisplayingTestCase(Math.min(displayingTestCase, updatedDumpTestCases.length - 1));
         }
-    }, [testCase, dumpTestCase, displayingTestCase]);
+    }, [inputs, dumpTestCase, displayingTestCase]);
 
     const cloneTestCase = useCallback(() => {
-        if (testCase.length > 0) {
-            const newTestCase = JSON.parse(JSON.stringify(testCase[displayingTestCase]));
-            setTestCase(prevTestCase => [...prevTestCase, newTestCase]);
+        if (inputs.length > 0) {
+            const newTestCase = JSON.parse(JSON.stringify(inputs[displayingTestCase]));
+            setInputs(prevTestCase => [...prevTestCase, newTestCase]);
             setDumpTestCase(prevDumpTestCase => [...prevDumpTestCase, newTestCase]);
             setDisplayingTestCase(dumpTestCase.length);
         }
-    }, [testCase, dumpTestCase, displayingTestCase]);
+    }, [inputs, dumpTestCase, displayingTestCase]);
 
     const handleOnEditorChange = useCallback((value) => {
         setCurrentShort(value);
-        updateLongCode(value);
+        setShortCode(value);
         setPrintOutput([]);
 
         setSavingStatus('Saving...')
         localStorage.setItem(`code_${question?.title}`, value)
         setSavingStatus('Saved')
-    }, [question, updateLongCode]);
+    }, [question]);
 
     const handleResetShortCode = useCallback(() => {
         setCurrentShort(shortCode);
-        updateLongCode(shortCode);
         // Remove from local storage
         localStorage.removeItem(`code_${question?.title}`);
-    }, [shortCode, question, updateLongCode]);
+    }, [shortCode, question]);
 
 
 
@@ -264,9 +277,9 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, shortCod
                                         <div className="grid grid-cols-1 gap-4">
                                             <div>
                                                 <div className="flex flex-col gap-2">
-                                                    {dumpTestCase[displayingTestCase].slice(0, -1).map((inputValue, inputIndex) => (
+                                                    {dumpTestCase[displayingTestCase].slice(0, inputParams.length).map((inputValue, inputIndex) => (
                                                         <div key={`${displayingTestCase}-input-${inputIndex}`}>
-                                                            <p>{testParams[inputIndex]}:</p>
+                                                            <p>{inputParams[inputIndex]}:</p>
                                                             <input
                                                                 key={`${displayingTestCase}-input-${inputIndex}`}
                                                                 value={inputValue}
@@ -277,14 +290,6 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, shortCod
                                                     ))}
                                                 </div>
                                             </div>
-                                            {testCase[displayingTestCase]?.output?.length > 0 && (
-                                                <div>
-                                                    <p className="font-bold">Expected Output:</p>
-                                                    <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48">
-                                                        {JSON.stringify(testCase[displayingTestCase].output, null, 2)}
-                                                    </pre>
-                                                </div>
-                                            )}
                                         </div>
                                     )}
                                 </div>
@@ -293,7 +298,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, shortCod
 
                         <div className="bg-gray-100 rounded-xl overflow-auto h-[calc(100%-8px)] p-2 m-1">
                             <div>
-                                {testCase && testCase.length > 0 && !output ? (
+                                {inputs && inputs.length > 0 && !output ? (
                                     <p>Run code to see output</p>
                                 ) : (
                                     <>
@@ -332,10 +337,10 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, shortCod
                                                                 <div>
                                                                     <p className="font-bold">Inputs:</p>
                                                                     <div className="flex flex-col gap-2">
-                                                                        {dumpTestCase[displayingTestCase].slice(0, -1).map((inputValue, inputIndex) => (
+                                                                                    {dumpTestCase[displayingTestCase].slice(0, inputParams.length).map((inputValue, inputIndex) => (
 
                                                                             <>
-                                                                                <p>{testParams[inputIndex]}</p>
+                                                                                            <p>{inputParams[inputIndex]}</p>
                                                                                 <input
                                                                                     key={`output-${displayingTestCase}-input-${inputIndex}`}
                                                                                     value={inputValue}
@@ -357,13 +362,13 @@ const CodeEditor = ({ question, tests, dumpTests, testParams, longCode, shortCod
                                                                 <div>
                                                                     <p className="font-bold">Your Output:</p>
                                                                     <pre className={`whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 ${output[displayingTestCase][4] === true ? 'text-green-500' : 'text-red-500'}`}>
-                                                                        {JSON.stringify(output[displayingTestCase][3], null, 2)}
+                                                                                    {JSON.stringify(userOutput[displayingTestCase], null)}
                                                                     </pre>
                                                                 </div>
                                                                 <div>
                                                                     <p className="font-bold">Expected Output:</p>
                                                                     <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 text-green-500">
-                                                                        {JSON.stringify(output[displayingTestCase][2], null, 2)}
+                                                                                    {JSON.stringify(expectedOutput[displayingTestCase])}
                                                                     </pre>
                                                                 </div>
                                                             </div>

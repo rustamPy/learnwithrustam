@@ -28,7 +28,6 @@ import { fetchAllQuestions } from '@/app/(pro)/leetcode/utils';
 import {
     Navbar,
     Drawer,
-    Button,
     Typography,
     IconButton,
 } from '@material-tailwind/react';
@@ -88,12 +87,11 @@ const QuestionList = ({ open, setOpen, questions, pathname }) => {
                     {questions.map(q => (
                         <div
                             key={`${q.slug}-${q.title}`}
-                            className={`text-[13px] text-gray-800 font-semibold ${pathname === `/leetcode/${q.slug}` ? 'bg-gray-900 text-gray-100' : ''} p-2 rounded-lg`}
+                            className={`text-[13px] text-gray-800 font-semibold ${pathname === `/leetcode/${q.slug}` ? 'bg-gray-900 text-gray-50' : 'text-gray-100'} p-2 rounded-lg`}
                         >
                             <Link href={`/leetcode/${q.slug}`}>
                                 <div className='flex justify-between'>
-                                    <div className='flex flex-col'>
-
+                                    <div className={`flex flex-col`}>
                                         {q.slug}. {q.title}
                                         {showTopics && (
                                             <div className={`flex flex-row rounded-lg py-1`}>

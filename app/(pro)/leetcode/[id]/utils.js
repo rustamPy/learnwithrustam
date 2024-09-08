@@ -1,11 +1,13 @@
-export const BASES = {
-    'python': (func, params, tests, name, testFunction = false) => {
-        return (
-            `
-    ${testFunction ? testFunction :
-                `
-${func}
-if __name__ == '__main__':
+export const SHORT_CODE = {
+    'python': (name, params) => `class Solution:
+    def ${name}(self, ${params.join(', ')}):
+        pass
+`
+};
+
+export const BASE_CODE = {
+    'python': ((params, tests, name) => 
+`if __name__ == '__main__':
     import sys
     import io
     import json
@@ -14,30 +16,39 @@ if __name__ == '__main__':
     params = ${params}
     tests = ${tests}
 
-    o = Solution()
+    # Initialize the Solution objects
+
+    user_solution = Solution()
+    correct_solution = _Solution()
+
+    # Generate outputs
     all_print_outputs = []
+    expected_outputs = []
+    user_outputs = []
+
+
+    for test in tests:
+        expected_output = correct_solution.${name}(*test)
+        expected_outputs.append(expected_output)
 
     for test_index in range(len(tests)):
-        # Redirect stdout to capture print statements for this test case
         temp_stdout = io.StringIO()
         sys.stdout = temp_stdout
 
         try:
-            # Extract the number of input parameters and output values
-            target = tests[test_index][-1]
             # Ensure we have the right number of inputs
             if len(tests[test_index]) - 1 != len(params):
                 raise ValueError("The number of params and test is not matching")
 
             # Call the function with the input parameters
-            check = o.${name}(*tests[test_index][:-1])
+            actual_output = user_solution.${name}(*tests[test_index][:len(params)])
 
-            bl = check == target
-            tests[test_index].append(check)
-            tests[test_index].append(bl)
+            result = actual_output == expected_outputs[test_index]
+            user_outputs.append(actual_output)
+            tests[test_index].append(result)
             
         except Exception as e:
-            tests[test_index].append(str(e))
+            tests[test_index].append(f'ERROR: {str(e)}')
             tests[test_index].append(False)
 
         # Capture print output for this test case
@@ -51,39 +62,28 @@ if __name__ == '__main__':
     # Prepare the final output
     final_output = {
         "print_output": all_print_outputs,
-        "test_results": tests
+        "expected_outputs": expected_outputs,
+        "user_outputs" : user_outputs,
+        "test_results": tests        
     }
 
     # Print the JSON-encoded final output
-    print(json.dumps(final_output))`
-
-
+    print(json.dumps(final_output))`)
 }
 
-    
-    `
-        )
-    }
-};
 
-export const QUESTIONS_MAP = {
-    'python': (name, params) => `class Solution:
-    def ${name}(self, ${params.join(', ')}):
-        pass
-`
-};
-
-export const SPECIFIC_DT = {
-    'linked_list': (tests) => `
+export const SPECIFIC_BASE_CODE = {
+    python: {
+        linked_list: (tests, name, params) => `
 if __name__ == '__main__':
     import sys
     import io
     import json
 
     # Define the number of input params the method expects
-    params = ["nums1", "nums2"]
+    params = ${params}
 
-    # Test cases: input lists and expected output
+    # Test cases: input lists
     tests = ${tests}
 
     class LinkedList:
@@ -118,9 +118,21 @@ if __name__ == '__main__':
             l2 = l2.next
         return l1 is None and l2 is None
 
-    # Initialize the Solution object
-    o = Solution()
+    # Initialize the Solution objects
+
+    user_solution = Solution()
+    correct_solution = _Solution()
+
+    # Generate outputs
     all_print_outputs = []
+    expected_outputs = []
+    user_outputs = []
+
+
+    for test in tests:
+        inputs = [create_linked_list_from_arr(test[i]) for i in range(len(params))]
+        expected_output = correct_solution.${name}(*inputs)
+        expected_outputs.append(create_arr_from_linked_list(expected_output))
 
     # Iterate through all test cases
     for test_index in range(len(tests)):
@@ -129,24 +141,23 @@ if __name__ == '__main__':
         sys.stdout = temp_stdout
 
         try:
-            # Extract the target (expected output)
-            target_list = tests[test_index][-1]  # expected output
-            target_linkedlist = create_linked_list_from_arr(target_list)  # Convert to LinkedList
-
             # Ensure the correct number of inputs
-            if len(tests[test_index]) - 1 != len(params):
+            if len(tests[test_index]) != len(params):
                 raise ValueError(f"Test {test_index}: Mismatch between number of inputs and params")
 
             # Convert the test inputs to LinkedLists
             inputs = [create_linked_list_from_arr(tests[test_index][i]) for i in range(len(params))]
 
             # Call the function with the input parameters
-            actual_output = o.addTwoNumbers(*inputs)
+            actual_output = user_solution.${name}(*inputs)
 
             # Compare the function output with the expected output
-            is_correct = compare_linked_lists(actual_output, target_linkedlist)
+            expected_output = create_linked_list_from_arr(expected_outputs[test_index])
+            is_correct = compare_linked_lists(actual_output, expected_output)
 
-            tests[test_index].append(create_arr_from_linked_list(actual_output))
+            actual_output_list = create_arr_from_linked_list(actual_output)
+
+            user_outputs.append(actual_output_list)
             tests[test_index].append(is_correct)
 
         except Exception as e:
@@ -165,10 +176,13 @@ if __name__ == '__main__':
     # Prepare the final output
     final_output = {
         "print_output": all_print_outputs,
+        "expected_outputs": expected_outputs,
+        "user_outputs" : user_outputs,
         "test_results": tests
     }
 
     # Print the JSON-encoded final output
     print(json.dumps(final_output))
     `
+    }
 }

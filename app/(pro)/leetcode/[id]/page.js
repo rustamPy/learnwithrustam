@@ -22,16 +22,23 @@ const CodeEditorRunner = ({ params }) => {
     const [printOutput, setPrintOutput] = useState([]);
     const [status, setStatus] = useState(null);
 
-    const [tests, setTestCase] = useState([]);
+    const [inputs, setInputs] = useState([]);
     const [testFunction, setTestFunction] = useState(null);
+    const [solution, setSolution] = useState(null);
+    const [expectedOutput, setExpectedOutput] = useState([])
+    const [userOutput, setUserOutput] = useState([])
 
-    const [dumpTestCase, setDumpTestCase] = useState([]);
-    const [testParams, setTestParams] = useState([]);
-    const [evaluatedTestCase, setEvaluatedTestCase] = useState(dumpTestCase);
+    const [targetTests, setTargetTests] = useState([])
+
+
+    const [defaultInputs, setDumpTestCase] = useState([]);
+    const [inputParams, setTestParams] = useState([]);
+    const [evaluatedTestCase, setEvaluatedTestCase] = useState(defaultInputs);
 
     const { setIsNavbarVisible } = useNavbarVisibility();
     const [longCode, setLongCode] = useState('');
     const [shortCode, setShortCode] = useState('');
+    const [baseCode, setBaseCase] = useState('')
 
     const [output, setOutput] = useState(null);
     const [error, setError] = useState(null);
@@ -53,10 +60,7 @@ const CodeEditorRunner = ({ params }) => {
         return result;
     };
 
-    const convertTestFunction = (testFunction, tests) => {
-        return testFunction.replace('#TESTS', JSON.stringify(tests));
-    }
-
+    console.log(`page inputs: ${inputs}`)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -67,12 +71,10 @@ const CodeEditorRunner = ({ params }) => {
                 const params = fetchedTest.params;
                 const convertedTestCase = convertTestCase(fetchedTest.content, params);
 
-                if (fetchedTest.testFunction) {
-                    const convertedTestFunction = convertTestFunction(fetchedTest.testFunction, convertedTestCase);
-                    setTestFunction(fetchedTest.testFunction);
-                }
-
-                setTestCase(convertedTestCase);
+                setSolution(fetchedTest.solution)
+                setTestFunction(fetchedTest.testFunction);
+                setSolution(fetchedTest.solution)
+                setInputs(convertedTestCase);
                 setQuestion(fetchedQuestion);
                 setTestParams(params);
                 setDumpTestCase(convertedTestCase.slice(0, 3));
@@ -88,18 +90,30 @@ const CodeEditorRunner = ({ params }) => {
         return () => setIsNavbarVisible(true);
     }, [setIsNavbarVisible]);
 
+
+    const handlePassConditions = useCallback((outputArr) => {
+        const allFalse = outputArr.every(subArr => Array.isArray(subArr) && subArr[subArr.length - 1] === false);
+        const allTrue = outputArr.every(subArr => Array.isArray(subArr) && subArr[subArr.length - 1] === true);
+        setStatus(allFalse ? 'Wrong Answers' : allTrue ? 'Right Answers' : 'Mixed Results');
+    }, []);
+
+
     const runCode = useCallback(async () => {
         setIsRunning(true);
         setOutput('Running...');
         setError(null);
-        setEvaluatedTestCase(dumpTestCase);
+        setEvaluatedTestCase(defaultInputs);
 
         try {
-            const codeToRun = testFunction ? `${shortCode}\n\n${longCode}` : longCode;
+            const runCode = `${shortCode}\n\n${solution}\n\n${baseCode}`
+            console.log(`tFunction: ${testFunction}`)
+            console.log(`sCode: ${shortCode}`)
+            console.log(`solution: ${solution}`)
+            console.log(`bCode: ${baseCode}`)
 
-            console.log(codeToRun)
+            console.log(`runCode: ${runCode}`)
 
-
+            // Run user code with test cases
             const createResponse = await fetch('http://127.0.0.1:2358/submissions', {
                 method: 'POST',
                 headers: {
@@ -109,24 +123,22 @@ const CodeEditorRunner = ({ params }) => {
                 },
                 body: JSON.stringify({
                     language_id: language.id,
-                    source_code: longCode || codeToRun,
-                    stdin: '',
+                    source_code: runCode,
+                    stdin: JSON.stringify(defaultInputs),
                 }),
             });
-
-
 
             if (!createResponse.ok) {
                 throw new Error(`HTTP error! status: ${createResponse.status}`);
             }
 
-            const { token } = await createResponse.json();
+            let { token: runToken } = await createResponse.json();
 
             let getResponseData;
 
             do {
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                const getResponse = await fetch(`http://127.0.0.1:2358/submissions/${token}`, {
+                const getResponse = await fetch(`http://127.0.0.1:2358/submissions/${runToken}`, {
                     method: 'GET',
                     headers: {
                         'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
@@ -142,6 +154,8 @@ const CodeEditorRunner = ({ params }) => {
 
             } while (getResponseData.status && getResponseData.status.id <= 2);
 
+            console.log(`getResponseDat: ${getResponseData}`)
+
             if (getResponseData.stdout) {
                 const jsonOutput = getResponseData.stdout
                     .replace(/None/g, 'null')
@@ -150,11 +164,14 @@ const CodeEditorRunner = ({ params }) => {
 
                 try {
                     const parsedOutput = JSON.parse(jsonOutput);
-                    console.log(parsedOutput)
+                    console.log(`parsedOutput: ${parsedOutput}`)
+
                     if (parsedOutput.print_output || parsedOutput.test_results) {
                         handlePassConditions(parsedOutput.test_results);
                         setOutput(parsedOutput.test_results);
                         setPrintOutput(parsedOutput.print_output);
+                        setExpectedOutput(parsedOutput.expected_outputs)
+                        setUserOutput(parsedOutput.user_outputs)
                     } else {
                         handlePassConditions(parsedOutput);
                         setOutput(parsedOutput);
@@ -178,15 +195,9 @@ const CodeEditorRunner = ({ params }) => {
         } finally {
             setIsRunning(false);
         }
-    }, [longCode, testFunction, language.id, dumpTestCase]);
+    }, [shortCode, baseCode, language.id, defaultInputs, handlePassConditions]);
 
-    const handlePassConditions = useCallback((outputArr) => {
-        const allFalse = outputArr.every(subArr => Array.isArray(subArr) && subArr[subArr.length - 1] === false);
-        const allTrue = outputArr.every(subArr => Array.isArray(subArr) && subArr[subArr.length - 1] === true);
-        setStatus(allFalse ? 'Wrong Answers' : allTrue ? 'Right Answers' : 'Mixed Results');
-    }, []);
-
-    if (!question || testParams.length === 0 || tests.length === 0 || dumpTestCase.length === 0) {
+    if (!question || inputParams.length === 0 || inputs.length === 0 || defaultInputs.length === 0) {
         return <LoadingDisplay />
     }
 
@@ -219,11 +230,13 @@ const CodeEditorRunner = ({ params }) => {
 
                 <CodeEditor
                     question={question}
-                    testParams={testParams}
-                    dumpTests={dumpTestCase}
-                    tests={tests}
-                    longCode={longCode}
-                    setLongCode={setLongCode}
+                    inputParams={inputParams}
+                    defaultInputs={defaultInputs}
+                    inputs={inputs}
+                    setInputs={setInputs}
+                    userOutput={userOutput}
+                    expectedOutput={expectedOutput}
+                    targetTests={targetTests}
                     shortCode={shortCode}
                     setShortCode={setShortCode}
                     isRunning={isRunning}
@@ -234,6 +247,7 @@ const CodeEditorRunner = ({ params }) => {
                     setPrintOutput={setPrintOutput}
                     status={status}
                     testFunction={testFunction}
+                    setBaseCode={setBaseCase}
                 />
             </PanelGroup>
         </div>

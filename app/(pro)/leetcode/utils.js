@@ -76,7 +76,8 @@ export const fetchEachTest = async (slug) => {
 
         return {
             params: test.params || 'NA',
-            testFunction: test.testFunction || false,
+            testFunction: test.testFunction || undefined,
+            solution: test.solution || undefined,
             content: htmlContent
         };
     } catch (error) {
