@@ -1,8 +1,9 @@
 ---
 params: ['nums', 'target']
+types: ['List[int]', 'int']
 solution: |
     class _Solution:
-        def twoSum(self, nums, target: int):
+        def twoSum(self, nums, target):
             table = {v:i for i, v in enumerate(nums)}
             for i in range(len(nums)):
                 diff = target - nums[i]
@@ -11,8 +12,7 @@ solution: |
 ---
 [2,7,11,15]
 9
-[3,2,4]
-6
-[3,3]
-6
-
+[2,7,11,15]
+13
+[2,7,11,15]
+26

@@ -7,15 +7,14 @@ export const SHORT_CODE = {
 
 export const BASE_CODE = {
     'python': ((params, tests, name) => 
-`if __name__ == '__main__':
+        `if __name__ == '__main__':
     import sys
     import io
     import json
-
+    import traceback
 
     params = ${params}
     tests = ${tests}
-
     # Initialize the Solution objects
 
     user_solution = Solution()
@@ -23,9 +22,9 @@ export const BASE_CODE = {
 
     # Generate outputs
     all_print_outputs = []
+    error_outputs = []
     expected_outputs = []
     user_outputs = []
-
 
     for test in tests:
         expected_output = correct_solution.${name}(*test)
@@ -37,7 +36,7 @@ export const BASE_CODE = {
 
         try:
             # Ensure we have the right number of inputs
-            if len(tests[test_index]) - 1 != len(params):
+            if len(tests[test_index]) != len(params):
                 raise ValueError("The number of params and test is not matching")
 
             # Call the function with the input parameters
@@ -48,29 +47,34 @@ export const BASE_CODE = {
             tests[test_index].append(result)
             
         except Exception as e:
-            tests[test_index].append(f'ERROR: {str(e)}')
             tests[test_index].append(False)
+            error_message = f"{type(e).__name__}: {str(e)}\\n{traceback.format_exc()}"
+            error_outputs.append(error_message)
+            user_outputs.append(None)  # No output for this test case
 
-        # Capture print output for this test case
-        print_output = temp_stdout.getvalue().strip()
-        if print_output:
-            all_print_outputs.append(print_output.split('\\n'))
+        finally:
+            # Capture print output for this test case
+            print_output = temp_stdout.getvalue().strip()
+            if print_output:
+                all_print_outputs.append(print_output.split('\\n'))
+            else:
+                all_print_outputs.append([])  # Empty list if no print output
 
-        # Reset stdout
-        sys.stdout = sys.__stdout__
+            # Reset stdout
+            sys.stdout = sys.__stdout__
 
     # Prepare the final output
     final_output = {
         "print_output": all_print_outputs,
         "expected_outputs": expected_outputs,
-        "user_outputs" : user_outputs,
-        "test_results": tests        
+        "user_outputs": user_outputs,
+        "test_results": tests,
+        "error_outputs": error_outputs
     }
 
     # Print the JSON-encoded final output
     print(json.dumps(final_output))`)
 }
-
 
 export const SPECIFIC_BASE_CODE = {
     python: {
@@ -124,6 +128,7 @@ if __name__ == '__main__':
     correct_solution = _Solution()
 
     # Generate outputs
+    error_outputs = []
     all_print_outputs = []
     expected_outputs = []
     user_outputs = []
@@ -161,14 +166,21 @@ if __name__ == '__main__':
             tests[test_index].append(is_correct)
 
         except Exception as e:
-            # If an error occurs, append the error message and a failed status
-            tests[test_index].append(f'ERROR: {str(e)}')
             tests[test_index].append(False)
+            error_message = f"{type(e).__name__}: {str(e)}\\n{traceback.format_exc()}"
+            error_outputs.append(error_message)
+            user_outputs.append(None)  # No output for this test case
 
-        # Capture print output for this test case
-        print_output = temp_stdout.getvalue().strip()
-        if print_output:
-            all_print_outputs.append(print_output.split('\\n'))
+        finally:
+            # Capture print output for this test case
+            print_output = temp_stdout.getvalue().strip()
+            if print_output:
+                all_print_outputs.append(print_output.split('\\n'))
+            else:
+                all_print_outputs.append([])  # Empty list if no print output
+
+            # Reset stdout
+            sys.stdout = sys.__stdout__
 
         # Reset stdout
         sys.stdout = sys.__stdout__
@@ -178,7 +190,8 @@ if __name__ == '__main__':
         "print_output": all_print_outputs,
         "expected_outputs": expected_outputs,
         "user_outputs" : user_outputs,
-        "test_results": tests
+        "test_results": tests,
+        "error_output": error_outputs
     }
 
     # Print the JSON-encoded final output
@@ -186,3 +199,160 @@ if __name__ == '__main__':
     `
     }
 }
+
+
+export const convertTestCase = (inputString, params, types) => {
+    let lines = typeof inputString === 'string' ?
+        inputString.trim().split('\n').map(str => str.replace(/^<p>/, '').replace(/<\/p>$/, '')) :
+        JSON.parse(JSON.stringify(inputString))
+
+    if (typeof lines[0] === 'string') {
+        let pairs = []
+        for (let i = 0; i < lines.length; i += params.length) {
+            pairs.push(lines.slice(i, i + params.length));
+        }
+        lines = pairs
+    }
+
+    let result = null;
+    console.log('LINEs')
+    console.log(lines)
+
+    for (let i = 0; i < lines.length; i += params.length) {
+        console.log(i)
+        const testCase = lines.slice(i, i + params.length).map(pair => {
+
+            console.log('PAIR!!!!')
+            console.log(pair)
+
+            return pair.map((inp, index) => {
+
+                const type = types[index]?.toLowerCase()
+                try {
+                    //console.log(index)
+                    console.log('\n\n')
+                    console.log(`INP - TYPE:`)
+                    console.log(inp)
+                    console.log(typeof inp)
+                    console.log(`TYPE: ${type}`)
+
+                    console.log('\n\n')
+
+
+
+
+                    const parsed = typeof inp === 'string' ? JSON.parse(inp) : inp
+
+                    console.log('PARSED:')
+                    console.log(parsed)
+                    if (typeof inp === 'string' || typeof inp === 'number') {
+                        if (type.startsWith('list[')) {
+                            if (!Array.isArray(parsed)) {
+                                return `${inp} is not a valid value of type ${types[index]}`
+                            }
+                            if (type.startsWith('list[list[')) {
+                                if (!Array.isArray(parsed[0])) {
+                                    return `${inp} is not a valid value of type ${types[index]}`
+                                }
+                                if (type.startsWith('list[list[int]')) {
+                                    console.log(`TEST 1 - from ${pair} <- ${index}\n\n`)
+                                    return parsed
+                                } else if (type.startsWith('list[list[str]')) {
+                                    return parsed.map(subitem => {
+                                        return subitem.map(val => val.toString())
+                                    })
+                                }
+                            } else if (type.startsWith('list[int]')) {
+                                console.log('list[int]')
+                                console.log(parsed)
+                                return parsed
+                            } else if (type.startsWith('list[str]')) {
+                                return parsed.map(val => val.toString())
+                            }
+                        } else if (type.startsWith('int')) {
+                            console.log(`TEST 2 - from ${pair} <- ${index}\n\n`)
+                            return parsed
+                        } else if (type.startsWith('str')) {
+                            return parsed.toString()
+                        }
+                    } else {
+                        if (type.startsWith('list[')) {
+                            if (!Array.isArray(parsed)) {
+                                return `${inp} is not a valid value of type ${types[index]}`
+                            }
+                            console.log(`parsed`)
+                            console.log(parsed)
+
+
+
+                            const parsedLs = typeof parsed === 'string' ? JSON.parse(parsed) : parsed;
+                            console.log(`parsed LS`)
+                            console.log(parsedLs)
+                            console.log(typeof parsedLs)
+
+                            if (type.startsWith('list[list[')) {
+                                if (!Array.isArray(parsed[0])) {
+                                    return `${inp} is not a valid value of type ${types[index]}`
+                                }
+
+                                if (type.startsWith('list[list[int]')) {
+                                    console.log(`TEST 3 - from ${pair} <- ${index}\n\n`)
+                                    return parsedLs
+                                } else if (type.startsWith('list[list[str]')) {
+                                    return parsedLs.map(ls => {
+                                        return ls.map(val => val.toString())
+                                    })
+                                }
+
+                            } else if (type.startsWith('list[int]')) {
+                                console.log('HERE')
+                                return parsedLs
+                            } else if (type.startsWith('list[str]')) {
+                                return parsedLs.map(val => val.toString())
+                            }
+
+
+
+
+                        } else if (type.startsWith('int') && parsed) {
+                            console.log(parsed)
+                            return parsed[index]
+                        } else if (type.startsWith('str') && parsed) {
+
+                            return parsed[index].toString()
+                        }
+                    }
+                    console.log('----')
+
+                    return parsed
+                } catch (e) {
+                    return `${inp} is not a valid value of type ${types[index]}`
+
+                }
+
+
+            })
+
+        });
+        console.log('\n\n\n\n\n\nTEST INPUTS:')
+        console.log(testCase)
+        console.log('\n\n\n\n\n\n\n')
+        if (!result) {
+            result = testCase;
+        } else {
+            result.push(testCase[0])
+        }
+    }
+    console.log('RESULT')
+    console.log(result)
+    return result;
+};
+
+
+
+
+export const toCamelCase = (str) => {
+    return str?.split(' ').map((word, index) =>
+        index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    ).join('');
+};

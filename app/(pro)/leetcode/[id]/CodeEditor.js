@@ -1,109 +1,81 @@
 'use client';
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Panel } from 'react-resizable-panels';
-import { PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import Editor from '@monaco-editor/react';
 import { Spinner, Select, Option, Tooltip } from '@material-tailwind/react';
-import { SHORT_CODE, BASE_CODE, SPECIFIC_BASE_CODE } from './utils';
-import { GoDotFill, GoPlus } from "react-icons/go";
-import { RiCloseCircleFill } from "react-icons/ri";
-import { GrPowerReset } from "react-icons/gr";
+import { SHORT_CODE, toCamelCase, convertTestCase } from './utils';
+import { GoDotFill, GoPlus, GoSkip } from "react-icons/go";
+import { RiCloseCircleFill, RiFullscreenFill, RiFullscreenExitLine } from "react-icons/ri";
+import { GrPowerReset, GrTest } from "react-icons/gr";
 import { IoCodeSlash } from "react-icons/io5";
-import { WindowPanel, CustomSkeleton } from './Components';
-import { languages } from './Components';
+import { TbSourceCode } from "react-icons/tb";
+
+
+import { } from "react-icons/ri";
+import { WindowPanel, CustomSkeleton, languages } from './Components';
 import { useTheme } from 'next-themes';
-import { GrTest } from 'react-icons/gr';
-import { TbSourceCode } from 'react-icons/tb';
+
+const formatInputValue = (value, type) => {
+    if (Array.isArray(value)) {
+        if (type.startsWith('List[List[')) {
+            return `[${value.map(sublist => `[${sublist.join(',')}]`).join(',')}]`;
+        } else if (type.startsWith('List[')) {
+            return `[${value.join(',')}]`;
+        }
+    }
+    return value.toString();
+};
 
 const CodeEditor = ({
     question,
     inputs,
+    inputTypes,
     setInputs,
-    defaultInputs,
     expectedOutput,
     userOutput,
+    errorOutput,
     inputParams,
-    shortCode,
     setShortCode,
     isRunning,
     output,
     error,
-    evaluatedTestCase,
+    evaluatedInputs,
     printOutput,
     setPrintOutput,
     status,
-    testFunction,
-    setBaseCode
+    maxShowingInputIndex,
+    setMaxShowingInputIndex,
 }) => {
     const [currentShort, setCurrentShort] = useState('');
     const [language, setLanguage] = useState(languages[0]);
     const editorRef = useRef(null);
-    const [dumpTestCase, setDumpTestCase] = useState(defaultInputs);
-    const [displayingTestCase, setDisplayingTestCase] = useState(0);
+    const [currentInputIndex, setCurrentInputIndex] = useState(0);
     const [hoverStates, setHoverStates] = useState({});
-    const [savingStatus, setSavingStatus] = useState('')
+    const [savingStatus, setSavingStatus] = useState('');
     const { theme } = useTheme();
 
 
-    console.log(`inputs: ${inputs}`)
+    const [editorFullScreen, setEditorFullScreen] = useState(false);
+    const [testsFullScreen, setTestsFullScreen] = useState(false);
 
 
     useEffect(() => {
-        setShortCode(localStorage.getItem(`code_${question?.title}`));
-    }, [])
-
-    useEffect(() => {
-        // Load saved code from local storage when component mounts
         const savedCode = localStorage.getItem(`code_${question?.title}`);
         if (savedCode) {
+            setShortCode(savedCode);
             setCurrentShort(savedCode);
-        }
-    }, [question]);
-
-    useEffect(() => {
-        handleSetLangSample();
-    }, [language, inputs]); 
-
-    const toCamelCase = useCallback((str) => {
-        return str?.split(' ').map((word, index) =>
-            index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-        ).join('');
-    }, []);
-
-
-    const handleSetLangSample = useCallback(() => {
-        try {
-
+        } else {
             const functionName = toCamelCase(question?.title) || '';
-            const functionParams = inputParams || [];
-
-            // Read function short code
-            const shortCodeTemplate = SHORT_CODE[language?.monacoId](functionName, functionParams);
-
-            // Read function base code
-            const baseCodeTemplate = BASE_CODE[language?.monacoId](JSON.stringify(functionParams), JSON.stringify(inputs), functionName);
-
-            // Read function specific base code
-            const specificBaseCodeTemplate = SPECIFIC_BASE_CODE[language?.monacoId] && SPECIFIC_BASE_CODE[language?.monacoId][testFunction] && SPECIFIC_BASE_CODE[language?.monacoId][testFunction](JSON.stringify(inputs), functionName, JSON.stringify(functionParams))
-
-
-            setBaseCode(testFunction ? specificBaseCodeTemplate : baseCodeTemplate)
-
-            if (shortCodeTemplate && (baseCodeTemplate || specificBaseCodeTemplate)) {
+            const shortCodeTemplate = SHORT_CODE[language?.monacoId](functionName, inputParams);
+            if (shortCodeTemplate) {
                 setShortCode(shortCodeTemplate);
-                // Only set currentShort if it's not already set (i.e., not loaded from local storage)
-                if (!currentShort) {
-                    setCurrentShort(shortCodeTemplate);
-                }
+                setCurrentShort(shortCodeTemplate);
             } else {
                 setCurrentShort("");
                 console.warn(`No template found for language: ${language?.monacoId}`);
             }
-        } catch (error) {
-            console.error("Error loading data: ", error);
-            setCurrentShort("Error");
         }
-    }, [language, question, inputs, inputParams, toCamelCase, currentShort]);
+    }, [question, language, inputParams]);
 
     const handleEditorDidMount = (editor, monaco) => {
         editorRef.current = editor;
@@ -122,73 +94,91 @@ const CodeEditor = ({
         }
     }, []);
 
-    const handleChangeTestCases = useCallback((event, testCaseIndex, inputIndex) => {
+    const updateInput = useCallback((event, idx) => {
         const updatedTestCases = JSON.parse(JSON.stringify(inputs));
-        const updatedDumpTestCases = JSON.parse(JSON.stringify(dumpTestCase));
+        updatedTestCases[currentInputIndex][idx] = event.target.value;
+        const newInputs = convertTestCase(updatedTestCases, inputParams, inputTypes) || updatedTestCases;
+        setInputs(newInputs);
+    }, [inputs, currentInputIndex, inputParams, inputTypes, setInputs]);
 
-        let newValue = event.target.value.replace(/[^0-9,.-]/g, '');
-        const valueArray = newValue.split(',').map(value => value.trim()).filter(Boolean).map(Number);
-
-        updatedTestCases[testCaseIndex][inputIndex] = valueArray;
-        updatedDumpTestCases[testCaseIndex][inputIndex] = newValue;
-
-        setInputs(updatedTestCases);
-        setDumpTestCase(updatedDumpTestCases);
-    }, [inputs, dumpTestCase]);
-
-    const removeTestCases = useCallback((testCaseIndex) => {
-        if (dumpTestCase.length > 1) {
-            const updatedTestCases = inputs.filter((_, index) => index !== testCaseIndex);
-            const updatedDumpTestCases = dumpTestCase.filter((_, index) => index !== testCaseIndex);
-            setInputs(updatedTestCases);
-            setDumpTestCase(updatedDumpTestCases);
-            setDisplayingTestCase(Math.min(displayingTestCase, updatedDumpTestCases.length - 1));
+    const removeInput = useCallback(() => {
+        if (currentInputIndex > 0) {
+            setInputs(prevInputs => prevInputs.filter((_, index) => index !== currentInputIndex));
+            setCurrentInputIndex(prevIndex => prevIndex - 1);
+            setMaxShowingInputIndex(prevMax => prevMax - 1);
         }
-    }, [inputs, dumpTestCase, displayingTestCase]);
+    }, [currentInputIndex, setInputs, setMaxShowingInputIndex]);
 
-    const cloneTestCase = useCallback(() => {
-        if (inputs.length > 0) {
-            const newTestCase = JSON.parse(JSON.stringify(inputs[displayingTestCase]));
-            setInputs(prevTestCase => [...prevTestCase, newTestCase]);
-            setDumpTestCase(prevDumpTestCase => [...prevDumpTestCase, newTestCase]);
-            setDisplayingTestCase(dumpTestCase.length);
+    const cloneCurrentInput = useCallback(() => {
+        if (currentInputIndex >= 0) {
+            setInputs(prevInputs => {
+                const newInput = JSON.parse(JSON.stringify(prevInputs[currentInputIndex]));
+                const newArray = [...prevInputs];
+                newArray.splice(maxShowingInputIndex + 1, 0, newInput);
+                return newArray;
+            });
+            setCurrentInputIndex(maxShowingInputIndex + 1);
+            setMaxShowingInputIndex(prevMax => prevMax + 1);
         }
-    }, [inputs, dumpTestCase, displayingTestCase]);
+    }, [currentInputIndex, maxShowingInputIndex, setInputs, setMaxShowingInputIndex]);
 
     const handleOnEditorChange = useCallback((value) => {
         setCurrentShort(value);
         setShortCode(value);
         setPrintOutput([]);
-
-        setSavingStatus('Saving...')
-        localStorage.setItem(`code_${question?.title}`, value)
-        setSavingStatus('Saved')
-    }, [question]);
+        setSavingStatus('Saving...');
+        localStorage.setItem(`code_${question?.title}`, value);
+        setSavingStatus('Saved');
+    }, [question, setShortCode, setPrintOutput]);
 
     const handleResetShortCode = useCallback(() => {
-        setCurrentShort(shortCode);
-        // Remove from local storage
+        const functionName = toCamelCase(question?.title) || '';
+        const shortCodeTemplate = SHORT_CODE[language?.monacoId](functionName, inputParams);
+        setCurrentShort(shortCodeTemplate);
+        setShortCode(shortCodeTemplate);
         localStorage.removeItem(`code_${question?.title}`);
-    }, [shortCode, question]);
+    }, [question, language, inputParams, setShortCode]);
 
+
+    console.log(printOutput)
+
+    const memoizedEditor = useMemo(() => (
+        <Editor
+            height="100%"
+            language={language.monacoId}
+            value={currentShort}
+            onChange={handleOnEditorChange}
+            onMount={handleEditorDidMount}
+            theme={theme === 'dark' ? 'vs-dark' : 'vs-light'}
+            options={{
+                minimap: { enabled: true },
+                readOnly: false,
+                lineNumbers: "on",
+                renderWhitespace: "all",
+                autoClosingBrackets: "always",
+                formatOnPaste: true,
+                formatOnType: true,
+            }}
+            loading={<CustomSkeleton />}
+        />
+    ), [language, currentShort, theme, handleOnEditorChange]);
 
 
     return (
         <Panel minSize={40} defaultSize={70}>
             <PanelGroup direction="vertical">
                 <Panel minSize={30} defaultSize={50}>
-                    {/* Code Editor */}
-                    <WindowPanel tabs={[{ name: 'Code', icon: <IoCodeSlash />, color: 'text-green-500' }]}>
-                        <div className="bg-gray-100 dark:bg-gray-900 rounded-lg m-1 flex flex-col h-full">
-                            <div className="flex items-center p-4 border-b h-16">
-                                <div className='w-54 mr-2'>
-                                    <Select value={language.id.toString()} onChange={handleLanguageChange} label="Language" className='text-xs dark:text-gray-50'>
-                                        {languages.map((lang) => (
-                                            <Option key={lang.id} value={lang.id.toString()} className='text-xs'>{lang.name}</Option>
-                                        ))}
-                                    </Select>
-                                </div>
-                                <div className='mr-2'>
+                    <WindowPanel tabs={[{ name: 'Code', icon: <IoCodeSlash />, color: 'text-green-500' }]} isFullScreen={editorFullScreen} setFullScreen={setEditorFullScreen}>
+                        <div className="bg-gray-100 dark:bg-gray-900 rounded-lg m-1 flex flex-col h-full">                            
+                            <div className="flex items-center justify-between p-4 border-b h-16">
+                                <div className='flex items-center'>
+                                    <div className='w-54 mr-2'>
+                                        <Select value={language.id.toString()} onChange={handleLanguageChange} label="Language" className='text-xs dark:text-gray-50'>
+                                            {languages.map((lang) => (
+                                                <Option key={lang.id} value={lang.id.toString()} className='text-xs'>{lang.name}</Option>
+                                            ))}
+                                        </Select>
+                                    </div>
                                     <Tooltip content={`Reset the current code`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
                                         <button
                                             className="text-sm px-4 py-2 rounded-md text-gray-800 hover:text-gray-70 dark:text-gray-50 dark:hover:text-gray-400"
@@ -198,44 +188,33 @@ const CodeEditor = ({
                                         </button>
                                     </Tooltip>
                                 </div>
+                                <div className='flex items-center'>
+                                    <span className="text-sm text-gray-500 mr-2">{savingStatus}</span>
+                                </div>
                             </div>
                             <div className="flex-grow overflow-hidden rounded-b-lg">
-                                <Editor
-                                    height="100%"
-                                    language={language.monacoId}
-                                    value={currentShort}
-                                    onChange={handleOnEditorChange}
-                                    onMount={handleEditorDidMount}
-                                    theme={theme === 'dark' ? 'vs-dark' : 'vs-light'}
-                                    options={{
-                                        minimap: { enabled: true },
-                                        readOnly: false,
-                                        lineNumbers: "on",
-                                        renderWhitespace: "all"
-                                    }}
-                                    loading={<CustomSkeleton />}
-
-                                />
+                                {memoizedEditor}
                             </div>
                         </div>
                     </WindowPanel>
                 </Panel>
                 <PanelResizeHandle className="h-1 mr-8 ml-8 center bg-gray-400 hover:bg-blue-500 rounded-full cursor-ns-resize" />
                 <Panel minSize={20} defaultSize={50}>
-                    {/* Test Editor */}
                     <WindowPanel
                         tabs={[
                             { name: 'Default Test Cases', icon: <GrTest />, color: 'text-green-500' },
                             { name: 'Output', icon: isRunning ? <Spinner className='h-4 w-4 mr-2' /> : <TbSourceCode />, color: 'text-green-500' }
                         ]}
                         activeTab={isRunning || output ? 1 : 0}
+                        isFullScreen={testsFullScreen}
+                        setFullScreen={setTestsFullScreen}
                     >
                         <div className="bg-gray-100 rounded-xl overflow-auto h-[calc(100%-8px)] p-2 m-1">
                             <div className="flex flex-col space-y-4">
                                 <div className="flex flex-wrap gap-2">
-                                    {dumpTestCase && dumpTestCase.length > 0 ? (
+                                    {inputs && inputs.length > 0 ? (
                                         <>
-                                            {dumpTestCase.map((_, index) => (
+                                            {inputs.slice(0, maxShowingInputIndex + 1).map((_, index) => (
                                                 <div
                                                     key={`${index}-test-case-button`}
                                                     className="relative"
@@ -243,25 +222,25 @@ const CodeEditor = ({
                                                     onMouseLeave={() => setHoverStates(prev => ({ ...prev, [index]: false }))}
                                                 >
                                                     <button
-                                                        className={`text-sm px-4 py-2 rounded-md ${displayingTestCase === index ? 'bg-gray-700 text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
-                                                        onClick={() => setDisplayingTestCase(index)}
+                                                        className={`text-sm px-4 py-2 rounded-md ${currentInputIndex === index ? 'bg-gray-700 text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
+                                                        onClick={() => setCurrentInputIndex(index)}
                                                     >
                                                         Case {index + 1}
                                                     </button>
                                                     {hoverStates[index] && (
                                                         <button
                                                             className="absolute -top-2 -right-2 text-sm rounded-full bg-white"
-                                                            onClick={() => removeTestCases(index)}
+                                                            onClick={() => removeInput()}
                                                         >
                                                             <RiCloseCircleFill className="text-xl text-red-500 hover:text-red-700" />
                                                         </button>
                                                     )}
                                                 </div>
                                             ))}
-                                            <Tooltip content={`Clone the current test Case ${displayingTestCase + 1}`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
+                                            <Tooltip content={`Clone the current test Case ${currentInputIndex + 1}`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
                                                 <button
                                                     className="text-sm px-4 py-2 rounded-md text-gray-800 hover:text-gray-700"
-                                                    onClick={cloneTestCase}
+                                                    onClick={cloneCurrentInput}
                                                 >
                                                     <GoPlus />
                                                 </button>
@@ -273,18 +252,18 @@ const CodeEditor = ({
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-4">
-                                    {dumpTestCase[displayingTestCase] && (
+                                    {inputs[currentInputIndex] && (
                                         <div className="grid grid-cols-1 gap-4">
                                             <div>
                                                 <div className="flex flex-col gap-2">
-                                                    {dumpTestCase[displayingTestCase].slice(0, inputParams.length).map((inputValue, inputIndex) => (
-                                                        <div key={`${displayingTestCase}-input-${inputIndex}`}>
-                                                            <p>{inputParams[inputIndex]}:</p>
+                                                    {inputs[currentInputIndex].slice(0, inputParams.length).map((val, idx) => (
+                                                        <div key={`${currentInputIndex}-input-${idx}`}>
+                                                            <p>{inputParams[idx]} ({inputTypes[idx]}):</p>
                                                             <input
-                                                                key={`${displayingTestCase}-input-${inputIndex}`}
-                                                                value={inputValue}
-                                                                onChange={(event) => handleChangeTestCases(event, displayingTestCase, inputIndex)}
-                                                                className="border border-gray-300 rounded-md px-2 py-1"
+                                                                key={`${currentInputIndex}-input-${idx}`}
+                                                                value={formatInputValue(val, inputTypes[idx])}
+                                                                onChange={(e) => updateInput(e, idx)}
+                                                                className="border border-gray-300 rounded-md px-2 py-1 w-full"
                                                             />
                                                         </div>
                                                     ))}
@@ -316,37 +295,44 @@ const CodeEditor = ({
                                                 ) : (
                                                     <div>
                                                         <h1 className={`text-xl mb-4 ${status === 'Wrong Answers' ? 'text-red-500' : status === 'Right Answers' ? 'text-green-500' : 'text-yellow-500'}`}>
-                                                            {status}
+                                                                        {errorOutput.length > 0 ? 'Error' : status}
                                                         </h1>
                                                         <div className="flex flex-wrap gap-2 mb-4">
-                                                            {evaluatedTestCase.map((_, index) => (
+                                                                        {evaluatedInputs.map((_, index) => (
                                                                 <button
                                                                     key={`output-${index}`}
-                                                                    className={`text-sm px-4 py-2 rounded-md ${displayingTestCase === index ? 'bg-gray-300 text-gray-800' : 'bg-gray-100 hover:bg-gray-200'}`}
-                                                                    onClick={() => setDisplayingTestCase(index)}
+                                                                                className={`text-sm px-4 py-2 rounded-md ${currentInputIndex === index ? 'bg-gray-300 text-gray-800' : 'bg-gray-100 hover:bg-gray-200'}`}
+                                                                                onClick={() => setCurrentInputIndex(index)}
                                                                 >
                                                                     <div className="flex items-center">
-                                                                        <GoDotFill className={`mr-2 ${status === 'Wrong Answers' ? 'text-red-500' : status === 'Right Answers' ? 'text-green-500' : 'text-red-500'}`} />
+                                                                                    {errorOutput.length > 0 ? <GoSkip className='mr-2' /> : <GoDotFill className={`mr-2 ${status === 'Wrong Answers' ? 'text-red-500' : status === 'Right Answers' ? 'text-green-500' : 'text-red-500'}`} />}
                                                                         <span>Case {index + 1}</span>
                                                                     </div>
                                                                 </button>
                                                             ))}
                                                         </div>
-                                                        {output && output[displayingTestCase] && (
+                                                                    {output && output[currentInputIndex] && (
                                                             <div className="grid grid-cols-1 gap-4">
+                                                                            {errorOutput.length > 0 && (
+                                                                                <div className='bg-red-100 rounded-xl '>
+                                                                                    <pre className="whitespace-pre-wrap p-2 overflow-auto max-h-48 text-red-800">
+                                                                                        {errorOutput[currentInputIndex]}
+                                                                                    </pre>
+                                                                                </div>
+                                                                            )}
                                                                 <div>
                                                                     <p className="font-bold">Inputs:</p>
                                                                     <div className="flex flex-col gap-2">
-                                                                                    {dumpTestCase[displayingTestCase].slice(0, inputParams.length).map((inputValue, inputIndex) => (
+                                                                                    {inputs[currentInputIndex].slice(0, inputParams.length).map((val, idx) => (
 
                                                                             <>
-                                                                                            <p>{inputParams[inputIndex]}</p>
-                                                                                <input
-                                                                                    key={`output-${displayingTestCase}-input-${inputIndex}`}
-                                                                                    value={inputValue}
-                                                                                    className="border border-gray-300 rounded-md px-2 py-1"
-                                                                                    disabled
-                                                                                />
+                                                                                            <p>{inputParams[idx]}</p>
+                                                                                            <input
+                                                                                                key={`${currentInputIndex}-output-${idx}`}
+                                                                                                value={val}
+                                                                                                className="border border-gray-300 rounded-md px-2 py-1"
+                                                                                                disabled
+                                                                                            />
                                                                             </>
                                                                         ))}
                                                                     </div>
@@ -355,20 +341,20 @@ const CodeEditor = ({
                                                                     <div>
                                                                         <p className="font-bold">Stdout:</p>
                                                                         <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 text-gray-800">
-                                                                            {printOutput[displayingTestCase]?.map((o, i) => <p key={i}>{o}</p>)}
+                                                                                        {printOutput[currentInputIndex]?.map((o, i) => <p key={i}>{o}</p>)}
                                                                         </pre>
                                                                     </div>
                                                                 )}
                                                                 <div>
                                                                     <p className="font-bold">Your Output:</p>
-                                                                    <pre className={`whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 ${output[displayingTestCase][4] === true ? 'text-green-500' : 'text-red-500'}`}>
-                                                                                    {JSON.stringify(userOutput[displayingTestCase], null)}
+                                                                                <pre className={`whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 ${output[currentInputIndex][4] === true ? 'text-green-500' : 'text-red-500'}`}>
+                                                                                    {JSON.stringify(userOutput[currentInputIndex], null)}
                                                                     </pre>
                                                                 </div>
                                                                 <div>
                                                                     <p className="font-bold">Expected Output:</p>
                                                                     <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 text-green-500">
-                                                                                    {JSON.stringify(expectedOutput[displayingTestCase])}
+                                                                                    {JSON.stringify(expectedOutput[currentInputIndex])}
                                                                     </pre>
                                                                 </div>
                                                             </div>

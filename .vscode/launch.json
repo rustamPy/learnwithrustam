@@ -9,7 +9,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
-            "url": "http://localhost:3000/leetcode/324",
+            "url": "http://localhost:3000/leetcode/1",
             "webRoot": "${workspaceFolder}"
         }
     ]

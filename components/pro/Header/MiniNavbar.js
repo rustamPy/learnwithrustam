@@ -201,7 +201,7 @@ const MiniNavbar = ({ children }) => {
                     <PiLineVertical className='text-gray-300 dark:text-gray-500' />
                     <div className='flex items-center hover:bg-gray-100 font-semibold rounded-xl mr-2 p-1'>
                         <MdFormatListNumbered className='mr-1' />
-                        <button onClick={() => setOpen(true)} ripple variant="text" className='text-sm' > Problem List </button>
+                        <button onClick={() => setOpen(true)} variant="text" className='text-sm' > Problem List </button>
                     </div>
                     <QuestionIteration questions={questions} pathname={pathname} />
 

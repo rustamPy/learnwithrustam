@@ -26,6 +26,9 @@ const QuestionPanel = ({ question }) => {
 
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [activeAccordion, setActiveAccordion] = useState(null);
+    const [questionFullScreen, setQuestionFullScreen] = useState(false);
+
+
 
     // Create a ref for the scrollable container
     const scrollableRef = useRef(null);
@@ -91,6 +94,8 @@ const QuestionPanel = ({ question }) => {
                     { name: 'Description', icon: <BsFileText />, color: "text-blue-800" },
                     { name: 'Editorial', icon: <FaHatWizard />, color: "text-yellow-800" }
                 ]}
+                isFullScreen={questionFullScreen}
+                setFullScreen={setQuestionFullScreen}
             >
                 {/* Scrollable Content Area */}
                 <div className="p-4 h-full overflow-auto" ref={scrollableRef}>

@@ -1,5 +1,6 @@
 ---
 params: ['nums1', 'nums2']
+types: ['List[int]', 'List[int]']
 testFunction: linked_list
 solution: |
     class _Solution:

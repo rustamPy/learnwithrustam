@@ -7,8 +7,10 @@ export const languages = [
     { id: 71, name: 'Python', monacoId: 'python' },
 ];
 
+import { RiFullscreenFill, RiFullscreenExitLine } from "react-icons/ri";
 
-export const WindowPanel = memo(({ tabs = [], children, activeTab = false }) => {
+
+export const WindowPanel = memo(({ tabs = [], children, activeTab = false, isFullScreen = false, isHidden = true, setFullScreen, setHidden }) => {
     const [selectedTab, setSelectedTab] = useState(0);
     const childrenArray = React.Children.toArray(children);
     const safeTabs = tabs.length > 0 ? tabs : [{ name: 'Default Tab' }];
@@ -25,8 +27,9 @@ export const WindowPanel = memo(({ tabs = [], children, activeTab = false }) => 
     }, [activeTab]); // Adding activeTab as a dependency ensures dynamic updates
 
     return (
-        <div className="bg-gray-50 dark:bg-gray-900 rounded-lg m-1 h-[calc(100%-8px)] overflow-auto pb-8">
-            <div className='flex bg-gray-200 dark:bg-gray-700 p-2 sticky top-0  z-10'>
+        <div className="bg-gray-50 dark:bg-gray-900 rounded-lg m-1 h-full overflow-auto pb-8 ">
+            <div className='flex bg-gray-200 dark:bg-gray-700 p-2 sticky top-0 z-10 items-center justify-between'>
+                <div className="flex flex-row">
                 {safeTabs.map((t, index) => (
                     <div key={`${index}-tab-container`} className="flex items-center">
                         <div
@@ -39,6 +42,13 @@ export const WindowPanel = memo(({ tabs = [], children, activeTab = false }) => 
                         {index < safeTabs.length - 1 && <PiLineVertical className='text-gray-300 dark:text-gray-500' />}
                     </div>
                 ))}
+                </div>
+
+                <div>
+                    <div className="flex flex-row">
+                        {isFullScreen ? <RiFullscreenExitLine onClick={() => setFullScreen(false)} /> : <RiFullscreenFill onClick={() => setFullScreen(true)} />}
+                    </div>
+                </div>
             </div>
             {childrenArray[selectedTab] || childrenArray[0] || <div>No content available</div>}
         </div>

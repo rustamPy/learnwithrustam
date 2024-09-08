@@ -10,10 +10,12 @@ import MiniNavbar from '@/components/pro/Header/MiniNavbar';
 
 import CodeEditor from './CodeEditor';
 import QuestionPanel from './QuestionPanel';
-import { LoadingDisplay } from './Components';
-import { languages } from './Components';
+import { LoadingDisplay, languages } from './Components';
 
 import { PiLineVertical } from 'react-icons/pi';
+
+import { convertTestCase, BASE_CODE, SPECIFIC_BASE_CODE, toCamelCase } from './utils'
+
 
 const CodeEditorRunner = ({ params }) => {
     const { id } = params;
@@ -23,44 +25,25 @@ const CodeEditorRunner = ({ params }) => {
     const [status, setStatus] = useState(null);
 
     const [inputs, setInputs] = useState([]);
+    const [inputTypes, setInputTypes] = useState([])
     const [testFunction, setTestFunction] = useState(null);
     const [solution, setSolution] = useState(null);
     const [expectedOutput, setExpectedOutput] = useState([])
     const [userOutput, setUserOutput] = useState([])
+    const [errorOutput, setErrorOutput] = useState([])
 
-    const [targetTests, setTargetTests] = useState([])
-
-
-    const [defaultInputs, setDumpTestCase] = useState([]);
     const [inputParams, setTestParams] = useState([]);
-    const [evaluatedTestCase, setEvaluatedTestCase] = useState(defaultInputs);
+    const [maxShowingInputIndex, setMaxShowingInputIndex] = useState(2)
+    const [evaluatedInputs, setEvaluatedInputs] = useState(inputs.slice(0, maxShowingInputIndex + 1));
 
     const { setIsNavbarVisible } = useNavbarVisibility();
-    const [longCode, setLongCode] = useState('');
     const [shortCode, setShortCode] = useState('');
-    const [baseCode, setBaseCase] = useState('')
+    const [baseCode, setBaseCode] = useState('')
 
     const [output, setOutput] = useState(null);
     const [error, setError] = useState(null);
     const [isRunning, setIsRunning] = useState(false);
 
-    const convertTestCase = (testString, params) => {
-        let lines = testString.trim().split('\n').map(str => str.replace(/^<p>/, '').replace(/<\/p>$/, ''));
-        const result = [];
-        for (let i = 0; i < lines.length; i += params.length + 1) {
-            const testCase = lines.slice(i, i + params.length + 1).map(item => {
-                try {
-                    return JSON.parse(item);
-                } catch (e) {
-                    return item;
-                }
-            });
-            result.push(testCase);
-        }
-        return result;
-    };
-
-    console.log(`page inputs: ${inputs}`)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -68,16 +51,19 @@ const CodeEditorRunner = ({ params }) => {
                 const fetchedQuestion = await fetchEachQuestionMD(id);
                 const fetchedTest = await fetchEachTest(id);
 
-                const params = fetchedTest.params;
-                const convertedTestCase = convertTestCase(fetchedTest.content, params);
 
-                setSolution(fetchedTest.solution)
+                console.log('FETCHED CONTENT - TEST')
+                console.log(fetchedTest.content)
+                const params = fetchedTest.params;
+                const types = fetchedTest.types || [];
+                const convertedInputs = convertTestCase(fetchedTest.content, params, types);
+
+                setSolution(fetchedTest.solution);
                 setTestFunction(fetchedTest.testFunction);
-                setSolution(fetchedTest.solution)
-                setInputs(convertedTestCase);
+                setInputTypes(types);
+                setInputs(convertedInputs);
                 setQuestion(fetchedQuestion);
                 setTestParams(params);
-                setDumpTestCase(convertedTestCase.slice(0, 3));
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -98,22 +84,35 @@ const CodeEditorRunner = ({ params }) => {
     }, []);
 
 
+
+    const handleSetLangSample = useCallback((newInputs) => {
+        try {
+            const functionName = toCamelCase(question?.title) || '';
+            const functionParams = inputParams || [];
+
+            const baseCodeTemplate = !testFunction ?
+                BASE_CODE[language?.monacoId](JSON.stringify(functionParams), JSON.stringify(newInputs), functionName) :
+                SPECIFIC_BASE_CODE[language?.monacoId] && SPECIFIC_BASE_CODE[language?.monacoId][testFunction] && SPECIFIC_BASE_CODE[language?.monacoId][testFunction](JSON.stringify(newInputs), functionName, JSON.stringify(functionParams))
+            setBaseCode(baseCodeTemplate)
+            return baseCodeTemplate
+        } catch (error) {
+            console.error("Error loading data: ", error);
+            setCurrentShort("Error");
+        }
+    }, [language, question, inputs, inputParams, toCamelCase]);
+
     const runCode = useCallback(async () => {
         setIsRunning(true);
         setOutput('Running...');
         setError(null);
-        setEvaluatedTestCase(defaultInputs);
+        setEvaluatedInputs(inputs.slice(0, maxShowingInputIndex + 1));
 
         try {
-            const runCode = `${shortCode}\n\n${solution}\n\n${baseCode}`
-            console.log(`tFunction: ${testFunction}`)
-            console.log(`sCode: ${shortCode}`)
-            console.log(`solution: ${solution}`)
-            console.log(`bCode: ${baseCode}`)
+            const newInputs = convertTestCase(inputs, inputParams, inputTypes)
+            const bCode = baseCode || handleSetLangSample(newInputs);
+            const runCode = `${shortCode}\n\n${solution}\n\n${bCode}`;
+            console.log(runCode)
 
-            console.log(`runCode: ${runCode}`)
-
-            // Run user code with test cases
             const createResponse = await fetch('http://127.0.0.1:2358/submissions', {
                 method: 'POST',
                 headers: {
@@ -124,7 +123,7 @@ const CodeEditorRunner = ({ params }) => {
                 body: JSON.stringify({
                     language_id: language.id,
                     source_code: runCode,
-                    stdin: JSON.stringify(defaultInputs),
+                    stdin: '',
                 }),
             });
 
@@ -154,8 +153,6 @@ const CodeEditorRunner = ({ params }) => {
 
             } while (getResponseData.status && getResponseData.status.id <= 2);
 
-            console.log(`getResponseDat: ${getResponseData}`)
-
             if (getResponseData.stdout) {
                 const jsonOutput = getResponseData.stdout
                     .replace(/None/g, 'null')
@@ -164,14 +161,14 @@ const CodeEditorRunner = ({ params }) => {
 
                 try {
                     const parsedOutput = JSON.parse(jsonOutput);
-                    console.log(`parsedOutput: ${parsedOutput}`)
-
+                    console.log(parsedOutput)
                     if (parsedOutput.print_output || parsedOutput.test_results) {
                         handlePassConditions(parsedOutput.test_results);
                         setOutput(parsedOutput.test_results);
                         setPrintOutput(parsedOutput.print_output);
-                        setExpectedOutput(parsedOutput.expected_outputs)
-                        setUserOutput(parsedOutput.user_outputs)
+                        setExpectedOutput(parsedOutput.expected_outputs);
+                        setUserOutput(parsedOutput.user_outputs);
+                        setErrorOutput(parsedOutput.error_outputs)
                     } else {
                         handlePassConditions(parsedOutput);
                         setOutput(parsedOutput);
@@ -195,9 +192,11 @@ const CodeEditorRunner = ({ params }) => {
         } finally {
             setIsRunning(false);
         }
-    }, [shortCode, baseCode, language.id, defaultInputs, handlePassConditions]);
+    }, [shortCode, baseCode, language.id, handlePassConditions, inputs, inputTypes, inputParams, maxShowingInputIndex]);
 
-    if (!question || inputParams.length === 0 || inputs.length === 0 || defaultInputs.length === 0) {
+
+
+    if (!question || inputParams.length === 0 || inputs.length === 0) {
         return <LoadingDisplay />
     }
 
@@ -231,23 +230,22 @@ const CodeEditorRunner = ({ params }) => {
                 <CodeEditor
                     question={question}
                     inputParams={inputParams}
-                    defaultInputs={defaultInputs}
                     inputs={inputs}
+                    inputTypes={inputTypes}
+                    maxShowingInputIndex={maxShowingInputIndex}
+                    setMaxShowingInputIndex={setMaxShowingInputIndex}
                     setInputs={setInputs}
                     userOutput={userOutput}
+                    errorOutput={errorOutput}
                     expectedOutput={expectedOutput}
-                    targetTests={targetTests}
-                    shortCode={shortCode}
                     setShortCode={setShortCode}
                     isRunning={isRunning}
                     output={output}
                     error={error}
-                    evaluatedTestCase={evaluatedTestCase}
+                    evaluatedInputs={evaluatedInputs}
                     printOutput={printOutput}
                     setPrintOutput={setPrintOutput}
                     status={status}
-                    testFunction={testFunction}
-                    setBaseCode={setBaseCase}
                 />
             </PanelGroup>
         </div>
