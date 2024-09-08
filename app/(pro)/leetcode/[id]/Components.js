@@ -28,16 +28,16 @@ export const WindowPanel = memo(({ tabs = [], children, activeTab = false, isFul
 
     return (
         <div className="bg-gray-50 dark:bg-gray-900 rounded-lg m-1 h-full overflow-auto pb-8 ">
-            <div className='flex bg-gray-200 dark:bg-gray-700 p-2 sticky top-0 z-10 items-center justify-between'>
+            <div className='flex bg-gray-200 dark:bg-gray-800 px-[8px] py-[4px] sticky top-0 z-10 items-center justify-between'>
                 <div className="flex flex-row">
                     {safeTabs.map((t, index) => (
                         <div key={`${index}-tab-container`} className="flex items-center">
                             <div
-                                className={`flex items-center rounded ${selectedTab === index ? 'text-gray-900' : 'text-gray-500'} hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer`}
+                                className={`flex items-center p-1 rounded ${selectedTab === index ? 'text-gray-900' : 'text-gray-500'} hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer`}
                                 onClick={() => setSelectedTab(index)}
                             >
-                                {t.icon && <div className={t.color}>{t.icon}</div>}
-                                <Typography className="font-semibold w-max rounded text-xs p-1 center dark:text-white ">{t.name}</Typography>
+                                {t.icon && <div className={`mr-1 ${t.color}`}>{t.icon}</div>}
+                                <Typography className="font-semibold w-max rounded text-xs center dark:text-white ">{t.name}</Typography>
                             </div>
                             {index < safeTabs.length - 1 && <PiLineVertical className='text-gray-300 dark:text-gray-500' />}
                         </div>

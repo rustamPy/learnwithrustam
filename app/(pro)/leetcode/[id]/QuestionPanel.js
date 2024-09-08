@@ -30,13 +30,11 @@ const QuestionPanel = ({ question }) => {
 
 
 
-    // Create a ref for the scrollable container
     const scrollableRef = useRef(null);
 
     const scrollToAccordion = (href) => {
         setActiveAccordion(href);
 
-        // Use setTimeout to delay the scrolling until after the state update and re-render
         setTimeout(() => {
             const targetAccordion = document.getElementById(href);
             if (targetAccordion && scrollableRef.current) {
@@ -45,20 +43,16 @@ const QuestionPanel = ({ question }) => {
                 const targetRect = targetAccordion.getBoundingClientRect();
                 const targetTopRelativeToContainer = targetRect.top - containerRect.top;
 
-                // Calculate the height of the expanded accordion content
                 const accordionBody = targetAccordion.querySelector('.accordion-body');
                 const accordionBodyHeight = accordionBody ? accordionBody.scrollHeight : 0;
 
-                // Calculate the new scroll position
                 const newScrollTop = container.scrollTop + targetTopRelativeToContainer - 20; // 20px padding
 
-                // Animate the scroll
                 container.scrollTo({
                     top: newScrollTop,
                     behavior: 'smooth'
                 });
 
-                // After the initial scroll, check if the accordion is fully visible
                 setTimeout(() => {
                     const updatedTargetRect = targetAccordion.getBoundingClientRect();
                     const updatedContainerRect = container.getBoundingClientRect();
@@ -70,7 +64,7 @@ const QuestionPanel = ({ question }) => {
                             behavior: 'smooth'
                         });
                     }
-                }, 500); // Adjust this delay as needed
+                }, 500);
             }
         }, 0);
     };
@@ -114,12 +108,14 @@ const QuestionPanel = ({ question }) => {
                                         <div className="flex">
                                             {additionalButtons.map((b, idx) => (
                                                 <div key={idx} className="w-max rounded-full text-[11px] p-1.5 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300 mr-2">
+                                                    <a onClick={() => scrollToAccordion(b.href)} className='cursor-pointer'>
                                                     <div className="flex flex-row items-center">
                                                         <div className={`text-[15px] ${b.icon ? 'mr-1' : ''}`}>{b.icon}</div>
                                                         <div className={`${COLOR_MAP[b.name] ? `text-${COLOR_MAP[b.name]} font-semibold` : ''}`}>
-                                                            <a onClick={() => scrollToAccordion(b.href)} className='cursor-pointer'>{b.name}</a>
+                                                                {b.name}
                                                         </div>
-                                                    </div>
+                                                        </div>
+                                                    </a>
                                                 </div>
                                             ))}
                                         </div>
@@ -145,7 +141,7 @@ const QuestionPanel = ({ question }) => {
                             </div>
 
                                 <div
-                                    className="prose max-w-full text-gray-700 dark:text-gray-100 leading-relaxed mb-4"
+                                    className="prose max-w-full text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4"
                                     dangerouslySetInnerHTML={{ __html: question?.content }}
                                 />
                                 <Details items={additionalButtons} open={activeAccordion} setOpen={setActiveAccordion} />
@@ -167,36 +163,39 @@ const QuestionPanel = ({ question }) => {
     );
 };
 
-const Details = ({ items, open, setOpen }) => {
 
-    return (
-        <>
-            {items.map((item, index) => (
-                item.content && (
-                    <Accordion key={index} open={open === item.href} id={item.href}>
-                        <AccordionHeader onClick={() => setOpen(open === item.href ? null : item.href)} className='text-sm'>
-                            {item.name}
-                        </AccordionHeader>
-                        <AccordionBody>
-                            {typeof item.content === 'string' ? (
-                                <div>{item.content}</div>
-                            ) : (
-                                <div className='flex'>
-                                    {
-                                        item.content.map((i, idx) => (
-                                            <div key={idx} className='w-max rounded-full text-[11px] p-1.5 bg-gray-300 dark:bg-gray-800 text-gray-800 dark:text-gray-300 mr-2'>
-                                                {i}
-                                            </div>
-                                        ))
-                                    }
-                                </div>
-                            )}
-                        </AccordionBody>
-                    </Accordion>
-                )
-            ))}
-        </>
-    );
-}
+const Details = ({ items, open, setOpen }) =>
+    <>
+        {items.map((item, index) => (
+            item.content && (
+                <Accordion key={index} open={open === item.href} id={item.href}>
+                    <AccordionHeader
+                        onClick={() => setOpen(open === item.href ? null : item.href)}
+                        className="border-b-[1px] border-gray-200 dark:border-[#1e1c1cff]" // Change border color
+                    >
+                        <div className='flex flex-row items-center text-xs text-gray-700 dark:text-gray-300'>
+                            <span className='mr-1'>{item.icon}</span>{item.name}
+                        </div>
+                    </AccordionHeader>
+                    <AccordionBody>
+                        {typeof item.content === 'string' ? (
+                            <div>{item.content}</div>
+                        ) : (
+                            <div className='flex'>
+                                {
+                                    item.content.map((i, idx) => (
+                                        <div key={idx} className='w-max rounded-full text-[11px] p-1.5 bg-gray-300 dark:bg-gray-800 text-gray-800 dark:text-gray-300 mr-2'>
+                                            {i}
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        )}
+                    </AccordionBody>
+                </Accordion>
+            )
+        ))}
+    </>
+
 
 export default QuestionPanel;

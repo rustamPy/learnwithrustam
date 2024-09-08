@@ -33,7 +33,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { FiVideo } from 'react-icons/fi';
 
-import ThemeToggle from '@/components/pro/ThemeToggle'; // Adjust import if needed
+import ThemeToggle from '@/components/pro/ThemeToggle';
 import BannerSection from '@/components/pro/Header/Banner';
 
 const RESOURCES = [

@@ -32,13 +32,10 @@ const CoursesGrid = ({ specificCourses, cardsPerPage = 4 }) => {
         currentCourses = specificCourses.slice(startIndex, startIndex + coursesPerPage);;
     }
 
-
-    // Handler to go to a specific page
     const goToPage = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
 
-    // Handler for next and previous buttons
     const nextPage = () => {
         if (currentPage < totalPages) {
             setCurrentPage(currentPage + 1);
@@ -51,7 +48,6 @@ const CoursesGrid = ({ specificCourses, cardsPerPage = 4 }) => {
         }
     };
 
-    // Function to handle adding or removing a course
     const toggleCourse = async (courseId) => {
         let updatedCourses;
         if (userCourses) {
@@ -85,11 +81,10 @@ const CoursesGrid = ({ specificCourses, cardsPerPage = 4 }) => {
         }
     };
 
-    // Generate the pagination numbers with ellipses
     const getPaginationNumbers = () => {
         const pages = [];
         const maxPageNumbersToShow = 5;
-        const sidePages = 2; // Number of pages to show on each side of the current page
+        const sidePages = 2;
 
         if (totalPages <= maxPageNumbersToShow) {
             for (let i = 1; i <= totalPages; i++) {
@@ -97,21 +92,18 @@ const CoursesGrid = ({ specificCourses, cardsPerPage = 4 }) => {
             }
         } else {
             if (currentPage <= sidePages + 1) {
-                // Near the start
                 for (let i = 1; i <= sidePages + 2; i++) {
                     pages.push(i);
                 }
                 pages.push('...');
                 pages.push(totalPages);
             } else if (currentPage >= totalPages - sidePages) {
-                // Near the end
                 pages.push(1);
                 pages.push('...');
                 for (let i = totalPages - sidePages - 1; i <= totalPages; i++) {
                     pages.push(i);
                 }
             } else {
-                // Somewhere in the middle
                 pages.push(1);
                 pages.push('...');
                 for (let i = currentPage - 1; i <= currentPage + 1; i++) {
