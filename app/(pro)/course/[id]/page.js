@@ -109,10 +109,10 @@ function HeroSection({ course }) {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
                     >
-                        <Button size="lg" ripple="light" className="mr-4 bg-lwr-general-blue-light-theme-color-1 dark:bg-lwr-general-gray-dark-theme-color-1 text-gray-200 dark:text-gray-800" onClick={() => alert('TEST')}>
+                        <Button size="lg" className="mr-4 bg-lwr-general-blue-light-theme-color-1 dark:bg-lwr-general-gray-dark-theme-color-1 text-gray-200 dark:text-gray-800" onClick={() => alert('TEST')}>
                             Register
                         </Button>
-                        <Button color="blue" size="lg" ripple="light" variant="outlined" className="dark:border-lwr-general-gray-dark-theme-color-1 text-gray-800 dark:text-gray-200" onClick={scrollToDetails}>
+                        <Button color="blue" size="lg" variant="outlined" className="dark:border-lwr-general-gray-dark-theme-color-1 text-gray-800 dark:text-gray-200" onClick={scrollToDetails}>
                             Preview Course
                         </Button>
                     </motion.div>

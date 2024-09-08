@@ -1,7 +1,6 @@
 'use client';
 import React, { useState, useCallback, useRef } from 'react';
 import {
-    Chip,
     Button,
     Tooltip,
     Accordion,
@@ -14,6 +13,9 @@ import { MdWork } from "react-icons/md";
 import { MdOutlineTopic } from "react-icons/md";
 import { Panel } from 'react-resizable-panels';
 import { WindowPanel, CustomSkeleton } from './Components';
+import { COLOR_MAP } from '@/app/(pro)/leetcode/utils'
+import { FaHatWizard } from "react-icons/fa6";
+
 
 const QuestionPanel = ({ question }) => {
     const colors = {
@@ -24,6 +26,9 @@ const QuestionPanel = ({ question }) => {
 
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [activeAccordion, setActiveAccordion] = useState(null);
+    const [questionFullScreen, setQuestionFullScreen] = useState(false);
+
+
 
     // Create a ref for the scrollable container
     const scrollableRef = useRef(null);
@@ -72,29 +77,6 @@ const QuestionPanel = ({ question }) => {
 
     const toggleBookmark = useCallback(() => {
         setIsBookmarked(prev => !prev);
-        // Here you would typically also update this in your backend or local storage
-    }, []);
-
-    const renderDifficulty = useCallback((level) => {
-        return (
-            <Chip
-                value={level}
-                color={colors[level] || 'blue'}
-                variant="outlined"
-                className="ml-2 text-xs font-semibold"
-            />
-        );
-    }, []);
-
-    const renderTags = useCallback((tags) => {
-        return tags.map((tag, index) => (
-            <Chip
-                key={index}
-                value={tag}
-                color="blue-gray"
-                className="mr-2 mb-2 text-xs w-max"
-            />
-        ));
     }, []);
 
     const additionalButtons = [
@@ -104,13 +86,16 @@ const QuestionPanel = ({ question }) => {
         { name: 'Hint', icon: <FaRegLightbulb />, content: question.hint, href: 'hint' },
     ];
 
+
     return (
         <Panel minSize={20} defaultSize={30}>
             <WindowPanel
                 tabs={[
-                    { name: 'Description', icon: <BsFileText />, color: "text-blue-500" },
-                    { name: 'Editorial', icon: <FaRegLightbulb />, color: "text-yellow-500" }
+                    { name: 'Description', icon: <BsFileText />, color: "text-blue-800" },
+                    { name: 'Editorial', icon: <FaHatWizard />, color: "text-yellow-800" }
                 ]}
+                isFullScreen={questionFullScreen}
+                setFullScreen={setQuestionFullScreen}
             >
                 {/* Scrollable Content Area */}
                 <div className="p-4 h-full overflow-auto" ref={scrollableRef}>
@@ -123,15 +108,15 @@ const QuestionPanel = ({ question }) => {
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="flex flex-col">
                                         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mb-2">
-                                            {question.title}
+                                            {question.slug}. {question.title}
                                         </h1>
                                         {/* Additional Buttons */}
                                         <div className="flex">
                                             {additionalButtons.map((b, idx) => (
-                                                <div key={idx} className="w-max rounded-full text-[11px] p-1.5 bg-gray-300 dark:bg-gray-800 text-gray-800 dark:text-gray-300 mr-2">
+                                                <div key={idx} className="w-max rounded-full text-[11px] p-1.5 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300 mr-2">
                                                     <div className="flex flex-row items-center">
                                                         <div className={`text-[15px] ${b.icon ? 'mr-1' : ''}`}>{b.icon}</div>
-                                                        <div className={`${colors[b.name] ? `text-${colors[b.name]}-800` : ''}`}>
+                                                        <div className={`${COLOR_MAP[b.name] ? `text-${COLOR_MAP[b.name]} font-semibold` : ''}`}>
                                                             <a onClick={() => scrollToAccordion(b.href)} className='cursor-pointer'>{b.name}</a>
                                                         </div>
                                                     </div>
@@ -157,10 +142,6 @@ const QuestionPanel = ({ question }) => {
                                         </Button>
                                     </Tooltip>
                                 </div>
-                            </div>
-
-                            <div className="mb-4">
-                                    {renderTags(question.topics || [])}
                             </div>
 
                                 <div

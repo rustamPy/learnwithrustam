@@ -8,13 +8,7 @@ import SearchBar from '@/components/pro/FunctionalComponents/SearchBar';
 import FilterSortBar from '@/components/pro/FunctionalComponents/FilterSortBar';
 import Pagination from '@/components/pro/FunctionalComponents/Pagination';
 
-
-const COLOR_MAP = {
-    'Easy': 'lwr-leetcode-easy-100',
-    'Medium': 'lwr-leetcode-medium-100',
-    'Hard': 'lwr-leetcode-hard-100'
-};
-
+import { COLOR_MAP } from '@/app/(pro)/leetcode/utils'
 
 const TableHead = ({ columns, onSort }) => (
     <thead>

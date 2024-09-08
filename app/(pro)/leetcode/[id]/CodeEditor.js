@@ -1,92 +1,81 @@
 'use client';
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import Editor from '@monaco-editor/react';
-import { Spinner, Select, Option, Tooltip, Button } from '@material-tailwind/react';
-import { QUESTIONS_MAP, BASES } from './utils';
-import { GoDotFill, GoPlus } from "react-icons/go";
-import { RiCloseCircleFill } from "react-icons/ri";
-import { GrPowerReset } from "react-icons/gr";
-import { TiMediaPlay } from "react-icons/ti";
-import { GrTest } from "react-icons/gr";
+import { Spinner, Select, Option, Tooltip } from '@material-tailwind/react';
+import { SHORT_CODE, toCamelCase, convertTestCase } from './utils';
+import { GoDotFill, GoPlus, GoSkip } from "react-icons/go";
+import { RiCloseCircleFill, RiFullscreenFill, RiFullscreenExitLine } from "react-icons/ri";
+import { GrPowerReset, GrTest } from "react-icons/gr";
 import { IoCodeSlash } from "react-icons/io5";
 import { TbSourceCode } from "react-icons/tb";
-import { WindowPanel, CustomSkeleton } from './Components';
-import { languages } from './Components';
+
+
+import { } from "react-icons/ri";
+import { WindowPanel, CustomSkeleton, languages } from './Components';
 import { useTheme } from 'next-themes';
 
-const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
-    const [shortCode, setShortCode] = useState('');
+const formatInputValue = (value, type) => {
+    if (Array.isArray(value)) {
+        if (type.startsWith('List[List[')) {
+            return `[${value.map(sublist => `[${sublist.join(',')}]`).join(',')}]`;
+        } else if (type.startsWith('List[')) {
+            return `[${value.join(',')}]`;
+        }
+    }
+    return value.toString();
+};
+
+const CodeEditor = ({
+    question,
+    inputs,
+    inputTypes,
+    setInputs,
+    expectedOutput,
+    userOutput,
+    errorOutput,
+    inputParams,
+    setShortCode,
+    isRunning,
+    output,
+    error,
+    evaluatedInputs,
+    printOutput,
+    setPrintOutput,
+    status,
+    maxShowingInputIndex,
+    setMaxShowingInputIndex,
+}) => {
     const [currentShort, setCurrentShort] = useState('');
-    const [longCode, setLongCode] = useState('');
     const [language, setLanguage] = useState(languages[0]);
-    const [output, setOutput] = useState(null);
-    const [printOutput, setPrintOutput] = useState([]);
-    const [error, setError] = useState(null);
-    const [status, setStatus] = useState(null);
-    const [isRunning, setIsRunning] = useState(false);
     const editorRef = useRef(null);
-    const [testCase, setTestCase] = useState(tests);
-    const [dumpTestCase, setDumpTestCase] = useState(dumpTests);
-    const [evaluatedTestCase, setEvaluatedTestCase] = useState(dumpTestCase);
-    const [displayingTestCase, setDisplayingTestCase] = useState(0);
+    const [currentInputIndex, setCurrentInputIndex] = useState(0);
     const [hoverStates, setHoverStates] = useState({});
-    const [savingStatus, setSavingStatus] = useState('')
+    const [savingStatus, setSavingStatus] = useState('');
     const { theme } = useTheme();
 
-    const updateLongCode = useCallback((shortCodeValue) => {
-        const mainIndex = longCode.indexOf("if __name__ == '__main__':");
-        if (mainIndex !== -1) {
-            const newLongCode = shortCodeValue + longCode.slice(mainIndex);
-            setLongCode(newLongCode);
-        } else {
-            setLongCode(shortCodeValue);
-        }
-    }, [longCode]);
+
+    const [editorFullScreen, setEditorFullScreen] = useState(false);
+    const [testsFullScreen, setTestsFullScreen] = useState(false);
+
 
     useEffect(() => {
-        // Load saved code from local storage when component mounts
         const savedCode = localStorage.getItem(`code_${question?.title}`);
         if (savedCode) {
+            setShortCode(savedCode);
             setCurrentShort(savedCode);
-            updateLongCode(savedCode);
-        }
-    }, [question]);
-
-    useEffect(() => {
-        handleSetLangSample();
-    }, [language, testCase]);
-
-    const toCamelCase = useCallback((str) => {
-        return str?.split(' ').map((word, index) =>
-            index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-        ).join('');
-    }, []);
-
-    const handleSetLangSample = useCallback(() => {
-        try {
+        } else {
             const functionName = toCamelCase(question?.title) || '';
-            const params = testParams || [];
-            const shortCodeTemplate = QUESTIONS_MAP[language?.monacoId](functionName, params);
-            const longCodeTemplate = BASES[language?.monacoId](shortCodeTemplate, JSON.stringify(params), JSON.stringify(testCase), functionName);
-            if (shortCodeTemplate && longCodeTemplate) {
+            const shortCodeTemplate = SHORT_CODE[language?.monacoId](functionName, inputParams);
+            if (shortCodeTemplate) {
                 setShortCode(shortCodeTemplate);
-                // Only set currentShort if it's not already set (i.e., not loaded from local storage)
-                if (!currentShort) {
-                    setCurrentShort(shortCodeTemplate);
-                }
-                setLongCode(longCodeTemplate);
+                setCurrentShort(shortCodeTemplate);
             } else {
                 setCurrentShort("");
-                setLongCode("");
                 console.warn(`No template found for language: ${language?.monacoId}`);
             }
-        } catch (error) {
-            console.error("Error loading data: ", error);
-            setCurrentShort("Error");
-            setLongCode("Error");
         }
-    }, [language, question, testCase, testParams, toCamelCase, currentShort]);
+    }, [question, language, inputParams]);
 
     const handleEditorDidMount = (editor, monaco) => {
         editorRef.current = editor;
@@ -105,165 +94,91 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
         }
     }, []);
 
-    const runCode = useCallback(async () => {
-        setIsRunning(true);
-        setOutput('Running...');
-        setError(null);
-        setEvaluatedTestCase(dumpTestCase);
+    const updateInput = useCallback((event, idx) => {
+        const updatedTestCases = JSON.parse(JSON.stringify(inputs));
+        updatedTestCases[currentInputIndex][idx] = event.target.value;
+        const newInputs = convertTestCase(updatedTestCases, inputParams, inputTypes) || updatedTestCases;
+        setInputs(newInputs);
+    }, [inputs, currentInputIndex, inputParams, inputTypes, setInputs]);
 
-        try {
-            const createResponse = await fetch('http://127.0.0.1:2358/submissions', {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json',
-                    'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
-                    'x-rapidapi-key': 'ec77f5a774msh4fc4c1c656aba38p1a4647jsna78adfa32e18',
-                },
-                body: JSON.stringify({
-                    language_id: language.id,
-                    source_code: longCode.replace('${tests}', JSON.stringify(testCase)),
-                    stdin: '',
-                }),
+    const removeInput = useCallback(() => {
+        if (currentInputIndex > 0) {
+            setInputs(prevInputs => prevInputs.filter((_, index) => index !== currentInputIndex));
+            setCurrentInputIndex(prevIndex => prevIndex - 1);
+            setMaxShowingInputIndex(prevMax => prevMax - 1);
+        }
+    }, [currentInputIndex, setInputs, setMaxShowingInputIndex]);
+
+    const cloneCurrentInput = useCallback(() => {
+        if (currentInputIndex >= 0) {
+            setInputs(prevInputs => {
+                const newInput = JSON.parse(JSON.stringify(prevInputs[currentInputIndex]));
+                const newArray = [...prevInputs];
+                newArray.splice(maxShowingInputIndex + 1, 0, newInput);
+                return newArray;
             });
-
-            if (!createResponse.ok) {
-                throw new Error(`HTTP error! status: ${createResponse.status}`);
-            }
-
-            const { token } = await createResponse.json();
-
-            let getResponseData;
-            do {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                const getResponse = await fetch(`http://127.0.0.1:2358/submissions/${token}`, {
-                    method: 'GET',
-                    headers: {
-                        'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
-                        'x-rapidapi-key': 'ec77f5a774msh4fc4c1c656aba38p1a4647jsna78adfa32e18',
-                    },
-                });
-
-                if (!getResponse.ok) {
-                    throw new Error(`HTTP error! status: ${getResponse.status}`);
-                }
-
-                getResponseData = await getResponse.json();
-            } while (getResponseData.status && getResponseData.status.id <= 2);
-
-            if (getResponseData.stdout) {
-                const jsonOutput = getResponseData.stdout
-                    .replace(/None/g, 'null')
-                    .replace(/True/g, 'true')
-                    .replace(/False/g, 'false');
-
-                try {
-                    const parsedOutput = JSON.parse(jsonOutput);
-                    if (parsedOutput.print_output || parsedOutput.test_results) {
-                        handlePassConditions(parsedOutput.test_results);
-                        setOutput(parsedOutput.test_results);
-                        setPrintOutput(parsedOutput.print_output);
-                    } else {
-                        handlePassConditions(parsedOutput);
-                        setOutput(parsedOutput);
-                    }
-                } catch (parseError) {
-                    console.error('JSON parsing error:', parseError);
-                    setError(`Error parsing output: ${jsonOutput}`);
-                }
-            } else if (getResponseData.stderr) {
-                setError(getResponseData.stderr);
-            } else if (getResponseData.compile_output) {
-                setError(getResponseData.compile_output);
-            } else if (getResponseData.message) {
-                setError(getResponseData.message);
-            } else {
-                setError(JSON.stringify(getResponseData, null, 2));
-            }
-        } catch (error) {
-            console.error('Full error:', error);
-            setError('Error: ' + error.message);
-        } finally {
-            setIsRunning(false);
+            setCurrentInputIndex(maxShowingInputIndex + 1);
+            setMaxShowingInputIndex(prevMax => prevMax + 1);
         }
-    }, [language.id, longCode, testCase, dumpTestCase]);
-
-    const handlePassConditions = useCallback((outputArr) => {
-        const allFalse = outputArr.every(subArr => Array.isArray(subArr) && subArr[subArr.length - 1] === false);
-        const allTrue = outputArr.every(subArr => Array.isArray(subArr) && subArr[subArr.length - 1] === true);
-        setStatus(allFalse ? 'Wrong Answers' : allTrue ? 'Right Answers' : 'Mixed Results');
-    }, []);
-
-    const handleChangeTestCases = useCallback((event, testCaseIndex, inputIndex) => {
-        const updatedTestCases = JSON.parse(JSON.stringify(testCase));
-        const updatedDumpTestCases = JSON.parse(JSON.stringify(dumpTestCase));
-
-        let newValue = event.target.value.replace(/[^0-9,.-]/g, '');
-        const valueArray = newValue.split(',').map(value => value.trim()).filter(Boolean).map(Number);
-
-        updatedTestCases[testCaseIndex][inputIndex] = valueArray;
-        updatedDumpTestCases[testCaseIndex][inputIndex] = newValue;
-
-        setTestCase(updatedTestCases);
-        setDumpTestCase(updatedDumpTestCases);
-    }, [testCase, dumpTestCase]);
-
-    const removeTestCases = useCallback((testCaseIndex) => {
-        if (dumpTestCase.length > 1) {
-            const updatedTestCases = testCase.filter((_, index) => index !== testCaseIndex);
-            const updatedDumpTestCases = dumpTestCase.filter((_, index) => index !== testCaseIndex);
-            setTestCase(updatedTestCases);
-            setDumpTestCase(updatedDumpTestCases);
-            setDisplayingTestCase(Math.min(displayingTestCase, updatedDumpTestCases.length - 1));
-        }
-    }, [testCase, dumpTestCase, displayingTestCase]);
-
-    const cloneTestCase = useCallback(() => {
-        if (testCase.length > 0) {
-            const newTestCase = JSON.parse(JSON.stringify(testCase[displayingTestCase]));
-            setTestCase(prevTestCase => [...prevTestCase, newTestCase]);
-            setDumpTestCase(prevDumpTestCase => [...prevDumpTestCase, newTestCase]);
-            setDisplayingTestCase(dumpTestCase.length);
-        }
-    }, [testCase, dumpTestCase, displayingTestCase]);
+    }, [currentInputIndex, maxShowingInputIndex, setInputs, setMaxShowingInputIndex]);
 
     const handleOnEditorChange = useCallback((value) => {
         setCurrentShort(value);
-        updateLongCode(value);
+        setShortCode(value);
         setPrintOutput([]);
-
-        setSavingStatus('Saving...')
-        localStorage.setItem(`code_${question?.title}`, value)
-        setSavingStatus('Saved')
-    }, [longCode, question]);
+        setSavingStatus('Saving...');
+        localStorage.setItem(`code_${question?.title}`, value);
+        setSavingStatus('Saved');
+    }, [question, setShortCode, setPrintOutput]);
 
     const handleResetShortCode = useCallback(() => {
-        setCurrentShort(shortCode);
-        updateLongCode(shortCode);
-        // Remove from local storage
+        const functionName = toCamelCase(question?.title) || '';
+        const shortCodeTemplate = SHORT_CODE[language?.monacoId](functionName, inputParams);
+        setCurrentShort(shortCodeTemplate);
+        setShortCode(shortCodeTemplate);
         localStorage.removeItem(`code_${question?.title}`);
-    }, [shortCode, question, updateLongCode]);
+    }, [question, language, inputParams, setShortCode]);
 
 
-    console.log(savingStatus)
+    console.log(printOutput)
 
+    const memoizedEditor = useMemo(() => (
+        <Editor
+            height="100%"
+            language={language.monacoId}
+            value={currentShort}
+            onChange={handleOnEditorChange}
+            onMount={handleEditorDidMount}
+            theme={theme === 'dark' ? 'vs-dark' : 'vs-light'}
+            options={{
+                minimap: { enabled: true },
+                readOnly: false,
+                lineNumbers: "on",
+                renderWhitespace: "all",
+                autoClosingBrackets: "always",
+                formatOnPaste: true,
+                formatOnType: true,
+            }}
+            loading={<CustomSkeleton />}
+        />
+    ), [language, currentShort, theme, handleOnEditorChange]);
 
-    console.log(output)
 
     return (
         <Panel minSize={40} defaultSize={70}>
             <PanelGroup direction="vertical">
                 <Panel minSize={30} defaultSize={50}>
-                    <WindowPanel tabs={[{ name: 'Code', icon: <IoCodeSlash />, color: 'text-green-500' }]}>
-                        <div className="bg-gray-100 dark:bg-gray-900 rounded-lg m-1 flex flex-col h-full">
-                            <div className="flex items-center p-4 border-b h-16">
-                                <div className='w-54 mr-2'>
-                                    <Select value={language.id.toString()} onChange={handleLanguageChange} label="Language" className='text-xs dark:text-gray-50'>
-                                        {languages.map((lang) => (
-                                            <Option key={lang.id} value={lang.id.toString()} className='text-xs'>{lang.name}</Option>
-                                        ))}
-                                    </Select>
-                                </div>
-                                <div className='mr-2'>
+                    <WindowPanel tabs={[{ name: 'Code', icon: <IoCodeSlash />, color: 'text-green-500' }]} isFullScreen={editorFullScreen} setFullScreen={setEditorFullScreen}>
+                        <div className="bg-gray-100 dark:bg-gray-900 rounded-lg m-1 flex flex-col h-full">                            
+                            <div className="flex items-center justify-between p-4 border-b h-16">
+                                <div className='flex items-center'>
+                                    <div className='w-54 mr-2'>
+                                        <Select value={language.id.toString()} onChange={handleLanguageChange} label="Language" className='text-xs dark:text-gray-50'>
+                                            {languages.map((lang) => (
+                                                <Option key={lang.id} value={lang.id.toString()} className='text-xs'>{lang.name}</Option>
+                                            ))}
+                                        </Select>
+                                    </div>
                                     <Tooltip content={`Reset the current code`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
                                         <button
                                             className="text-sm px-4 py-2 rounded-md text-gray-800 hover:text-gray-70 dark:text-gray-50 dark:hover:text-gray-400"
@@ -273,37 +188,12 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                         </button>
                                     </Tooltip>
                                 </div>
-                                <div className="ml-auto">
-                                    <Tooltip content={`Run the code`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
-                                        <button
-                                            className="px-4 py-2 rounded-md text-gray-800 hover:text-gray-900 hover:bg-gray-200 dark:text-gray-50 dark:hover:text-gray-400 dark:text-gray-50 dark:hover:bg-gray-700"
-                                            onClick={runCode}
-                                        >
-                                            <div className='flex items-center'>
-                                                <TiMediaPlay className='cursor-pointer mr-1' />
-                                                <p className='dark:hover:text-gray-200'>Run</p>
-                                            </div>
-                                        </button>
-                                    </Tooltip>
+                                <div className='flex items-center'>
+                                    <span className="text-sm text-gray-500 mr-2">{savingStatus}</span>
                                 </div>
                             </div>
                             <div className="flex-grow overflow-hidden rounded-b-lg">
-                                <Editor
-                                    height="100%"
-                                    language={language.monacoId}
-                                    value={currentShort}
-                                    onChange={handleOnEditorChange}
-                                    onMount={handleEditorDidMount}
-                                    theme={theme === 'dark' ? 'vs-dark' : 'vs-light'}
-                                    options={{
-                                        minimap: { enabled: true },
-                                        readOnly: false,
-                                        lineNumbers: "on",
-                                        renderWhitespace: "all"
-                                    }}
-                                    loading={<CustomSkeleton />}
-
-                                />
+                                {memoizedEditor}
                             </div>
                         </div>
                     </WindowPanel>
@@ -316,13 +206,15 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                             { name: 'Output', icon: isRunning ? <Spinner className='h-4 w-4 mr-2' /> : <TbSourceCode />, color: 'text-green-500' }
                         ]}
                         activeTab={isRunning || output ? 1 : 0}
+                        isFullScreen={testsFullScreen}
+                        setFullScreen={setTestsFullScreen}
                     >
                         <div className="bg-gray-100 rounded-xl overflow-auto h-[calc(100%-8px)] p-2 m-1">
                             <div className="flex flex-col space-y-4">
                                 <div className="flex flex-wrap gap-2">
-                                    {dumpTestCase && dumpTestCase.length > 0 ? (
+                                    {inputs && inputs.length > 0 ? (
                                         <>
-                                            {dumpTestCase.map((_, index) => (
+                                            {inputs.slice(0, maxShowingInputIndex + 1).map((_, index) => (
                                                 <div
                                                     key={`${index}-test-case-button`}
                                                     className="relative"
@@ -330,25 +222,25 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                                     onMouseLeave={() => setHoverStates(prev => ({ ...prev, [index]: false }))}
                                                 >
                                                     <button
-                                                        className={`text-sm px-4 py-2 rounded-md ${displayingTestCase === index ? 'bg-gray-700 text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
-                                                        onClick={() => setDisplayingTestCase(index)}
+                                                        className={`text-sm px-4 py-2 rounded-md ${currentInputIndex === index ? 'bg-gray-700 text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
+                                                        onClick={() => setCurrentInputIndex(index)}
                                                     >
                                                         Case {index + 1}
                                                     </button>
                                                     {hoverStates[index] && (
                                                         <button
                                                             className="absolute -top-2 -right-2 text-sm rounded-full bg-white"
-                                                            onClick={() => removeTestCases(index)}
+                                                            onClick={() => removeInput()}
                                                         >
                                                             <RiCloseCircleFill className="text-xl text-red-500 hover:text-red-700" />
                                                         </button>
                                                     )}
                                                 </div>
                                             ))}
-                                            <Tooltip content={`Clone the current test Case ${displayingTestCase + 1}`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
+                                            <Tooltip content={`Clone the current test Case ${currentInputIndex + 1}`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
                                                 <button
                                                     className="text-sm px-4 py-2 rounded-md text-gray-800 hover:text-gray-700"
-                                                    onClick={cloneTestCase}
+                                                    onClick={cloneCurrentInput}
                                                 >
                                                     <GoPlus />
                                                 </button>
@@ -360,31 +252,23 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-4">
-                                    {dumpTestCase[displayingTestCase] && (
+                                    {inputs[currentInputIndex] && (
                                         <div className="grid grid-cols-1 gap-4">
                                             <div>
                                                 <div className="flex flex-col gap-2">
-                                                    {dumpTestCase[displayingTestCase].slice(0, -1).map((inputValue, inputIndex) => (
-                                                        <>
-                                                            <p>{testParams[inputIndex]}:</p>
+                                                    {inputs[currentInputIndex].slice(0, inputParams.length).map((val, idx) => (
+                                                        <div key={`${currentInputIndex}-input-${idx}`}>
+                                                            <p>{inputParams[idx]} ({inputTypes[idx]}):</p>
                                                             <input
-                                                                key={`${displayingTestCase}-input-${inputIndex}`}
-                                                                value={inputValue}
-                                                                onChange={(event) => handleChangeTestCases(event, displayingTestCase, inputIndex)}
-                                                                className="border border-gray-300 rounded-md px-2 py-1"
+                                                                key={`${currentInputIndex}-input-${idx}`}
+                                                                value={formatInputValue(val, inputTypes[idx])}
+                                                                onChange={(e) => updateInput(e, idx)}
+                                                                className="border border-gray-300 rounded-md px-2 py-1 w-full"
                                                             />
-                                                        </>
+                                                        </div>
                                                     ))}
                                                 </div>
                                             </div>
-                                            {testCase[displayingTestCase]?.output?.length > 0 && (
-                                                <div>
-                                                    <p className="font-bold">Expected Output:</p>
-                                                    <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48">
-                                                        {JSON.stringify(testCase[displayingTestCase].output, null, 2)}
-                                                    </pre>
-                                                </div>
-                                            )}
                                         </div>
                                     )}
                                 </div>
@@ -393,7 +277,7 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
 
                         <div className="bg-gray-100 rounded-xl overflow-auto h-[calc(100%-8px)] p-2 m-1">
                             <div>
-                                {testCase && testCase.length > 0 && !output ? (
+                                {inputs && inputs.length > 0 && !output ? (
                                     <p>Run code to see output</p>
                                 ) : (
                                     <>
@@ -411,37 +295,44 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                                 ) : (
                                                     <div>
                                                         <h1 className={`text-xl mb-4 ${status === 'Wrong Answers' ? 'text-red-500' : status === 'Right Answers' ? 'text-green-500' : 'text-yellow-500'}`}>
-                                                            {status}
+                                                                        {errorOutput.length > 0 ? 'Error' : status}
                                                         </h1>
                                                         <div className="flex flex-wrap gap-2 mb-4">
-                                                            {evaluatedTestCase.map((_, index) => (
+                                                                        {evaluatedInputs.map((_, index) => (
                                                                 <button
                                                                     key={`output-${index}`}
-                                                                    className={`text-sm px-4 py-2 rounded-md ${displayingTestCase === index ? 'bg-gray-300 text-gray-800' : 'bg-gray-100 hover:bg-gray-200'}`}
-                                                                    onClick={() => setDisplayingTestCase(index)}
+                                                                                className={`text-sm px-4 py-2 rounded-md ${currentInputIndex === index ? 'bg-gray-300 text-gray-800' : 'bg-gray-100 hover:bg-gray-200'}`}
+                                                                                onClick={() => setCurrentInputIndex(index)}
                                                                 >
                                                                     <div className="flex items-center">
-                                                                        <GoDotFill className={`mr-2 ${output && output.length >= 4 && output[index][4] === true ? 'text-green-500' : 'text-red-500'}`} />
+                                                                                    {errorOutput.length > 0 ? <GoSkip className='mr-2' /> : <GoDotFill className={`mr-2 ${status === 'Wrong Answers' ? 'text-red-500' : status === 'Right Answers' ? 'text-green-500' : 'text-red-500'}`} />}
                                                                         <span>Case {index + 1}</span>
                                                                     </div>
                                                                 </button>
                                                             ))}
                                                         </div>
-                                                        {output && output[displayingTestCase] && (
+                                                                    {output && output[currentInputIndex] && (
                                                             <div className="grid grid-cols-1 gap-4">
+                                                                            {errorOutput.length > 0 && (
+                                                                                <div className='bg-red-100 rounded-xl '>
+                                                                                    <pre className="whitespace-pre-wrap p-2 overflow-auto max-h-48 text-red-800">
+                                                                                        {errorOutput[currentInputIndex]}
+                                                                                    </pre>
+                                                                                </div>
+                                                                            )}
                                                                 <div>
                                                                     <p className="font-bold">Inputs:</p>
                                                                     <div className="flex flex-col gap-2">
-                                                                        {dumpTestCase[displayingTestCase].slice(0, -1).map((inputValue, inputIndex) => (
+                                                                                    {inputs[currentInputIndex].slice(0, inputParams.length).map((val, idx) => (
 
                                                                             <>
-                                                                                <p>{testParams[inputIndex]}</p>
-                                                                                <input
-                                                                                    key={`output-${displayingTestCase}-input-${inputIndex}`}
-                                                                                    value={inputValue}
-                                                                                    className="border border-gray-300 rounded-md px-2 py-1"
-                                                                                    disabled
-                                                                                />
+                                                                                            <p>{inputParams[idx]}</p>
+                                                                                            <input
+                                                                                                key={`${currentInputIndex}-output-${idx}`}
+                                                                                                value={val}
+                                                                                                className="border border-gray-300 rounded-md px-2 py-1"
+                                                                                                disabled
+                                                                                            />
                                                                             </>
                                                                         ))}
                                                                     </div>
@@ -450,20 +341,20 @@ const CodeEditor = ({ question, tests, dumpTests, testParams }) => {
                                                                     <div>
                                                                         <p className="font-bold">Stdout:</p>
                                                                         <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 text-gray-800">
-                                                                            {printOutput[displayingTestCase]?.map((o, i) => <p key={i}>{o}</p>)}
+                                                                                        {printOutput[currentInputIndex]?.map((o, i) => <p key={i}>{o}</p>)}
                                                                         </pre>
                                                                     </div>
                                                                 )}
                                                                 <div>
                                                                     <p className="font-bold">Your Output:</p>
-                                                                    <pre className={`whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 ${output[displayingTestCase][4] === true ? 'text-green-500' : 'text-red-500'}`}>
-                                                                        {JSON.stringify(output[displayingTestCase][3], null, 2)}
+                                                                                <pre className={`whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 ${output[currentInputIndex][4] === true ? 'text-green-500' : 'text-red-500'}`}>
+                                                                                    {JSON.stringify(userOutput[currentInputIndex], null)}
                                                                     </pre>
                                                                 </div>
                                                                 <div>
                                                                     <p className="font-bold">Expected Output:</p>
                                                                     <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 text-green-500">
-                                                                        {JSON.stringify(output[displayingTestCase][2], null, 2)}
+                                                                                    {JSON.stringify(expectedOutput[currentInputIndex])}
                                                                     </pre>
                                                                 </div>
                                                             </div>
