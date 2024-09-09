@@ -244,7 +244,7 @@ const CodeEditorRunner = ({ params }) => {
             <PanelGroup direction="horizontal" className="flex-1" autoSaveId="persistence">
                 <QuestionPanel question={question} />
 
-                <PanelResizeHandle className="w-1 mt-8 mb-8 center bg-gray-400 dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-blue-800 rounded-full cursor-ns-resize" />
+                <PanelResizeHandle className="w-1 center bg-none hover:bg-blue-500 dark:hover:bg-blue-800 rounded-full cursor-ns-resize" />
 
                 <CodeEditor
                     question={question}

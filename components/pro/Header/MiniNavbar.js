@@ -197,7 +197,7 @@ const MiniNavbar = ({
 
                         <div className='flex items-center ml-2'>
                             <MdFormatListNumbered className='mr-1' />
-                            <button onClick={() => setOpen(true)} className='text-sm'>
+                            <button onClick={() => setOpen(true)} className='text-sm font-semibold'>
                                 Problem List
                             </button>
                         </div>
@@ -241,7 +241,7 @@ const MiniNavbar = ({
                                         className="flex items-center rounded-md text-gray-800 hover:text-gray-900 hover:bg-gray-200 dark:text-gray-50 dark:hover:text-gray-400 dark:hover:bg-gray-700"
                                         onClick={runCode}
                                     >
-                                        <span className="dark:hover:dark:text-[#d6ffd1] dark:text-[#d0ffca] px-2">{!isRunning ? <div className='flex flex-row items-center'> <HiOutlinePlay className="cursor-pointer mr-1" /> Run code</div> : <div className='flex flex-row items-center'> <Spinner className='h-4 w-4 mr-2' /> Running </div>}</span>
+                                        <span className="dark:hover:dark:text-[#d6ffd1] dark:text-[#d0ffca] px-2 font-semibold">{!isRunning ? <div className='flex flex-row items-center'> <HiOutlinePlay className="cursor-pointer mr-1" /> Run code</div> : <div className='flex flex-row items-center'> <Spinner className='h-4 w-4 mr-2' /> Running </div>}</span>
                                     </button>
                                 </Tooltip>
                             </div>

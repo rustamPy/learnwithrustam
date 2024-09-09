@@ -165,7 +165,12 @@ const CodeEditor = ({
         <Panel minSize={40} defaultSize={70}>
             <PanelGroup direction="vertical">
                 <Panel minSize={30} defaultSize={50}>
-                    <WindowPanel tabs={[{ name: 'Code', icon: <IoCodeSlash />, color: 'text-green-500' }]} isFullScreen={editorFullScreen} setFullScreen={setEditorFullScreen}>
+                    <WindowPanel
+                        tabs={[{ name: 'Code', icon: <IoCodeSlash />, color: 'text-green-500' }]}
+                        isFullScreen={editorFullScreen}
+                        setFullScreen={setEditorFullScreen}
+                        additionalClass={"!h-[calc(100%)]"}
+                    >
                         <div className="bg-gray-100 dark:bg-gray-900 rounded-lg m-1 flex flex-col h-full">                            
                             <div className="flex items-center justify-between p-4 h-16">
                                 <div className='flex items-center'>
@@ -195,7 +200,7 @@ const CodeEditor = ({
                         </div>
                     </WindowPanel>
                 </Panel>
-                <PanelResizeHandle className="h-1 mr-8 ml-8 mt-1 center bg-gray-400 dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-blue-800 rounded-full cursor-ns-resize" />
+                <PanelResizeHandle className="h-1 center bg-none hover:bg-blue-500 dark:hover:bg-blue-800 rounded-full cursor-ns-resize" />
                 <Panel minSize={20} defaultSize={50}>
                     <WindowPanel
                         tabs={[
@@ -206,7 +211,7 @@ const CodeEditor = ({
                         isFullScreen={testsFullScreen}
                         setFullScreen={setTestsFullScreen}
                     >
-                        <div className="bg-gray-100 dark:bg-gray-900 rounded-xl overflow-auto h-[calc(100%-8px)] p-2 m-1">
+                        <div className="bg-gray-100 dark:bg-gray-900 rounded-xl overflow-auto p-2 m-1">
                             <div className="flex flex-col space-y-4">
                                 <div className="flex flex-wrap gap-2">
                                     {inputs && inputs.length > 0 ? (
@@ -272,7 +277,7 @@ const CodeEditor = ({
                             </div>
                         </div>
 
-                        <div className="bg-gray-100 dark:bg-gray-900 rounded-xl overflow-auto h-[calc(100%-8px)] p-2 m-1">
+                        <div className="bg-gray-100 dark:bg-gray-900 rounded-xl overflow-auto p-2 m-1">
                             <>
                                 {inputs && inputs.length > 0 && !output ? (
                                     <div className="flex justify-center items-center h-full">

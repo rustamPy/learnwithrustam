@@ -11,7 +11,16 @@ export const languages = [
 
 
 
-export const WindowPanel = memo(({ tabs = [], children, activeTab = false, isFullScreen = false, isHidden = true, setFullScreen, setHidden }) => {
+export const WindowPanel = memo(({
+    tabs = [],
+    children,
+    activeTab = false,
+    isFullScreen = false,
+    isHidden = true,
+    setFullScreen,
+    setHidden,
+    additionalClass = ''
+}) => {
     const [selectedTab, setSelectedTab] = useState(0);
     const childrenArray = React.Children.toArray(children);
     const safeTabs = tabs.length > 0 ? tabs : [{ name: 'Default Tab' }];
@@ -27,7 +36,7 @@ export const WindowPanel = memo(({ tabs = [], children, activeTab = false, isFul
     }, [activeTab]);
 
     return (
-        <div className="bg-gray-50 dark:bg-gray-900 rounded-lg m-1 h-full overflow-auto pb-8 ">
+        <div className={`bg-gray-50 dark:bg-gray-900 rounded-xl h-[calc(100%-15px)] my-[2px] mx-[1px]  overflow-auto ${additionalClass}`}>
             <div className='flex bg-gray-200 dark:bg-gray-800 px-[8px] py-[4px] sticky top-0 z-10 items-center justify-between'>
                 <div className="flex flex-row">
                     {safeTabs.map((t, index) => (
