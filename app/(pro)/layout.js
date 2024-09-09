@@ -1,4 +1,3 @@
-// RootLayout.js
 import React from 'react';
 import '@/assets/styles/globals.css';
 import { getServerSession } from 'next-auth/next';
@@ -7,7 +6,7 @@ import ClientSessionProvider from './SessionProvider';
 import NavBar from '@/components/pro/Header/Navbar';
 import LWRFooter from '@/components/pro/Footer/LWRFooter';
 import { ThemeProvider } from 'next-themes';
-import { NavbarVisibilityProvider } from '@/components/pro/Header/NavbarVisibilityContext'; // Import the context provider
+import { NavbarVisibilityProvider } from '@/components/pro/Header/NavbarVisibilityContext';
 
 export const metadata = {
   title: 'LWR',

@@ -257,13 +257,11 @@ const CodeEditorRunner = ({ params }) => {
     const handleOnEditorChange = (value) => {
         setShortCode(value);
 
-        // Update longCode by replacing everything before "if __name__ == '__main__':"
         const mainIndex = longCode.indexOf("if __name__ == '__main__':");
         if (mainIndex !== -1) {
             const newLongCode = value + longCode.slice(mainIndex);
             setLongCode(newLongCode);
         } else {
-            // If "if __name__ == '__main__':" is not found, just update with the new value
             setLongCode(value);
         }
 
@@ -281,7 +279,7 @@ const CodeEditorRunner = ({ params }) => {
             </div>
             <PanelGroup direction="horizontal" className="flex-1" autoSaveId="persistence">
                 <Panel minSize={20} defaultSize={30}>
-                    <div className="bg-gray-100 rounded-lg m-1 h-[calc(100%-8px)] overflow-auto">
+                    <div className="bg-gray-100 rounded-lg m-1 overflow-auto">
                         <div className="p-4">
                             {!question ? (
                                 <div className="flex justify-center items-center h-full">
@@ -309,7 +307,7 @@ const CodeEditorRunner = ({ params }) => {
                 <Panel minSize={40} defaultSize={70}>
                     <PanelGroup direction="vertical">
                         <Panel minSize={30} defaultSize={50}>
-                            <div className="bg-gray-100 rounded-lg m-1 flex flex-col h-[calc(100%-8px)]">
+                            <div className="bg-gray-100 rounded-lg m-1 flex flex-col">
                                 <div className="flex justify-between items-center p-4 border-b">
                                     <div className="flex items-center">
                                         <LuFileCode2 className={"mr-1"} />
@@ -337,7 +335,7 @@ const CodeEditorRunner = ({ params }) => {
                         </Panel>
                         <PanelResizeHandle className="h-1 mr-8 ml-8 center bg-gray-400 hover:bg-blue-500 rounded-full cursor-ns-resize" />
                         <Panel minSize={20} defaultSize={50}>
-                            <div className="bg-gray-100 rounded-xl overflow-auto h-[calc(100%-8px)] p-2 m-1">
+                            <div className="bg-gray-100 rounded-xl overflow-auto p-2 m-1">
                                 <Tabs value={activeTab} key={activeTab} className="p-4">
                                     <TabsHeader>
                                         <Tab className="text-sm" value="default" onClick={() => setActiveTab('default')}>Default Test Cases</Tab>

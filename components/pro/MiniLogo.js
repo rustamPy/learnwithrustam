@@ -8,7 +8,7 @@ const MiniLogo = () => {
                 as="a"
                 href="/"
                 className={`cursor-pointer font-extrabold text-lwr-logo-light-theme-color dark:text-lwr-logo-dark-theme-color`}>
-                L {<span className="text-lwr-orange-color-100">{'{W}'}</span>} R
+                L{<span className="text-lwr-orange-color-100 mr-[-1px] ml-[-.2px]">{'{W}'}</span>}R
             </Typography>
         </>
     )

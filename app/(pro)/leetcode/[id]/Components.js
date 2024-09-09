@@ -4,6 +4,8 @@ import { Typography, Spinner } from "@material-tailwind/react";
 import { PiLineVertical } from "react-icons/pi";
 import { RiFullscreenFill, RiFullscreenExitLine } from "react-icons/ri";
 
+import { RiFullscreenFill, RiFullscreenExitLine } from "react-icons/ri";
+
 
 export const languages = [
     { id: 71, name: 'Python', monacoId: 'python' },
@@ -11,7 +13,16 @@ export const languages = [
 
 
 
-export const WindowPanel = memo(({ tabs = [], children, activeTab = false, isFullScreen = false, isHidden = true, setFullScreen, setHidden }) => {
+export const WindowPanel = memo(({
+    tabs = [],
+    children,
+    activeTab = false,
+    isFullScreen = false,
+    isHidden = true,
+    setFullScreen,
+    setHidden,
+    additionalClass = ''
+}) => {
     const [selectedTab, setSelectedTab] = useState(0);
     const childrenArray = React.Children.toArray(children);
     const safeTabs = tabs.length > 0 ? tabs : [{ name: 'Default Tab' }];
@@ -25,19 +36,20 @@ export const WindowPanel = memo(({ tabs = [], children, activeTab = false, isFul
     useEffect(() => {
         handleActiveTab();
     }, [activeTab]);
+    }, [activeTab]);
 
     return (
-        <div className="bg-gray-50 dark:bg-gray-900 rounded-lg m-1 h-full overflow-auto pb-8 ">
-            <div className='flex bg-gray-200 dark:bg-gray-700 p-2 sticky top-0 z-10 items-center justify-between'>
+        <div className={`bg-gray-50 dark:bg-gray-900 rounded-xl h-[calc(100%-15px)] my-[2px] mx-[1px]  overflow-auto ${additionalClass}`}>
+            <div className='flex bg-gray-200 dark:bg-gray-800 px-[8px] py-[4px] sticky top-0 z-10 items-center justify-between'>
                 <div className="flex flex-row">
                     {safeTabs.map((t, index) => (
                         <div key={`${index}-tab-container`} className="flex items-center">
                             <div
-                                className={`flex items-center rounded ${selectedTab === index ? 'text-gray-900' : 'text-gray-500'} hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer`}
+                                className={`flex items-center p-1 rounded ${selectedTab === index ? 'text-gray-900' : 'text-gray-500'} hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer`}
                                 onClick={() => setSelectedTab(index)}
                             >
-                                {t.icon && <div className={t.color}>{t.icon}</div>}
-                                <Typography className="font-semibold w-max rounded text-xs p-1 center dark:text-white ">{t.name}</Typography>
+                                {t.icon && <div className={`mr-1 ${t.color}`}>{t.icon}</div>}
+                                <Typography className="font-semibold w-max rounded text-xs center dark:text-white ">{t.name}</Typography>
                             </div>
                             {index < safeTabs.length - 1 && <PiLineVertical className='text-gray-300 dark:text-gray-500' />}
                         </div>
@@ -54,6 +66,9 @@ export const WindowPanel = memo(({ tabs = [], children, activeTab = false, isFul
         </div>
     );
 });
+WindowPanel.displayName = "WindowPanel"; // Setting display name
+
+
 WindowPanel.displayName = "WindowPanel"; // Setting display name
 
 
@@ -74,12 +89,15 @@ export const CustomSkeleton = () => (
     </div>
 );
 CustomSkeleton.displayName = "CustomSkeleton"; // Setting display name
+CustomSkeleton.displayName = "CustomSkeleton"; // Setting display name
 
 
 
+export const LoadingDisplay = () => (
 export const LoadingDisplay = () => (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
         <Spinner color="amber" className="h-16 w-16 text-blue-500" />
     </div>
 );
+LoadingDisplay.displayName = "LoadingDisplay"; // Setting display name
 LoadingDisplay.displayName = "LoadingDisplay"; // Setting display name
