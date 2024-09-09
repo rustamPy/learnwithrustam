@@ -1,8 +1,16 @@
 'use client';
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavbarVisibility } from '@/components/pro/Header/NavbarVisibilityContext';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useNavbarVisibility } from '@/components/pro/Header/NavbarVisibilityContext';
 import { PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { fetchEachQuestionMD, fetchEachTest } from '@/app/(pro)/leetcode/utils';
+
+
+
+
+import MiniNavbar from '@/components/pro/Header/MiniNavbar';
+
 
 
 
@@ -13,13 +21,68 @@ import CodeEditor from './CodeEditor';
 import QuestionPanel from './QuestionPanel';
 import { LoadingDisplay, languages } from './Components';
 
+import QuestionPanel from './QuestionPanel';
+import { LoadingDisplay, languages } from './Components';
 
+
+import { convertTestCase, BASE_CODE, SPECIFIC_BASE_CODE, toCamelCase } from './utils'
 import { convertTestCase, BASE_CODE, SPECIFIC_BASE_CODE, toCamelCase } from './utils'
 
 
 const CodeEditorRunner = ({ params }) => {
     const { id } = params;
     const [question, setQuestion] = useState('');
+    const [language, _] = useState(languages[0]);
+    const [printOutput, setPrintOutput] = useState([]);
+    const [status, setStatus] = useState(null);
+
+    const [inputs, setInputs] = useState([]);
+    const [inputTypes, setInputTypes] = useState([])
+    const [testFunction, setTestFunction] = useState(null);
+    const [solution, setSolution] = useState(null);
+    const [expectedOutput, setExpectedOutput] = useState([])
+    const [userOutput, setUserOutput] = useState([])
+    const [errorOutput, setErrorOutput] = useState([])
+
+    const [inputParams, setTestParams] = useState([]);
+    const [maxShowingInputIndex, setMaxShowingInputIndex] = useState(2)
+    const [evaluatedInputs, setEvaluatedInputs] = useState(inputs.slice(0, maxShowingInputIndex + 1));
+
+    const { setIsNavbarVisible } = useNavbarVisibility();
+    const [shortCode, setShortCode] = useState('');
+    const [baseCode, setBaseCode] = useState('')
+
+    const [output, setOutput] = useState(null);
+    const [error, setError] = useState(null);
+    const [isRunning, setIsRunning] = useState(false);
+
+    const [isTimerVisible, setIsTimerVisible] = useState(false);
+    const [timer, setTimer] = useState(0);
+    const [isTimerRunning, setIsTimerRunning] = useState(false);
+
+
+
+    useEffect(() => {
+        const savedTimer = localStorage.getItem('timer');
+        if (savedTimer && !isNaN(savedTimer)) {
+            setTimer(parseInt(savedTimer, 10));  // Parse the saved string as an integer
+        }
+    }, []);
+
+    useEffect(() => {
+        if (timer > 0) {  // Only save the timer when it has a valid value
+            localStorage.setItem('timer', timer.toString());
+        }
+    }, [timer]);
+
+    useEffect(() => {
+        let interval = null;
+        if (isTimerRunning) {
+            interval = setInterval(() => {
+                setTimer((prev) => prev + 1);
+            }, 1000);
+        } else if (!isTimerRunning && timer !== 0) {
+            clearInterval(interval);
     const [language, _] = useState(languages[0]);
     const [printOutput, setPrintOutput] = useState([]);
     const [status, setStatus] = useState(null);
@@ -86,7 +149,13 @@ const CodeEditorRunner = ({ params }) => {
                 const params = fetchedTest.params;
                 const types = fetchedTest.types || [];
                 const convertedInputs = convertTestCase(fetchedTest.content, params, types);
+                const types = fetchedTest.types || [];
+                const convertedInputs = convertTestCase(fetchedTest.content, params, types);
 
+                setSolution(fetchedTest.solution);
+                setTestFunction(fetchedTest.testFunction);
+                setInputTypes(types);
+                setInputs(convertedInputs);
                 setSolution(fetchedTest.solution);
                 setTestFunction(fetchedTest.testFunction);
                 setInputTypes(types);
@@ -248,6 +317,23 @@ const CodeEditorRunner = ({ params }) => {
 
                 <CodeEditor
                     question={question}
+                    inputParams={inputParams}
+                    inputs={inputs}
+                    inputTypes={inputTypes}
+                    maxShowingInputIndex={maxShowingInputIndex}
+                    setMaxShowingInputIndex={setMaxShowingInputIndex}
+                    setInputs={setInputs}
+                    userOutput={userOutput}
+                    errorOutput={errorOutput}
+                    expectedOutput={expectedOutput}
+                    setShortCode={setShortCode}
+                    isRunning={isRunning}
+                    output={output}
+                    error={error}
+                    evaluatedInputs={evaluatedInputs}
+                    printOutput={printOutput}
+                    setPrintOutput={setPrintOutput}
+                    status={status}
                     inputParams={inputParams}
                     inputs={inputs}
                     inputTypes={inputTypes}

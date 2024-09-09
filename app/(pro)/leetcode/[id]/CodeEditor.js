@@ -1,6 +1,8 @@
 'use client';
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import Editor from '@monaco-editor/react';
 import { Spinner, Select, Option, Tooltip } from '@material-tailwind/react';
 import { SHORT_CODE, toCamelCase } from './utils';
@@ -9,6 +11,10 @@ import { RiCloseCircleFill, RiFullscreenFill, RiFullscreenExitLine } from "react
 import { GrPowerReset, GrTest } from "react-icons/gr";
 import { IoCodeSlash } from "react-icons/io5";
 import { TbSourceCode } from "react-icons/tb";
+
+
+import { } from "react-icons/ri";
+import { WindowPanel, CustomSkeleton, languages } from './Components';
 
 
 import { } from "react-icons/ri";
@@ -46,13 +52,50 @@ const CodeEditor = ({
     maxShowingInputIndex,
     setMaxShowingInputIndex,
 }) => {
+const formatInputValue = (value, type) => {
+    if (Array.isArray(value)) {
+        if (type.startsWith('List[List[')) {
+            return `[${value.map(sublist => `[${sublist.join(',')}]`).join(',')}]`;
+        } else if (type.startsWith('List[')) {
+            return `[${value.join(',')}]`;
+        }
+    }
+    return value.toString();
+};
+
+const CodeEditor = ({
+    question,
+    inputs,
+    inputTypes,
+    setInputs,
+    expectedOutput,
+    userOutput,
+    errorOutput,
+    inputParams,
+    setShortCode,
+    isRunning,
+    output,
+    error,
+    evaluatedInputs,
+    printOutput,
+    setPrintOutput,
+    status,
+    maxShowingInputIndex,
+    setMaxShowingInputIndex,
+}) => {
     const [currentShort, setCurrentShort] = useState('');
     const [language, setLanguage] = useState(languages[0]);
     const editorRef = useRef(null);
     const [currentInputIndex, setCurrentInputIndex] = useState(0);
+    const [currentInputIndex, setCurrentInputIndex] = useState(0);
     const [hoverStates, setHoverStates] = useState({});
     const [savingStatus, setSavingStatus] = useState('');
+    const [savingStatus, setSavingStatus] = useState('');
     const { theme } = useTheme();
+
+
+    const [editorFullScreen, setEditorFullScreen] = useState(false);
+    const [testsFullScreen, setTestsFullScreen] = useState(false);
 
 
     const [editorFullScreen, setEditorFullScreen] = useState(false);
@@ -63,18 +106,24 @@ const CodeEditor = ({
         const savedCode = localStorage.getItem(`code_${question?.title}`);
         if (savedCode) {
             setShortCode(savedCode);
+            setShortCode(savedCode);
             setCurrentShort(savedCode);
+        } else {
         } else {
             const functionName = toCamelCase(question?.title) || '';
             const shortCodeTemplate = SHORT_CODE[language?.monacoId](functionName, inputParams);
             if (shortCodeTemplate) {
+            const shortCodeTemplate = SHORT_CODE[language?.monacoId](functionName, inputParams);
+            if (shortCodeTemplate) {
                 setShortCode(shortCodeTemplate);
+                setCurrentShort(shortCodeTemplate);
                 setCurrentShort(shortCodeTemplate);
             } else {
                 setCurrentShort("");
                 console.warn(`No template found for language: ${language?.monacoId}`);
             }
         }
+    }, [question, language, inputParams]);
     }, [question, language, inputParams]);
 
     const handleEditorDidMount = (editor, monaco) => {
@@ -120,17 +169,38 @@ const CodeEditor = ({
             setMaxShowingInputIndex(prevMax => prevMax + 1);
         }
     }, [currentInputIndex, maxShowingInputIndex, setInputs, setMaxShowingInputIndex]);
+    const cloneCurrentInput = useCallback(() => {
+        if (currentInputIndex >= 0) {
+            setInputs(prevInputs => {
+                const newInput = JSON.parse(JSON.stringify(prevInputs[currentInputIndex]));
+                const newArray = [...prevInputs];
+                newArray.splice(maxShowingInputIndex + 1, 0, newInput);
+                return newArray;
+            });
+            setCurrentInputIndex(maxShowingInputIndex + 1);
+            setMaxShowingInputIndex(prevMax => prevMax + 1);
+        }
+    }, [currentInputIndex, maxShowingInputIndex, setInputs, setMaxShowingInputIndex]);
 
     const handleOnEditorChange = useCallback((value) => {
         setCurrentShort(value);
+        setShortCode(value);
         setShortCode(value);
         setPrintOutput([]);
         setSavingStatus('Saving...');
         localStorage.setItem(`code_${question?.title}`, value);
         setSavingStatus('Saved');
     }, [question, setShortCode, setPrintOutput]);
+        setSavingStatus('Saving...');
+        localStorage.setItem(`code_${question?.title}`, value);
+        setSavingStatus('Saved');
+    }, [question, setShortCode, setPrintOutput]);
 
     const handleResetShortCode = useCallback(() => {
+        const functionName = toCamelCase(question?.title) || '';
+        const shortCodeTemplate = SHORT_CODE[language?.monacoId](functionName, inputParams);
+        setCurrentShort(shortCodeTemplate);
+        setShortCode(shortCodeTemplate);
         const functionName = toCamelCase(question?.title) || '';
         const shortCodeTemplate = SHORT_CODE[language?.monacoId](functionName, inputParams);
         setCurrentShort(shortCodeTemplate);
@@ -192,9 +262,12 @@ const CodeEditor = ({
                                 </div>
                                 <div className='flex items-center'>
                                     <span className="text-sm text-gray-500 mr-2">{savingStatus}</span>
+                                <div className='flex items-center'>
+                                    <span className="text-sm text-gray-500 mr-2">{savingStatus}</span>
                                 </div>
                             </div>
                             <div className="flex-grow overflow-hidden rounded-b-lg">
+                                {memoizedEditor}
                                 {memoizedEditor}
                             </div>
                         </div>
@@ -210,12 +283,16 @@ const CodeEditor = ({
                         activeTab={isRunning || output ? 1 : 0}
                         isFullScreen={testsFullScreen}
                         setFullScreen={setTestsFullScreen}
+                        isFullScreen={testsFullScreen}
+                        setFullScreen={setTestsFullScreen}
                     >
                         <div className="bg-gray-100 dark:bg-gray-900 rounded-xl overflow-auto p-2 m-1">
                             <div className="flex flex-col space-y-4">
                                 <div className="flex flex-wrap gap-2">
                                     {inputs && inputs.length > 0 ? (
+                                    {inputs && inputs.length > 0 ? (
                                         <>
+                                            {inputs.slice(0, maxShowingInputIndex + 1).map((_, index) => (
                                             {inputs.slice(0, maxShowingInputIndex + 1).map((_, index) => (
                                                 <div
                                                     key={`${index}-test-case-button`}
@@ -240,8 +317,10 @@ const CodeEditor = ({
                                                 </div>
                                             ))}
                                             <Tooltip content={`Clone the current test Case ${currentInputIndex + 1}`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
+                                            <Tooltip content={`Clone the current test Case ${currentInputIndex + 1}`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
                                                 <button
                                                     className="text-sm px-4 py-2 rounded-md text-gray-800 hover:text-gray-700"
+                                                    onClick={cloneCurrentInput}
                                                     onClick={cloneCurrentInput}
                                                 >
                                                     <GoPlus />
@@ -255,6 +334,7 @@ const CodeEditor = ({
 
                                 <div className="grid grid-cols-1 gap-4">
                                     {inputs[currentInputIndex] && (
+                                    {inputs[currentInputIndex] && (
                                         <div className="grid grid-cols-1 gap-4">
                                             <div>
                                                 <div className="flex flex-col gap-2">
@@ -267,6 +347,7 @@ const CodeEditor = ({
                                                                 onChange={(e) => updateInput(e, idx)}
                                                                 className="bg:gray-100 dark:bg-gray-800 rounded-md p-2 w-full text-md"
                                                             />
+                                                        </div>
                                                         </div>
                                                     ))}
                                                 </div>
@@ -302,8 +383,10 @@ const CodeEditor = ({
                                                     <div>
                                                         <h1 className={`text-xl mb-4 ${status === 'Wrong Answers' ? 'text-red-500' : status === 'Right Answers' ? 'text-green-500' : 'text-yellow-500'}`}>
                                                                         {errorOutput.length > 0 ? 'Error' : status}
+                                                                        {errorOutput.length > 0 ? 'Error' : status}
                                                         </h1>
                                                         <div className="flex flex-wrap gap-2 mb-4">
+                                                                        {evaluatedInputs.map((_, index) => (
                                                                         {evaluatedInputs.map((_, index) => (
                                                                 <button
                                                                     key={`output-${index}`}
@@ -311,6 +394,7 @@ const CodeEditor = ({
                                                                                 onClick={() => setCurrentInputIndex(index)}
                                                                 >
                                                                     <div className="flex items-center">
+                                                                                    {errorOutput.length > 0 ? <GoSkip className='mr-2' /> : <GoDotFill className={`mr-2 ${status === 'Wrong Answers' ? 'text-red-500' : status === 'Right Answers' ? 'text-green-500' : 'text-red-500'}`} />}
                                                                                     {errorOutput.length > 0 ? <GoSkip className='mr-2' /> : <GoDotFill className={`mr-2 ${status === 'Wrong Answers' ? 'text-red-500' : status === 'Right Answers' ? 'text-green-500' : 'text-red-500'}`} />}
                                                                         <span>Case {index + 1}</span>
                                                                     </div>
@@ -321,7 +405,15 @@ const CodeEditor = ({
                                                             ))}
                                                         </div>
                                                                     {output && output[currentInputIndex] && (
+                                                                    {output && output[currentInputIndex] && (
                                                             <div className="grid grid-cols-1 gap-4">
+                                                                            {errorOutput.length > 0 && (
+                                                                                <div className='bg-red-100 rounded-xl '>
+                                                                                    <pre className="whitespace-pre-wrap p-2 overflow-auto max-h-48 text-red-800">
+                                                                                        {errorOutput[currentInputIndex]}
+                                                                                    </pre>
+                                                                                </div>
+                                                                            )}
                                                                             {errorOutput.length > 0 && (
                                                                                 <div className='bg-red-100 rounded-xl '>
                                                                                     <pre className="whitespace-pre-wrap p-2 overflow-auto max-h-48 text-red-800">
@@ -333,8 +425,16 @@ const CodeEditor = ({
                                                                     <p className="font-bold">Inputs:</p>
                                                                     <div className="flex flex-col gap-2">
                                                                                     {inputs[currentInputIndex].slice(0, inputParams.length).map((val, idx) => (
+                                                                                    {inputs[currentInputIndex].slice(0, inputParams.length).map((val, idx) => (
 
                                                                             <>
+                                                                                            <p>{inputParams[idx]}</p>
+                                                                                            <input
+                                                                                                key={`${currentInputIndex}-output-${idx}`}
+                                                                                                value={val}
+                                                                                                className="border border-gray-300 rounded-md px-2 py-1"
+                                                                                                disabled
+                                                                                            />
                                                                                             <p>{inputParams[idx]}</p>
                                                                                             <input
                                                                                                 key={`${currentInputIndex}-output-${idx}`}
@@ -351,6 +451,7 @@ const CodeEditor = ({
                                                                         <p className="font-bold">Stdout:</p>
                                                                         <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 text-gray-800">
                                                                                         {printOutput[currentInputIndex]?.map((o, i) => <p key={i}>{o}</p>)}
+                                                                                        {printOutput[currentInputIndex]?.map((o, i) => <p key={i}>{o}</p>)}
                                                                         </pre>
                                                                     </div>
                                                                 )}
@@ -358,11 +459,14 @@ const CodeEditor = ({
                                                                     <p className="font-bold">Your Output:</p>
                                                                                 <pre className={`whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 ${output[currentInputIndex][4] === true ? 'text-green-500' : 'text-red-500'}`}>
                                                                                     {JSON.stringify(userOutput[currentInputIndex], null)}
+                                                                                <pre className={`whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 ${output[currentInputIndex][4] === true ? 'text-green-500' : 'text-red-500'}`}>
+                                                                                    {JSON.stringify(userOutput[currentInputIndex], null)}
                                                                     </pre>
                                                                 </div>
                                                                 <div>
                                                                     <p className="font-bold">Expected Output:</p>
                                                                     <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 text-green-500">
+                                                                                    {JSON.stringify(expectedOutput[currentInputIndex])}
                                                                                     {JSON.stringify(expectedOutput[currentInputIndex])}
                                                                     </pre>
                                                                 </div>

@@ -16,6 +16,9 @@ import { WindowPanel, CustomSkeleton } from './Components';
 import { COLOR_MAP } from '@/app/(pro)/leetcode/utils'
 import { FaHatWizard } from "react-icons/fa6";
 
+import { COLOR_MAP } from '@/app/(pro)/leetcode/utils'
+import { FaHatWizard } from "react-icons/fa6";
+
 
 const QuestionPanel = ({ question }) => {
     const colors = {
@@ -26,6 +29,9 @@ const QuestionPanel = ({ question }) => {
 
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [activeAccordion, setActiveAccordion] = useState(null);
+    const [questionFullScreen, setQuestionFullScreen] = useState(false);
+
+
     const [questionFullScreen, setQuestionFullScreen] = useState(false);
 
 
@@ -81,13 +87,18 @@ const QuestionPanel = ({ question }) => {
     ];
 
 
+
     return (
         <Panel minSize={20} defaultSize={30}>
             <WindowPanel
                 tabs={[
                     { name: 'Description', icon: <BsFileText />, color: "text-blue-800" },
                     { name: 'Editorial', icon: <FaHatWizard />, color: "text-yellow-800" }
+                    { name: 'Description', icon: <BsFileText />, color: "text-blue-800" },
+                    { name: 'Editorial', icon: <FaHatWizard />, color: "text-yellow-800" }
                 ]}
+                isFullScreen={questionFullScreen}
+                setFullScreen={setQuestionFullScreen}
                 isFullScreen={questionFullScreen}
                 setFullScreen={setQuestionFullScreen}
             >
@@ -102,6 +113,7 @@ const QuestionPanel = ({ question }) => {
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="flex flex-col">
                                         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mb-2">
+                                            {question.slug}. {question.title}
                                             {question.slug}. {question.title}
                                         </h1>
                                         {/* Additional Buttons */}

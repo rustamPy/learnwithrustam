@@ -4,6 +4,8 @@ import { Typography, Spinner } from "@material-tailwind/react";
 import { PiLineVertical } from "react-icons/pi";
 import { RiFullscreenFill, RiFullscreenExitLine } from "react-icons/ri";
 
+import { RiFullscreenFill, RiFullscreenExitLine } from "react-icons/ri";
+
 
 export const languages = [
     { id: 71, name: 'Python', monacoId: 'python' },
@@ -33,6 +35,7 @@ export const WindowPanel = memo(({
 
     useEffect(() => {
         handleActiveTab();
+    }, [activeTab]);
     }, [activeTab]);
 
     return (
@@ -66,6 +69,9 @@ export const WindowPanel = memo(({
 WindowPanel.displayName = "WindowPanel"; // Setting display name
 
 
+WindowPanel.displayName = "WindowPanel"; // Setting display name
+
+
 
 
 export const CustomSkeleton = () => (
@@ -83,12 +89,15 @@ export const CustomSkeleton = () => (
     </div>
 );
 CustomSkeleton.displayName = "CustomSkeleton"; // Setting display name
+CustomSkeleton.displayName = "CustomSkeleton"; // Setting display name
 
 
 
+export const LoadingDisplay = () => (
 export const LoadingDisplay = () => (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
         <Spinner color="amber" className="h-16 w-16 text-blue-500" />
     </div>
 );
+LoadingDisplay.displayName = "LoadingDisplay"; // Setting display name
 LoadingDisplay.displayName = "LoadingDisplay"; // Setting display name
