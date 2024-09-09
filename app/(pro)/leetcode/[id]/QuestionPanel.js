@@ -27,6 +27,7 @@ const QuestionPanel = ({ question }) => {
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [activeAccordion, setActiveAccordion] = useState(null);
     const [questionFullScreen, setQuestionFullScreen] = useState(false);
+    const [questionHidden, setQuestionHidden] = useState(false);
 
 
 
@@ -90,6 +91,8 @@ const QuestionPanel = ({ question }) => {
                 ]}
                 isFullScreen={questionFullScreen}
                 setFullScreen={setQuestionFullScreen}
+                isHidden={questionHidden}
+                setHidden={setQuestionHidden}
             >
                 {/* Scrollable Content Area */}
                 <div className="p-4 h-full overflow-auto" ref={scrollableRef}>

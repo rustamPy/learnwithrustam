@@ -2,8 +2,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavbarVisibility } from '@/components/pro/Header/NavbarVisibilityContext';
 import { PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { fetchEachQuestionMD, fetchEachTest } from '@/app/(pro)/leetcode/utils';
-
+import { fetchQuestion, fetchTest } from '@/app/(pro)/leetcode/utils';
+import { getQuestions } from '@/lib/questions';
 
 
 
@@ -81,8 +81,8 @@ const CodeEditorRunner = ({ params }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const fetchedQuestion = await fetchEachQuestionMD(id);
-                const fetchedTest = await fetchEachTest(id);
+                const fetchedQuestion = await fetchQuestion(id)
+                const fetchedTest = await fetchTest(id)
                 const params = fetchedTest.params;
                 const types = fetchedTest.types || [];
                 const convertedInputs = convertTestCase(fetchedTest.content, params, types);

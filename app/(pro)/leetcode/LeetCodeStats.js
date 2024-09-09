@@ -27,7 +27,7 @@ function StatsCard({ count, title, description, children }) {
     );
 }
 
-export function LeetCodeStatsSection({ stats }) {
+const LeetCodeStatsSection = ({ stats }) => {
 
     return (
         <>

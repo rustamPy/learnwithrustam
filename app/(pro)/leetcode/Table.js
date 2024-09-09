@@ -107,10 +107,9 @@ const Table = ({ questions }) => {
         }
         setSortConfig({ key, direction });
     };
-
     const sortedQuestions = [...questions]
         .filter(question =>
-            (question.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (question?.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 question.slug.toString().toLowerCase().includes(searchQuery.toLowerCase())) &&
             (category === 'All' || question.level === category) &&
             (selectedTopics.length === 0 || selectedTopics.some(topic => question.topics.includes(topic)))

@@ -169,26 +169,33 @@ const MiniNavbar = ({
 }) => {
     const { data: session } = useSession();
     const [questions, setQuestions] = useState([]);
+    const [loading, setLoading] = useState(true)
     const [open, setOpen] = useState(false);
 
-    useEffect(() => {
+    useEffect(() => {   
         const getData = async () => {
             try {
                 const data = await fetchAllQuestions();
-                setQuestions(data.questions);
+                setQuestions(data.questions.map(q => q.question));
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
         getData();
+        setLoading(false)
     }, []);
 
     const pathname = usePathname();
     const route = useRouter();
 
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <>
-            <Navbar className='max-w-full py-0 rounded-none shadow-none z-10 dark:bg-[#131313] border-none'>
+            <Navbar className='max-w-full py-0 rounded-none shadow-none z-10 dark:bg-[#131313] border-none mt-[5px] mb-[4px]'>
                 <div className="flex flex-row items-center justify-between w-full">
                     {/* Left Side */}
                     <div className="flex flex-row items-center text-lwr-logo-light-theme-color dark:text-lwr-logo-dark-theme-color">
@@ -207,18 +214,31 @@ const MiniNavbar = ({
 
                     {/* Centered Run and Timer Controls */}
                     <div className="flex flex justify-center items-center">
-                        <div className="flex items-center space-x-2 dark:bg-gray-800 bg-gray-100 px-4 py-1 rounded-xl mr-[200px]">
+                        <div className="flex items-center space-x-2 dark:bg-gray-800 bg-gray-100 px-4 py-1 rounded-xl">
                             {/* Timer Control Section */}
                             <div className="flex items-center space-x-2">
                                 {/* Toggle Timer Visibility */}
                                 <Tooltip content="Open the timer" placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
+                                    <div className="relative inline-flex items-center">
+                                        {isTimerRunning &&
 
-                                    <button
-                                        onClick={() => setIsTimerVisible(!isTimerVisible)}
-                                        className="text-gray-800 dark:text-gray-50 hover:text-gray-900 dark:hover:text-gray-200"
-                                    >
-                                        {isTimerVisible ? <HiOutlineArrowRight /> : <FaRegClock className={`${!isTimerRunning ? 'text-gray-800 dark:text-[#d0ffca]' : 'text-red-500'}`} />}
-                                    </button>
+
+                                            <span className="absolute flex h-[13px] w-[13px] top-[1.5px] right-[1.5px]">
+                                                <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-red-900 dark:bg-green-300 opacity-10"></span>
+                                            </span>
+                                        }
+
+                                        <button
+                                            onClick={() => setIsTimerVisible(!isTimerVisible)}
+                                            className="text-gray-800 dark:text-gray-50 hover:text-gray-900 dark:hover:text-gray-200 relative"
+                                        >
+                                            {isTimerVisible ? (
+                                                <HiOutlineArrowRight />
+                                            ) : (
+                                                <FaRegClock className={`text-gray-800 dark:text-green-300`} />
+                                            )}
+                                        </button>
+                                    </div>
                                 </Tooltip>
                                 {isTimerVisible && (
                                     <>
@@ -241,7 +261,7 @@ const MiniNavbar = ({
                                         className="flex items-center rounded-md text-gray-800 hover:text-gray-900 hover:bg-gray-200 dark:text-gray-50 dark:hover:text-gray-400 dark:hover:bg-gray-700"
                                         onClick={runCode}
                                     >
-                                        <span className="dark:hover:dark:text-[#d6ffd1] dark:text-[#d0ffca] px-2 font-semibold">{!isRunning ? <div className='flex flex-row items-center'> <HiOutlinePlay className="cursor-pointer mr-1" /> Run code</div> : <div className='flex flex-row items-center'> <Spinner className='h-4 w-4 mr-2' /> Running </div>}</span>
+                                        <span className="dark:text-green-300 px-2 font-semibold">{!isRunning ? <div className='flex flex-row items-center'> <HiOutlinePlay className="cursor-pointer mr-1" /> Run code</div> : <div className='flex flex-row items-center'> <Spinner className='h-4 w-4 mr-2' /> Running </div>}</span>
                                     </button>
                                 </Tooltip>
                             </div>

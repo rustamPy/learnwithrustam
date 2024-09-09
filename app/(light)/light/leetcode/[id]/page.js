@@ -3,11 +3,12 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import Editor from '@monaco-editor/react';
 import { Typography, Spinner, Select, Option, Button, Tabs, TabsHeader, TabsBody, Tab, TabPanel, Tooltip, Chip } from '@material-tailwind/react';
-import { fetchEachQuestionMD, fetchEachTest } from '@/app/(pro)/leetcode/utils';
+import { fetchQuestion, fetchTest } from '@/app/(pro)/leetcode/utils';
 import { QUESTIONS_MAP, BASES } from './utils';
 import { GoDotFill, GoPlus } from "react-icons/go";
 import { RiCloseCircleFill } from "react-icons/ri";
 import { LuFileCode2 } from "react-icons/lu";
+
 
 
 import useLocalStorage from './useLocalStorage';
@@ -54,8 +55,8 @@ const CodeEditorRunner = ({ params }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const fetchedQuestion = await fetchEachQuestionMD(id);
-                const fetchedTest = await fetchEachTest(id);
+                const fetchedQuestion = await fetchQuestion(id)
+                const fetchedTest = await fetchTest(id)
                 const params = fetchedTest.params;
                 const convertedTestCase = convertTestCase(fetchedTest.content, params);
                 setQuestion(fetchedQuestion);
