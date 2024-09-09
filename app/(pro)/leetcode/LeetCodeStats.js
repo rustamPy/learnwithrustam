@@ -98,7 +98,7 @@ export function LeetCodeStatsSection({ stats }) {
                                 description="An average difficulty rating for the tasks we've tackled."
                             >
                                 <div className="flex flex-col mt-2">
-                                    {Object.keys(stats.countByDifficulties).map(difficulty => {
+                                    {stats?.countByDifficulties && Object.keys(stats.countByDifficulties).map(difficulty => {
                                         const count = stats.countByDifficulties[difficulty]
                                         return (
                                             <span key={difficulty} className={`text-lwr-leetcode-${difficulty.toLowerCase()}-100`}>

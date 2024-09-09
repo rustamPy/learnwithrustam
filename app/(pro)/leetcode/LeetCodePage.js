@@ -12,17 +12,16 @@ const Page = ({ questions, topGroups, stats }) => {
     const handleGetStartedClick = () => {
         setContentVisible(true);
 
-        // Delay the scroll to allow the content to render and its height to be applied
         setTimeout(() => {
             const targetElement = document.getElementById('start');
             if (targetElement) {
                 const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY;
                 window.scrollTo({
-                    top: targetPosition - 100, // Adjust for any fixed header or padding
+                    top: targetPosition - 100,
                     behavior: 'smooth'
                 });
             }
-        }, 100); // Delay in milliseconds (adjust if needed)
+        }, 100);
     };
 
     return (

@@ -257,13 +257,11 @@ const CodeEditorRunner = ({ params }) => {
     const handleOnEditorChange = (value) => {
         setShortCode(value);
 
-        // Update longCode by replacing everything before "if __name__ == '__main__':"
         const mainIndex = longCode.indexOf("if __name__ == '__main__':");
         if (mainIndex !== -1) {
             const newLongCode = value + longCode.slice(mainIndex);
             setLongCode(newLongCode);
         } else {
-            // If "if __name__ == '__main__':" is not found, just update with the new value
             setLongCode(value);
         }
 
