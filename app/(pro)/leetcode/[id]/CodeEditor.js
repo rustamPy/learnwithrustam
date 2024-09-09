@@ -3,15 +3,14 @@ import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import Editor from '@monaco-editor/react';
 import { Spinner, Select, Option, Tooltip } from '@material-tailwind/react';
-import { SHORT_CODE, toCamelCase, convertTestCase } from './utils';
+import { SHORT_CODE, toCamelCase } from './utils';
 import { GoDotFill, GoPlus, GoSkip } from "react-icons/go";
-import { RiCloseCircleFill, RiFullscreenFill, RiFullscreenExitLine } from "react-icons/ri";
+import { RiCloseCircleFill } from "react-icons/ri";
 import { GrPowerReset, GrTest } from "react-icons/gr";
 import { IoCodeSlash } from "react-icons/io5";
 import { TbSourceCode } from "react-icons/tb";
 
 
-import { } from "react-icons/ri";
 import { WindowPanel, CustomSkeleton, languages } from './Components';
 import { useTheme } from 'next-themes';
 
@@ -56,7 +55,11 @@ const CodeEditor = ({
 
 
     const [editorFullScreen, setEditorFullScreen] = useState(false);
+    const [editorHidden, setEditorHidden] = useState(false);
     const [testsFullScreen, setTestsFullScreen] = useState(false);
+    const [testsHidden, setTestsHidden] = useState(false);
+
+
 
 
     useEffect(() => {
@@ -97,8 +100,7 @@ const CodeEditor = ({
     const updateInput = useCallback((event, idx) => {
         const updatedTestCases = JSON.parse(JSON.stringify(inputs));
         updatedTestCases[currentInputIndex][idx] = event.target.value;
-        const newInputs = convertTestCase(updatedTestCases, inputParams, inputTypes) || updatedTestCases;
-        setInputs(newInputs);
+        setInputs(updatedTestCases);
     }, [inputs, currentInputIndex, inputParams, inputTypes, setInputs]);
 
     const removeInput = useCallback(() => {
@@ -140,8 +142,6 @@ const CodeEditor = ({
     }, [question, language, inputParams, setShortCode]);
 
 
-    console.log(printOutput)
-
     const memoizedEditor = useMemo(() => (
         <Editor
             height="100%"
@@ -163,17 +163,24 @@ const CodeEditor = ({
         />
     ), [language, currentShort, theme, handleOnEditorChange]);
 
-
     return (
         <Panel minSize={40} defaultSize={70}>
             <PanelGroup direction="vertical">
-                <Panel minSize={30} defaultSize={50}>
-                    <WindowPanel tabs={[{ name: 'Code', icon: <IoCodeSlash />, color: 'text-green-500' }]} isFullScreen={editorFullScreen} setFullScreen={setEditorFullScreen}>
-                        <div className="bg-gray-100 dark:bg-gray-900 rounded-lg m-1 flex flex-col h-full">                            
-                            <div className="flex items-center justify-between p-4 border-b h-16">
+                <Panel minSize={10} defaultSize={50} collapsible={true} collapsedSize={3.5}>
+                    <WindowPanel
+                        tabs={[{ name: 'Code', icon: <IoCodeSlash />, color: 'text-green-500' }]}
+                        isFullScreen={editorFullScreen}
+                        setFullScreen={setEditorFullScreen}
+                        isHidden={editorHidden}
+                        setHidden={setEditorHidden}
+                        additionalClass={"!h-[calc(100%)]"}
+                        panelId="code-editor"
+                    >
+                        <div className="bg-gray-100 dark:bg-gray-900 rounded-lg m-1 flex flex-col h-full">
+                            <div className="flex items-center justify-between p-4 h-16">
                                 <div className='flex items-center'>
-                                    <div className='w-54 mr-2'>
-                                        <Select value={language.id.toString()} onChange={handleLanguageChange} label="Language" className='text-xs dark:text-gray-50'>
+                                    <div className='mr-2'>
+                                        <Select success={true} size="md" value={language.id.toString()} onChange={handleLanguageChange} label="Language" className='text-xs dark:text-gray-50'>
                                             {languages.map((lang) => (
                                                 <Option key={lang.id} value={lang.id.toString()} className='text-xs'>{lang.name}</Option>
                                             ))}
@@ -198,8 +205,8 @@ const CodeEditor = ({
                         </div>
                     </WindowPanel>
                 </Panel>
-                <PanelResizeHandle className="h-1 mr-8 ml-8 center bg-gray-400 hover:bg-blue-500 rounded-full cursor-ns-resize" />
-                <Panel minSize={20} defaultSize={50}>
+                <PanelResizeHandle className="h-1 center bg-none hover:bg-blue-500 dark:hover:bg-blue-800 rounded-full cursor-ns-resize" />
+                <Panel minSize={5} defaultSize={50}>
                     <WindowPanel
                         tabs={[
                             { name: 'Default Test Cases', icon: <GrTest />, color: 'text-green-500' },
@@ -208,81 +215,94 @@ const CodeEditor = ({
                         activeTab={isRunning || output ? 1 : 0}
                         isFullScreen={testsFullScreen}
                         setFullScreen={setTestsFullScreen}
+                        isHidden={testsHidden}
+                        setHidden={setTestsHidden}
+                        panelId="test-cases"
                     >
-                        <div className="bg-gray-100 rounded-xl overflow-auto h-[calc(100%-8px)] p-2 m-1">
-                            <div className="flex flex-col space-y-4">
-                                <div className="flex flex-wrap gap-2">
-                                    {inputs && inputs.length > 0 ? (
-                                        <>
-                                            {inputs.slice(0, maxShowingInputIndex + 1).map((_, index) => (
-                                                <div
-                                                    key={`${index}-test-case-button`}
-                                                    className="relative"
-                                                    onMouseEnter={() => setHoverStates(prev => ({ ...prev, [index]: true }))}
-                                                    onMouseLeave={() => setHoverStates(prev => ({ ...prev, [index]: false }))}
-                                                >
-                                                    <button
-                                                        className={`text-sm px-4 py-2 rounded-md ${currentInputIndex === index ? 'bg-gray-700 text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
-                                                        onClick={() => setCurrentInputIndex(index)}
-                                                    >
-                                                        Case {index + 1}
-                                                    </button>
-                                                    {hoverStates[index] && (
-                                                        <button
-                                                            className="absolute -top-2 -right-2 text-sm rounded-full bg-white"
-                                                            onClick={() => removeInput()}
-                                                        >
-                                                            <RiCloseCircleFill className="text-xl text-red-500 hover:text-red-700" />
-                                                        </button>
-                                                    )}
-                                                </div>
-                                            ))}
-                                            <Tooltip content={`Clone the current test Case ${currentInputIndex + 1}`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
+                        {/* Inputs */}
+                        <div className="bg-gray-100 dark:bg-gray-900 rounded-xl overflow-auto p-2 m-1">
+                            {inputs && inputs.length > 0 ?
+                                <div className="flex flex-col space-y-4">
+                                    <div className="flex flex-wrap gap-2">
+                                        {inputs.slice(0, maxShowingInputIndex + 1).map((_, index) => (
+                                            <div
+                                                key={`${index}-test-case-button`}
+                                                className="relative"
+                                                onMouseEnter={() => setHoverStates(prev => ({ ...prev, [index]: true }))}
+                                                onMouseLeave={() => setHoverStates(prev => ({ ...prev, [index]: false }))}
+                                            >
                                                 <button
-                                                    className="text-sm px-4 py-2 rounded-md text-gray-800 hover:text-gray-700"
-                                                    onClick={cloneCurrentInput}
+                                                    className={`text-sm px-[15px] py-[5px] rounded-xl ${currentInputIndex === index ? 'dark:bg-gray-700 dark:text-white bg-gray-300 text-gray-800' : 'dark:bg-gray-800 dark:hover:bg-gray-700 bg-gray-200 text-gray-800 dark:text-white'}`}
+                                                    onClick={() => setCurrentInputIndex(index)}
                                                 >
-                                                    <GoPlus />
+                                                    Case {index + 1}
                                                 </button>
-                                            </Tooltip>
-                                        </>
-                                    ) : (
-                                        <CustomSkeleton />
-                                    )}
-                                </div>
-
-                                <div className="grid grid-cols-1 gap-4">
-                                    {inputs[currentInputIndex] && (
-                                        <div className="grid grid-cols-1 gap-4">
-                                            <div>
-                                                <div className="flex flex-col gap-2">
-                                                    {inputs[currentInputIndex].slice(0, inputParams.length).map((val, idx) => (
-                                                        <div key={`${currentInputIndex}-input-${idx}`}>
-                                                            <p>{inputParams[idx]} ({inputTypes[idx]}):</p>
-                                                            <input
-                                                                key={`${currentInputIndex}-input-${idx}`}
-                                                                value={formatInputValue(val, inputTypes[idx])}
-                                                                onChange={(e) => updateInput(e, idx)}
-                                                                className="border border-gray-300 rounded-md px-2 py-1 w-full"
-                                                            />
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                                {hoverStates[index] && (
+                                                    <button
+                                                        className="absolute -top-[5px] -right-[6px] text-sm rounded-full bg-white"
+                                                        onClick={() => removeInput()}
+                                                    >
+                                                        <RiCloseCircleFill className="text-[15px] text-red-500 hover:text-red-700" />
+                                                    </button>
+                                                )}
                                             </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
+                                        ))}
+                                        <Tooltip content={`Clone the current test Case ${currentInputIndex + 1}`} placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
+                                            <button
+                                                className="text-sm px-2 rounded-md dark:text-gray-200 dark:hover:text-gray-400 text-gray-800 hover:text-gray-700"
+                                                onClick={cloneCurrentInput}
+                                            >
+                                                <GoPlus />
+                                            </button>
+                                        </Tooltip>
+                                    </div>
 
-                        <div className="bg-gray-100 rounded-xl overflow-auto h-[calc(100%-8px)] p-2 m-1">
-                            <div>
+
+
+
+                                    <div>
+
+                                        <p className="text-[15px] font-bold">Inputs:</p>
+
+                                        <div className="grid grid-cols-1 gap-4">
+                                            {inputs[currentInputIndex] && (
+                                                <div className="w-full h-max rounded-lg px-2 py-1">
+                                                    <div>
+                                                        <div className="flex flex-col gap-2">
+                                                            {inputs[currentInputIndex].slice(0, inputParams.length).map((val, idx) => (
+                                                                <div key={`${currentInputIndex}-input-${idx}`}>
+                                                                    <p className='mb-2 dark:text-gray-400 text-gray-700 text-[12px]'>{inputParams[idx]} <strong>({inputTypes[idx]}) </strong> = </p>
+                                                                    <input
+                                                                        key={`${currentInputIndex}-input-${idx}`}
+                                                                        value={formatInputValue(val, inputTypes[idx])}
+                                                                        onChange={(e) => updateInput(e, idx)}
+                                                                        className="bg:gray-100 dark:bg-gray-800 rounded-md p-2 w-full text-md"
+                                                                    />
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div> :
+                                <CustomSkeleton option={"inputs"} />
+                            }
+                        </div>
+                        {/* Outputs */}
+                        <div className="bg-gray-100 dark:bg-gray-900 rounded-xl overflow-auto p-2 m-1">
+                            <>
                                 {inputs && inputs.length > 0 && !output ? (
-                                    <p>Run code to see output</p>
+                                    <div className="flex justify-center items-center h-full">
+                                        <p className="text-center">
+                                            Run code to see output
+                                        </p>
+                                    </div>
                                 ) : (
                                     <>
                                         {isRunning ? (
-                                            <CustomSkeleton />
+                                                <CustomSkeleton option={'output'} />
                                         ) : (
                                             <>
                                                 {error ? (
@@ -301,14 +321,14 @@ const CodeEditor = ({
                                                                         {evaluatedInputs.map((_, index) => (
                                                                 <button
                                                                     key={`output-${index}`}
-                                                                                className={`text-sm px-4 py-2 rounded-md ${currentInputIndex === index ? 'bg-gray-300 text-gray-800' : 'bg-gray-100 hover:bg-gray-200'}`}
+                                                                                className={`text-sm px-[15px] py-[5px] rounded-xl ${currentInputIndex === index ? 'dark:bg-gray-700 dark:text-white bg-gray-300 text-gray-800' : 'dark:bg-gray-800 dark:hover:bg-gray-700 bg-gray-200 text-gray-800 dark:text-white'}`}
                                                                                 onClick={() => setCurrentInputIndex(index)}
                                                                 >
                                                                     <div className="flex items-center">
                                                                                     {errorOutput.length > 0 ? <GoSkip className='mr-2' /> : <GoDotFill className={`mr-2 ${status === 'Wrong Answers' ? 'text-red-500' : status === 'Right Answers' ? 'text-green-500' : 'text-red-500'}`} />}
                                                                         <span>Case {index + 1}</span>
                                                                     </div>
-                                                                </button>
+                                                                            </button>
                                                             ))}
                                                         </div>
                                                                     {output && output[currentInputIndex] && (
@@ -321,39 +341,43 @@ const CodeEditor = ({
                                                                                 </div>
                                                                             )}
                                                                 <div>
-                                                                    <p className="font-bold">Inputs:</p>
+                                                                                <p className="text-[15px] font-bold">Inputs:</p>
                                                                     <div className="flex flex-col gap-2">
                                                                                     {inputs[currentInputIndex].slice(0, inputParams.length).map((val, idx) => (
-
                                                                             <>
-                                                                                            <p>{inputParams[idx]}</p>
+                                                                                            <div className='w-full h-max rounded-lg px-2 py-1'>
+                                                                                                <p className="mb-2 dark:text-gray-400 text-gray-700 text-[12px]">{inputParams[idx]} <strong>({inputTypes[idx]}) </strong> = </p>
                                                                                             <input
                                                                                                 key={`${currentInputIndex}-output-${idx}`}
                                                                                                 value={val}
-                                                                                                className="border border-gray-300 rounded-md px-2 py-1"
+                                                                                                    className="border border-gray-300 rounded-md px-2 py-1 mb-1"
                                                                                                 disabled
                                                                                             />
+                                                                                            </div>
                                                                             </>
                                                                         ))}
                                                                     </div>
                                                                 </div>
-                                                                {printOutput.length > 0 && (
-                                                                    <div>
-                                                                        <p className="font-bold">Stdout:</p>
-                                                                        <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 text-gray-800">
+                                                                            {printOutput[0]?.length > 0 && (
+                                                                                <div className='w-full h-max rounded-lg dark:bg-gray-800 px-2 py-1'>
+
+                                                                                    <p className="text-[15px] font-bold">Stdout:</p>
+                                                                                    <pre className="whitespace-pre-wrap p-2 rounded-md overflow-auto max-h-48 text-gray-800 dark:text-gray-200">
                                                                                         {printOutput[currentInputIndex]?.map((o, i) => <p key={i}>{o}</p>)}
-                                                                        </pre>
-                                                                    </div>
+                                                                                    </pre>
+                                                                                </div>
                                                                 )}
-                                                                <div>
-                                                                    <p className="font-bold">Your Output:</p>
-                                                                                <pre className={`whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 ${output[currentInputIndex][4] === true ? 'text-green-500' : 'text-red-500'}`}>
+                                                                            <div className='w-full h-max rounded-lg dark:bg-gray-800 px-2 py-1'>
+
+                                                                                <p className="text-[15px] font-bold">Your Output:</p>
+                                                                                <pre className={`whitespace-pre-wrap p-2 rounded-md overflow-auto max-h-48 ${output[currentInputIndex][4] === true ? 'text-green-500' : 'text-red-500'}`}>
                                                                                     {JSON.stringify(userOutput[currentInputIndex], null)}
                                                                     </pre>
                                                                 </div>
-                                                                <div>
-                                                                    <p className="font-bold">Expected Output:</p>
-                                                                    <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 text-green-500">
+                                                                            <div className='w-full h-max rounded-lg dark:bg-gray-800 px-2 py-1'>
+
+                                                                                <p className="text-[15px] font-bold">Expected Output:</p>
+                                                                                <pre className="whitespace-pre-wrap p-2 rounded-md overflow-auto max-h-48 text-green-500">
                                                                                     {JSON.stringify(expectedOutput[currentInputIndex])}
                                                                     </pre>
                                                                 </div>
@@ -365,7 +389,7 @@ const CodeEditor = ({
                                         )}
                                     </>
                                 )}
-                            </div>
+                            </>
                         </div>
                     </WindowPanel>
                 </Panel>

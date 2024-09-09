@@ -13,8 +13,8 @@ const QuestionsPage = () => {
 
         const getData = async () => {
             try {
-                const data = await fetchAllQuestions();
-                setQuestions(data.questions)
+                const data = await fetchAllQuestions()
+                setQuestions(data.questions.map(q => q.question))
                 setStats(data.stats)
                 setTopGroups(data.topGroups)
             } catch (error) {

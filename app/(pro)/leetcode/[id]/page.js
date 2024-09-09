@@ -2,8 +2,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavbarVisibility } from '@/components/pro/Header/NavbarVisibilityContext';
 import { PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { fetchEachQuestionMD, fetchEachTest } from '@/app/(pro)/leetcode/utils';
-
+import { fetchQuestion, fetchTest } from '@/app/(pro)/leetcode/utils';
+import { getQuestions } from '@/lib/questions';
 
 
 
@@ -75,16 +75,14 @@ const CodeEditorRunner = ({ params }) => {
         return () => clearInterval(interval);
     }, [isTimerRunning, timer]);
 
-    console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
-    console.log(errorOutput)
     const handleStartStopTimer = () => setIsTimerRunning(!isTimerRunning);
     const handleResetTimer = () => setTimer(0);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const fetchedQuestion = await fetchEachQuestionMD(id);
-                const fetchedTest = await fetchEachTest(id);
+                const fetchedQuestion = await fetchQuestion(id)
+                const fetchedTest = await fetchTest(id)
                 const params = fetchedTest.params;
                 const types = fetchedTest.types || [];
                 const convertedInputs = convertTestCase(fetchedTest.content, params, types);
@@ -142,7 +140,6 @@ const CodeEditorRunner = ({ params }) => {
             const newInputs = convertTestCase(inputs, inputParams, inputTypes)
             const bCode = baseCode || handleSetLangSample(newInputs);
             const runCode = `${shortCode}\n\n${solution}\n\n${bCode}`;
-            console.log(runCode)
 
             const createResponse = await fetch('http://127.0.0.1:2358/submissions', {
                 method: 'POST',
@@ -192,7 +189,6 @@ const CodeEditorRunner = ({ params }) => {
 
                 try {
                     const parsedOutput = JSON.parse(jsonOutput);
-                    console.log(parsedOutput)
                     if (parsedOutput.print_output || parsedOutput.test_results) {
                         handlePassConditions(parsedOutput.test_results);
                         setOutput(parsedOutput.test_results);
@@ -234,6 +230,7 @@ const CodeEditorRunner = ({ params }) => {
     return (
         <div className="flex flex-col h-screen overflow-hidden max-h-full pb-1 mt-2 px-2">
             <MiniNavbar
+                questions={question}
                 isTimerVisible={isTimerVisible}
                 setIsTimerVisible={setIsTimerVisible}
                 handleResetTimer={handleResetTimer}
@@ -247,7 +244,7 @@ const CodeEditorRunner = ({ params }) => {
             <PanelGroup direction="horizontal" className="flex-1" autoSaveId="persistence">
                 <QuestionPanel question={question} />
 
-                <PanelResizeHandle className="w-1 mt-8 mb-8 center bg-gray-400 hover:bg-blue-500 rounded-full cursor-ns-resize" />
+                <PanelResizeHandle className="w-1 center bg-none hover:bg-blue-500 dark:hover:bg-blue-800 rounded-full cursor-ns-resize" />
 
                 <CodeEditor
                     question={question}

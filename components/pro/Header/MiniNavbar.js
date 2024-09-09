@@ -4,7 +4,11 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import MiniLogo from '@/components/pro/MiniLogo';
 
+import { fetchAllQuestions } from '@/app/(pro)/leetcode/utils';
+
 import { Tooltip, Spinner } from '@material-tailwind/react';
+import ThemeToggle from '@/components/pro/ThemeToggle';
+
 import { FaRegClock } from "react-icons/fa6";
 import { HiOutlineRefresh, HiOutlinePlay, HiOutlinePause, HiOutlineArrowRight } from "react-icons/hi";
 import { PiLineVertical } from 'react-icons/pi';
@@ -74,7 +78,7 @@ const QuestionList = ({ open, setOpen, questions, pathname }) => {
                     {questions.map(q => (
                         <div
                             key={`${q.slug}-${q.title}`}
-                            className={`text-[13px] text-gray-800 font-semibold ${pathname === `/leetcode/${q.slug}` ? 'bg-gray-900 text-gray-50' : 'text-gray-100'} p-2 rounded-lg`}
+                            className={`text-sm font-semibold p-3 rounded-lg mb-2 ${pathname === `/leetcode/${q.slug}` ? 'bg-gray-900 text-gray-50' : 'bg-gray-100 text-gray-800'} transition-colors`}
                         >
                             <Link href={`/leetcode/${q.slug}`}>
                                 <div className='flex justify-between'>
@@ -103,6 +107,7 @@ const QuestionList = ({ open, setOpen, questions, pathname }) => {
     );
 };
 
+
 const QuestionIteration = ({ questions, pathname }) => {
     const findCurrentIndex = () => {
         for (let i = 0; i < questions.length; i++) {
@@ -120,33 +125,27 @@ const QuestionIteration = ({ questions, pathname }) => {
         setIteration(currentIdx);
     }, [pathname, questions]);
 
-    const handleForward = () => {
-        if (iteration !== -1 && iteration < questions.length - 1) {
-            setIteration(iteration + 1);
-        }
+    const getPreviousQuestionSlug = () => {
+        return questions[(iteration - 1 + questions.length) % questions.length]?.slug || '';
     };
 
-    const handleBackward = () => {
-        if (iteration > 0) {
-            setIteration(iteration - 1);
-        }
+    const getNextQuestionSlug = () => {
+        return questions[(iteration + 1) % questions.length]?.slug || '';
     };
 
     return (
-        <div className='flex'>
-            <Link href={`/leetcode/${questions[iteration - 1]?.slug || ''}`}>
-                <button onClick={handleBackward} className={'disabled:text-gray-400 mr-2'} disabled={iteration === 0}>
-                    <RiArrowLeftWideFill />
-                </button>
+        <div className='flex flex-row items-center'>
+            <Link href={`/leetcode/${getPreviousQuestionSlug()}`}>
+                <RiArrowLeftWideFill className='mr-2 cursor-pointer' />
             </Link>
-            <Link href={`/leetcode/${questions[iteration + 1]?.slug || ''}`}>
-                <button onClick={handleForward} className={'disabled:text-gray-400 mr-2'} disabled={iteration === questions.length - 1}>
-                    <RiArrowRightWideFill />
-                </button>
+            <Link href={`/leetcode/${getNextQuestionSlug()}`}>
+                <RiArrowRightWideFill className='cursor-pointer' />
             </Link>
         </div>
     );
 };
+
+
 
 
 
@@ -170,54 +169,76 @@ const MiniNavbar = ({
 }) => {
     const { data: session } = useSession();
     const [questions, setQuestions] = useState([]);
+    const [loading, setLoading] = useState(true)
     const [open, setOpen] = useState(false);
 
-    useEffect(() => {
+    useEffect(() => {   
         const getData = async () => {
             try {
                 const data = await fetchAllQuestions();
-                setQuestions(data.questions);
+                setQuestions(data.questions.map(q => q.question));
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
         getData();
+        setLoading(false)
     }, []);
 
     const pathname = usePathname();
     const route = useRouter();
 
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <>
-            <Navbar className='max-w-full py-0 rounded-none shadow-none z-10'>
+            <Navbar className='max-w-full py-0 rounded-none shadow-none z-10 dark:bg-[#131313] border-none mt-[5px] mb-[4px]'>
                 <div className="flex flex-row items-center justify-between w-full">
-                    <div className="flex items-center text-lwr-logo-light-theme-color dark:text-lwr-logo-dark-theme-color">
+                    {/* Left Side */}
+                    <div className="flex flex-row items-center text-lwr-logo-light-theme-color dark:text-lwr-logo-dark-theme-color">
                         <MiniLogo />
                         <PiLineVertical className='text-gray-300 dark:text-gray-500' />
-                        <div className='flex items-center'>
+
+                        <div className='flex items-center ml-2'>
                             <MdFormatListNumbered className='mr-1' />
-                            <button onClick={() => setOpen(true)} className='text-sm'>
+                            <button onClick={() => setOpen(true)} className='text-sm font-semibold'>
                                 Problem List
                             </button>
                         </div>
+                        <PiLineVertical className='text-gray-300 dark:text-gray-500' />
                         <QuestionIteration questions={questions} pathname={pathname} />
                     </div>
 
                     {/* Centered Run and Timer Controls */}
                     <div className="flex flex justify-center items-center">
-                        {/* <div className="flex-1 flex justify-center items-center space-x-4 bg-gray-100 m-auto w-max px-4 py-2 rounded-xl">*/}
-                        <div className="flex items-center space-x-2 bg-gray-100 px-4 py-1 rounded-xl mr-[200px]">
+                        <div className="flex items-center space-x-2 dark:bg-gray-800 bg-gray-100 px-4 py-1 rounded-xl">
                             {/* Timer Control Section */}
                             <div className="flex items-center space-x-2">
                                 {/* Toggle Timer Visibility */}
                                 <Tooltip content="Open the timer" placement="bottom" className="text-[10px] font-normal bg-gray-200 text-gray-800">
+                                    <div className="relative inline-flex items-center">
+                                        {isTimerRunning &&
 
-                                    <button
-                                        onClick={() => setIsTimerVisible(!isTimerVisible)}
-                                        className="text-gray-800 dark:text-gray-50 hover:text-gray-900 dark:hover:text-gray-200"
-                                    >
-                                        {isTimerVisible ? <HiOutlineArrowRight /> : <FaRegClock className={`${!isTimerRunning ? 'text-black' : 'text-red-500'}`} />}
-                                    </button>
+
+                                            <span className="absolute flex h-[13px] w-[13px] top-[1.5px] right-[1.5px]">
+                                                <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-red-900 dark:bg-green-300 opacity-10"></span>
+                                            </span>
+                                        }
+
+                                        <button
+                                            onClick={() => setIsTimerVisible(!isTimerVisible)}
+                                            className="text-gray-800 dark:text-gray-50 hover:text-gray-900 dark:hover:text-gray-200 relative"
+                                        >
+                                            {isTimerVisible ? (
+                                                <HiOutlineArrowRight />
+                                            ) : (
+                                                <FaRegClock className={`text-gray-800 dark:text-green-300`} />
+                                            )}
+                                        </button>
+                                    </div>
                                 </Tooltip>
                                 {isTimerVisible && (
                                     <>
@@ -240,21 +261,26 @@ const MiniNavbar = ({
                                         className="flex items-center rounded-md text-gray-800 hover:text-gray-900 hover:bg-gray-200 dark:text-gray-50 dark:hover:text-gray-400 dark:hover:bg-gray-700"
                                         onClick={runCode}
                                     >
-                                        <span className="dark:hover:text-gray-200">{!isRunning ? <div className='flex flex-row items-center'> <HiOutlinePlay className="cursor-pointer mr-1" /> Run code</div> : <div className='flex flex-row items-center'> <Spinner className='h-4 w-4 mr-2' /> Running </div>}</span>
+                                        <span className="dark:text-green-300 px-2 font-semibold">{!isRunning ? <div className='flex flex-row items-center'> <HiOutlinePlay className="cursor-pointer mr-1" /> Run code</div> : <div className='flex flex-row items-center'> <Spinner className='h-4 w-4 mr-2' /> Running </div>}</span>
                                     </button>
                                 </Tooltip>
                             </div>
                         </div>
                     </div>
 
-                    {session && (
-                        <UserProfile user={session.user} />
-                    )}
+                    {/* Right Side */}
+                    <div className="flex items-center">
+                        {session ? (
+                            <UserProfile user={session.user} />
+                        ) : (<div className='rounded-full w-8 h-8 bg-gray-100 text-xs text-black'> .... </div>)}
+                        <ThemeToggle />
+                    </div>
                 </div>
             </Navbar>
             <QuestionList open={open} setOpen={setOpen} questions={questions} pathname={pathname} />
         </>
     );
 };
+
 
 export default MiniNavbar;
