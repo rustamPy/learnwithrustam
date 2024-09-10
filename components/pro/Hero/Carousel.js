@@ -23,7 +23,7 @@ const HeroCarousel = () => {
             </Typography>
 
             <Carousel
-                className="rounded-xl w-full max-w-6xl mx-auto mt-9"
+                className="rounded-xl w-full max-w-6xl mx-auto mt-9 overflow-hidden"
                 autoplay
                 loop
                 navigation={({ setActiveIndex, activeIndex, length }) => (
