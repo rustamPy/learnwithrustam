@@ -30,7 +30,7 @@ const LearnWithRustamPage = () => {
                     <div className="space-y-4">
                         <h2 className='text-xl'>But this page is about:</h2>
                         <ul className="list-disc list-inside">
-                            <Link href="/light/leetcode"><li className='text-gray-600'> Leetcode </li></Link>
+                            <Link href="/light/wecode"><li className='text-gray-600'> WeCode </li></Link>
                         </ul>
                     </div>
                 </div>

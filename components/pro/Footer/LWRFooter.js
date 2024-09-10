@@ -7,7 +7,7 @@ import Logo from '@/components/pro/Logo'
 const LINKS = [
     {
         title: "Services",
-        items: [["Courses", "/courses", 'c'], ["Leetcode", "/leetcode"], ["Learn Polish", "/learnpolish"], ["Tutorials", "/videos/tutorials"], "Mentoring"],
+        items: [["Courses", "/courses", 'c'], ["WeCode", "/wecode"], ["Learn Polish", "/learnpolish"], ["Tutorials", "/videos/tutorials"], "Mentoring"],
     },
     {
         title: "Company",

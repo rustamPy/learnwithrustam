@@ -37,6 +37,9 @@ export const WindowPanel = memo(({
     }, [activeTab]);
 
     const toggleFullScreen = () => {
+        if (isHidden) {
+            setHidden(false);
+        }
         setFullScreen(!isFullScreen);
     };
 

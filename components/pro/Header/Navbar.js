@@ -7,6 +7,7 @@ import { signOut } from 'next-auth/react';
 import { debounce } from 'lodash';
 import { MdConstruction } from 'react-icons/md';
 import Logo from '@/components/pro/Logo';
+import WeCodeLogo from '@/components/pro/WeCodeLogo'
 
 import {
     Navbar,
@@ -26,11 +27,9 @@ import {
     Bars3Icon,
     XMarkIcon,
 } from '@heroicons/react/24/outline';
-import {
-    Bars4Icon,
-    RectangleGroupIcon,
-    LanguageIcon,
-} from '@heroicons/react/24/solid';
+
+import { FaLanguage } from "react-icons/fa";
+
 import { FiVideo } from 'react-icons/fi';
 
 import ThemeToggle from '@/components/pro/ThemeToggle'; // Adjust import if needed
@@ -38,22 +37,22 @@ import BannerSection from '@/components/pro/Header/Banner';
 
 const RESOURCES = [
     {
-        title: 'Leetcode',
-        description: 'Find Leetcode solutions by me',
-        href: '/leetcode',
-        icon: Bars4Icon,
+        title: 'WeCode',
+        description: 'Find WeCode solutions by me',
+        href: '/wecode',
+        icon: <WeCodeLogo linked={false} />,
     },
     {
         title: 'Polski. Krok po Kroku',
         description: 'Audio Guide for Polish language',
         href: '/learnpolish',
-        icon: LanguageIcon,
+        icon: <FaLanguage size={25} />,
     },
     {
         title: 'IT Video Tutorials',
         description: 'Exclusive tutorials only here',
         href: '/videos/tutorials',
-        icon: FiVideo,
+        icon: <FiVideo size={25} />,
     },
 ];
 
@@ -93,11 +92,8 @@ function ResourcesMenu() {
         ({ icon, title, description, href, construction }, key) => (
             <a href={href} key={key}>
                 <MenuItem className="flex items-center gap-3 rounded-lg dark:hover:bg-gray-700">
-                    <div className="flex items-center justify-center rounded-lg p-2">
-                        {React.createElement(icon, {
-                            strokeWidth: 2,
-                            className: 'h-6 text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1 w-6',
-                        })}
+                    <div className="flex items-center justify-center rounded-lg p-2 text-lwr-general-blue-light-theme-color-1 dark:text-lwr-general-gray-dark-theme-color-1">
+                        {icon}
                     </div>
                     <div>
                         {construction ? (

@@ -59,6 +59,37 @@ const CodeEditor = ({
     const [testsFullScreen, setTestsFullScreen] = useState(false);
     const [testsHidden, setTestsHidden] = useState(false);
 
+    const editorPanelRef = useRef(null);
+    const testsPanelRef = useRef(null);
+
+    const togglePanel = useCallback((isEditor) => {
+        if (isEditor) {
+            setEditorHidden(prev => !prev);
+            setTestsHidden(false);
+        } else {
+            setTestsHidden(prev => !prev);
+            setEditorHidden(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        const editorPanel = editorPanelRef.current;
+        const testsPanel = testsPanelRef.current;
+
+        if (!editorPanel || !testsPanel) return;
+
+        if (editorHidden) {
+            editorPanel.resize(3.5);
+            testsPanel.resize(97);
+        } else if (testsHidden) {
+            editorPanel.resize(95);
+            testsPanel.resize(5);
+        } else {
+            editorPanel.resize(50);
+            testsPanel.resize(50);
+        }
+    }, [editorHidden, testsHidden]);
+
 
 
 
@@ -166,13 +197,17 @@ const CodeEditor = ({
     return (
         <Panel minSize={40} defaultSize={70}>
             <PanelGroup direction="vertical">
-                <Panel minSize={10} defaultSize={50} collapsible={true} collapsedSize={3.5}>
+                <Panel
+                    minSize={3.5}
+                    defaultSize={50}
+                    ref={editorPanelRef}
+                >
                     <WindowPanel
                         tabs={[{ name: 'Code', icon: <IoCodeSlash />, color: 'text-green-500' }]}
                         isFullScreen={editorFullScreen}
                         setFullScreen={setEditorFullScreen}
                         isHidden={editorHidden}
-                        setHidden={setEditorHidden}
+                        setHidden={() => togglePanel(true)}
                         additionalClass={"!h-[calc(100%)]"}
                         panelId="code-editor"
                     >
@@ -205,8 +240,12 @@ const CodeEditor = ({
                         </div>
                     </WindowPanel>
                 </Panel>
-                <PanelResizeHandle className="h-1 center bg-none hover:bg-blue-500 dark:hover:bg-blue-800 rounded-full cursor-ns-resize" />
-                <Panel minSize={5} defaultSize={50}>
+                <PanelResizeHandle withHandle className="h-1 center bg-none hover:bg-blue-500 dark:hover:bg-blue-800 rounded-full cursor-ns-resize" />
+                <Panel
+                    minSize={3.5}
+                    defaultSize={50}
+                    ref={testsPanelRef}
+                >
                     <WindowPanel
                         tabs={[
                             { name: 'Default Test Cases', icon: <GrTest />, color: 'text-green-500' },
@@ -216,7 +255,7 @@ const CodeEditor = ({
                         isFullScreen={testsFullScreen}
                         setFullScreen={setTestsFullScreen}
                         isHidden={testsHidden}
-                        setHidden={setTestsHidden}
+                        setHidden={() => togglePanel(false)}
                         panelId="test-cases"
                     >
                         {/* Inputs */}

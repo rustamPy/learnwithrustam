@@ -14,7 +14,7 @@ const SimplePage = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await fetch('/api/leetcode');
+                const response = await fetch('/api/wecode');
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
                 }
@@ -35,7 +35,7 @@ const SimplePage = () => {
         return (
             (question?.title?.toLowerCase().includes(searchQuery?.toLowerCase()) ||
                 question?.slug?.toString()?.toLowerCase().includes(searchQuery?.toLowerCase())) &&
-        (category === 'All' || question.level === category)
+            (category === 'All' || question.level === category)
 
         )
     });
@@ -52,7 +52,7 @@ const SimplePage = () => {
             <span className='bg-yellow-900'></span>
             <span className='bg-red-200'></span>
 
-            <h1 className="text-xl mb-6">LeetCode Questions</h1>
+            <h1 className="text-xl mb-6">WeCode Questions</h1>
 
             <div className="mb-4">
                 <h2 className="mb-2 font-semibold">Stats</h2>
@@ -110,7 +110,7 @@ const SimplePage = () => {
                             <td className="border border-gray-300 p-2">{question.slug}</td>
                             <td className="border border-gray-300 p-2">
                                 <div className='flex flex-row items-center'>
-                                    <Link href={`/light/leetcode/${question.slug}`}>{question.title}</Link>
+                                    <Link href={`/light/wecode/${question.slug}`}>{question.title}</Link>
                                     <div className={`ml-2 w-2 h-2 bg-${question.level.toLowerCase() === 'easy' ? 'green-200' : question.level.toLowerCase() === 'medium' ? 'yellow-900' : 'red-200'} rounded-full`}></div>
                                     {question.topics.slice(0, 5).map((topic, i) => (
                                         <div key={`${question.slug}_topic_${i}`} className='text-[8px] rounded-lg bg-gray-100 p-1 ml-2'>

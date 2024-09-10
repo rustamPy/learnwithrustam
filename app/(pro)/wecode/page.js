@@ -1,5 +1,5 @@
 'use client';
-import Page from './LeetCodePage'
+import Page from './WeCodePage'
 import { Suspense, useState, useEffect } from 'react';
 import { fetchAllQuestions } from './utils'
 

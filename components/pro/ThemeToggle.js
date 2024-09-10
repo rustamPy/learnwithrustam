@@ -31,6 +31,7 @@ export default function ThemeToggle() {
             aria-label="Toggle theme"
         >
             {icon}
+
         </button>
     );
 }

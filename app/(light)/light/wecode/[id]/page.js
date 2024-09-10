@@ -3,16 +3,13 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import Editor from '@monaco-editor/react';
 import { Typography, Spinner, Select, Option, Button, Tabs, TabsHeader, TabsBody, Tab, TabPanel, Tooltip, Chip } from '@material-tailwind/react';
-import { fetchQuestion, fetchTest } from '@/app/(pro)/leetcode/utils';
+import { fetchQuestion, fetchTest } from '@/app/(pro)/wecode/utils';
 import { QUESTIONS_MAP, BASES } from './utils';
 import { GoDotFill, GoPlus } from "react-icons/go";
 import { RiCloseCircleFill } from "react-icons/ri";
 import { LuFileCode2 } from "react-icons/lu";
 
-
-
-import useLocalStorage from './useLocalStorage';
-
+import useLocalStorage from '@/lib/useLocalStorage';
 
 const languages = [
     { id: 71, name: 'Python', monacoId: 'python' },
@@ -386,7 +383,7 @@ const CodeEditorRunner = ({ params }) => {
                                                             </Tooltip>
                                                         </>
                                                     ) : (
-                                                            <CustomSkeleton />
+                                                        <CustomSkeleton />
                                                     )}
                                                 </div>
 
@@ -428,21 +425,21 @@ const CodeEditorRunner = ({ params }) => {
                                                         <CustomSkeleton />
                                                     ) : (
                                                         <>
-                                                                    {error ? (
-                                                                        <div>
-                                                                            <h1 className="text-xl mb-4 text-red-500">Error</h1>
-                                                                            <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 text-red-500">
-                                                                                {error}
-                                                                            </pre>
-                                                                        </div>
-                                                                    ) : (
-                                                                        <div>
-                                                                            <h1 className={`text-xl mb-4 ${status === 'Wrong Answers' ? 'text-red-500' : status === 'Right Answers' ? 'text-green-500' : 'text-yellow-500'}`}>
-                                                                                {status}
-                                                                            </h1>
-                                                                            <div className="flex flex-wrap gap-2 mb-4">
-                                                                                {testCase.map((_, index) => (
-                                                                                    <button
+                                                            {error ? (
+                                                                <div>
+                                                                    <h1 className="text-xl mb-4 text-red-500">Error</h1>
+                                                                    <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 text-red-500">
+                                                                        {error}
+                                                                    </pre>
+                                                                </div>
+                                                            ) : (
+                                                                <div>
+                                                                    <h1 className={`text-xl mb-4 ${status === 'Wrong Answers' ? 'text-red-500' : status === 'Right Answers' ? 'text-green-500' : 'text-yellow-500'}`}>
+                                                                        {status}
+                                                                    </h1>
+                                                                    <div className="flex flex-wrap gap-2 mb-4">
+                                                                        {testCase.map((_, index) => (
+                                                                            <button
                                                                                 key={`output-${index}`}
                                                                                 className={`text-sm px-4 py-2 rounded-md ${displayingTestCase === index ? 'bg-gray-300 text-gray-800' : 'bg-gray-100 hover:bg-gray-200'}`}
                                                                                 onClick={() => setDisplayingTestCase(index)}
@@ -453,44 +450,44 @@ const CodeEditorRunner = ({ params }) => {
                                                                                 </div>
                                                                             </button>
                                                                         ))}
-                                                                                </div>
-                                                                                {output && output[displayingTestCase] && (
-                                                                                    <div className="grid grid-cols-1 gap-4">
-                                                                                        <div>
-                                                                                            <p className="font-bold">Inputs:</p>
-                                                                                            <div className="flex flex-col gap-2">
-                                                                                                {dumpTestCase[displayingTestCase].slice(0, -1).map((inputValue, inputIndex) => (
-                                                                                                    <input
+                                                                    </div>
+                                                                    {output && output[displayingTestCase] && (
+                                                                        <div className="grid grid-cols-1 gap-4">
+                                                                            <div>
+                                                                                <p className="font-bold">Inputs:</p>
+                                                                                <div className="flex flex-col gap-2">
+                                                                                    {dumpTestCase[displayingTestCase].slice(0, -1).map((inputValue, inputIndex) => (
+                                                                                        <input
                                                                                             key={`output-${displayingTestCase}-input-${inputIndex}`}
                                                                                             value={inputValue}
                                                                                             className="border border-gray-300 rounded-md px-2 py-1"
                                                                                             disabled
                                                                                         />
                                                                                     ))}
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        {printOutput.length > 0 && (
-                                                                                            <div>
-                                                                                                <p className="font-bold">Stdout:</p>
-                                                                                                <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 text-gray-800">
-                                                                                                    {printOutput[displayingTestCase]?.map((o, i) => <p key={i}>{o}</p>)}
-                                                                                                </pre>
-                                                                                            </div>
-                                                                                        )}
-                                                                                        <div>
-                                                                                            <p className="font-bold">Your Output:</p>
-                                                                                            <pre className={`whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 ${output[displayingTestCase][4] === true ? 'text-green-500' : 'text-red-500'}`}>
-                                                                                                {JSON.stringify(output[displayingTestCase][3], null, 2)}
-                                                                                            </pre>
-                                                                                        </div>
-                                                                                        <div>
-                                                                                            <p className="font-bold">Expected Output:</p>
-                                                                                            <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 text-green-500">
-                                                                                                {JSON.stringify(output[displayingTestCase][2], null, 2)}
-                                                                                            </pre>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                )}
+                                                                                </div>
+                                                                            </div>
+                                                                            {printOutput.length > 0 && (
+                                                                                <div>
+                                                                                    <p className="font-bold">Stdout:</p>
+                                                                                    <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 text-gray-800">
+                                                                                        {printOutput[displayingTestCase]?.map((o, i) => <p key={i}>{o}</p>)}
+                                                                                    </pre>
+                                                                                </div>
+                                                                            )}
+                                                                            <div>
+                                                                                <p className="font-bold">Your Output:</p>
+                                                                                <pre className={`whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 ${output[displayingTestCase][4] === true ? 'text-green-500' : 'text-red-500'}`}>
+                                                                                    {JSON.stringify(output[displayingTestCase][3], null, 2)}
+                                                                                </pre>
+                                                                            </div>
+                                                                            <div>
+                                                                                <p className="font-bold">Expected Output:</p>
+                                                                                <pre className="whitespace-pre-wrap bg-gray-100 p-2 rounded-md overflow-auto max-h-48 text-green-500">
+                                                                                    {JSON.stringify(output[displayingTestCase][2], null, 2)}
+                                                                                </pre>
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
                                                                 </div>
                                                             )}
                                                         </>

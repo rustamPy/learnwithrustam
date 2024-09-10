@@ -20,6 +20,7 @@
     "@react-pdf-viewer/full-screen": "^3.12.0",
     "@react-pdf-viewer/page-navigation": "^3.12.0",
     "@react-spring/web": "*",
+    "@tailwindcss/typography": "^0.5.15",
     "bootstrap": "^5.3.3",
     "framer-motion": "^11.3.21",
     "fs": "^0.0.1-security",
