@@ -3,7 +3,6 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useNavbarVisibility } from '@/components/pro/Header/NavbarVisibilityContext';
 import { PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { fetchQuestion, fetchTest, fetchSolution } from '@/app/(pro)/wecode/utils';
-import { getQuestions } from '@/lib/questions';
 
 
 
@@ -59,7 +58,7 @@ const CodeEditorRunner = ({ params }) => {
     }, []);
 
     useEffect(() => {
-        if (timer > 0) {  // Only save the timer when it has a valid value
+        if (timer > 0) {
             localStorage.setItem('timer', timer.toString());
         }
     }, [timer]);

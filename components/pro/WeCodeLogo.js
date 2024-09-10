@@ -1,10 +1,5 @@
 import { Typography } from "@material-tailwind/react";
 
-import { Switch } from "@material-tailwind/react";
-import { PiSelectionBackground } from "react-icons/pi";
-
-
-
 const WeCodeLogo = ({ linked = true, size = 16 }) => {
 
     return (

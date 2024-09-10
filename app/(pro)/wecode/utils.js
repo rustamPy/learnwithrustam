@@ -1,6 +1,5 @@
 import { remark } from 'remark';
 import html from 'remark-html';
-import matter from 'gray-matter';
 
 export const COLOR_MAP = {
     'Easy': 'lwr-wecode-easy-100',
