@@ -1,6 +1,8 @@
 import withMT from "@material-tailwind/react/utils/withMT";
+import type { Config } from 'tailwindcss'
+import { PluginAPI } from 'tailwindcss/types/config'
 
-module.exports = withMT({
+const config: Config = {
   content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
@@ -72,7 +74,7 @@ module.exports = withMT({
           'Noto Color Emoji'
         ]
       },
-      typography: (theme) => ({
+      typography: (theme: PluginAPI['theme']) => ({
         DEFAULT: {
           css: {
             color: '#333333',
@@ -159,7 +161,6 @@ module.exports = withMT({
             'code.language-python': {
               color: '#ed64a6',
               backgroundColor: '#ffffff00'
-
             }
           },
         },
@@ -169,4 +170,6 @@ module.exports = withMT({
   plugins: [
     require('@tailwindcss/typography'),
   ],
-});
+};
+
+export default withMT(config);
