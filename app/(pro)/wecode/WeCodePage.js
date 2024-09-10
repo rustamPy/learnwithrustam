@@ -52,7 +52,7 @@ const Page = ({ questions, topGroups, stats }) => {
             <section className="w-full max-w-6xl px-4 sm:px-6 lg:px-8 text-center">
                 <div className="space-y-8">
                     <h2 className="text-lg font-semibold text-lwr-orange-color-200 dark:text-lwr-orange-color-100 tracking-wide uppercase">Check the solutions Today</h2>
-                    <div className="relative inline-flex items-center justify-center text-[300px]">
+                    <div className="relative inline-flex items-center justify-center text-[100px]">
                         <WeCodeLogo size={100} />
                     </div>
                     <Typography className="mt-4 text-4xl font-extrabold text-gray-900 dark:text-gray-100 sm:text-xl lg:text-4xl">
