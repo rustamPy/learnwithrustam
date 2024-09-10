@@ -59,6 +59,7 @@ const QuestionPanel = ({ question, editorial }) => {
     const [activeAccordion, setActiveAccordion] = useState(null);
     const [questionFullScreen, setQuestionFullScreen] = useState(false);
     const [questionHidden, setQuestionHidden] = useState(false);
+    const [questionHidden, setQuestionHidden] = useState(false);
 
     console.log(editorial?.content)
 
@@ -97,6 +98,7 @@ const QuestionPanel = ({ question, editorial }) => {
                         });
                     }
                 }, 500);
+                }, 500);
             }
         }, 0);
     };
@@ -124,6 +126,8 @@ const QuestionPanel = ({ question, editorial }) => {
                 setFullScreen={setQuestionFullScreen}
                 isHidden={questionHidden}
                 setHidden={setQuestionHidden}
+                isHidden={questionHidden}
+                setHidden={setQuestionHidden}
             >
                 {/* Scrollable Content Area */}
                 <div className="p-4 h-full overflow-auto" ref={scrollableRef}>
@@ -146,6 +150,7 @@ const QuestionPanel = ({ question, editorial }) => {
                                                     <div className="flex flex-row items-center">
                                                         <div className={`text-[15px] ${b.icon ? 'mr-1' : ''}`}>{b.icon}</div>
                                                         <div className={`${COLOR_MAP[b.name] ? `text-${COLOR_MAP[b.name]} font-semibold` : ''}`}>
+                                                            {b.name}
                                                             {b.name}
                                                         </div>
                                                     </div>

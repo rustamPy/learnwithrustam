@@ -99,6 +99,7 @@ const WeCodeStatsSection = ({ stats }) => {
                             >
                                 <div className="flex flex-col mt-2">
                                     {stats?.countByDifficulties && Object.keys(stats.countByDifficulties).map(difficulty => {
+                                    {stats?.countByDifficulties && Object.keys(stats.countByDifficulties).map(difficulty => {
                                         const count = stats.countByDifficulties[difficulty]
                                         return (
                                             <span key={difficulty} className={`text-lwr-wecode-${difficulty.toLowerCase()}-100`}>

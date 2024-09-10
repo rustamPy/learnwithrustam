@@ -54,6 +54,8 @@ const CodeEditorRunner = ({ params }) => {
             try {
                 const fetchedQuestion = await fetchQuestion(id)
                 const fetchedTest = await fetchTest(id)
+                const fetchedQuestion = await fetchQuestion(id)
+                const fetchedTest = await fetchTest(id)
                 const params = fetchedTest.params;
                 const convertedTestCase = convertTestCase(fetchedTest.content, params);
                 setQuestion(fetchedQuestion);
