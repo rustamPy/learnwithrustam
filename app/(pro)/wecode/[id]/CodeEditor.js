@@ -59,6 +59,37 @@ const CodeEditor = ({
     const [testsFullScreen, setTestsFullScreen] = useState(false);
     const [testsHidden, setTestsHidden] = useState(false);
 
+    const editorPanelRef = useRef(null);
+    const testsPanelRef = useRef(null);
+
+    const togglePanel = useCallback((isEditor) => {
+        if (isEditor) {
+            setEditorHidden(prev => !prev);
+            setTestsHidden(false);
+        } else {
+            setTestsHidden(prev => !prev);
+            setEditorHidden(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        const editorPanel = editorPanelRef.current;
+        const testsPanel = testsPanelRef.current;
+
+        if (!editorPanel || !testsPanel) return;
+
+        if (editorHidden) {
+            editorPanel.resize(3.5);
+            testsPanel.resize(97);
+        } else if (testsHidden) {
+            editorPanel.resize(95);
+            testsPanel.resize(5);
+        } else {
+            editorPanel.resize(50);
+            testsPanel.resize(50);
+        }
+    }, [editorHidden, testsHidden]);
+
 
 
 
@@ -166,13 +197,17 @@ const CodeEditor = ({
     return (
         <Panel minSize={40} defaultSize={70}>
             <PanelGroup direction="vertical">
-                <Panel minSize={10} defaultSize={50} collapsible={true} collapsedSize={3.5}>
+                <Panel
+                    minSize={3.5}
+                    defaultSize={50}
+                    ref={editorPanelRef}
+                >
                     <WindowPanel
                         tabs={[{ name: 'Code', icon: <IoCodeSlash />, color: 'text-green-500' }]}
                         isFullScreen={editorFullScreen}
                         setFullScreen={setEditorFullScreen}
                         isHidden={editorHidden}
-                        setHidden={setEditorHidden}
+                        setHidden={() => togglePanel(true)}
                         additionalClass={"!h-[calc(100%)]"}
                         panelId="code-editor"
                     >
@@ -205,8 +240,12 @@ const CodeEditor = ({
                         </div>
                     </WindowPanel>
                 </Panel>
-                <PanelResizeHandle className="h-1 center bg-none hover:bg-blue-500 dark:hover:bg-blue-800 rounded-full cursor-ns-resize" />
-                <Panel minSize={5} defaultSize={50}>
+                <PanelResizeHandle withHandle className="h-1 center bg-none hover:bg-blue-500 dark:hover:bg-blue-800 rounded-full cursor-ns-resize" />
+                <Panel
+                    minSize={3.5}
+                    defaultSize={50}
+                    ref={testsPanelRef}
+                >
                     <WindowPanel
                         tabs={[
                             { name: 'Default Test Cases', icon: <GrTest />, color: 'text-green-500' },
@@ -216,7 +255,7 @@ const CodeEditor = ({
                         isFullScreen={testsFullScreen}
                         setFullScreen={setTestsFullScreen}
                         isHidden={testsHidden}
-                        setHidden={setTestsHidden}
+                        setHidden={() => togglePanel(false)}
                         panelId="test-cases"
                     >
                         {/* Inputs */}
@@ -321,14 +360,14 @@ const CodeEditor = ({
                                                                         {evaluatedInputs.map((_, index) => (
                                                                 <button
                                                                     key={`output-${index}`}
-                                                                                className={`text-sm px-[15px] py-[5px] rounded-xl ${currentInputIndex === index ? 'dark:bg-gray-700 dark:text-white bg-gray-300 text-gray-800' : 'dark:bg-gray-800 dark:hover:bg-gray-700 bg-gray-200 text-gray-800 dark:text-white'}`}
-                                                                                onClick={() => setCurrentInputIndex(index)}
+                                                                    className={`text-sm px-[15px] py-[5px] rounded-xl ${currentInputIndex === index ? 'dark:bg-gray-700 dark:text-white bg-gray-300 text-gray-800' : 'dark:bg-gray-800 dark:hover:bg-gray-700 bg-gray-200 text-gray-800 dark:text-white'}`}
+                                                                    onClick={() => setCurrentInputIndex(index)}
                                                                 >
                                                                     <div className="flex items-center">
-                                                                                    {errorOutput.length > 0 ? <GoSkip className='mr-2' /> : <GoDotFill className={`mr-2 ${status === 'Wrong Answers' ? 'text-red-500' : status === 'Right Answers' ? 'text-green-500' : 'text-red-500'}`} />}
+                                                                        {errorOutput.length > 0 ? <GoSkip className='mr-2' /> : <GoDotFill className={`mr-2 ${status === 'Wrong Answers' ? 'text-red-500' : status === 'Right Answers' ? 'text-green-500' : 'text-red-500'}`} />}
                                                                         <span>Case {index + 1}</span>
                                                                     </div>
-                                                                            </button>
+                                                                </button>
                                                             ))}
                                                         </div>
                                                                     {output && output[currentInputIndex] && (
@@ -345,15 +384,15 @@ const CodeEditor = ({
                                                                     <div className="flex flex-col gap-2">
                                                                                     {inputs[currentInputIndex].slice(0, inputParams.length).map((val, idx) => (
                                                                             <>
-                                                                                            <div className='w-full h-max rounded-lg px-2 py-1'>
-                                                                                                <p className="mb-2 dark:text-gray-400 text-gray-700 text-[12px]">{inputParams[idx]} <strong>({inputTypes[idx]}) </strong> = </p>
-                                                                                            <input
-                                                                                                key={`${currentInputIndex}-output-${idx}`}
-                                                                                                value={val}
-                                                                                                    className="border border-gray-300 rounded-md px-2 py-1 mb-1"
-                                                                                                disabled
-                                                                                            />
-                                                                                            </div>
+                                                                                <div className='w-full h-max rounded-lg px-2 py-1'>
+                                                                                    <p className="mb-2 dark:text-gray-400 text-gray-700 text-[12px]">{inputParams[idx]} <strong>({inputTypes[idx]}) </strong> = </p>
+                                                                                    <input
+                                                                                        key={`${currentInputIndex}-output-${idx}`}
+                                                                                        value={val}
+                                                                                        className="border border-gray-300 rounded-md px-2 py-1 mb-1"
+                                                                                        disabled
+                                                                                    />
+                                                                                </div>
                                                                             </>
                                                                         ))}
                                                                     </div>

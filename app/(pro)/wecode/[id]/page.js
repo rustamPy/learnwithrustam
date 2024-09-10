@@ -2,8 +2,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavbarVisibility } from '@/components/pro/Header/NavbarVisibilityContext';
 import { PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { fetchQuestion, fetchTest } from '@/app/(pro)/leetcode/utils';
-import { getQuestions } from '@/lib/questions';
+import { fetchQuestion, fetchTest, fetchSolution } from '@/app/(pro)/wecode/utils';
 
 
 
@@ -20,15 +19,16 @@ import { convertTestCase, BASE_CODE, SPECIFIC_BASE_CODE, toCamelCase } from './u
 const CodeEditorRunner = ({ params }) => {
     const { id } = params;
     const [question, setQuestion] = useState('');
+    const [editorial, setEditorial] = useState('');
     const [language, _] = useState(languages[0]);
     const [printOutput, setPrintOutput] = useState([]);
     const [status, setStatus] = useState(null);
 
     const [inputs, setInputs] = useState([]);
-    const [inputTypes, setInputTypes] = useState([])
+    const [inputTypes, setInputTypes] = useState([]);
     const [testFunction, setTestFunction] = useState(null);
     const [solution, setSolution] = useState(null);
-    const [expectedOutput, setExpectedOutput] = useState([])
+    const [expectedOutput, setExpectedOutput] = useState([]);
     const [userOutput, setUserOutput] = useState([])
     const [errorOutput, setErrorOutput] = useState([])
 
@@ -58,7 +58,7 @@ const CodeEditorRunner = ({ params }) => {
     }, []);
 
     useEffect(() => {
-        if (timer > 0) {  // Only save the timer when it has a valid value
+        if (timer > 0) {
             localStorage.setItem('timer', timer.toString());
         }
     }, [timer]);
@@ -81,8 +81,9 @@ const CodeEditorRunner = ({ params }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const fetchedQuestion = await fetchQuestion(id)
-                const fetchedTest = await fetchTest(id)
+                const fetchedQuestion = await fetchQuestion(id);
+                const fetchedEditorial = await fetchSolution(id);
+                const fetchedTest = await fetchTest(id);
                 const params = fetchedTest.params;
                 const types = fetchedTest.types || [];
                 const convertedInputs = convertTestCase(fetchedTest.content, params, types);
@@ -92,6 +93,7 @@ const CodeEditorRunner = ({ params }) => {
                 setInputTypes(types);
                 setInputs(convertedInputs);
                 setQuestion(fetchedQuestion);
+                setEditorial(fetchedEditorial);
                 setTestParams(params);
             } catch (error) {
                 console.error('Error:', error);
@@ -242,7 +244,7 @@ const CodeEditorRunner = ({ params }) => {
             />
 
             <PanelGroup direction="horizontal" className="flex-1" autoSaveId="persistence">
-                <QuestionPanel question={question} />
+                <QuestionPanel question={question} editorial={editorial} />
 
                 <PanelResizeHandle className="w-1 center bg-none hover:bg-blue-500 dark:hover:bg-blue-800 rounded-full cursor-ns-resize" />
 

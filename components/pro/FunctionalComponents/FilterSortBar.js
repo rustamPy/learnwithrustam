@@ -34,10 +34,10 @@ const FilterSortBar = ({
     const [isTopicBoxOpen, setIsTopicBoxOpen] = useState(false);
     const [tallerBox, setTallerBox] = useState(false);
     const COLOR_MAP = {
-        'Easy': 'lwr-leetcode-easy-100',
-        "Beginner": 'lwr-leetcode-easy-100',
-        'Medium': 'lwr-leetcode-medium-100',
-        'Hard': 'lwr-leetcode-hard-100'
+        'Easy': 'lwr-wecode-easy-100',
+        "Beginner": 'lwr-wecode-easy-100',
+        'Medium': 'lwr-wecode-medium-100',
+        'Hard': 'lwr-wecode-hard-100'
     };
 
     const filteredTopics = allTopics.filter(topic =>

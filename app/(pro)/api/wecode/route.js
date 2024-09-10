@@ -5,7 +5,7 @@ import matter from 'gray-matter';
 
 
 async function fetchQuestionsFromFS(id = null, fileName = null) {
-    const directoryPath = path.join(process.cwd(), 'public', 'leetcode');
+    const directoryPath = path.join(process.cwd(), 'public', 'wecode');
     const subdirectories = fs.readdirSync(directoryPath, { withFileTypes: true });
 
     let result = [];

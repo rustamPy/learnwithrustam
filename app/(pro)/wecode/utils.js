@@ -1,16 +1,15 @@
 import { remark } from 'remark';
 import html from 'remark-html';
-import matter from 'gray-matter';
 
 export const COLOR_MAP = {
-    'Easy': 'lwr-leetcode-easy-100',
-    'Medium': 'lwr-leetcode-medium-100',
-    'Hard': 'lwr-leetcode-hard-100'
+    'Easy': 'lwr-wecode-easy-100',
+    'Medium': 'lwr-wecode-medium-100',
+    'Hard': 'lwr-wecode-hard-100'
 };
 
 export const fetchQuestion = async (slug) => {
     try {
-        const response = await fetch(`/api/leetcode?id=${slug}&fileName=question`);
+        const response = await fetch(`/api/wecode?id=${slug}&fileName=question`);
         if (!response.ok) {
             throw new Error('Failed to fetch data');
         }
@@ -35,7 +34,7 @@ export const fetchQuestion = async (slug) => {
 
 export const fetchAllQuestions = async () => {
     try {
-        const response = await fetch('/api/leetcode');
+        const response = await fetch('/api/wecode');
 
         if (!response.ok) {
             throw new Error('Failed to fetch data');
@@ -50,7 +49,7 @@ export const fetchAllQuestions = async () => {
 
 export const fetchTest = async (slug) => {
     try {
-        const response = await fetch(`/api/leetcode?id=${slug}&fileName=test`);
+        const response = await fetch(`/api/wecode?id=${slug}&fileName=test`);
         if (!response.ok) {
             throw new Error('Failed to fetch data');
         }
@@ -75,7 +74,7 @@ export const fetchTest = async (slug) => {
 
 export const fetchSolution = async (slug) => {
     try {
-        const response = await fetch(`/api/leetcode?id=${slug}&fileName=solution`);
+        const response = await fetch(`/api/wecode?id=${slug}&fileName=solution`);
         if (!response.ok) {
             throw new Error('Failed to fetch data');
         }
@@ -85,6 +84,8 @@ export const fetchSolution = async (slug) => {
         if (!solution) {
             throw new Error('Solution not found');
         }
+
+        console.log(solution)
 
         const processedContent = await remark().use(html).process(solution.content);
         const htmlContent = processedContent.toString();

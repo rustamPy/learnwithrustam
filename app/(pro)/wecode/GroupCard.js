@@ -34,7 +34,7 @@ const GroupCard = ({ groups }) => {
 
     return (
         <section className="container mx-auto py-8 px-4">
-            <Card shadow={false} className="border border-gray-300">
+            <Card shadow={false} className="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg">
                 <CardHeader
                     shadow={false}
                     floated={false}
@@ -42,7 +42,7 @@ const GroupCard = ({ groups }) => {
                 >
                     <div>
                         <Typography variant="h1" className="!text-3xl mb-2 text-white">
-                            Our Local Top LeetCode Problem Groups
+                            Our Local Top WeCode Problem Groups
                         </Typography>
                         <Typography className="!text-lg font-normal text-blue-100">
                             Explore and master 3 popular question categories
@@ -63,7 +63,7 @@ const GroupCard = ({ groups }) => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                         >
-                            <Card className="border border-gray-200 bg-white overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                            <Card className="dark:bg-gray-500 bg-gray-50 h-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
                                 <CardBody className="p-5">
                                     <div className="flex items-center justify-between mb-4">
                                         <Typography variant="h5" color="blue-gray" className="font-bold">
@@ -85,7 +85,7 @@ const GroupCard = ({ groups }) => {
                                                 transition={{ duration: 0.3, delay: key * 0.1 }}
                                             >
                                                 <Typography variant="small" className="font-medium">
-                                                    <a href={`/leetcode/${q.slug}`} className="hover:text-blue-500 transition-colors duration-200">
+                                                    <a href={`/wecode/${q.slug}`} className="dark:hover:text-gray-800 hover:text-gray-900 font-semibold dark:text-gray-50 transition-colors duration-200">
                                                         {q.title}
                                                     </a>
                                                 </Typography>
@@ -127,7 +127,7 @@ const GroupCard = ({ groups }) => {
                                                 >
                                                     {group.questions.slice(3).map((q, key) => (
                                                         <Typography key={key + 3} variant="small" className="font-medium">
-                                                            <a href={`/leetcode/${q.slug}`} className="hover:text-blue-500 transition-colors duration-200">
+                                                            <a href={`/wecode/${q.slug}`} className="hover:text-blue-500 transition-colors duration-200">
                                                                 {q.title}
                                                             </a>
                                                         </Typography>

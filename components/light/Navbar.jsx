@@ -37,7 +37,7 @@ const NavBar = () => {
                     <Link href="/light" className="ml-4">L{`{W}`}R</Link>
                     <div className="hidden lg:block">
                         <div className="mb-6 p-0 flex lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
-                            <Link href="/light/leetcode" className="text-black px-3">Leetcode</Link>
+                            <Link href="/light/wecode" className="text-black px-3">WeCode</Link>
                             <div className="px-3 flex flex-row items-center text-yellow-800">
                                 <Link href={goPro()}>
                                     Switch to Pro
@@ -66,7 +66,7 @@ const NavBar = () => {
                     </IconButton>
                 </div>
                 <Collapse open={openNav}>
-                    <Link href="/light/leetcode" className="text-black px-3">Leetcode</Link>
+                    <Link href="/light/wecode" className="text-black px-3">Wecode</Link>
                     <div className="px-3 flex flex-row items-left text-yellow-800">
                         <Link href={goPro()}>
                             Switch to Pro

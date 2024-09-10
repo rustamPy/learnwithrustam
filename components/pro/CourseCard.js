@@ -22,9 +22,9 @@ const IMAGEMAP = {
 };
 
 const COLOR_MAP = {
-    'beginner': "bg-lwr-leetcode-easy-100",
-    'medium': "bg-lwr-leetcode-medium-100",
-    'hard': "bg-lwr-leetcode-hard-100",
+    'beginner': "bg-lwr-wecode-easy-100",
+    'medium': "bg-lwr-wecode-medium-100",
+    'hard': "bg-lwr-wecode-hard-100",
 }
 
 const CourseCard = ({ id, title, desc, price, options, level = '' }) => {

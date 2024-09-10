@@ -8,7 +8,7 @@ import SearchBar from '@/components/pro/FunctionalComponents/SearchBar';
 import FilterSortBar from '@/components/pro/FunctionalComponents/FilterSortBar';
 import Pagination from '@/components/pro/FunctionalComponents/Pagination';
 
-import { COLOR_MAP } from '@/app/(pro)/leetcode/utils'
+import { COLOR_MAP } from '@/app/(pro)/wecode/utils'
 
 const TableHead = ({ columns, onSort }) => (
     <thead>
@@ -45,7 +45,7 @@ const TableBody = ({ questions, colorMap }) => {
                     className={`bg-${colorMap[level]} text-gray-900`}
                 >
                     <td className="px-4 py-2 text-sm">
-                        <Link href={`/leetcode/${slug}`} passHref>
+                        <Link href={`/wecode/${slug}`} passHref>
                             <Typography
                                 variant="small"
                                 className={`font-normal hover:underline font-semibold`}
@@ -55,7 +55,7 @@ const TableBody = ({ questions, colorMap }) => {
                         </Link>
                     </td>
                     <td className="px-4 py-2 text-sm">
-                        <Link href={`/leetcode/${slug}`} passHref>
+                        <Link href={`/wecode/${slug}`} passHref>
                             <Typography
                                 variant="small"
                                 className="font-normal hover:underline font-semibold"
@@ -165,9 +165,9 @@ const Table = ({ questions }) => {
 
     return (
         <div className="container mx-auto py-8 px-4">
-            <span className='bg-lwr-leetcode-easy-100'></span>
-            <span className='bg-lwr-leetcode-medium-100'></span>
-            <span className='bg-lwr-leetcode-hard-100'></span>
+            <span className='bg-lwr-wecode-easy-100'></span>
+            <span className='bg-lwr-wecode-medium-100'></span>
+            <span className='bg-lwr-wecode-hard-100'></span>
             <div className="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
                 <div className="flex flex-col md:flex-row justify-between mb-8">
                     <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Tasks</h1>

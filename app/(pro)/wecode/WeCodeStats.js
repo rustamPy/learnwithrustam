@@ -27,14 +27,14 @@ function StatsCard({ count, title, description, children }) {
     );
 }
 
-const LeetCodeStatsSection = ({ stats }) => {
+const WeCodeStatsSection = ({ stats }) => {
 
     return (
         <>
             <div className="grid mt-16 w-full lg:h-[54rem] md:h-[34rem] place-items-center bg-center bg-contain bg-no-repeat">
                 <div className="container mx-auto px-4 text-center">
                     <Typography className="inline-flex text-xs rounded-lg border-[1.5px] border-blue-gray-50 py-1 lg:px-4 px-1 font-medium text-primary">
-                        Exciting Updates! Explore the latest LeetCode tasks
+                        Exciting Updates! Explore the latest WeCode tasks
                     </Typography>
                     <Typography
                         variant="h1"
@@ -49,7 +49,7 @@ const LeetCodeStatsSection = ({ stats }) => {
                         <span className="leading-snug text-lwr-orange-color-100">
                             challenge
                         </span>{" "}
-                        through my curated LeetCode tasks.
+                        through my curated WeCode tasks.
                     </Typography>
                     <Typography
                         variant="lead"
@@ -59,8 +59,8 @@ const LeetCodeStatsSection = ({ stats }) => {
                     </Typography>
                     <div>
                         <img
-                            src="/imgs/leetcode1.png"
-                            alt="LeetCode Tasks"
+                            src="/imgs/wecode1.png"
+                            alt="WeCode Tasks"
                             className="w-auto h-auto"
                         />
                     </div>
@@ -69,9 +69,9 @@ const LeetCodeStatsSection = ({ stats }) => {
 
             {/* Statistics Section */}
             <section className="lg:py-28 py-10 px-8 container mx-auto mt-2">
-                <span className="text-lwr-leetcode-easy-100"></span>
-                <span className="text-lwr-leetcode-medium-100"></span>
-                <span className="text-lwr-leetcode-hard-100"></span>
+                <span className="text-lwr-wecode-easy-100"></span>
+                <span className="text-lwr-wecode-medium-100"></span>
+                <span className="text-lwr-wecode-hard-100"></span>
                 <div className="grid gap-10 lg:grid-cols-1 lg:gap-24 xl:grid-cols-2 items-center">
                     <Card
                         className="bg-gray-100/50 py-24 text-center"
@@ -87,7 +87,7 @@ const LeetCodeStatsSection = ({ stats }) => {
                             variant="h5"
                             className="mt-2 font-bold bg-gradient-to-r from-blue-500 to-purple-500 dark:from-blue-700 dark:to-purple-700 bg-clip-text text-transparent"
                         >
-                            LeetCode Task{stats.totalQuestions > 1 ? 's' : ''}
+                            WeCode Task{stats.totalQuestions > 1 ? 's' : ''}
                         </Typography>
                     </Card>
                     <div>
@@ -101,7 +101,7 @@ const LeetCodeStatsSection = ({ stats }) => {
                                     {stats?.countByDifficulties && Object.keys(stats.countByDifficulties).map(difficulty => {
                                         const count = stats.countByDifficulties[difficulty]
                                         return (
-                                            <span key={difficulty} className={`text-lwr-leetcode-${difficulty.toLowerCase()}-100`}>
+                                            <span key={difficulty} className={`text-lwr-wecode-${difficulty.toLowerCase()}-100`}>
                                                 {difficulty} question{count > 1 ? 's' : ''}: {count}
                                             </span>
                                         )
@@ -123,4 +123,4 @@ const LeetCodeStatsSection = ({ stats }) => {
     );
 }
 
-export default LeetCodeStatsSection;
+export default WeCodeStatsSection;
