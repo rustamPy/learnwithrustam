@@ -234,7 +234,6 @@ const CodeEditorRunner = ({ params }) => {
         <div className="flex flex-col h-screen overflow-hidden max-h-full pb-1 mt-2 px-2">
             <MiniNavbar
                 questions={question}
-                questions={question}
                 isTimerVisible={isTimerVisible}
                 setIsTimerVisible={setIsTimerVisible}
                 handleResetTimer={handleResetTimer}
@@ -248,7 +247,6 @@ const CodeEditorRunner = ({ params }) => {
             <PanelGroup direction="horizontal" className="flex-1" autoSaveId="persistence">
                 <QuestionPanel question={question} editorial={editorial} />
 
-                <PanelResizeHandle className="w-1 center bg-none hover:bg-blue-500 dark:hover:bg-blue-800 rounded-full cursor-ns-resize" />
                 <PanelResizeHandle className="w-1 center bg-none hover:bg-blue-500 dark:hover:bg-blue-800 rounded-full cursor-ns-resize" />
 
                 <CodeEditor
