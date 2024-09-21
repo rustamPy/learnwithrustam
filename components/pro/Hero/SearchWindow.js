@@ -187,6 +187,10 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
 
     const totalPages = Math.ceil(filteredCourses.length / coursesPerPage);
 
+    const gridClass = isProfilePage
+        ? "grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4"
+        : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4";
+
     return (
         <div className={`bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6 ${containerClass} mb-8 mt-16 w-full max-w-7xl mx-auto`}>
             <div className="flex justify-between items-center mb-8">
@@ -242,7 +246,7 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
             {displayedCourses.length === 0 ? (
                 <Typography className="text-center mt-10 text-gray-700 dark:text-gray-300">No courses found</Typography>
             ) : (
-                    <div className={isListView ? "flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mt-8" : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"}>
+                    <div className={isListView ? "flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mt-8" : gridClass}>
                     {isListView ? (
                         <>
                                 <div className="w-full lg:w-1/3 overflow-y-auto max-h-[600px] pl-2 pr-2" style={{ scrollbarWidth: 'thin', scrollbarColor: '#4A5568 #CBD5E0' }}>
