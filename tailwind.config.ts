@@ -7,7 +7,7 @@ const config: Config = {
   theme: {
     extend: {
       boxShadow: {
-        'lwr-shadow-orange': '0 1px 5px 2px #ffecd0, 0 2px 4px -1px rgba(59, 130, 246, 0.06)',
+        'lwr-shadow-orange': '4px 4px 0px 1px #ffecd0, 0 2px 4px -1px rgba(59, 130, 246, 0.06)',
         'lwr-shadow-red': '0 4px 6px -1px rgba(239, 68, 68, 0.5), 0 2px 4px -1px rgba(239, 68, 68, 0.06)',
         'inner': 'inset 0 12px 24px rgba(0, 0, 0, 0.1)',
       },

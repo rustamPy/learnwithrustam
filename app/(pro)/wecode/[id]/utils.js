@@ -222,7 +222,7 @@ export const convertTestCase = (inputString, params, types) => {
 
                 const type = types[index]?.toLowerCase()
                 try {
-                    const parsed = typeof inp === 'string' ? JSON.parse(inp) : inp
+                    const parsed = inp
 
                     if (typeof inp === 'string' || typeof inp === 'number') {
                         if (type.startsWith('list[')) {

@@ -67,7 +67,7 @@ const NAVITEMS = [
     },
     {
         title: 'Courses',
-        href: '/#courses',
+        href: '/courses',
     },
     {
         title: 'Get Together',

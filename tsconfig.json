@@ -29,7 +29,7 @@
     ".next/types/**/*.ts",
     "config/database.js"
 ,
-"components/pro/Hero/CourseSearch.js",
+"components/pro/Hero/SearchWindow.js",
 "components/pro/Hero/IndexHero.ks",
 "components/pro/Hero/Carousel.js",
 "components/pro/Header/Banner.js",

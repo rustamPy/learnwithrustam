@@ -17,13 +17,13 @@ const HeroCarousel = () => {
         <div id="together" className="scroll-mt-[450px] sm:scroll-mt-32 mb-16">
             <Typography
                 variant="h1"
-                className="mb-4 text-4xl lg:text-6xl font-extrabold tracking-tight leading-none text-lwr-gray-color-500 md:text-5xl dark:text-white"
+                className="mb-4 text-4xl lg:text-6xl font-extrabold tracking-tight leading-none text-lwr-gray-color-500 md:text-5xl dark:text-white text-center"
             >
                 Let's Get <span className="text-lwr-orange-color-100">Together</span>
             </Typography>
 
             <Carousel
-                className="rounded-xl w-full max-w-6xl mx-auto mt-9"
+                className="rounded-xl w-full max-w-6xl mx-auto mt-9 overflow-hidden"
                 autoplay
                 loop
                 navigation={({ setActiveIndex, activeIndex, length }) => (

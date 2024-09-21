@@ -1,27 +1,10 @@
-'use client';
-
-import React, { useState } from 'react';
-import { Typography } from '@material-tailwind/react';
-import CoursesGrid from '@/components/pro/CoursesGrid';
-import Construction from '@/components/pro/Construction';
+import SearchWindow from '@/components/pro/Hero/SearchWindow'
 
 const Courses = () => {
-    const [construction, setConstruction] = useState(true);
 
     return (
-        <div className="flex flex-col items-center lg:mr-24 lg:ml-24 relative">
-            {construction ? (
-                <Construction />
-            ) : (
-                <>
-                    {/* Overlay to enforce the blur and show "Under Construction" */}
-                    <img src='/imgs/courses_1.png' width='200px' alt='Courses Banner' />
-                    <Typography variant="h5" textGradient className='mb-4 text-lwr-orange-color-100'>
-                        Available Courses
-                    </Typography>
-                    <CoursesGrid />
-                </>
-            )}
+        <div className="flex flex-col items-center lg:mr-16 lg:ml-16 relative">
+            <SearchWindow />
         </div>
     );
 };

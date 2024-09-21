@@ -4,10 +4,10 @@ import React from 'react';
 import Introduction from '@/components/pro/Hero/Introduction';
 import HeroCarousel from '@/components/pro/Hero/Carousel';
 import Features from '@/components/pro/Hero/Features';
-import CourseSearch from '@/components/pro/Hero/CourseSearch';
+import SearchWindow from '@/components/pro/Hero/SearchWindow';
 
 const Index = () => (
-  <div className='text-center m-9 mt-6'>
+  <div className='m-9 mt-6 flex flex-col items-center'>
     {/* Introduction Section */}
     <Introduction />
 
@@ -15,7 +15,7 @@ const Index = () => (
     <Features />
 
     {/* Search Window Section for course search */}
-    <CourseSearch />
+    <SearchWindow />
 
     {/* Hero Carousel Section with images */}
     <HeroCarousel />

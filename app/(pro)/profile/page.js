@@ -2,10 +2,8 @@
 
 import { useSession, signOut } from "next-auth/react";
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import empty from "@/public/imgs/empty.png"
 import SignInWindow from '@/components/pro/SignInWindow';
-import CoursesGrid from '@/components/pro/CoursesGrid';
+import SearchWindow from '@/components/pro/Hero/SearchWindow';
 import { AttentionWindow } from '@/components/pro/AttentionWindow'
 
 import {
@@ -37,10 +35,7 @@ export default function Profile() {
     });
     const [message, setMessage] = useState('');
     const [isEditing, setIsEditing] = useState(false);
-    const [open, setOpen] = useState(false)
-
-
-
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         if (session && session.user) {
@@ -80,7 +75,7 @@ export default function Profile() {
                 setMessage(data.message || 'Update successful');
                 await update();
                 setIsEditing(false);
-                setOpen(!open)
+                setOpen(true);
             }
         } catch (error) {
             setMessage('Error updating data');
@@ -88,13 +83,10 @@ export default function Profile() {
     }
 
     const handleCloseWindow = () => {
-        setOpen(!open);
+        setOpen(false);
     }
 
-
-
     return (
-
         <>
             <div className="bg-gradient-to-r from-[#e7cfbe] to-[#bec4d9] dark:bg-gradient-to-r dark:from-[#e7cfbe5f] dark:to-[#bec4d964] ">
                 <div className="container mx-auto py-8">
@@ -105,7 +97,7 @@ export default function Profile() {
                                 {/* Profile Window*/}
                                 <div className="relative bg-white shadow dark:shadow-lwr-shadow-orange rounded-lg p-6 dark:bg-black mb-4">
                                     <Button
-                                        onClick={!isEditing ? () => setIsEditing(!isEditing) : handleSaveChanges}
+                                        onClick={!isEditing ? () => setIsEditing(true) : handleSaveChanges}
                                         size="sm"
                                         className="text-xs bg-lwr-orange-color-100 px-3 py-1 rounded-md hover:bg-lwr-orange-color-200 dark:bg-lwr-blue-color-500"
                                     >
@@ -122,7 +114,6 @@ export default function Profile() {
                                         )}
 
                                         <div className="relative">
-
                                             <img
                                                 src={session.user.image || '/default-avatar.png'}
                                                 alt="User Avatar"
@@ -143,7 +134,6 @@ export default function Profile() {
                                             </Button>
                                         </div>
                                     </div>
-
                                 </div>
                                 {/* Contacts Window*/}
                                 <div className="relative bg-white shadow rounded-lg p-6 dark:bg-black  dark:shadow-lwr-shadow-orange">
@@ -151,13 +141,13 @@ export default function Profile() {
                                         <span className="text-gray-700 uppercase font-bold tracking-wider mb-2 dark:text-white">Contacts:</span>
                                         <ul>
                                             <li className="mb-2"><b>Phone:</b> {
-
                                                 <AddPhoneNumber
                                                     value={profileData.phone}
                                                     onChange={(newValue) => setProfileData((prev) => ({ ...prev, phone: newValue }))}
                                                     isEditing={isEditing}
                                                     setIsEditing={setIsEditing}
-                                                />}</li>
+                                                />}
+                                            </li>
                                             <li className="mb-2"><b>Email:</b> {session.user.email}</li>
                                         </ul>
                                     </div>
@@ -168,9 +158,8 @@ export default function Profile() {
                             <div className="relative bg-white shadow rounded-lg p-6 dark:bg-black">
                                 {/* About Me Window*/}
                                 <div className="relative bg-white shadow dark:shadow-lwr-shadow-orange rounded-lg p-6 dark:bg-black mb-4">
-                                    <div className="flex justify-between items-center mb-4"> {/* Add a flex container here */}
+                                    <div className="flex justify-between items-center mb-4">
                                         <h2 className="text-xl font-bold">About Me</h2>
-
                                     </div>
                                     {open && (
                                         <AttentionWindow
@@ -187,32 +176,30 @@ export default function Profile() {
                                     />
                                 </div>
                                 {/* Courses Window*/}
-                                <div className="relative bg-white shadow dark:shadow-lwr-shadow-orange rounded-lg p-6 dark:bg-black">
-                                    {selectedCourses.length === 0 ?
-                                        <div className="flex flex-col items-center">
-                                            <h2 className="text-xl font-bold mt-6 mb-4"> No courses added</h2>
-                                            <Image src={empty} width={200} height={200} className="mb-4" />
-                                            <a href="/courses">
-                                                <Button variant="filled" size="sm" className="bg-lwr-orange-color-50 dark:bg-lwr-blue-color-500">
-                                                    Explore my courses
-                                                </Button>
-                                            </a>
-                                        </div>
-                                        :
-                                        <div className="flex flex-col items-center">
-                                            <h2 className="text-xl font-bold mt-6 mb-4">{`Selected courses (${selectedCourses.length})`}</h2>
-                                            <CoursesGrid specificCourses={selectedCourses} cardsPerPage={3} />
-                                        </div>
-                                    }
-                                </div>
-
+                                {selectedCourses.length === 0 ? (
+                                    <div className="flex flex-col items-center bg-white shadow dark:shadow-lwr-shadow-orange rounded-lg p-6 dark:bg-black">
+                                        <h2 className="text-xl font-bold mb-4">No courses added yet</h2>
+                                        <p className="text-center text-gray-600 mb-6 dark:text-gray-400">
+                                            You haven't added any courses to your profile. Explore our course catalog to find courses that interest you.
+                                        </p>
+                                        <a href="/courses">
+                                            <Button variant="filled" size="lg" className="bg-lwr-orange-color-50 hover:bg-lwr-orange-color-100 dark:bg-lwr-blue-color-500 dark:hover:bg-lwr-blue-color-600">
+                                                Explore Courses
+                                            </Button>
+                                        </a>
+                                    </div>
+                                ) : (
+                                    <SearchWindow
+                                        specificCourses={selectedCourses}
+                                        isProfilePage={true}
+                                        containerClass="bg-white shadow dark:shadow-lwr-shadow-orange rounded-lg p-6 dark:bg-black"
+                                    />
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </>
-
-
     );
 };

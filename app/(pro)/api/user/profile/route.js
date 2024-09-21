@@ -16,15 +16,11 @@ export async function PATCH(request) {
     const { worktitle, phone, courses, about, userStatus } = await request.json();
     const updateData = {};
 
-    if (worktitle) updateData.worktitle = worktitle;
-    if (phone) updateData.phone = phone;
-    if (courses) updateData.courses = courses;
-    if (about) updateData.about = about;
-    if (userStatus) updateData.userStatus = userStatus;
-
-    if (Object.keys(updateData).length === 0) {
-        return NextResponse.json({ error: "No valid fields provided for update" }, { status: 400 });
-    }
+    if (worktitle !== undefined) updateData.worktitle = worktitle;
+    if (phone !== undefined) updateData.phone = phone;
+    if (courses !== undefined) updateData.courses = courses;
+    if (about !== undefined) updateData.about = about;
+    if (userStatus !== undefined) updateData.userStatus = userStatus;
 
     try {
         const result = await db.collection("users").updateOne(
@@ -32,11 +28,11 @@ export async function PATCH(request) {
             { $set: updateData }
         );
 
-        if (result.modifiedCount === 0) {
-            return NextResponse.json({ error: "User not found or data not changed" }, { status: 404 });
+        if (result.matchedCount === 0) {
+            return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        return NextResponse.json({ message: "Data is updated successfully" });
+        return NextResponse.json({ message: "Profile updated successfully" });
     } catch (error) {
         console.error("Error updating data:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

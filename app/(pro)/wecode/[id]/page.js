@@ -143,6 +143,8 @@ const CodeEditorRunner = ({ params }) => {
             const bCode = baseCode || handleSetLangSample(newInputs);
             const runCode = `${shortCode}\n\n${solution}\n\n${bCode}`;
 
+
+            console.log(runCode)
             const createResponse = await fetch('http://127.0.0.1:2358/submissions', {
                 method: 'POST',
                 headers: {
