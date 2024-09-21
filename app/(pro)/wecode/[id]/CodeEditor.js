@@ -295,10 +295,6 @@ const CodeEditor = ({
                                             </button>
                                         </Tooltip>
                                     </div>
-
-
-
-
                                     <div>
 
                                         <p className="text-[15px] font-bold">Inputs:</p>

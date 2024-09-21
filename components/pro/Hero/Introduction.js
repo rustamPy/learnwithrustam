@@ -3,7 +3,7 @@ import { Typography, Button } from '@material-tailwind/react';
 import { FaPython, FaJs } from "react-icons/fa";
 import { SiCplusplus } from "react-icons/si";
 import Image from "next/image";
-import Intro from "@/assets/images/_intro.png";
+import Intro from "@/assets/images/_hero.png";
 
 const Introduction = () => {
     return (
@@ -12,10 +12,10 @@ const Introduction = () => {
                 <Typography variant="h1" className="mb-2 py-6 text-4xl lg:text-6xl font-extrabold tracking-tight leading-none text-lwr-gray-color-500 md:text-5xl dark:text-white">
                     <span className="text-lwr-orange-color-100">Join.</span> Connect. Learn.
                 </Typography>
-                <Typography variant="small" className="mb-4 tracking-tight font-bold text-lwr-gray-color-500 dark:text-white">
+                <Typography variant="small" className="tracking-tight font-bold text-lwr-gray-color-500 dark:text-white">
                     Online Programming Classes
                 </Typography>
-                <Image src={Intro} width={900} height={900} className="mx-auto" alt="Introduction" priority />
+                <Image src={Intro} width={800} height={800} className="mx-auto" alt="Introduction" priority />
             </div>
 
             <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">

@@ -4,7 +4,7 @@ import { Typography, Spinner } from "@material-tailwind/react";
 import { PiLineVertical } from "react-icons/pi";
 import { RiFullscreenFill, RiFullscreenExitLine } from "react-icons/ri";
 import { FaRegWindowMinimize } from "react-icons/fa6";
-import { GoDotFill, GoPlus, GoSkip } from "react-icons/go";
+import { GoPlus } from "react-icons/go";
 
 export const languages = [
     { id: 71, name: 'Python', monacoId: 'python' },
@@ -122,12 +122,8 @@ export const WindowPanel = memo(({
 WindowPanel.displayName = "WindowPanel";
 
 
-
-
 export const CustomSkeleton = ({ option }) => (
     <div className="animate-pulse">
-
-
         {option === 'output' ?
             <>
                 <Typography
@@ -335,7 +331,7 @@ export const CustomSkeleton = ({ option }) => (
 
     </div>
 );
-CustomSkeleton.displayName = "CustomSkeleton"; // Setting display name
+CustomSkeleton.displayName = "CustomSkeleton";
 
 
 
@@ -344,4 +340,4 @@ export const LoadingDisplay = () => (
         <Spinner color="amber" className="h-16 w-16 text-blue-500" />
     </div>
 );
-LoadingDisplay.displayName = "LoadingDisplay"; // Setting display name
+LoadingDisplay.displayName = "LoadingDisplay";

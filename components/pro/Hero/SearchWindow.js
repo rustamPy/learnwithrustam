@@ -8,8 +8,7 @@ import { Grid, List } from 'lucide-react';
 import FilterSortBar from '@/components/pro/FunctionalComponents/FilterSortBar';
 import Pagination from '@/components/pro/FunctionalComponents/Pagination';
 import SearchBar from '@/components/pro/FunctionalComponents/SearchBar';
-import CourseCard, { ListCardView } from '@/components/pro/CourseCard'
-
+import CourseCard, { ListCardView, ListCardSkeleton } from '@/components/pro/CourseCard';
 
 const SearchWindow = ({ specificCourses = null, isProfilePage = false, containerClass = "" }) => {
     const { data: session, update } = useSession();
@@ -19,24 +18,28 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
     const [coursesPerPage, setCoursesPerPage] = useState(isProfilePage ? 2 : 4);
     const [category, setCategory] = useState('All');
     const [sortOrder, setSortOrder] = useState('asc');
-    const [allTopics, setAllTopics] = useState([...new Set(filteredCourses.flatMap(c => c.topics))])
+    const [allTopics, setAllTopics] = useState([...new Set(filteredCourses.flatMap(c => c.topics))]);
     const [selectedTopics, setSelectedTopics] = useState([]);
     const [userCourses, setUserCourses] = useState([]);
     const [isListView, setIsListView] = useState(false);
-    const [selectedCourse, setSelectedCourse] = useState(null);
+    const [selectedCourse, setSelectedCourse] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const [useInfiniteScroll, setUseInfiniteScroll] = useState(true);
 
+
+    console.log(selectedCourse)
     const observer = useRef();
     const lastCourseElementRef = useCallback(node => {
-        if (isLoading) return;
+        if (isLoading || !useInfiniteScroll) return;
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && displayedCourses.length < filteredCourses.length) {
+            if (entries[0].isIntersecting && hasMore) {
                 setCurrentPage(prevPage => prevPage + 1);
             }
         });
         if (node) observer.current.observe(node);
-    }, [isLoading, displayedCourses.length, filteredCourses.length]);
+    }, [isLoading, hasMore, useInfiniteScroll]);
 
     useEffect(() => {
         if (session?.user?.courses) {
@@ -75,34 +78,34 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
 
         setFilteredCourses(filtered);
         setCurrentPage(1);
-        setDisplayedCourses(filtered.slice(0, isListView ? 10 : coursesPerPage));
-    }, [category, selectedTopics, sortOrder, specificCourses, isListView, coursesPerPage]);
+        updateDisplayedCourses(filtered, 1);
+        setHasMore(filtered.length > coursesPerPage);
+    }, [category, selectedTopics, sortOrder, specificCourses, coursesPerPage]);
 
     useEffect(() => {
         filterAndSortCourses();
     }, [selectedTopics, filterAndSortCourses]);
 
-    useEffect(() => {
-        if (isListView) {
-            setIsLoading(true);
-            const newCourses = filteredCourses.slice(0, currentPage * 10);
-            setDisplayedCourses(newCourses);
-            setIsLoading(false);
-        } else {
-            setDisplayedCourses(filteredCourses.slice(0, currentPage * coursesPerPage));
-        }
-    }, [currentPage, filteredCourses, isListView, coursesPerPage]);
-
-    useEffect(() => {
-        const startIndex = (currentPage - 1) * (isListView ? 10 : coursesPerPage);
-        const endIndex = startIndex + (isListView ? 10 : coursesPerPage);
-        setDisplayedCourses(filteredCourses.slice(startIndex, endIndex));
-    }, [currentPage, filteredCourses, isListView, coursesPerPage]);
-
-    const handleCoursesPerPageChange = (value) => {
-        setCoursesPerPage(Number(value));
-        setCurrentPage(1);
+    const updateDisplayedCourses = (courses, page) => {
+        const startIndex = (page - 1) * coursesPerPage;
+        const endIndex = startIndex + coursesPerPage;
+        setDisplayedCourses(courses.slice(startIndex, endIndex));
+        setHasMore(endIndex < courses.length);
     };
+
+    useEffect(() => {
+        setIsLoading(true);
+        if (!isListView) {
+            updateDisplayedCourses(filteredCourses, currentPage);
+        } else if (useInfiniteScroll) {
+            const startIndex = 0;
+            const endIndex = currentPage * coursesPerPage;
+            const newCourses = filteredCourses.slice(startIndex, endIndex);
+            setDisplayedCourses(newCourses);
+            setHasMore(endIndex < filteredCourses.length);
+        }
+        setIsLoading(false);
+    }, [currentPage, filteredCourses, coursesPerPage, useInfiniteScroll, isListView]);
 
     const handleCategoryFilter = (category) => {
         setCategory(category);
@@ -122,7 +125,7 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
 
     const handleResetTopics = () => {
         setSelectedTopics([]);
-    }
+    };
 
     const toggleCourse = async (courseId) => {
         if (!session) {
@@ -160,46 +163,43 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
 
     const toggleView = () => {
         setIsListView(!isListView);
-        setSelectedCourse(null);
         setCurrentPage(1);
-        setDisplayedCourses(filteredCourses.slice(0, isListView ? coursesPerPage : 10));
+        updateDisplayedCourses(filteredCourses, 1);
     };
 
     const handleCourseSelect = (course) => {
         setSelectedCourse(course);
     };
 
-    const handlePageChange = (newPage) => {
-        setCurrentPage(newPage);
+    const handleCoursesPerPageChange = (value) => {
+        const newCoursesPerPage = Number(value);
+        setCoursesPerPage(newCoursesPerPage);
+        setCurrentPage(1);
+        updateDisplayedCourses(filteredCourses, 1);
     };
 
-    const totalPages = Math.ceil(filteredCourses.length / (isListView ? 10 : coursesPerPage));
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+        if (!isListView) {
+            updateDisplayedCourses(filteredCourses, newPage);
+        }
+    };
 
-
-    const gridClass = isProfilePage
-        ? "grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4"
-        : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4";
+    const totalPages = Math.ceil(filteredCourses.length / coursesPerPage);
 
     return (
-        <div className={`bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6 ${containerClass} mb-16 mt-16 w-full max-w-7xl mx-auto`}>
+        <div className={`bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6 ${containerClass} mb-8 mt-16 w-full max-w-7xl mx-auto`}>
             <div className="flex justify-between items-center mb-8">
                 <Typography className="text-4xl font-extrabold text-gray-900 dark:text-gray-100">
                     {isProfilePage ? "Selected" : "Our"}
-
                     <span className="px-2 py-1 relative inline-block">
                         <svg className="stroke-current bottom-0 absolute text-blue-300 -translate-x-2" viewBox="0 0 410 18" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6 6.4c16.8 16.8 380.8-11.2 397.6 5.602" strokeWidth="12" fill="none" fillRule="evenodd" strokeLinecap="round"></path>
                         </svg>
                         <span className="relative">Courses</span>
                     </span>
-
                 </Typography>
                 <div className="flex items-center space-x-4">
-                    <Switch
-                        label={isListView ? <List className="h-5 w-5" /> : <Grid className="h-5 w-5" />}
-                        onChange={toggleView}
-                        checked={isListView}
-                    />
                     {!isProfilePage && !isListView && (
                         <Select
                             value={`${coursesPerPage}`}
@@ -209,10 +209,15 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
                             label='Courses per page'
                         >
                             <Option value="4">4 per page</Option>
-                            <Option value="8">8 per page</Option>
-                            <Option value="16">16 per page</Option>
+                            <Option value="12">12 per page</Option>
+                            <Option value="24">24 per page</Option>
                         </Select>
                     )}
+                    <Switch
+                        label={isListView ? <List className="h-5 w-5" /> : <Grid className="h-5 w-5" />}
+                        onChange={toggleView}
+                        checked={isListView}
+                    />
                 </div>
             </div>
 
@@ -237,10 +242,10 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
             {displayedCourses.length === 0 ? (
                 <Typography className="text-center mt-10 text-gray-700 dark:text-gray-300">No courses found</Typography>
             ) : (
-                <div className={isListView ? "flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mt-8" : gridClass}>
+                    <div className={isListView ? "flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mt-8" : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"}>
                     {isListView ? (
                         <>
-                            <div className="w-full lg:w-1/3 overflow-y-auto max-h-[600px] pr-4">
+                                <div className="w-full lg:w-1/3 overflow-y-auto max-h-[600px] pl-2" style={{ scrollbarWidth: 'thin', scrollbarColor: '#4A5568 #CBD5E0' }}>
                                 {displayedCourses.map((course, index) => (
                                     <div
                                         key={course.id}
@@ -261,7 +266,7 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
                                 ))}
                                 {isLoading && <p>Loading more courses...</p>}
                             </div>
-                            <div className="w-full lg:w-2/3 pl-0 lg:pl-4 mt-4 lg:mt-0 overflow-y-auto max-h-[600px]">
+                                <div className={`w-full items-center lg:w-2/3 pl-0 lg:pl-8 mt-4 lg:mt-0 ${!selectedCourse ? 'overflow-hidden' : 'overflow-y-auto'} max-h-[600px]`}>
                                 {selectedCourse ? (
                                     <ListCardView
                                         {...selectedCourse}
@@ -270,20 +275,19 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
                                         isProfilePage={isProfilePage}
                                     />
                                 ) : (
-                                    <Typography className="text-center text-gray-700 dark:text-gray-300">
-                                        Select a course to view details
-                                    </Typography>
+                                            <ListCardSkeleton />
                                 )}
                             </div>
                         </>
                     ) : (
-                        displayedCourses.map(course => (
+                                displayedCourses.map((course, index) => (
                             <CourseCard
                                 key={course.id}
                                 {...course}
                                 onToggleSave={toggleCourse}
                                 isSaved={userCourses.includes(course.id)}
                                 isProfilePage={isProfilePage}
+                                        ref={index === displayedCourses.length - 1 ? lastCourseElementRef : null}
                             />
                         ))
                     )}
@@ -302,5 +306,7 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
         </div>
     );
 };
+
+
 
 export default SearchWindow;

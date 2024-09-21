@@ -115,7 +115,7 @@ const CoursePage = ({ params }) => {
                 <title>{course.title} | Course Details</title>
                 <meta name="description" content={course.overview} />
             </Head>
-            {session ? (
+            {!session ? (
                 <div className="min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-white p-6">
                     <div className="flex flex-col lg:flex-row gap-8">
                         <div className="lg:w-1/3">
