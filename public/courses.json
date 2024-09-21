@@ -38,15 +38,18 @@
       "instructor": "Rustam Karimov",
       "price": [
         "₼",
-        "NA",
+        "50",
         "month"
       ],
       "options": {
         "plus": [
-          "TBA"
+          "Access to additional resources",
+          "One-on-one mentoring sessions",
+          "Certificate of completion"
         ],
         "minus": [
-          "TBA"
+          "Limited interaction with peers",
+          "No advanced topics covered"
         ]
       }
     },
@@ -121,15 +124,18 @@
       "instructor": "Rustam Karimov",
       "price": [
         "₼",
-        "NA",
+        "80",
         "month"
       ],
       "options": {
         "plus": [
-          "TBA"
+          "Access to additional resources",
+          "One-on-one mentoring sessions",
+          "Certificate of completion"
         ],
         "minus": [
-          "TBA"
+          "Limited interaction with peers",
+          "No advanced topics covered"
         ]
       }
     },
@@ -174,15 +180,18 @@
       "instructor": "Rustam Karimov",
       "price": [
         "₼",
-        "NA",
+        "100",
         "month"
       ],
       "options": {
         "plus": [
-          "TBA"
+          "Access to additional resources",
+          "Personalized feedback on assignments",
+          "Certificate of completion"
         ],
         "minus": [
-          "TBA"
+          "Limited interaction with peers",
+          "No advanced topics covered"
         ]
       }
     },
@@ -313,15 +322,18 @@
       "instructor": "Rustam Karimov",
       "price": [
         "₼",
-        "NA",
+        "120",
         "month"
       ],
       "options": {
         "plus": [
-          "TBA"
+          "Access to additional resources",
+          "Personalized mentoring sessions",
+          "Certificate of completion"
         ],
         "minus": [
-          "TBA"
+          "Limited interaction with peers",
+          "Potential delays in feedback"
         ]
       }
     },
@@ -468,8 +480,8 @@
       ],
       "instructor": "Rustam Karimov",
       "price": [
-        "₼",
-        "100",
+        "",
+        "TBA",
         "month"
       ],
       "options": {

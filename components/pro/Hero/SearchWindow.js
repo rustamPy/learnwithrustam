@@ -245,7 +245,7 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
                     <div className={isListView ? "flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mt-8" : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"}>
                     {isListView ? (
                         <>
-                                <div className="w-full lg:w-1/3 overflow-y-auto max-h-[600px] pl-2" style={{ scrollbarWidth: 'thin', scrollbarColor: '#4A5568 #CBD5E0' }}>
+                                <div className="w-full lg:w-1/3 overflow-y-auto max-h-[600px] pl-2 pr-2" style={{ scrollbarWidth: 'thin', scrollbarColor: '#4A5568 #CBD5E0' }}>
                                 {displayedCourses.map((course, index) => (
                                     <div
                                         key={course.id}

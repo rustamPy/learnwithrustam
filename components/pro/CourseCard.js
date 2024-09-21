@@ -37,7 +37,7 @@ const CourseCard = ({ id, title, desc, price, options, level = '', onToggleSave,
     return (
         <Card
             key={id}
-            className="mt-4 flex flex-col mr-4 mb-4 bg-white dark:bg-gray-700 relative overflow-hidden w-full h-[540px] transform transition-all duration-300 ease-in-out hover:scale-[1.02] hover:-translate-y-1 shadow-lg hover:shadow-xl"
+            className="mt-4 flex flex-col mr-4 mb-4 bg-white dark:bg-gray-700 relative overflow-hidden w-full h-[640px] transform transition-all duration-300 ease-in-out hover:scale-[1.02] hover:-translate-y-1 shadow-lg hover:shadow-xl"
         >
             <div className={`absolute top-6 -right-14 ${COLOR_MAP[level]} text-white px-16 py-1 rotate-45 z-10 shadow-md`}>
                 <Typography variant="small" className="font-semibold text-xs whitespace-nowrap">
@@ -64,36 +64,38 @@ const CourseCard = ({ id, title, desc, price, options, level = '', onToggleSave,
                 </Button>
             </CardHeader>
             <CardBody className="flex flex-col flex-grow p-4 bg-gradient-to-b from-white to-gray-100 dark:from-gray-700 dark:to-gray-800">
-                <div className="flex-grow">
+                <div className="rounded">
                     <Typography variant="h6" className="mb-2 text-gray-800 dark:text-gray-300 text-lg font-bold">
                         {title}
                     </Typography>
-                    <Typography className="font-normal mb-4 text-gray-600 dark:text-gray-100 text-sm line-clamp-3 overflow-auto h-24" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgb(232, 235, 239) rgb(255 255 255 / 0%)' }}>
+                    <Typography className="font-normal text-gray-600 dark:text-gray-100 text-sm line-clamp-3 overflow-auto h-[120px]" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgb(232, 235, 239) rgb(255 255 255 / 0%)' }}>
                         {desc}
                     </Typography>
                 </div>
-
-                <div className="mt-auto">
-                    <Typography variant="h5" className="flex items-center gap-1 mb-4 text-lwr-orange-color-100 text-xl">
-                        {price[0]}{price[1]}
-                        <Typography as="span" variant="small" className="text-gray-800 dark:text-gray-100 text-sm">
-                            /{price[2]}
-                        </Typography>
+                <Typography variant="h5" className="flex items-center gap-1 text-lwr-orange-color-100 text-xl mt-2">
+                    {price[0]}{price[1]}
+                    <Typography as="span" variant="small" className="text-gray-800 dark:text-gray-100 text-sm">
+                        /{price[2]}
                     </Typography>
+                </Typography>
+                <div className='mt-4 overflow-auto h-[140px]' style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgb(232, 235, 239) rgb(255 255 255 / 0%)' }}>
+
                     <ul className="space-y-2 mb-6">
-                        {options.plus.slice(0, 2).map((feature, index) => (
+                        {options.plus.slice(0, 4).map((feature, index) => (
                             <li key={index} className="flex items-center text-sm">
                                 <CheckCircleIcon className="h-4 w-4 text-green-500 mr-1" />
                                 <Typography variant="small" className='text-gray-800 dark:text-gray-100'>{feature}</Typography>
                             </li>
                         ))}
-                        {options.minus.slice(0, 1).map((feature, index) => (
+                        {options.minus.slice(0, 4).map((feature, index) => (
                             <li key={index} className="flex items-center text-sm text-gray-500">
                                 <MinusCircleIcon className="h-4 w-4 text-red-500 mr-1" />
                                 <Typography variant="small" className='text-gray-800 dark:text-gray-100'>{feature}</Typography>
                             </li>
                         ))}
                     </ul>
+                </div>
+                <div className='mt-auto'>
                     <Button
                         color="blue"
                         fullWidth
