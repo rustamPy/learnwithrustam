@@ -118,7 +118,7 @@ const CourseCard = ({ id, title, desc, price, options, level = '', onToggleSave,
 
 
 export const ListCardSkeleton = () => (
-    <div className="animate-pulse flex flex-col w-full max-w-3xl shadow-none overflow-x-hidden rounded-xl">
+    <div className="animate-pulse flex flex-col w-full shadow-none overflow-x-hidden rounded-xl">
 
 
         {/* Skeleton for the image */}
@@ -198,7 +198,7 @@ export const ListCardView = ({
     const { data: session } = useSession();
 
     return (
-        <Card className={`flex flex-col w-full max-w-3xl shadow-none overflow-x-hidden ${COLOR_MAP[level]}`}>
+        <Card className={`flex flex-col w-full shadow-none overflow-x-hidden ${COLOR_MAP[level]}`}>
             <div className={`absolute top-6 -right-14 ${COLOR_MAP[level]} text-white px-16 py-1 rotate-45 z-10 shadow-md`}>
                 <Typography variant="small" className="font-semibold text-xs whitespace-nowrap">
                     {level.toLocaleUpperCase()}

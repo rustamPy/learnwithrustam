@@ -1,6 +1,4 @@
-'use client';
 import React from 'react';
-
 
 export const AttentionWindow = ({ title, content, onClose }) => {
     return (

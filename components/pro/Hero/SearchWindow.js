@@ -204,19 +204,6 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
                     </span>
                 </Typography>
                 <div className="flex items-center space-x-4">
-                    {!isProfilePage && !isListView && (
-                        <Select
-                            value={`${coursesPerPage}`}
-                            onChange={(value) => handleCoursesPerPageChange(value)}
-                            color="blue"
-                            className="text-xs bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
-                            label='Courses per page'
-                        >
-                            <Option value="4">4 per page</Option>
-                            <Option value="12">12 per page</Option>
-                            <Option value="24">24 per page</Option>
-                        </Select>
-                    )}
                     <Switch
                         label={isListView ? <List className="h-5 w-5" /> : <Grid className="h-5 w-5" />}
                         onChange={toggleView}
@@ -241,6 +228,10 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
                 allTopics={allTopics}
                 selectedTopics={selectedTopics}
                 itemsCount={filteredCourses.length}
+                showCoursesPerPage={!isProfilePage}
+                coursesPerPage={coursesPerPage}
+                onCoursesPerPageChange={handleCoursesPerPageChange}
+                isProfilePage={isProfilePage}
             />
 
             {displayedCourses.length === 0 ? (
@@ -249,38 +240,38 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
                     <div className={isListView ? "flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mt-8" : gridClass}>
                     {isListView ? (
                         <>
-                                <div className="w-full lg:w-1/3 overflow-y-auto max-h-[600px] pl-2 pr-2" style={{ scrollbarWidth: 'thin', scrollbarColor: '#4A5568 #CBD5E0' }}>
-                                {displayedCourses.map((course, index) => (
-                                    <div
-                                        key={course.id}
-                                        ref={index === displayedCourses.length - 1 ? lastCourseElementRef : null}
-                                        className={`p-4 mb-4 rounded-lg cursor-pointer ${selectedCourse?.id === course.id
-                                            ? 'bg-blue-100 dark:bg-blue-900'
-                                            : 'bg-white dark:bg-gray-700'
-                                            }`}
-                                        onClick={() => handleCourseSelect(course)}
-                                    >
-                                        <Typography className="font-bold text-gray-900 dark:text-gray-100">
-                                            {course.title}
-                                        </Typography>
-                                        <Typography className="text-sm text-gray-600 dark:text-gray-400">
-                                            {course.desc.substring(0, 100)}...
-                                        </Typography>
-                                    </div>
-                                ))}
-                                {isLoading && <p>Loading more courses...</p>}
+                                <div className="w-full lg:w-1/3 overflow-y-auto max-h-[600px] pr-1" style={{ scrollbarWidth: 'thin', scrollbarColor: '#4A5568 #CBD5E0' }}>
+                                    {displayedCourses.map((course, index) => (
+                                        <div
+                                            key={course.id}
+                                            ref={index === displayedCourses.length - 1 ? lastCourseElementRef : null}
+                                            className={`p-4 mb-4 rounded-lg cursor-pointer ${selectedCourse?.id === course.id
+                                                ? 'bg-blue-100 dark:bg-blue-900'
+                                                : 'bg-white dark:bg-gray-700'
+                                                }`}
+                                            onClick={() => handleCourseSelect(course)}
+                                        >
+                                            <Typography className="font-bold text-gray-900 dark:text-gray-100">
+                                                {course.title}
+                                            </Typography>
+                                            <Typography className="text-sm text-gray-600 dark:text-gray-400">
+                                                {course.desc.substring(0, 100)}...
+                                            </Typography>
+                                        </div>
+                                    ))}
+                                    {isLoading && <p>Loading more courses...</p>}
                             </div>
-                                <div className={`w-full items-center lg:w-2/3 pl-0 lg:pl-8 mt-4 lg:mt-0 ${!selectedCourse ? 'overflow-hidden' : 'overflow-y-auto'} max-h-[600px]`}>
-                                {selectedCourse ? (
-                                    <ListCardView
-                                        {...selectedCourse}
-                                        onToggleSave={toggleCourse}
-                                        isSaved={userCourses.includes(selectedCourse.id)}
-                                        isProfilePage={isProfilePage}
-                                    />
-                                ) : (
-                                            <ListCardSkeleton />
-                                )}
+                                <div className={`w-full items-center lg:w-2/3 pl-0 lg:pl-4 mt-4 lg:mt-0 ${!selectedCourse ? 'overflow-hidden' : 'overflow-y-auto'} max-h-[600px]`}>
+                                    {selectedCourse ? (
+                                        <ListCardView
+                                            {...selectedCourse}
+                                            onToggleSave={toggleCourse}
+                                            isSaved={userCourses.includes(selectedCourse.id)}
+                                            isProfilePage={isProfilePage}
+                                        />
+                                    ) : (
+                                        <ListCardSkeleton />
+                                    )}
                             </div>
                         </>
                     ) : (

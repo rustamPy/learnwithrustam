@@ -26,8 +26,11 @@ const FilterSortBar = ({
         { value: 'desc', label: 'Title (Z-A)' }
     ],
     onSortOrderChange,
-
-    itemsCount = 0
+    itemsCount = 0,
+    showCoursesPerPage = true,
+    coursesPerPage,
+    onCoursesPerPageChange,
+    isProfilePage
 }) => {
     const [searchTopic, setSearchTopic] = useState('');
     const [showAllTopics, setShowAllTopics] = useState(false);
@@ -224,6 +227,23 @@ const FilterSortBar = ({
                         )}
                     </div>
                 )}
+
+                {showCoursesPerPage && !isProfilePage && (
+                    <div className="flex items-center space-x-1">
+                        <Select
+                            value={`${coursesPerPage}`}
+                            onChange={(value) => onCoursesPerPageChange(value)}
+                            color="blue"
+                            className="text-xs bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
+                            label='Courses per page'
+                        >
+                            <Option value="4">4 per page</Option>
+                            <Option value="12">12 per page</Option>
+                            <Option value="24">24 per page</Option>
+                        </Select>
+                    </div>
+                )}
+
                 {itemsCount > 0 && (<div className='flex items-center text-sm space-x-1 w-54 bg-gray-100 p-2 dark:bg-gray-900 rounded-md'>Selected item{itemsCount > 0 ? 's' : ''}: <span className='font-bold ml-2'>{itemsCount}</span></div>)}
             </div>
         </div>
