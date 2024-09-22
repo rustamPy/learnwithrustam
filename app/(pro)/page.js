@@ -7,7 +7,7 @@ import Features from '@/components/pro/Hero/Features';
 import SearchWindow from '@/components/pro/Hero/SearchWindow';
 
 const Index = () => (
-  <div className='m-9 mt-6 flex flex-col items-center'>
+  <div className='m-1 mt-6 flex flex-col items-center'>
     {/* Introduction Section */}
     <Introduction />
 

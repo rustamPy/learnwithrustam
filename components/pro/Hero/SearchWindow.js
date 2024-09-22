@@ -196,7 +196,7 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
             <div className="flex justify-between items-center mb-8">
                 <Typography className="text-4xl font-extrabold text-gray-900 dark:text-gray-100">
                     {isProfilePage ? "Selected" : "Our"}
-                    <span className="px-2 py-1 relative inline-block">
+                    <span className="px-1 py-1 mr-2 relative inline-block">
                         <svg className="stroke-current bottom-0 absolute text-blue-300 -translate-x-2" viewBox="0 0 410 18" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6 6.4c16.8 16.8 380.8-11.2 397.6 5.602" strokeWidth="12" fill="none" fillRule="evenodd" strokeLinecap="round"></path>
                         </svg>

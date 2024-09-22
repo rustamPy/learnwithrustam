@@ -125,7 +125,7 @@ export const ListCardSkeleton = () => (
         <div className="relative h-64 bg-gray-100 dark:bg-gray-700 rounded-b-none rounded-t-xl shadow-none mb-2">
 
             <div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                <p className='text-lg dark:text-gray-400'>Select a course to view details</p>
+                <p className='text-lg dark:text-gray-400 text-center'>Select a course to view details</p>
             </div>
         </div>
 
