@@ -8,6 +8,7 @@ import { Grid, List } from 'lucide-react';
 import FilterSortBar from '@/components/pro/FunctionalComponents/FilterSortBar';
 import Pagination from '@/components/pro/FunctionalComponents/Pagination';
 import SearchBar from '@/components/pro/FunctionalComponents/SearchBar';
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import CourseCard, { ListCardView, ListCardSkeleton } from '@/components/pro/CourseCard';
 
 const SearchWindow = ({ specificCourses = null, isProfilePage = false, containerClass = "" }) => {
@@ -240,39 +241,56 @@ const SearchWindow = ({ specificCourses = null, isProfilePage = false, container
                     <div className={isListView ? "flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mt-8" : gridClass}>
                     {isListView ? (
                         <>
-                                <div className="w-full lg:w-1/3 overflow-y-auto max-h-[600px] pr-1" style={{ scrollbarWidth: 'thin', scrollbarColor: '#4A5568 #CBD5E0' }}>
-                                    {displayedCourses.map((course, index) => (
-                                        <div
-                                            key={course.id}
-                                            ref={index === displayedCourses.length - 1 ? lastCourseElementRef : null}
-                                            className={`p-4 mb-4 rounded-lg cursor-pointer ${selectedCourse?.id === course.id
-                                                ? 'bg-blue-100 dark:bg-blue-900'
-                                                : 'bg-white dark:bg-gray-700'
-                                                }`}
-                                            onClick={() => handleCourseSelect(course)}
-                                        >
-                                            <Typography className="font-bold text-gray-900 dark:text-gray-100">
-                                                {course.title}
-                                            </Typography>
-                                            <Typography className="text-sm text-gray-600 dark:text-gray-400">
-                                                {course.desc.substring(0, 100)}...
-                                            </Typography>
+                                <PanelGroup direction="horizontal" autoSaveId="persistence">
+                                    <Panel
+                                        minSize={3.5}
+                                        defaultSize={50}
+                                    >
+                                        <div className="w-full overflow-y-auto max-h-[600px] pr-1" style={{ scrollbarWidth: 'thin', scrollbarColor: '#4A5568 #CBD5E0' }}>
+                                            {displayedCourses.map((course, index) => (
+                                                <div
+                                                    key={course.id}
+                                                    ref={index === displayedCourses.length - 1 ? lastCourseElementRef : null}
+                                                    className={`p-2 mb-2 rounded-lg cursor-pointer ${selectedCourse?.id === course.id
+                                                        ? 'bg-blue-100 dark:bg-blue-900'
+                                                        : 'bg-white dark:bg-gray-700'
+                                                        }`}
+                                                    onClick={() => handleCourseSelect(course)}
+                                                >
+                                                    <Typography className="font-bold text-gray-900 dark:text-gray-100">
+                                                        {course.title}
+                                                    </Typography>
+                                                    <Typography className="text-sm text-gray-600 dark:text-gray-400">
+                                                        {course.desc.substring(0, 100)}...
+                                                    </Typography>
+                                                </div>
+                                            ))}
+                                            {isLoading && <p>Loading more courses...</p>}
                                         </div>
-                                    ))}
-                                    {isLoading && <p>Loading more courses...</p>}
-                            </div>
-                                <div className={`w-full items-center lg:w-2/3 pl-0 lg:pl-4 mt-4 lg:mt-0 ${!selectedCourse ? 'overflow-hidden' : 'overflow-y-auto'} max-h-[600px]`}>
-                                    {selectedCourse ? (
-                                        <ListCardView
-                                            {...selectedCourse}
-                                            onToggleSave={toggleCourse}
-                                            isSaved={userCourses.includes(selectedCourse.id)}
-                                            isProfilePage={isProfilePage}
-                                        />
-                                    ) : (
-                                        <ListCardSkeleton />
-                                    )}
-                            </div>
+
+                                    </Panel>
+                                    <PanelResizeHandle withHandle className="w-1 bg-gray-200 hover:bg-blue-500 dark:hover:bg-blue-800 rounded-full cursor-ns-resize" />
+                                    <Panel
+                                        minSize={3.5}
+                                        defaultSize={100}
+                                    >
+                                        <div className={`w-full items-center pl-0 lg:pl-1 mt-4 lg:mt-0 ${!selectedCourse ? 'overflow-hidden' : 'overflow-y-auto'} max-h-[600px]`}>
+                                            {selectedCourse ? (
+                                                <ListCardView
+                                                    {...selectedCourse}
+                                                    onToggleSave={toggleCourse}
+                                                    isSaved={userCourses.includes(selectedCourse.id)}
+                                                    isProfilePage={isProfilePage}
+                                                />
+                                            ) : (
+                                                <ListCardSkeleton />
+                                            )}
+                                        </div>
+                                    </Panel>
+
+                                </PanelGroup>
+
+
                         </>
                     ) : (
                                 displayedCourses.map((course, index) => (
