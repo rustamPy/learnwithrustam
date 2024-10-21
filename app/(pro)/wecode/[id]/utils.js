@@ -12,6 +12,7 @@ export const BASE_CODE = {
     import io
     import json
     import traceback
+    from math import *
 
     params = ${params}
     tests = ${tests}
@@ -83,6 +84,7 @@ if __name__ == '__main__':
     import sys
     import io
     import json
+    from math import *
 
     # Define the number of input params the method expects
     params = ${params}
@@ -247,7 +249,9 @@ export const convertTestCase = (inputString, params, types) => {
                                 return parsed.map(val => val.toString())
                             }
                         } else if (type.startsWith('int')) {
-                            return parsed
+                            console.log('gots')
+                            console.log(parseInt(parsed))
+                            return parseInt(parsed)
                         } else if (type.startsWith('str')) {
                             return parsed.toString()
                         }
@@ -280,7 +284,9 @@ export const convertTestCase = (inputString, params, types) => {
 
 
                         } else if (type.startsWith('int') && parsed) {
-                            return parsed[index]
+                            console.log('gots')
+                            console.log(parseInt(parsed[index]))
+                            return parseInt(parsed[index])
                         } else if (type.startsWith('str') && parsed) {
 
                             return parsed[index].toString()
