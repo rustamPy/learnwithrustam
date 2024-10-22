@@ -115,6 +115,30 @@ export const WPSC1 = () => {
     };
 
     const elements = {
+        'Get started': {
+            component: (
+                <CodeComponent isMobile={isMobile}>
+                    <div className='w-full h-full bg-gray-100 rounded p-4'>
+                        <p className='text-lg mb-4'> Welcome to my scratch page</p>
+                        <p className='text-sm italic'> Place your components here</p>
+                    </div>
+                </CodeComponent>
+            ),
+            code: (props) => `// Scratch Page under App.js
+import React, {useState} from 'react';
+
+const App = () => {
+    // Place your components' states here!!
+    return (
+        <div className='w-full h-full bg-gray-100 rounded p-4'>
+            <p className='text-lg mb-4'> Welcome to my scratch page</p>
+            <p className='text-sm italic'> Place your components here</p>
+            // Place your components' JSX here!!
+        </div>
+    )
+}
+export default App();`
+        },
         'Buttons': {
             component: (
                 <CodeComponent isMobile={isMobile}>
@@ -186,9 +210,10 @@ export const WPSC1 = () => {
   Just click without action
 </button>
 
-// Counter Button
+// Counter Button's state
 const [count, setCount] = useState(${count});
 
+// Counter Button's JSX
 <div className='flex justify-left'>
   <input
     value={${count}}
@@ -243,11 +268,14 @@ const [count, setCount] = useState(${count});
                 </CodeComponent>
 
             ),
-            code: () => `const [text, setText] = useState('${text}');
+            code: () => `import React, {useState} from 'react';
+// Text Inputs's state
+const [text, setText] = useState('${text}');
 
+// Text Inputs's JSX
 <input
   type="text"
-  value="${text}"
+  value={text}
   onChange={(e) => setText(e.target.value)}
   className="border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded px-4 py-2 w-full"
   placeholder="Enter text here..."
@@ -269,8 +297,10 @@ const [count, setCount] = useState(${count});
                 </CodeComponent>
 
             ),
-            code: () => `const [selectedFruit, setSelectedFruit] = useState('${selectedFruit}');
+            code: () => `// Dropdown Menu's state
+const [selectedFruit, setSelectedFruit] = useState('${selectedFruit}');
 
+// Dropdown Menu's JSX
 <select
   className="border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded px-4 py-2 w-full"
   value={selectedFruit}
