@@ -13,14 +13,14 @@ const CodeBlock = ({ code }) => {
     };
 
     return (
-        <div className="relative bg-gray-100 rounded-lg p-4 w-1/2 ml-4">
+        <div className="relative bg-gray-100 dark:bg-gray-800 rounded-lg p-4 w-1/2 ml-4">
             <button
                 onClick={handleCopy}
-                className="absolute top-2 right-2 p-2 rounded-md hover:bg-gray-200"
+                className="absolute top-2 right-2 p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
             >
-                {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                {copied ? <Check className="h-4 w-4 dark:text-gray-300" /> : <Copy className="h-4 w-4 dark:text-gray-300" />}
             </button>
-            <pre className="text-sm overflow-auto max-h-[300px] p-2">
+            <pre className="text-sm overflow-auto max-h-[300px] p-2 dark:text-gray-300">
                 <code className="language-jsx">{code}</code>
             </pre>
         </div>
@@ -29,14 +29,13 @@ const CodeBlock = ({ code }) => {
 
 const Base = ({ title, date, level, children }) => {
     return (
-        <div className="w-[90%] mx-auto p-6 rounded-lg">
+        <div className="mx-auto p-6 rounded-lg bg-white dark:bg-gray-900">
             <header className="mb-4">
-                <h1 className="text-3xl text-center font-bold text-gray-800">{title}</h1>
+                <h1 className="text-3xl text-center font-bold text-gray-800 dark:text-gray-100">{title}</h1>
                 <div className="flex justify-center mt-4">
                     <Chip variant="ghost" value={date} size="sm" color="green" className="rounded-full dark:text-gray-300 mr-4" />
                     <Chip variant="ghost" value={level} size="sm" color="green" className="rounded-full dark:text-gray-300" />
                 </div>
-
             </header>
             <div className="space-y-6">{children}</div>
         </div>
@@ -45,7 +44,6 @@ const Base = ({ title, date, level, children }) => {
 
 export const WPSC1 = () => {
     const [count, setCount] = useState(0);
-    const [closedWindow, setClosedWindow] = useState(true)
     const [text, setText] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
     const [textAreaContent, setTextAreaContent] = useState('');
@@ -91,29 +89,29 @@ export const WPSC1 = () => {
             component: (
                 <div className='w-1/2 overflow-auto'>
                     <div className='mb-4'>
-                        <p className='mb-2'>Just a button</p>
+                        <p className='mb-2 dark:text-gray-300'>Just a button</p>
                         <button
                             title="Button without action"
                             type="button"
-                            className="bg-gray-500 text-gray-100 px-3 py-1 rounded-md hover:bg-blue-700 w-64 transition duration-200 ease-in-out"
+                            className="bg-gray-500 text-gray-100 px-3 py-1 rounded-md hover:bg-blue-700 dark:bg-gray-700 dark:hover:bg-blue-600 w-64 transition duration-200 ease-in-out"
                         >
                             Just click without action
                         </button>
                     </div>
 
                     <div className='mb-4'>
-                        <p className='mb-2'>Button with counter</p>
+                        <p className='mb-2 dark:text-gray-300'>Button with counter</p>
                         <div className='flex justify-left'>
                             <input
                                 value={count}
                                 disabled
-                                className="mr-2 border border-gray-300 rounded-md px-2 py-1 w-16 text-center"
+                                className="mr-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded-md px-2 py-1 w-16 text-center"
                             />
                             <button
                                 onClick={() => setCount(count + 1)}
                                 type="button"
                                 title="Increase count"
-                                className="bg-gray-500 text-white px-3 py-1 rounded-md hover:bg-orange-600 transition duration-200 ease-in-out mr-2"
+                                className="bg-gray-500 text-white px-3 py-1 rounded-md hover:bg-orange-600 dark:bg-gray-700 dark:hover:bg-orange-500 transition duration-200 ease-in-out mr-2"
                             >
                                 ▲
                             </button>
@@ -121,7 +119,7 @@ export const WPSC1 = () => {
                                 onClick={() => setCount(count - 1)}
                                 type="button"
                                 title="Decrease count"
-                                className="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-200 ease-in-out mr-2"
+                                className="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-red-600 dark:bg-gray-600 dark:hover:bg-red-500 transition duration-200 ease-in-out mr-2"
                             >
                                 ▼
                             </button>
@@ -129,30 +127,31 @@ export const WPSC1 = () => {
                                 onClick={() => setCount(0)}
                                 type="button"
                                 title="Reset count"
-                                className="bg-gray-500 text-white px-2 py-1 rounded-md hover:bg-blue-700 transition duration-200 ease-in-out"
+                                className="bg-gray-500 text-white px-2 py-1 rounded-md hover:bg-blue-700 dark:bg-gray-700 dark:hover:bg-blue-600 transition duration-200 ease-in-out"
                             >
                                 <RotateCcw className="h-4 w-4" />
                             </button>
                         </div>
                     </div>
 
-
-
                     <div className='flex flex-col mr-8'>
-                        <p className='mb-2'>Button to pop-up alert</p>
-
-                        <button title="Show date" onClick={() => alert(`Hello there, today is ${date.toJSON().slice(0, 10)}`)} type="button" className="bg-gray-500 text-gray-100 px-3 py-1 rounded-md hover:bg-blue-700 transition duration-200 ease-in-out">
+                        <p className='mb-2 dark:text-gray-300'>Button to pop-up alert</p>
+                        <button
+                            title="Show date"
+                            onClick={() => alert(`Hello there, today is ${date.toJSON().slice(0, 10)}`)}
+                            type="button"
+                            className="bg-gray-500 text-gray-100 px-3 py-1 rounded-md hover:bg-blue-700 dark:bg-gray-700 dark:hover:bg-blue-600 transition duration-200 ease-in-out"
+                        >
                             What date is today?
                         </button>
                     </div>
                 </div>
             ),
-            code: (props) => `
-// Simple Button
+            code: (props) => `// Simple Button
 <button
   title="Button without action"
   type="button"
-  className="bg-gray-500 text-gray-100 px-3 py-1 rounded-md hover:bg-blue-700 w-64 transition duration-200 ease-in-out"
+  className="bg-gray-500 text-gray-100 px-3 py-1 rounded-md hover:bg-blue-700 dark:bg-gray-700 dark:hover:bg-blue-600 w-64 transition duration-200 ease-in-out"
 >
   Just click without action
 </button>
@@ -164,13 +163,13 @@ const [count, setCount] = useState(${count});
   <input
     value={${count}}
     disabled
-    className="mr-2 border border-gray-300 rounded-md px-2 py-1 w-16 text-center"
+    className="mr-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded-md px-2 py-1 w-16 text-center"
   />
   <button
     onClick={() => setCount(${count} + 1)}
     type="button"
     title="Increase count"
-    className="bg-gray-500 text-white px-3 py-1 rounded-md hover:bg-orange-600 transition duration-200 ease-in-out mr-2"
+    className="bg-gray-500 text-white px-3 py-1 rounded-md hover:bg-orange-600 dark:bg-gray-700 dark:hover:bg-orange-500 transition duration-200 ease-in-out mr-2"
   >
     ▲
   </button>
@@ -178,7 +177,7 @@ const [count, setCount] = useState(${count});
     onClick={() => setCount(${count} - 1)}
     type="button"
     title="Decrease count"
-    className="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-200 ease-in-out mr-2"
+    className="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-red-600 dark:bg-gray-600 dark:hover:bg-red-500 transition duration-200 ease-in-out mr-2"
   >
     ▼
   </button>
@@ -186,7 +185,7 @@ const [count, setCount] = useState(${count});
     onClick={() => setCount(0)}
     type="button"
     title="Reset count"
-    className="bg-gray-500 text-white px-2 py-1 rounded-md hover:bg-blue-700 transition duration-200 ease-in-out"
+    className="bg-gray-500 text-white px-2 py-1 rounded-md hover:bg-blue-700 dark:bg-gray-700 dark:hover:bg-blue-600 transition duration-200 ease-in-out"
   >
     <RotateCcw />
   </button>
@@ -195,7 +194,7 @@ const [count, setCount] = useState(${count});
     title="Show date"
     onClick={() => alert('Hello there, today is ${`date.toJSON().slice(0, 10)`}')} 
     type="button" 
-    className="bg-gray-500 text-gray-100 px-3 py-1 rounded-md hover:bg-blue-700 transition duration-200 ease-in-out"
+    className="bg-gray-500 text-gray-100 px-3 py-1 rounded-md hover:bg-blue-700 dark:bg-gray-700 dark:hover:bg-blue-600 transition duration-200 ease-in-out"
     >
     What date is today?
     </button>
@@ -208,7 +207,7 @@ const [count, setCount] = useState(${count});
                         type="text"
                         value={text}
                         onChange={(e) => setText(e.target.value)}
-                        className="border border-gray-300 rounded px-4 py-2 w-full"
+                        className="border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded px-4 py-2 w-full"
                         placeholder="Enter text here..."
                     />
                 </div>
@@ -219,7 +218,7 @@ const [count, setCount] = useState(${count});
   type="text"
   value="${text}"
   onChange={(e) => setText(e.target.value)}
-  className="border border-gray-300 rounded px-4 py-2 w-full"
+  className="border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded px-4 py-2 w-full"
   placeholder="Enter text here..."
 />`
         },
@@ -227,7 +226,7 @@ const [count, setCount] = useState(${count});
             component: (
                 <div className='w-1/2 overflow-auto'>
                     <select
-                        className="border border-gray-300 rounded px-4 py-2 w-full"
+                        className="border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded px-4 py-2 w-full"
                         value={selectedFruit}
                         onChange={(e) => setSelectedFruit(e.target.value)}
                     >
@@ -241,7 +240,7 @@ const [count, setCount] = useState(${count});
             code: () => `const [selectedFruit, setSelectedFruit] = useState('${selectedFruit}');
 
 <select
-  className="border border-gray-300 rounded px-4 py-2 w-full"
+  className="border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded px-4 py-2 w-full"
   value={selectedFruit}
   onChange={(e) => setSelectedFruit(e.target.value)}
 >
@@ -257,11 +256,11 @@ const [count, setCount] = useState(${count});
                     <label className="flex items-center">
                         <input
                             type="checkbox"
-                            className="form-checkbox h-5 w-5 text-blue-600"
+                            className="form-checkbox h-5 w-5 text-blue-600 dark:text-blue-500 dark:border-gray-600 dark:bg-gray-800"
                             checked={isChecked}
                             onChange={(e) => setIsChecked(e.target.checked)}
                         />
-                        <span className="ml-2 text-gray-700">
+                        <span className="ml-2 text-gray-700 dark:text-gray-300">
                             {isChecked ? 'Checked!' : 'Check me!'}
                         </span>
                     </label>
@@ -272,11 +271,11 @@ const [count, setCount] = useState(${count});
 <label className="flex items-center">
   <input 
     type="checkbox" 
-    className="form-checkbox h-5 w-5 text-blue-600"
+    className="form-checkbox h-5 w-5 text-blue-600 dark:text-blue-500 dark:border-gray-600 dark:bg-gray-800"
     checked={isChecked}
     onChange={(e) => setIsChecked(e.target.checked)}
   />
-  <span className="ml-2 text-gray-700">
+  <span className="ml-2 text-gray-700 dark:text-gray-300">
     {isChecked ? 'Checked!' : 'Check me!'}
   </span>
 </label>`
@@ -292,9 +291,9 @@ const [count, setCount] = useState(${count});
                                 value="radio1"
                                 checked={selectedRadio === 'radio1'}
                                 onChange={(e) => setSelectedRadio(e.target.value)}
-                                className="form-radio h-5 w-5 text-blue-600"
+                                className="form-radio h-5 w-5 text-blue-600 dark:text-blue-500 dark:border-gray-600 dark:bg-gray-800"
                             />
-                            <span className="ml-2 text-gray-700">Radio 1</span>
+                            <span className="ml-2 text-gray-700 dark:text-gray-300">Radio 1</span>
                         </label>
                         <label className="flex items-center">
                             <input
@@ -303,11 +302,11 @@ const [count, setCount] = useState(${count});
                                 value="radio2"
                                 checked={selectedRadio === 'radio2'}
                                 onChange={(e) => setSelectedRadio(e.target.value)}
-                                className="form-radio h-5 w-5 text-blue-600"
+                                className="form-radio h-5 w-5 text-blue-600 dark:text-blue-500 dark:border-gray-600 dark:bg-gray-800"
                             />
-                            <span className="ml-2 text-gray-700">Radio 2</span>
+                            <span className="ml-2 text-gray-700 dark:text-gray-300">Radio 2</span>
                         </label>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
                             Selected: {selectedRadio || 'None'}
                         </p>
                     </div>
@@ -323,22 +322,22 @@ const [count, setCount] = useState(${count});
       value="radio1"
       checked={selectedRadio === 'radio1'}
       onChange={(e) => setSelectedRadio(e.target.value)}
-      className="form-radio h-5 w-5 text-blue-600" 
+      className="form-radio h-5 w-5 text-blue-600 dark:text-blue-500 dark:border-gray-600 dark:bg-gray-800"
     />
-    <span className="ml-2 text-gray-700">Radio 1</span>
+    <span className="ml-2 text-gray-700 dark:text-gray-300">Radio 1</span>
   </label>
   <label className="flex items-center">
-    <input 
-      type="radio" 
-      name="radioGroup" 
+    <input
+      type="radio"
+      name="radioGroup"
       value="radio2"
       checked={selectedRadio === 'radio2'}
       onChange={(e) => setSelectedRadio(e.target.value)}
-      className="form-radio h-5 w-5 text-blue-600" 
+      className="form-radio h-5 w-5 text-blue-600 dark:text-blue-500 dark:border-gray-600 dark:bg-gray-800"
     />
-    <span className="ml-2 text-gray-700">Radio 2</span>
+    <span className="ml-2 text-gray-700 dark:text-gray-300">Radio 2</span>
   </label>
-  <p className="text-sm text-gray-600">
+  <p className="text-sm text-gray-600 dark:text-gray-400">
     Selected: {selectedRadio || 'None'}
   </p>
 </div>`
@@ -349,7 +348,7 @@ const [count, setCount] = useState(${count});
                     <textarea
                         value={textAreaContent}
                         onChange={(e) => setTextAreaContent(e.target.value)}
-                        className="border border-gray-300 rounded px-4 py-2 w-full"
+                        className="border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded px-4 py-2 w-full"
                         placeholder="Enter your comments here..."
                         rows="4"
                     ></textarea>
@@ -360,7 +359,7 @@ const [count, setCount] = useState(${count});
 <textarea
   value="${textAreaContent}"
   onChange={(e) => setTextAreaContent(e.target.value)}
-  className="border border-gray-300 rounded px-4 py-2 w-full"
+  className="border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded px-4 py-2 w-full"
   placeholder="Enter your comments here..."
   rows="4"
 ></textarea>`
@@ -369,7 +368,7 @@ const [count, setCount] = useState(${count});
             component: (
                 <div className='w-1/2 overflow-auto'>
                     <label className="flex items-center cursor-pointer">
-                        <span className="border border-gray-300 rounded px-4 py-2 text-gray-700">
+                        <span className="border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded px-4 py-2 text-gray-700">
                             {selectedFile ? selectedFile.name : 'Upload File'}
                         </span>
                         <input
@@ -383,7 +382,7 @@ const [count, setCount] = useState(${count});
             code: () => `const [selectedFile, setSelectedFile] = useState(null);
 
 <label className="flex items-center cursor-pointer">
-  <span className="border border-gray-300 rounded px-4 py-2 text-gray-700">
+  <span className="border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded px-4 py-2 text-gray-700">
     {selectedFile ? selectedFile.name : 'Upload File'}
   </span>
   <input
@@ -402,43 +401,40 @@ const [count, setCount] = useState(${count});
             level="medium"
         >
             {(!state.overview || !state.instructions) && (
-                <div className='flex justify-center '>
-
+                <div className='flex justify-center'>
                     <button
                         onClick={resetAlerts}
-                        className="h-8 text-center text-xs items bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600"
+                        className="h-8 text-center text-xs items bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
                     >
                         Reset Alerts
                     </button>
                 </div>
             )}
 
-            {state.overview && <div className="relative bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4 rounded-xl" role="alert">
+            {state.overview && <div className="relative bg-blue-100 dark:bg-blue-900 border-l-4 border-blue-500 text-blue-700 dark:text-blue-200 p-4 mb-4 rounded-xl" role="alert">
                 <button
                     onClick={() => handleClose('overview')}
-                    className="absolute text-gray-800 top-2 right-2 p-2 rounded-md hover:text-red-500"
+                    className="absolute text-gray-800 dark:text-gray-200 top-2 right-2 p-2 rounded-md hover:text-red-500 dark:hover:text-red-400"
                 >
                     <CircleX />
                 </button>
-                <p className="font-bold">Here’s a brief overview of the Basic UI Components Library</p>
+                <p className="font-bold">Here's a brief overview of the Basic UI Components Library</p>
                 <p>Discover a range of UI components you can incorporate into your projects.</p>
             </div>
             }
 
-            {state.instructions && <div className="relative bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4 rounded-xl" role="alert">
+            {state.instructions && <div className="relative bg-blue-100 dark:bg-blue-900 border-l-4 border-blue-500 text-blue-700 dark:text-blue-200 p-4 mb-4 rounded-xl" role="alert">
                 <button
                     onClick={() => handleClose('instructions')}
-                    className="absolute text-gray-800 top-2 right-2 p-2 rounded-md hover:text-red-500"
+                    className="absolute text-gray-800 dark:text-gray-200 top-2 right-2 p-2 rounded-md hover:text-red-500 dark:hover:text-red-400"
                 >
                     <CircleX />
                 </button>
                 <p><strong>Instructions:</strong></p>
-
-                <ul>
+                <ul className="dark:text-blue-200">
                     <li><strong>Choose a UI Component:</strong>
                         <p>Select one UI component to create. Examples include buttons, input fields, cards, dropdown menus, modals, or navigation tabs.</p>
                     </li>
-
                     <li><strong>Design the Component:</strong>
                         <p>Use the software of your choice (e.g., Figma, Sketch, Adobe XD, or even MS Paint) to create a high-fidelity design of your chosen component. Ensure that your component includes all necessary states (e.g., hover, active, disabled for a button).</p>
                     </li>
@@ -465,8 +461,8 @@ const [count, setCount] = useState(${count});
             }
             <div className="space-y-8">
                 {Object.entries(elements).map(([name, { component, code }]) => (
-                    <div key={name} className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
-                        <h2 className="font-semibold text-lg text-gray-800 mb-4">{name}</h2>
+                    <div key={name} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
+                        <h2 className="font-semibold text-lg text-gray-800 dark:text-gray-200 mb-4">{name}</h2>
                         <div className="flex">
                             {component}
                             <CodeBlock code={code()} />

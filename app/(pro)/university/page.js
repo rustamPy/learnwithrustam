@@ -25,7 +25,7 @@ const UniversityPage = () => {
                 currentId={currentId}
             />
             <main className="flex-1 overflow-y-auto">
-                <div className='p-4 m-2 border rounded-xl bg-white'>
+                <div className='p-2 m-2 rounded-xl bg-white dark:bg-blue-500'>
                     {CurrentViewComponent && <CurrentViewComponent />}
                 </div>
             </main>
