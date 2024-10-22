@@ -1,8 +1,31 @@
-import React from 'react';
+'use client';
+import React, { useState, useReducer } from 'react';
 import { Chip } from '@material-tailwind/react';
-import { useState } from 'react';
+import { RotateCcw, Copy, Check, CircleX } from 'lucide-react';
 
-import { RotateCcw } from 'lucide-react';
+const CodeBlock = ({ code }) => {
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = async () => {
+        await navigator.clipboard.writeText(code);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    return (
+        <div className="relative bg-gray-100 rounded-lg p-4 w-1/2 ml-4">
+            <button
+                onClick={handleCopy}
+                className="absolute top-2 right-2 p-2 rounded-md hover:bg-gray-200"
+            >
+                {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+            </button>
+            <pre className="text-sm overflow-auto max-h-[300px] p-2">
+                <code className="language-jsx">{code}</code>
+            </pre>
+        </div>
+    );
+};
 
 const Base = ({ title, date, level, children }) => {
     return (
@@ -13,6 +36,7 @@ const Base = ({ title, date, level, children }) => {
                     <Chip variant="ghost" value={date} size="sm" color="green" className="rounded-full dark:text-gray-300 mr-4" />
                     <Chip variant="ghost" value={level} size="sm" color="green" className="rounded-full dark:text-gray-300" />
                 </div>
+
             </header>
             <div className="space-y-6">{children}</div>
         </div>
@@ -21,238 +45,393 @@ const Base = ({ title, date, level, children }) => {
 
 export const WPSC1 = () => {
     const [count, setCount] = useState(0);
-    const [text, setText] = useState('')
+    const [closedWindow, setClosedWindow] = useState(true)
+    const [text, setText] = useState('');
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [textAreaContent, setTextAreaContent] = useState('');
+    const [selectedFruit, setSelectedFruit] = useState('');
+    const [isChecked, setIsChecked] = useState(false);
+    const [selectedRadio, setSelectedRadio] = useState('');
     const date = new Date();
 
+    const CLOSE_ALERT = 'CLOSE_ALERT';
+    const RESET_ALERTS = 'RESET_ALERTS';
+
+    const initialState = {
+        overview: true,
+        instructions: true
+    };
+
+    const alertReducer = (state, action) => {
+        switch (action.type) {
+            case CLOSE_ALERT:
+                return {
+                    ...state,
+                    [action.alertType]: false
+                };
+            case RESET_ALERTS:
+                return initialState;
+            default:
+                return state;
+        }
+    };
+
+    const [state, dispatch] = useReducer(alertReducer, initialState);
+
+    const handleClose = (alertType) => {
+        dispatch({ type: CLOSE_ALERT, alertType });
+    };
+
+    const resetAlerts = () => {
+        dispatch({ type: RESET_ALERTS });
+    };
+
     const elements = {
-        'Buttons': (
-            <div className='flex flex-row'>
-                <div className='flex flex-col mr-8'>
-                    <p className='mb-2'> Just a button </p>
-                    <button title="Button without action" type="button" className="bg-gray-500 text-gray-100 px-3 py-1 rounded-md hover:bg-blue-700 w-64 transition duration-200 ease-in-out">
-                        Just click without action
-                    </button>
-                    <code className='text-xs w-48 overflow-auto mt-2 h-48'>
-                        {
-                            `<button title="Button without action" type="button" className="bg-gray-500 text-gray-100 px-3 py-1 rounded-md hover:bg-blue-700 w-64 transition duration-200 ease-in-out">
+        'Buttons': {
+            component: (
+                <div className='w-1/2 overflow-auto'>
+                    <div className='mb-4'>
+                        <p className='mb-2'>Just a button</p>
+                        <button
+                            title="Button without action"
+                            type="button"
+                            className="bg-gray-500 text-gray-100 px-3 py-1 rounded-md hover:bg-blue-700 w-64 transition duration-200 ease-in-out"
+                        >
                             Just click without action
-                            </button>`
-                        }
-                    </code>
-                </div>
-                <div className='flex flex-col mr-8'>
-                    <p className='mb-2'> Button to update the state of input </p>
-                    <div className='flex justify-left'>
-                        <input
-                            value={count}
-                            disabled
-                            className="mr-2 border border-gray-300 rounded-md px-2 py-1 w-16 text-center"
-                        />
-                        <button
-                            onClick={() => setCount(count + 1)}
-                            type="button"
-                            title="Increase count"
-                            className="bg-gray-500 text-white px-3 py-1 rounded-md hover:bg-orange-600 transition duration-200 ease-in-out mr-2">
-                            ▲
-                        </button>
-                        <button
-                            onClick={() => setCount(count - 1)}
-                            type="button"
-                            title="Decrease count"
-                            className="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-200 ease-in-out mr-2">
-                            ▼
-                        </button>
-                        <button
-                            onClick={() => setCount(0)}
-                            type="button"
-                            title="Reset count"
-                            className="bg-gray-500 text-white px-2 py-1 rounded-md hover:bg-blue-700 transition duration-200 ease-in-out mr-2">
-                            <RotateCcw />
                         </button>
                     </div>
 
-                    <code className='text-xs w-48 overflow-auto mt-2 h-48'>
-                        {
-                            `
-                            const [count, setCount] = useState(0);  
-
-                            
+                    <div className='mb-4'>
+                        <p className='mb-2'>Button with counter</p>
+                        <div className='flex justify-left'>
+                            <input
+                                value={count}
+                                disabled
+                                className="mr-2 border border-gray-300 rounded-md px-2 py-1 w-16 text-center"
+                            />
                             <button
-                            onClick={() => setCount(count + 1)}
-                            type="button"
-                            title="Increase count"
-                            className="bg-gray-500 text-white px-3 py-1 rounded-md hover:bg-orange-600 transition duration-200 ease-in-out mr-2">
-                            ▲
+                                onClick={() => setCount(count + 1)}
+                                type="button"
+                                title="Increase count"
+                                className="bg-gray-500 text-white px-3 py-1 rounded-md hover:bg-orange-600 transition duration-200 ease-in-out mr-2"
+                            >
+                                ▲
+                            </button>
+                            <button
+                                onClick={() => setCount(count - 1)}
+                                type="button"
+                                title="Decrease count"
+                                className="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-200 ease-in-out mr-2"
+                            >
+                                ▼
+                            </button>
+                            <button
+                                onClick={() => setCount(0)}
+                                type="button"
+                                title="Reset count"
+                                className="bg-gray-500 text-white px-2 py-1 rounded-md hover:bg-blue-700 transition duration-200 ease-in-out"
+                            >
+                                <RotateCcw className="h-4 w-4" />
+                            </button>
+                        </div>
+                    </div>
+
+
+
+                    <div className='flex flex-col mr-8'>
+                        <p className='mb-2'>Button to pop-up alert</p>
+
+                        <button title="Show date" onClick={() => alert(`Hello there, today is ${date.toJSON().slice(0, 10)}`)} type="button" className="bg-gray-500 text-gray-100 px-3 py-1 rounded-md hover:bg-blue-700 transition duration-200 ease-in-out">
+                            What date is today?
                         </button>
-                        
-                        <button
-                            onClick={() => setCount(count - 1)}
-                            type="button"
-                            title="Decrease count"
-                            className="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-200 ease-in-out">
-                            ▼
-                        </button>
-                        
-                        <button
-                            onClick={() => setCount(0)}
-                            type="button"
-                            title="Reset count"
-                            className="bg-gray-500 text-white px-2 py-1 rounded-md hover:bg-blue-700 transition duration-200 ease-in-out mr-2">
-                            <RotateCcw />
-                        </button>
-
-
-                        `
-                        }
-                    </code>
+                    </div>
                 </div>
+            ),
+            code: (props) => `
+// Simple Button
+<button
+  title="Button without action"
+  type="button"
+  className="bg-gray-500 text-gray-100 px-3 py-1 rounded-md hover:bg-blue-700 w-64 transition duration-200 ease-in-out"
+>
+  Just click without action
+</button>
 
-                <div className='flex flex-col mr-8'>
-                    <p className='mb-2'>Button to pop-up alert</p>
+// Counter Button
+const [count, setCount] = useState(${count});
 
-                    <button title="Show date" onClick={() => alert(`Hello there, today is ${date.toJSON().slice(0, 10)}`)} type="button" className="bg-gray-500 text-gray-100 px-3 py-1 rounded-md hover:bg-blue-700 transition duration-200 ease-in-out">
-                        What date is today?
-                    </button>
-
-                    <code className='text-xs w-48 overflow-auto mt-2 h-48'>
-                        {
-                            `<button title="Show date" onClick={() => alert('Hello there, today is ${`date.toJSON().slice(0, 10)`}')} type="button" className="bg-gray-500 text-gray-100 px-3 py-1 rounded-md hover:bg-blue-700 transition duration-200 ease-in-out">
-                        What date is today?
-                    </button>`
-                        }
-                    </code>
+<div className='flex justify-left'>
+  <input
+    value={${count}}
+    disabled
+    className="mr-2 border border-gray-300 rounded-md px-2 py-1 w-16 text-center"
+  />
+  <button
+    onClick={() => setCount(${count} + 1)}
+    type="button"
+    title="Increase count"
+    className="bg-gray-500 text-white px-3 py-1 rounded-md hover:bg-orange-600 transition duration-200 ease-in-out mr-2"
+  >
+    ▲
+  </button>
+  <button
+    onClick={() => setCount(${count} - 1)}
+    type="button"
+    title="Decrease count"
+    className="bg-gray-400 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-200 ease-in-out mr-2"
+  >
+    ▼
+  </button>
+  <button
+    onClick={() => setCount(0)}
+    type="button"
+    title="Reset count"
+    className="bg-gray-500 text-white px-2 py-1 rounded-md hover:bg-blue-700 transition duration-200 ease-in-out"
+  >
+    <RotateCcw />
+  </button>
+  // Alert Button
+  <button
+    title="Show date"
+    onClick={() => alert('Hello there, today is ${`date.toJSON().slice(0, 10)`}')} 
+    type="button" 
+    className="bg-gray-500 text-gray-100 px-3 py-1 rounded-md hover:bg-blue-700 transition duration-200 ease-in-out"
+    >
+    What date is today?
+    </button>
+  </div>`
+        },
+        'Text Input': {
+            component: (
+                <div className='w-1/2 overflow-auto'>
+                    <input
+                        type="text"
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
+                        className="border border-gray-300 rounded px-4 py-2 w-full"
+                        placeholder="Enter text here..."
+                    />
                 </div>
+            ),
+            code: () => `const [text, setText] = useState('${text}');
 
-                <div className='flex flex-col mr-8'>
-                    <p className='mb-2'>Disabled button</p>
-                    <button title="Not available" type="button" className="bg-gray-200 text-gray-400 px-3 py-1 rounded-md" disabled>
-                        Not available
-                    </button>
-                    <code className='text-xs w-48 overflow-auto mt-2 h-48'>
-                        {
-                            `<button title="Not available" type="button" className="bg-gray-200 text-gray-400 px-3 py-1 rounded-md" disabled>
-                        Not available
-                    </button>`
-                        }
-                    </code>
+<input
+  type="text"
+  value="${text}"
+  onChange={(e) => setText(e.target.value)}
+  className="border border-gray-300 rounded px-4 py-2 w-full"
+  placeholder="Enter text here..."
+/>`
+        },
+        'Dropdown Menu': {
+            component: (
+                <div className='w-1/2 overflow-auto'>
+                    <select
+                        className="border border-gray-300 rounded px-4 py-2 w-full"
+                        value={selectedFruit}
+                        onChange={(e) => setSelectedFruit(e.target.value)}
+                    >
+                        <option value="" disabled>Select your fruit</option>
+                        <option value="banana">Banana</option>
+                        <option value="kiwi">Kiwi</option>
+                        <option value="orange">Orange</option>
+                    </select>
                 </div>
-            </div >
-        ),
-        'Text Input': (
-            <div className='flex flex-col mr-8'>
-                <input type="text" className="border border-gray-300 rounded px-4 py-2 w-full" placeholder="Enter text here..." />
-                <code className='text-xs overflow-auto mt-4'>
-                    {`<input type="text" className="border border-gray-300 rounded px-4 py-2 w-full" placeholder="Enter text here..." />`}
-                </code>
-            </div>
-        ),
-        'Dropdown Menu': (
-            <div className='flex flex-col mr-8'>
-                <select className="border border-gray-300 rounded px-4 py-2 w-full">
-                    <option value="" disabled selected>Select your fruit</option>
-                    <option value="option1">Banana</option>
-                    <option value="option2">Kiwi</option>
-                    <option value="option3">Orange </option>
-                </select>
-                <code className='text-xs overflow-auto mt-4'>
-                    {`<select className="border border-gray-300 rounded px-4 py-2 w-full">
-                    <option value="" disabled selected>Select your fruit</option>
-                    <option value="option1">Banana</option>
-                    <option value="option2">Kiwi</option>
-                    <option value="option3">Orange </option>
-                </select>`}
-                </code>
-            </div>
+            ),
+            code: () => `const [selectedFruit, setSelectedFruit] = useState('${selectedFruit}');
 
-        ),
-        'Checkbox': (
-            <div className='flex flex-col mr-8'>
-                <label className="flex items-center">
-                    <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-600" />
-                    <span className="ml-2 text-gray-700">Check me!</span>
-                </label>
-                <code className='text-xs overflow-auto mt-4'>
-                    {`<label className="flex items-center">
-                    <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-600" />
-                    <span className="ml-2 text-gray-700">Check me!</span>
-                </label>`}
-                </code>
-            </div>
-        ),
-        'Radio Buttons': (
-            <div className='flex flex-col mr-8'>
-                <div className="flex flex-col space-y-2">
+<select
+  className="border border-gray-300 rounded px-4 py-2 w-full"
+  value={selectedFruit}
+  onChange={(e) => setSelectedFruit(e.target.value)}
+>
+  <option value="" disabled>Select your fruit</option>
+  <option value="banana">Banana</option>
+  <option value="kiwi">Kiwi</option>
+  <option value="orange">Orange</option>
+</select>`
+        },
+        'Checkbox': {
+            component: (
+                <div className='w-1/2 overflow-auto'>
                     <label className="flex items-center">
-                        <input type="radio" name="radioGroup" value="radio1" className="form-radio h-5 w-5 text-blue-600" />
-                        <span className="ml-2 text-gray-700">Radio 1</span>
-                    </label>
-                    <label className="flex items-center">
-                        <input type="radio" name="radioGroup" value="radio2" className="form-radio h-5 w-5 text-blue-600" />
-                        <span className="ml-2 text-gray-700">Radio 2</span>
+                        <input
+                            type="checkbox"
+                            className="form-checkbox h-5 w-5 text-blue-600"
+                            checked={isChecked}
+                            onChange={(e) => setIsChecked(e.target.checked)}
+                        />
+                        <span className="ml-2 text-gray-700">
+                            {isChecked ? 'Checked!' : 'Check me!'}
+                        </span>
                     </label>
                 </div>
-                <code className='text-xs overflow-auto mt-4'>
-                    {`<div className="flex flex-col space-y-2">
-                    <label className="flex items-center">
-                        <input type="radio" name="radioGroup" value="radio1" className="form-radio h-5 w-5 text-blue-600" />
-                        <span className="ml-2 text-gray-700">Radio 1</span>
-                    </label>
-                    <label className="flex items-center">
-                        <input type="radio" name="radioGroup" value="radio2" className="form-radio h-5 w-5 text-blue-600" />
-                        <span className="ml-2 text-gray-700">Radio 2</span>
-                    </label>
-                </div>`}
-                </code>
-            </div>
-        ),
-        'Text Area': (
-            <div className='flex flex-col mr-8'>
-                <textarea onChange={(e) => setText(e.target.value)} className="border border-gray-300 rounded px-4 py-2 w-full" placeholder="Enter your comments here..." rows="4"></textarea>
-                <code className='text-xs overflow-auto mt-4'>
-                    {`<textarea className="border border-gray-300 rounded px-4 py-2 w-full" placeholder="Enter your comments here..." rows="4">${text}</textarea>`}
-                </code>
-            </div>
-        ),
-        'File Upload': (
-            <div className='flex flex-col mr-8'>
-                <label className="flex items-center cursor-pointer">
-                    <span className="border border-gray-300 rounded px-4 py-2 text-gray-700">Upload File</span>
-                    <input type="file" className="hidden" />
-                </label>
-                <code className='text-xs overflow-auto mt-4'>
-                    {`<label className="flex items-center cursor-pointer">
-                    <span className="border border-gray-300 rounded px-4 py-2 text-gray-700">Upload File</span>
-                    <input type="file" className="hidden" />
-                </label>`}
-                </code>
-            </div>
-        ),
-        'Range Slider': (
-            <div className='flex flex-col mr-8'>
-                <div className="flex items-center">
-                    <input type="range" className="w-full h-2 bg-blue-200 rounded-lg" />
+            ),
+            code: () => `const [isChecked, setIsChecked] = useState(${isChecked});
+
+<label className="flex items-center">
+  <input 
+    type="checkbox" 
+    className="form-checkbox h-5 w-5 text-blue-600"
+    checked={isChecked}
+    onChange={(e) => setIsChecked(e.target.checked)}
+  />
+  <span className="ml-2 text-gray-700">
+    {isChecked ? 'Checked!' : 'Check me!'}
+  </span>
+</label>`
+        },
+        'Radio Buttons': {
+            component: (
+                <div className='w-1/2 overflow-auto'>
+                    <div className="flex flex-col space-y-2">
+                        <label className="flex items-center">
+                            <input
+                                type="radio"
+                                name="radioGroup"
+                                value="radio1"
+                                checked={selectedRadio === 'radio1'}
+                                onChange={(e) => setSelectedRadio(e.target.value)}
+                                className="form-radio h-5 w-5 text-blue-600"
+                            />
+                            <span className="ml-2 text-gray-700">Radio 1</span>
+                        </label>
+                        <label className="flex items-center">
+                            <input
+                                type="radio"
+                                name="radioGroup"
+                                value="radio2"
+                                checked={selectedRadio === 'radio2'}
+                                onChange={(e) => setSelectedRadio(e.target.value)}
+                                className="form-radio h-5 w-5 text-blue-600"
+                            />
+                            <span className="ml-2 text-gray-700">Radio 2</span>
+                        </label>
+                        <p className="text-sm text-gray-600">
+                            Selected: {selectedRadio || 'None'}
+                        </p>
+                    </div>
                 </div>
-                <code className='text-xs overflow-auto mt-4'>
-                    {`<div className="flex items-center">
-                    <input type="range" className="w-full h-2 bg-blue-200 rounded-lg" />
-                </div>`}
-                </code>
-            </div>
-        ),
+            ),
+            code: () => `const [selectedRadio, setSelectedRadio] = useState('${selectedRadio}');
+
+<div className="flex flex-col space-y-2">
+  <label className="flex items-center">
+    <input 
+      type="radio" 
+      name="radioGroup" 
+      value="radio1"
+      checked={selectedRadio === 'radio1'}
+      onChange={(e) => setSelectedRadio(e.target.value)}
+      className="form-radio h-5 w-5 text-blue-600" 
+    />
+    <span className="ml-2 text-gray-700">Radio 1</span>
+  </label>
+  <label className="flex items-center">
+    <input 
+      type="radio" 
+      name="radioGroup" 
+      value="radio2"
+      checked={selectedRadio === 'radio2'}
+      onChange={(e) => setSelectedRadio(e.target.value)}
+      className="form-radio h-5 w-5 text-blue-600" 
+    />
+    <span className="ml-2 text-gray-700">Radio 2</span>
+  </label>
+  <p className="text-sm text-gray-600">
+    Selected: {selectedRadio || 'None'}
+  </p>
+</div>`
+        },
+        'Text Area': {
+            component: (
+                <div className='w-1/2 overflow-auto'>
+                    <textarea
+                        value={textAreaContent}
+                        onChange={(e) => setTextAreaContent(e.target.value)}
+                        className="border border-gray-300 rounded px-4 py-2 w-full"
+                        placeholder="Enter your comments here..."
+                        rows="4"
+                    ></textarea>
+                </div>
+            ),
+            code: () => `const [textAreaContent, setTextAreaContent] = useState('${textAreaContent}');
+
+<textarea
+  value="${textAreaContent}"
+  onChange={(e) => setTextAreaContent(e.target.value)}
+  className="border border-gray-300 rounded px-4 py-2 w-full"
+  placeholder="Enter your comments here..."
+  rows="4"
+></textarea>`
+        },
+        'File Upload': {
+            component: (
+                <div className='w-1/2 overflow-auto'>
+                    <label className="flex items-center cursor-pointer">
+                        <span className="border border-gray-300 rounded px-4 py-2 text-gray-700">
+                            {selectedFile ? selectedFile.name : 'Upload File'}
+                        </span>
+                        <input
+                            type="file"
+                            className="hidden"
+                            onChange={(e) => setSelectedFile(e.target.files[0])}
+                        />
+                    </label>
+                </div>
+            ),
+            code: () => `const [selectedFile, setSelectedFile] = useState(null);
+
+<label className="flex items-center cursor-pointer">
+  <span className="border border-gray-300 rounded px-4 py-2 text-gray-700">
+    {selectedFile ? selectedFile.name : 'Upload File'}
+  </span>
+  <input
+    type="file"
+    className="hidden"
+    onChange={(e) => setSelectedFile(e.target.files[0])}
+  />
+</label>`
+        }
     };
 
     return (
         <Base
-            title={'Create a UI Component and Document it in a Design System'}
-            date={'2024-10-21'}
-            level={'easy'}
+            title="Create a UI Component and Document it in a Design System"
+            date="2024-10-21"
+            level="medium"
         >
-            <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4" role="alert">
+            {(!state.overview || !state.instructions) && (
+                <div className='flex justify-center '>
+
+                    <button
+                        onClick={resetAlerts}
+                        className="h-8 text-center text-xs items bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600"
+                    >
+                        Reset Alerts
+                    </button>
+                </div>
+            )}
+
+            {state.overview && <div className="relative bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4 rounded-xl" role="alert">
+                <button
+                    onClick={() => handleClose('overview')}
+                    className="absolute text-gray-800 top-2 right-2 p-2 rounded-md hover:text-red-500"
+                >
+                    <CircleX />
+                </button>
                 <p className="font-bold">Here’s a brief overview of the Basic UI Components Library</p>
                 <p>Discover a range of UI components you can incorporate into your projects.</p>
             </div>
+            }
 
-            <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4" role="alert">
+            {state.instructions && <div className="relative bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4 rounded-xl" role="alert">
+                <button
+                    onClick={() => handleClose('instructions')}
+                    className="absolute text-gray-800 top-2 right-2 p-2 rounded-md hover:text-red-500"
+                >
+                    <CircleX />
+                </button>
                 <p><strong>Instructions:</strong></p>
 
                 <ul>
@@ -283,15 +462,18 @@ export const WPSC1 = () => {
                 </ul>
 
             </div>
-
-            {Object.entries(elements).map(([name, comp]) => (
-                <div key={name} className="p-4 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
-                    <p className="font-semibold text-lg text-gray-800">{name}</p>
-                    <div className="mt-2">{comp}</div>
-                </div>
-            ))}
+            }
+            <div className="space-y-8">
+                {Object.entries(elements).map(([name, { component, code }]) => (
+                    <div key={name} className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
+                        <h2 className="font-semibold text-lg text-gray-800 mb-4">{name}</h2>
+                        <div className="flex">
+                            {component}
+                            <CodeBlock code={code()} />
+                        </div>
+                    </div>
+                ))}
+            </div>
         </Base>
     );
 };
-
-export default WPSC1;

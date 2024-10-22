@@ -1,23 +1,49 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight, Search } from 'lucide-react';
 import * as Icons from 'lucide-react';
+import Link from 'next/link';
 
-const MenuItem = ({ title, icon, isOpen, onClick, hasChildren, onComponentClick, component }) => {
+
+const MenuSearch = ({ onSearch }) => {
+    return (
+        <div className="px-4 pb-2">
+            <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    onChange={(e) => onSearch(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+            </div>
+        </div>
+    );
+};
+
+const MenuItem = ({ title, icon, isOpen, onClick, hasChildren, onComponentClick, id, isActive }) => {
     const IconComponent = Icons[icon];
 
-    const handleClick = () => {
-        if (component) {
-            onComponentClick(component);
+    const handleClick = (e) => {
+        if (id) {
+            e.preventDefault();
+            onComponentClick(id);
         }
         if (hasChildren) {
             onClick();
         }
     };
 
+    const linkHref = id ? `/university?id=${id}` : '/university';
+
     return (
-        <div
+        <Link
+            href={linkHref}
             onClick={handleClick}
-            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+            className={`
+                flex items-center px-4 py-2 text-sm text-gray-700 
+                hover:bg-gray-100 cursor-pointer
+                ${isActive ? 'bg-gray-100 font-medium' : ''}
+            `}
         >
             <div className="flex items-center flex-1">
                 {IconComponent && (
@@ -34,12 +60,33 @@ const MenuItem = ({ title, icon, isOpen, onClick, hasChildren, onComponentClick,
                     )}
                 </div>
             )}
-        </div>
+        </Link>
     );
 };
 
-const SubMenu = ({ items, level = 0, onComponentClick }) => {
-    const [openItems, setOpenItems] = useState({});
+const SubMenu = ({ items, level = 0, onComponentClick, currentId }) => {
+    const [openItems, setOpenItems] = useState(() => {
+        const initialState = {};
+        const setOpenState = (items) => {
+            for (const key in items) {
+                const item = items[key];
+                if (currentId === item.id ||
+                    (item.items && Object.values(item.items).some(subItem =>
+                        subItem.id === currentId ||
+                        (subItem.items && Object.values(subItem.items).some(grandChild =>
+                            grandChild.id === currentId
+                        ))
+                    ))) {
+                    initialState[key] = true;
+                }
+                if (item.items) {
+                    setOpenState(item.items);
+                }
+            }
+        };
+        setOpenState(items);
+        return initialState;
+    });
 
     const toggleItem = (key) => {
         setOpenItems(prev => ({
@@ -56,11 +103,12 @@ const SubMenu = ({ items, level = 0, onComponentClick }) => {
                         <MenuItem
                             title={item.title}
                             icon={item.icon}
-                            component={item.component}
+                            id={item.id}
                             isOpen={openItems[key]}
                             onClick={() => item.items && toggleItem(key)}
                             onComponentClick={onComponentClick}
                             hasChildren={!!item.items}
+                            isActive={currentId === item.id}
                         />
                     </div>
 
@@ -70,6 +118,7 @@ const SubMenu = ({ items, level = 0, onComponentClick }) => {
                                 items={item.items}
                                 level={level + 1}
                                 onComponentClick={onComponentClick}
+                                currentId={currentId}
                             />
                         </div>
                     )}
@@ -79,40 +128,59 @@ const SubMenu = ({ items, level = 0, onComponentClick }) => {
     );
 };
 
-const SideMenu = ({ config, onComponentSelect }) => {
+
+const SideMenu = ({ config, onComponentSelect, currentId }) => {
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const filterMenuItems = (items, term) => {
+        const filtered = {};
+        Object.entries(items).forEach(([key, item]) => {
+            if (item.title.toLowerCase().includes(term.toLowerCase()) ||
+                (item.items && Object.values(filterMenuItems(item.items, term)).length > 0)) {
+                filtered[key] = { ...item };
+                if (item.items) {
+                    filtered[key].items = filterMenuItems(item.items, term);
+                }
+            }
+        });
+        return filtered;
+    };
+
+    const filteredConfig = searchTerm ? filterMenuItems(config, searchTerm) : config;
+
     return (
         <div className="w-64 h-screen bg-white border-r border-gray-200">
             <div className="p-4">
                 <h2 className="text-lg font-semibold text-gray-800">Menu</h2>
             </div>
+            <MenuSearch onSearch={setSearchTerm} />
             <nav className="mt-2">
-                <SubMenu items={config} onComponentClick={onComponentSelect} />
+                <SubMenu
+                    items={filteredConfig}
+                    onComponentClick={onComponentSelect}
+                    currentId={currentId}
+                />
             </nav>
         </div>
     );
 };
 
 const requireComponent = require.context(
-    // Look for files in the current directory and subdirectories
     './',
-    // Include subdirectories
     true,
-    // Match .js files that contain "components" in their name
     /components\.js$/
 );
 
 const AllComponents = {};
 
 requireComponent.keys().forEach(fileName => {
-    // Get the component config
     const componentConfig = requireComponent(fileName);
-
-    // Merge each component export into AllComponents
     Object.keys(componentConfig).forEach(exportedComponent => {
         AllComponents[exportedComponent] = componentConfig[exportedComponent];
     });
 });
 
 export { AllComponents };
+
 
 export default SideMenu;
