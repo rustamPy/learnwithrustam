@@ -1,9 +1,9 @@
 'use client';
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 import { Chip } from '@material-tailwind/react';
 import { RotateCcw, Copy, Check, CircleX } from 'lucide-react';
 
-const CodeBlock = ({ code }) => {
+const CodeBlock = ({ code, isMobile }) => {
     const [copied, setCopied] = useState(false);
 
     const handleCopy = async () => {
@@ -13,7 +13,7 @@ const CodeBlock = ({ code }) => {
     };
 
     return (
-        <div className="relative bg-gray-100 dark:bg-gray-800 rounded-lg p-4 w-1/2 ml-4">
+        <div className={`relative dark:border border-gray-700 bg-gray-100 dark:bg-gray-800 rounded-lg p-4 ${!isMobile ? 'w-1/2' : ''}`}>
             <button
                 onClick={handleCopy}
                 className="absolute top-2 right-2 p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
@@ -27,9 +27,14 @@ const CodeBlock = ({ code }) => {
     );
 };
 
+const CodeComponent = ({ children, isMobile }) => (
+    <div className={`${!isMobile ? 'w-1/2' : ''} overflow-auto mr-2 mb-2`}>
+        {children}
+    </div>
+)
 const Base = ({ title, date, level, children }) => {
     return (
-        <div className="mx-auto p-6 rounded-lg bg-white dark:bg-gray-900">
+        <div className="mx-auto md:p-6 lg-p-6 p-2 rounded-lg bg-white dark:bg-gray-900">
             <header className="mb-4">
                 <h1 className="text-3xl text-center font-bold text-gray-800 dark:text-gray-100">{title}</h1>
                 <div className="flex justify-center mt-4">
@@ -42,6 +47,7 @@ const Base = ({ title, date, level, children }) => {
     );
 };
 
+
 export const WPSC1 = () => {
     const [count, setCount] = useState(0);
     const [text, setText] = useState('');
@@ -50,8 +56,20 @@ export const WPSC1 = () => {
     const [selectedFruit, setSelectedFruit] = useState('');
     const [isChecked, setIsChecked] = useState(false);
     const [selectedRadio, setSelectedRadio] = useState('');
-    const date = new Date();
+    const [isMobile, setIsMobile] = useState(false);
 
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    const date = new Date();
     const CLOSE_ALERT = 'CLOSE_ALERT';
     const RESET_ALERTS = 'RESET_ALERTS';
 
@@ -87,7 +105,7 @@ export const WPSC1 = () => {
     const elements = {
         'Buttons': {
             component: (
-                <div className='w-1/2 overflow-auto'>
+                <CodeComponent isMobile={isMobile}>
                     <div className='mb-4'>
                         <p className='mb-2 dark:text-gray-300'>Just a button</p>
                         <button
@@ -145,7 +163,7 @@ export const WPSC1 = () => {
                             What date is today?
                         </button>
                     </div>
-                </div>
+                </CodeComponent>
             ),
             code: (props) => `// Simple Button
 <button
@@ -202,7 +220,7 @@ const [count, setCount] = useState(${count});
         },
         'Text Input': {
             component: (
-                <div className='w-1/2 overflow-auto'>
+                <CodeComponent isMobile={isMobile}>
                     <input
                         type="text"
                         value={text}
@@ -210,7 +228,8 @@ const [count, setCount] = useState(${count});
                         className="border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded px-4 py-2 w-full"
                         placeholder="Enter text here..."
                     />
-                </div>
+                </CodeComponent>
+
             ),
             code: () => `const [text, setText] = useState('${text}');
 
@@ -224,7 +243,7 @@ const [count, setCount] = useState(${count});
         },
         'Dropdown Menu': {
             component: (
-                <div className='w-1/2 overflow-auto'>
+                <CodeComponent isMobile={isMobile}>
                     <select
                         className="border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded px-4 py-2 w-full"
                         value={selectedFruit}
@@ -235,7 +254,8 @@ const [count, setCount] = useState(${count});
                         <option value="kiwi">Kiwi</option>
                         <option value="orange">Orange</option>
                     </select>
-                </div>
+                </CodeComponent>
+
             ),
             code: () => `const [selectedFruit, setSelectedFruit] = useState('${selectedFruit}');
 
@@ -252,19 +272,22 @@ const [count, setCount] = useState(${count});
         },
         'Checkbox': {
             component: (
-                <div className='w-1/2 overflow-auto'>
-                    <label className="flex items-center">
-                        <input
-                            type="checkbox"
-                            className="form-checkbox h-5 w-5 text-blue-600 dark:text-blue-500 dark:border-gray-600 dark:bg-gray-800"
-                            checked={isChecked}
-                            onChange={(e) => setIsChecked(e.target.checked)}
-                        />
-                        <span className="ml-2 text-gray-700 dark:text-gray-300">
-                            {isChecked ? 'Checked!' : 'Check me!'}
-                        </span>
-                    </label>
-                </div>
+                <CodeComponent isMobile={isMobile}>
+                    <div className='w-1/2 overflow-auto'>
+                        <label className="flex items-center">
+                            <input
+                                type="checkbox"
+                                className="form-checkbox h-5 w-5 text-blue-600 dark:text-blue-500 dark:border-gray-600 dark:bg-gray-800"
+                                checked={isChecked}
+                                onChange={(e) => setIsChecked(e.target.checked)}
+                            />
+                            <span className="ml-2 text-gray-700 dark:text-gray-300">
+                                {isChecked ? 'Checked!' : 'Check me!'}
+                            </span>
+                        </label>
+                    </div>
+                </CodeComponent>
+
             ),
             code: () => `const [isChecked, setIsChecked] = useState(${isChecked});
 
@@ -282,7 +305,7 @@ const [count, setCount] = useState(${count});
         },
         'Radio Buttons': {
             component: (
-                <div className='w-1/2 overflow-auto'>
+                <CodeComponent isMobile={isMobile}>
                     <div className="flex flex-col space-y-2">
                         <label className="flex items-center">
                             <input
@@ -310,7 +333,8 @@ const [count, setCount] = useState(${count});
                             Selected: {selectedRadio || 'None'}
                         </p>
                     </div>
-                </div>
+                </CodeComponent>
+
             ),
             code: () => `const [selectedRadio, setSelectedRadio] = useState('${selectedRadio}');
 
@@ -344,7 +368,7 @@ const [count, setCount] = useState(${count});
         },
         'Text Area': {
             component: (
-                <div className='w-1/2 overflow-auto'>
+                <CodeComponent isMobile={isMobile}>
                     <textarea
                         value={textAreaContent}
                         onChange={(e) => setTextAreaContent(e.target.value)}
@@ -352,7 +376,7 @@ const [count, setCount] = useState(${count});
                         placeholder="Enter your comments here..."
                         rows="4"
                     ></textarea>
-                </div>
+                </CodeComponent>
             ),
             code: () => `const [textAreaContent, setTextAreaContent] = useState('${textAreaContent}');
 
@@ -366,7 +390,7 @@ const [count, setCount] = useState(${count});
         },
         'File Upload': {
             component: (
-                <div className='w-1/2 overflow-auto'>
+                <CodeComponent isMobile={isMobile}>
                     <label className="flex items-center cursor-pointer">
                         <span className="border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded px-4 py-2 text-gray-700">
                             {selectedFile ? selectedFile.name : 'Upload File'}
@@ -377,7 +401,7 @@ const [count, setCount] = useState(${count});
                             onChange={(e) => setSelectedFile(e.target.files[0])}
                         />
                     </label>
-                </div>
+                </CodeComponent>
             ),
             code: () => `const [selectedFile, setSelectedFile] = useState(null);
 
@@ -461,12 +485,21 @@ const [count, setCount] = useState(${count});
             }
             <div className="space-y-8">
                 {Object.entries(elements).map(([name, { component, code }]) => (
-                    <div key={name} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
+                    <div key={name} className="p-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
                         <h2 className="font-semibold text-lg text-gray-800 dark:text-gray-200 mb-4">{name}</h2>
-                        <div className="flex">
-                            {component}
-                            <CodeBlock code={code()} />
-                        </div>
+                        {isMobile ?
+                            (
+                                <div className="flex flex-col ">
+                                    {component}
+                                    <CodeBlock code={code()} isMobile={isMobile} />
+                                </div>
+                            ) :
+                            <div className="flex">
+                                {component}
+                                <CodeBlock code={code()} />
+                            </div>
+                        }
+
                     </div>
                 ))}
             </div>
