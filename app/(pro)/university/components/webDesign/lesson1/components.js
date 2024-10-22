@@ -1,9 +1,15 @@
 'use client';
 import React, { useState, useReducer, useEffect } from 'react';
 import { Chip } from '@material-tailwind/react';
+import { useTheme } from 'next-themes';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneLight as lightTheme, oneDark as darkTheme } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+
 import { RotateCcw, Copy, Check, CircleX } from 'lucide-react';
 
 const CodeBlock = ({ code, isMobile }) => {
+    const { theme } = useTheme();
     const [copied, setCopied] = useState(false);
 
     const handleCopy = async () => {
@@ -13,16 +19,22 @@ const CodeBlock = ({ code, isMobile }) => {
     };
 
     return (
-        <div className={`relative dark:border border-gray-700 bg-gray-100 dark:bg-gray-800 rounded-lg p-4 ${!isMobile ? 'w-1/2' : ''}`}>
+        <div className={`relative dark:border border-gray-700 bg-gray-100 dark:bg-gray-900 rounded-lg p-2 ${!isMobile ? 'w-1/2' : ''}`}>
             <button
                 onClick={handleCopy}
                 className="absolute top-2 right-2 p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
             >
                 {copied ? <Check className="h-4 w-4 dark:text-gray-300" /> : <Copy className="h-4 w-4 dark:text-gray-300" />}
             </button>
-            <pre className="text-sm overflow-auto max-h-[300px] p-2 dark:text-gray-300">
-                <code className="language-jsx">{code}</code>
-            </pre>
+            <div className="text-xs overflow-auto max-h-[300px]"> {/* Apply smaller text size */}
+                <SyntaxHighlighter
+                    language="javascript"
+                    style={theme === 'dark' ? darkTheme : lightTheme}
+                    showLineNumbers={true}
+                >
+                    {code}
+                </SyntaxHighlighter>
+            </div>
         </div>
     );
 };
