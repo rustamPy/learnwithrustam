@@ -4,24 +4,18 @@ import { Link2 } from 'lucide-react'
 import {
     Book,
     Calculator,
-    Flask,
     Globe2,
     User,
     Calendar,
-    Clock
 } from 'lucide-react';
 import {
     Card,
     CardHeader,
-    CardTitle,
     CardBody,
-    CardFooter,
-    Typography,
-    Button,
 } from "@material-tailwind/react";
 
 
-const SubjectCard = ({ icon: Icon, title, teacher, dueDate, university, tasks }) => {
+const SubjectCard = ({ icon: Icon, title, teacher, university, tasks }) => {
 
     return (
         <Card className="mb-4">
@@ -51,7 +45,7 @@ const SubjectCard = ({ icon: Icon, title, teacher, dueDate, university, tasks })
                                     </span>
                                     <div className="flex items-center gap-2 text-sm text-gray-600">
                                         <Calendar className="h-4 w-4" />
-                                        <span>{task.due}</span>
+                                        <span>{task.date}</span>
                                     </div>
 
                                     <a href={`/university/?id=${task.id}`}><Link2 /></a>
@@ -73,7 +67,7 @@ export const HomeworkView = () => {
             teacher: "Przemysław Nowak",
             university: "WAB",
             tasks: [
-                { title: "Simple Components", due: "Oct 23", id: "wp-simple" }
+                { title: "Simple Components", date: "Oct 22", id: "wp-simple" }
             ]
         }
     ];
