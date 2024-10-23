@@ -42,7 +42,7 @@ const MenuItem = ({ title, icon, isOpen, onClick, hasChildren, onComponentClick,
             href={linkHref}
             onClick={handleClick}
             className={`
-        flex items-center px-4 py-2 text-sm mr-2
+        flex items-center px-4 py-2 text-sm mr-2 rounded-r-xl
         ${isActive
                     ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white font-medium'
                     : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
