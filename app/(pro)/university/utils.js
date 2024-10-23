@@ -1,26 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, ChevronRight, Search, Menu, PanelTopClose } from 'lucide-react';
+import { ChevronDown, ChevronRight, PanelTopClose } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import Link from 'next/link';
 import { Drawer } from "@material-tailwind/react";
+import SearchBar from '@/components/pro/FunctionalComponents/SearchBar';
 
-const MenuSearch = ({ onSearch }) => {
-    return (
-        <div className="px-4 pb-2">
-            <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 dark:text-gray-400" />
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    onChange={(e) => onSearch(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
-            bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 
-            text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-                />
-            </div>
-        </div>
-    );
-};
 
 const MenuItem = ({ title, icon, isOpen, onClick, hasChildren, onComponentClick, id, isActive }) => {
     const IconComponent = Icons[icon];
@@ -35,11 +19,9 @@ const MenuItem = ({ title, icon, isOpen, onClick, hasChildren, onComponentClick,
         }
     };
 
-    const linkHref = id ? `/university?id=${id}` : '/university';
-
     return (
         <Link
-            href={linkHref}
+            href={id ? `/university?id=${id}` : '/university'}
             onClick={handleClick}
             className={`
         flex items-center px-4 py-2 text-sm mr-2 rounded-r-xl
@@ -51,9 +33,7 @@ const MenuItem = ({ title, icon, isOpen, onClick, hasChildren, onComponentClick,
       `}
         >
             <div className="flex items-center flex-1">
-                {IconComponent && (
-                    <IconComponent className="w-4 h-4 mr-2" />
-                )}
+                {IconComponent && <IconComponent className="w-4 h-4 mr-2" />}
                 <span>{title}</span>
             </div>
             {hasChildren && (
@@ -75,21 +55,26 @@ const SubMenu = ({ items, level = 0, onComponentClick, currentId }) => {
     useEffect(() => {
         const initialState = {};
         const setOpenState = (items) => {
-            for (const key in items) {
-                const item = items[key];
-                if (currentId === item.id ||
-                    (item.items && Object.values(item.items).some(subItem =>
-                        subItem.id === currentId ||
-                        (subItem.items && Object.values(subItem.items).some(grandChild =>
-                            grandChild.id === currentId
-                        ))
-                    ))) {
+            Object.entries(items).forEach(([key, item]) => {
+                if (
+                    currentId === item.id ||
+                    (item.items &&
+                        Object.values(item.items).some(subItem =>
+                            subItem.id === currentId ||
+                            (subItem.items &&
+                                Object.values(subItem.items).some(grandChild =>
+                                    grandChild.id === currentId
+                                )
+                            )
+                        )
+                    )
+                ) {
                     initialState[key] = true;
                 }
                 if (item.items) {
                     setOpenState(item.items);
                 }
-            }
+            });
         };
         setOpenState(items);
         setOpenItems(initialState);
@@ -118,7 +103,6 @@ const SubMenu = ({ items, level = 0, onComponentClick, currentId }) => {
                             isActive={currentId === item.id}
                         />
                     </div>
-
                     {item.items && openItems[key] && (
                         <div className="ml-4">
                             <SubMenu
@@ -134,6 +118,28 @@ const SubMenu = ({ items, level = 0, onComponentClick, currentId }) => {
         </div>
     );
 };
+
+const MenuContent = ({ setSearchTerm, filteredConfig, onComponentSelect, currentId, hasResults }) => (
+    <div className="h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700">
+        <div className="p-4">
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Menu</h2>
+        </div>
+        <SearchBar onSearch={setSearchTerm} placeholder={'Search for lesson'}></SearchBar>
+        <nav className="mt-2">
+            {hasResults ? (
+                <SubMenu
+                    items={filteredConfig}
+                    onComponentClick={onComponentSelect}
+                    currentId={currentId}
+                />
+            ) : (
+                <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                    No results found
+                </div>
+            )}
+        </nav>
+    </div>
+);
 
 const SideMenu = ({ config, onComponentSelect, currentId }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -166,23 +172,7 @@ const SideMenu = ({ config, onComponentSelect, currentId }) => {
     };
 
     const filteredConfig = searchTerm ? filterMenuItems(config, searchTerm) : config;
-
-    const MenuContent = () => (
-        <div className="h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700">
-            <div className="p-4">
-                <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Menu</h2>
-            </div>
-            <MenuSearch onSearch={setSearchTerm} />
-            <nav className="mt-2">
-                <SubMenu
-                    items={filteredConfig}
-                    onComponentClick={onComponentSelect}
-                    currentId={currentId}
-                />
-            </nav>
-        </div>
-    );
-
+    const hasResults = Object.keys(filteredConfig).length > 0;
     return (
         <>
             {isMobile ? (
@@ -202,11 +192,11 @@ const SideMenu = ({ config, onComponentSelect, currentId }) => {
                         placement="left"
                         className="p-0"
                     >
-                        <MenuContent />
+                        <MenuContent setSearchTerm={setSearchTerm} filteredConfig={filteredConfig} currentId={currentId} onComponentSelect={onComponentSelect} hasResults={hasResults} />
                     </Drawer>
                 </>
             ) : (
-                <MenuContent />
+                    <MenuContent setSearchTerm={setSearchTerm} filteredConfig={filteredConfig} currentId={currentId} onComponentSelect={onComponentSelect} hasResults={hasResults} />
             )}
         </>
     );

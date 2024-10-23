@@ -3,6 +3,19 @@ import React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import SideMenu, { AllComponents } from './utils';
 import { menuConfig, findComponentById } from './config';
+import { ShieldX } from 'lucide-react';
+
+const EmptyPage = () => {
+    return (
+        <div className='flex items-center justify-center h-screen text-lg'>
+            <div className='flex flex-col items-center'>
+                <ShieldX className='w-24 h-24' />
+                <p>I'm working on this page...</p>
+            </div>
+        </div>
+    )
+
+}
 
 const UniversityPage = () => {
     const router = useRouter();
@@ -26,7 +39,7 @@ const UniversityPage = () => {
             />
             <main className="flex-1 overflow-y-auto">
                 <div className='p-1 m-1 rounded-xl'>
-                    {CurrentViewComponent && <CurrentViewComponent />}
+                    {CurrentViewComponent ? <CurrentViewComponent /> : <EmptyPage />}
                 </div>
             </main>
         </div>
