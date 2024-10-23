@@ -9,8 +9,8 @@ const EmptyPage = () => {
     return (
         <div className='flex items-center justify-center h-screen text-lg'>
             <div className='flex flex-col items-center'>
-                <ShieldX className='w-24 h-24' />
-                <p>I'm working on this page...</p>
+                <ShieldX className='w-24 h-24 dark:text-gray-900' />
+                <p className='dark:text-gray-900'>I'm working on this page...</p>
             </div>
         </div>
     )
