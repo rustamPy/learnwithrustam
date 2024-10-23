@@ -205,7 +205,7 @@ const SideMenu = ({ config, onComponentSelect, currentId }) => {
 export default SideMenu;
 
 const requireComponent = require.context(
-    './',
+    './lessons',
     true,
     /components\.js$/
 );
