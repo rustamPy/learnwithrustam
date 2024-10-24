@@ -112,7 +112,7 @@ export const WPSC1 = () => {
     };
 
     const elements = {
-        'Buttons': {
+        'Buttons Component': {
             component: (
                 <ComponentReview isMobile={isMobile}>
                     <Buttons />
@@ -120,7 +120,7 @@ export const WPSC1 = () => {
             ),
             code: () => ButtonsCode()
         },
-        'Inputs': {
+        'Inputs Component': {
             component: (
                 <ComponentReview isMobile={isMobile}>
                     <Inputs />
@@ -128,13 +128,13 @@ export const WPSC1 = () => {
             ),
             code: () => InputsCode()
         },
-        'Drop Down with Search': {
+        'Drop Down with Search Component': {
             component: (
                 <ComponentReview isMobile={isMobile}><DropDownWithOptions /> </ComponentReview>
             ),
             code: () => DropdownWithSearchCode()
         },
-        'Checkboxes': {
+        'Checkboxes Component': {
             component: (
                 <ComponentReview isMobile={isMobile}>
                     <CheckBoxes />
@@ -143,7 +143,7 @@ export const WPSC1 = () => {
             ),
             code: () => CheckBoxesCode()
         },
-        'Text Areas': {
+        'Text Areas Component': {
             component: (
                 <ComponentReview isMobile={isMobile}>
                     <TextAreas />
@@ -151,7 +151,7 @@ export const WPSC1 = () => {
             ),
             code: () => TextAreasCode()
         },
-        'File Uploader': {
+        'File Uploader Component': {
             component: (
                 <ComponentReview isMobile={isMobile}>
                     <FileUpload />
