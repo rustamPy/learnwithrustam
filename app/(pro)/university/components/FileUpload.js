@@ -199,7 +199,8 @@ const initialState = {
     files: [],
     isDragging: false,
     error: null,
-    success: null
+    success: null,
+    maxSize: 5
 };
 
 // Reducer function
@@ -224,6 +225,8 @@ const reducer = (state, action) => {
             return { ...state, error: action.payload, success: null };
         case 'CLEAR_MESSAGES':
             return { ...state, error: null, success: null };
+        case 'MAX_SIZE':
+            return { ...state, maxSize: action.payload }
         default:
             return state;
     }
@@ -265,14 +268,13 @@ const FileUpload = () => {
     };
 
     const validateFiles = (files) => {
-        const maxSize = 5 * 1024 * 1024; // 5MB
-        const invalidFiles = files.filter(file => file.size > maxSize);
+        const ms = state.maxSize * 1024 * 1024; // 5MB
+        const invalidFiles = files.filter(file => file.size > ms);
 
         if (invalidFiles.length > 0) {
             dispatch({
                 type: 'SET_ERROR',
-                payload: 'Some files exceed the 5MB limit'
-            });
+                payload: \`Some files exceed the \${ state.maxSize } limit\`});
             return false;
         }
         return true;
@@ -284,6 +286,10 @@ const FileUpload = () => {
             dispatch({ type: 'ADD_FILES', payload: files });
         }
     };
+
+    const handleMaxSize = (e) => {
+        dispatch({ type: 'MAX_SIZE', payload: e.target.value })
+    }
 
     const getFileIcon = (fileType) => {
         const iconKey = Object.keys(fileTypeIcons).find(key => fileType.startsWith(key));
@@ -303,7 +309,8 @@ const FileUpload = () => {
                     placeholder="Set max size threshold"
                 />
             </div>
-            <div className={\`border-2 border-dashed rounded-lg p-8 mb-4 text-center cursor-pointer \${ state.isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400' } transition-colors duration-200\`}
+            <div
+                className={\`border-2 border-dashed rounded-lg p-8 mb-4 text-center cursor-pointer \${ state.isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400' } transition-colors duration-200\`}
                 onDragEnter={handleDragEnter}
                 onDragOver={handleDragEnter}
                 onDragLeave={handleDragLeave}
