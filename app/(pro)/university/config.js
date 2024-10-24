@@ -1,6 +1,6 @@
 export const menuConfig = {
     dashboard: {
-        title: "Homeworks",
+        title: "Assignments",
         icon: "BookOpenCheck",
         component: "HomeworkView",
         id: "home"
@@ -13,12 +13,24 @@ export const menuConfig = {
             simple: {
                 title: "Simple Components",
                 id: "wp-simple",
-                component: `WPSC`,
+                component: `WPSCHome`,
                 items: {
                     sc1: {
                         title: 'Lesson 1',
                         component: 'WPSC1',
                         id: "wp-simple-lesson1"
+                    }
+                },
+            },
+            advanced: {
+                title: "Advanced Components",
+                id: "wp-advanced",
+                component: `WPACHome`,
+                items: {
+                    ac1: {
+                        title: 'Lesson 1',
+                        component: 'WPAC1',
+                        id: "wp-advanced-lesson1"
                     }
                 },
             }

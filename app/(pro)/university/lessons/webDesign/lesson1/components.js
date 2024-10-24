@@ -13,9 +13,6 @@ import CheckBoxes, { CheckBoxesCode } from '@/app/(pro)/university/components/Ch
 import TextAreas, { TextAreasCode } from '@/app/(pro)/university/components/TextAreas'
 import FileUpload, { FileUploadCode } from '@/app/(pro)/university/components/FileUpload'
 
-
-
-
 import * as Icons from 'lucide-react';
 
 
@@ -69,10 +66,7 @@ const ComponentReview = ({ children, isMobile }) => (
 
 export const WPSC1 = () => {
 
-    const [selectedFruit, setSelectedFruit] = useState('');
-    const [selectedRadio, setSelectedRadio] = useState('');
     const [isMobile, setIsMobile] = useState(false);
-
 
     useEffect(() => {
         const checkMobile = () => {
@@ -135,7 +129,9 @@ export const WPSC1 = () => {
             code: () => InputsCode()
         },
         'Drop Down with Search': {
-            component: (<ComponentReview isMobile={isMobile}><DropDownWithOptions /> </ComponentReview>),
+            component: (
+                <ComponentReview isMobile={isMobile}><DropDownWithOptions /> </ComponentReview>
+            ),
             code: () => DropdownWithSearchCode()
         },
         'Checkboxes': {

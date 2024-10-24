@@ -16,7 +16,7 @@ export const WPBase = ({ title, date, level, children }) => {
 };
 
 
-export const WPSC = () => {
+export const WPSCHome = () => {
     return (
         <div className="mx-auto p-6 rounded-lg bg-white dark:bg-gray-900">
             <div className="space-y-6">

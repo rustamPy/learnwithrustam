@@ -1,5 +1,6 @@
 'use client';
 import React, { useReducer } from 'react';
+import { AlertCircle } from 'lucide-react';
 
 const Inputs = () => {
 
@@ -32,6 +33,25 @@ const Inputs = () => {
 
     const [state, dispatch] = useReducer(reducer, initialState);
 
+    const getPasswordStrength = (password) => {
+        if (!password) return { strength: '', color: '' };
+
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumbers = /\d/.test(password);
+        const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+        const length = password.length;
+
+        const criteria = [hasUpperCase, hasLowerCase, hasNumbers, hasSpecialChars, length >= 8].filter(Boolean).length;
+
+        console.log(criteria)
+
+        if (criteria <= 2) return { strength: 'Weak', color: 'text-red-600' };
+        if (criteria === 3) return { strength: 'Medium', color: 'text-yellow-600' };
+        if (criteria === 4) return { strength: 'Strong', color: 'text-green-600' };
+        return { strength: 'Very Strong', color: 'text-green-600' };
+    };
+    const passwordStrength = getPasswordStrength(state.password);
 
     return (
         <>
@@ -57,7 +77,17 @@ const Inputs = () => {
                 />
             </div>
             <div className='flex flex-col mr-8 mb-4'>
-                <p className='mb-2 dark:text-gray-300'>Password input</p>
+                <div className="flex items-center space-x-2 mb-2">
+                    <p className='dark:text-gray-300'>Password input</p>
+                    {state.password && (
+                        <div className="flex items-center space-x-1">
+                            <AlertCircle className={`w-4 h-4 ${passwordStrength.color}`} />
+                            <span className={`text-sm ${passwordStrength.color} font-medium`}>
+                                {passwordStrength.strength}
+                            </span>
+                        </div>
+                    )}
+                </div>
                 <input
                     type="password"
                     value={state.password}
@@ -94,6 +124,7 @@ export const InputsCode = () => `'use client';
 // Uncomment 'use client' if you are using Next.js
 
 import React, { useReducer } from 'react';
+import { AlertCircle } from 'lucide-react';
 
 const Inputs = () => {
 
@@ -106,6 +137,7 @@ const Inputs = () => {
         number: '',
         date: ''
     };
+
 
     const reducer = (state, action) => {
         switch (action.type) {
@@ -126,6 +158,25 @@ const Inputs = () => {
 
     const [state, dispatch] = useReducer(reducer, initialState);
 
+    const getPasswordStrength = (password) => {
+        if (!password) return { strength: '', color: '' };
+
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumbers = /\d/.test(password);
+        const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+        const length = password.length;
+
+        const criteria = [hasUpperCase, hasLowerCase, hasNumbers, hasSpecialChars, length >= 8].filter(Boolean).length;
+
+        console.log(criteria)
+
+        if (criteria <= 2) return { strength: 'Weak', color: 'text-red-600' };
+        if (criteria === 3) return { strength: 'Medium', color: 'text-yellow-600' };
+        if (criteria === 4) return { strength: 'Strong', color: 'text-green-600' };
+        return { strength: 'Very Strong', color: 'text-green-600' };
+    };
+    const passwordStrength = getPasswordStrength(state.password);
 
     return (
         <>
@@ -151,7 +202,17 @@ const Inputs = () => {
                 />
             </div>
             <div className='flex flex-col mr-8 mb-4'>
-                <p className='mb-2 dark:text-gray-300'>Password input</p>
+                <div className="flex items-center space-x-2 mb-2">
+                    <p className='dark:text-gray-300'>Password input</p>
+                    {state.password && (
+                        <div className="flex items-center space-x-1">
+                            <AlertCircle className={\`w-4 h-4 \${ passwordStrength.color }\`} />
+                            <span className={\`text-sm \${ passwordStrength.color } font-medium\`}>
+                                {passwordStrength.strength}
+                            </span>
+                        </div>
+                    )}
+                </div>
                 <input
                     type="password"
                     value={state.password}
@@ -183,6 +244,7 @@ const Inputs = () => {
         </>
     )
 }
+
 
 export default Inputs;
 `

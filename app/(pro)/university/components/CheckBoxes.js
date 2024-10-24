@@ -1,6 +1,6 @@
 'use client';
 import React, { useReducer } from 'react';
-import { Check, Minus, Circle, X } from 'lucide-react';
+import { Check, Minus, Circle, X, Moon, Sun } from 'lucide-react';
 
 // Initial state for all checkbox types
 const initialState = {
@@ -175,21 +175,20 @@ const CheckBoxes = () => {
             </div>
 
             {/* Switch */}
-            <div className="space-y-4">
+            <div className="space-y-4 " >
                 <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Switch</h2>
                 <label className="flex items-center space-x-3 cursor-pointer">
                     <div
-                        className={`w-12 h-6 rounded-full flex items-center
-                      transition-colors duration-200 ease-in-out
-                      ${state.switch ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'}`}
+                        className={`w-12 h-7 rounded-full flex items-center transition-colors duration-200 ease-in-out ${state.switch ? 'bg-yellow-600' : 'bg-gray-800 dark:bg-gray-700'}`}
                         onClick={() => dispatch({ type: TOGGLE_SWITCH })}
                     >
                         <div
                             className={`w-5 h-5 rounded-full bg-white shadow transform transition-transform duration-200 ease-in-out
                         ${state.switch ? 'translate-x-6' : 'translate-x-1'}`}
-                        />
+                        /> 
+                        {state.switch ? <Sun className='-translate-x-4 w-4 h-4 text-gray-800' /> : <Moon className='translate-x-2 w-4 h-4 text-gray-100' />}
                     </div>
-                    <span className="text-gray-700 dark:text-gray-200">Toggle Switch</span>
+                    <span className="text-gray-700 dark:text-gray-200">{state.switch ? 'Light' : 'Dark'} theme</span>
                 </label>
             </div>
 
@@ -261,7 +260,7 @@ export const CheckBoxesCode = () => `'use client';
 // Uncomment 'use client' if you are using Next.js
 
 import React, { useReducer } from 'react';
-import { Check, Minus, Circle, X } from 'lucide-react';
+import { Check, Minus, Circle, X, Moon, Sun } from 'lucide-react';
 
 // Initial state for all checkbox types
 const initialState = {
@@ -401,24 +400,12 @@ const CheckBoxes = () => {
             <div className="space-y-4">
                 <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Card Checkbox</h2>
                 <div
-                    className={\`p - 4 border - 2 rounded - lg cursor - pointer
-transition - colors duration - 200 ease -in -out
-                    \${
-    state.card
-    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-    : 'border-gray-200 dark:border-gray-700'
-} \`}
+                    className={\`p-4 border-2 rounded-lg cursor-pointer transition-colors duration-200 ease-in-out \${ state.card ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700' } \`}
                     onClick={() => dispatch({ type: TOGGLE_CARD })}
                 >
                     <div className="flex items-center space-x-3">
                         <div
-                            className={\`w - 6 h - 6 border - 2 rounded flex items - center justify - center
-transition - colors duration - 200 ease -in -out
-                        \${
-    state.card
-    ? 'bg-blue-500 border-blue-500'
-    : 'border-gray-300 dark:border-gray-600'
-} \`}
+                            className={\`w-6 h-6 border-2 rounded flex items-center justify-center transition-colors duration-200 ease-in-out \${ state.card ? 'bg-blue-500 border-blue-500' : 'border-gray-300 dark:border-gray-600' } \`}
                         >
                             {state.card && <Check className="w-4 h-4 text-white" />}
                         </div>
@@ -428,21 +415,19 @@ transition - colors duration - 200 ease -in -out
             </div>
 
             {/* Switch */}
-            <div className="space-y-4">
+            <div className="space-y-4 " >
                 <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Switch</h2>
                 <label className="flex items-center space-x-3 cursor-pointer">
                     <div
-                        className={\`w - 12 h - 6 rounded - full flex items - center
-transition - colors duration - 200 ease -in -out
-                      \${ state.switch ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600' } \`}
+                        className={\`w-12 h-7 rounded-full flex items-center transition-colors duration-200 ease-in-out \${ state.switch ? 'bg-yellow-600' : 'bg-gray-800 dark:bg-gray-700' } \`}
                         onClick={() => dispatch({ type: TOGGLE_SWITCH })}
                     >
                         <div
-                            className={\`w - 5 h - 5 rounded - full bg - white shadow transform transition - transform duration - 200 ease -in -out
-                        \${ state.switch ? 'translate-x-6' : 'translate-x-1' }\`}
+                            className={\`w-5 h-5 rounded-full bg-white shadow transform transition-transform duration-200 ease-in-out \${ state.switch ? 'translate-x-6' : 'translate-x-1' }\`}
                         />
+                        {state.switch ? <Sun className='-translate-x-4 w-4 h-4 text-gray-800' /> : <Moon className='translate-x-2 w-4 h-4 text-gray-100' />}
                     </div>
-                    <span className="text-gray-700 dark:text-gray-200">Toggle Switch</span>
+                    <span className="text-gray-700 dark:text-gray-200">{state.switch ? 'Light' : 'Dark'} theme</span>
                 </label>
             </div>
 
