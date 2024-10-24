@@ -101,7 +101,7 @@ export const WPSC1 = () => {
                     [action.alertType]: false
                 };
             case RESET_ALERTS:
-                return initialState;
+                return initialAlertState;
             default:
                 return state;
         }
