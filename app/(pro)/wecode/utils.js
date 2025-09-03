@@ -85,8 +85,6 @@ export const fetchSolution = async (slug) => {
             throw new Error('Solution not found');
         }
 
-        console.log(solution)
-
         const processedContent = await remark().use(html).process(solution.content);
         const htmlContent = processedContent.toString();
 

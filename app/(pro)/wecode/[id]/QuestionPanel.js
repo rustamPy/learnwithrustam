@@ -60,8 +60,6 @@ const QuestionPanel = ({ question, editorial }) => {
     const [questionFullScreen, setQuestionFullScreen] = useState(false);
     const [questionHidden, setQuestionHidden] = useState(false);
 
-    console.log(editorial?.content)
-
     const scrollableRef = useRef(null);
 
     const scrollToAccordion = (href) => {

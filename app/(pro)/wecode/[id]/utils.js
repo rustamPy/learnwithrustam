@@ -7,74 +7,75 @@ export const SHORT_CODE = {
 
 export const BASE_CODE = {
     'python': ((params, tests, name) =>
-        `if __name__ == '__main__':
-    import sys
-    import io
-    import json
-    import traceback
-    from math import *
+        `
+import sys
+import io
+import json
+import traceback
+from math import *
 
-    params = ${params}
-    tests = ${tests}
-    # Initialize the Solution objects
+params = ${params}
+tests = ${JSON.stringify(tests)}
+# Initialize the Solution objects
 
-    user_solution = Solution()
-    correct_solution = _Solution()
+user_solution = Solution()
+correct_solution = _Solution()
 
-    # Generate outputs
-    all_print_outputs = []
-    error_outputs = []
-    expected_outputs = []
-    user_outputs = []
+# Generate outputs
+all_print_outputs = []
+error_outputs = []
+expected_outputs = []
+user_outputs = []
 
-    for test in tests:
-        expected_output = correct_solution.${name}(*test)
-        expected_outputs.append(expected_output)
+for test in tests:
+    expected_output = correct_solution.${name}(*test)
+    expected_outputs.append(expected_output)
 
-    for test_index in range(len(tests)):
-        temp_stdout = io.StringIO()
-        sys.stdout = temp_stdout
+for test_index in range(len(tests)):
+    temp_stdout = io.StringIO()
+    sys.stdout = temp_stdout
 
-        try:
-            # Ensure we have the right number of inputs
-            if len(tests[test_index]) != len(params):
-                raise ValueError("The number of params and test is not matching")
+    try:
+        # Ensure we have the right number of inputs
+        if len(tests[test_index]) != len(params):
+            raise ValueError("The number of params and test is not matching")
 
-            # Call the function with the input parameters
-            actual_output = user_solution.${name}(*tests[test_index][:len(params)])
+        # Call the function with the input parameters
+        actual_output = user_solution.${name}(*tests[test_index][:len(params)])
 
-            result = actual_output == expected_outputs[test_index]
-            user_outputs.append(actual_output)
-            tests[test_index].append(result)
-            
-        except Exception as e:
-            tests[test_index].append(False)
-            error_message = f"{type(e).__name__}: {str(e)}\\n{traceback.format_exc()}"
-            error_outputs.append(error_message)
-            user_outputs.append(None)  # No output for this test case
+        result = actual_output == expected_outputs[test_index]
+        user_outputs.append(actual_output)
+        tests[test_index].append(result)
+        
+    except Exception as e:
+        tests[test_index].append(False)
+        error_message = f"{type(e).__name__}: {str(e)}\\n{traceback.format_exc()}"
+        error_outputs.append(error_message)
+        user_outputs.append(None)  # No output for this test case
 
-        finally:
-            # Capture print output for this test case
-            print_output = temp_stdout.getvalue().strip()
-            if print_output:
-                all_print_outputs.append(print_output.split('\\n'))
-            else:
-                all_print_outputs.append([])  # Empty list if no print output
+    finally:
+        # Capture print output for this test case
+        print_output = temp_stdout.getvalue().strip()
+        if print_output:
+            all_print_outputs.append(print_output.split('\\n'))
+        else:
+            all_print_outputs.append([])  # Empty list if no print output
 
-            # Reset stdout
-            sys.stdout = sys.__stdout__
+        # Reset stdout
+        sys.stdout = sys.__stdout__
 
-    # Prepare the final output
-    final_output = {
-        "print_output": all_print_outputs,
-        "expected_outputs": expected_outputs,
-        "user_outputs": user_outputs,
-        "test_results": tests,
-        "error_outputs": error_outputs
-    }
+# Prepare the final output
+final_output = {
+    "print_output": all_print_outputs,
+    "expected_outputs": expected_outputs,
+    "user_outputs": user_outputs,
+    "test_results": tests,
+    "error_outputs": error_outputs
+}
 
-    # Print the JSON-encoded final output
-    print(json.dumps(final_output))`)
+# Print the JSON-encoded final output
+print(json.dumps(final_output))
+json.dumps(final_output)`)
 }
 
 export const SPECIFIC_BASE_CODE = {
@@ -198,118 +199,80 @@ if __name__ == '__main__':
 
     # Print the JSON-encoded final output
     print(json.dumps(final_output))
+    final_output
     `
     }
 }
 
+export const convertTestCase = (lines, params = [], types = []) => {
+    // If lines is a string, split into array
+    if (typeof lines === 'string') {
+        lines = lines.trim().split('\n').map(str =>
+            str.replace(/^<p>/, '').replace(/<\/p>$/, '').trim()
+        );
+    }
 
-export const convertTestCase = (inputString, params, types) => {
-    let lines = typeof inputString === 'string' ?
-        inputString.trim().split('\n').map(str => str.replace(/^<p>/, '').replace(/<\/p>$/, '')) :
-        JSON.parse(JSON.stringify(inputString))
-
-    if (typeof lines[0] === 'string') {
-        let pairs = []
+    // If the first element is not an array, assume flat array and group by params.length
+    if (!Array.isArray(lines[0])) {
+        const grouped = [];
         for (let i = 0; i < lines.length; i += params.length) {
-            pairs.push(lines.slice(i, i + params.length));
+            grouped.push(lines.slice(i, i + params.length));
         }
-        lines = pairs
+        lines = grouped;
     }
 
-    let result = null;
-    for (let i = 0; i < lines.length; i += params.length) {
-        const testCase = lines.slice(i, i + params.length).map(pair => {
+    // Now lines is an array of arrays, process each element
+    const testCases = lines.map((line) => {
+        return line.map((value, idx) => {
+            const type = types[idx]?.toLowerCase();
 
-            return pair.map((inp, index) => {
-
-                const type = types[index]?.toLowerCase()
-                try {
-                    const parsed = inp
-
-                    if (typeof inp === 'string' || typeof inp === 'number') {
-                        if (type.startsWith('list[')) {
-                            if (!Array.isArray(parsed)) {
-                                return `${inp} is not a valid value of type ${types[index]}`
-                            }
-                            if (type.startsWith('list[list[')) {
-                                if (!Array.isArray(parsed[0])) {
-                                    return `${inp} is not a valid value of type ${types[index]}`
-                                }
-                                if (type.startsWith('list[list[int]')) {
-                                    return parsed
-                                } else if (type.startsWith('list[list[str]')) {
-                                    return parsed.map(subitem => {
-                                        return subitem.map(val => val.toString())
-                                    })
-                                }
-                            } else if (type.startsWith('list[int]')) {
-
-                                return parsed
-                            } else if (type.startsWith('list[str]')) {
-                                return parsed.map(val => val.toString())
-                            }
-                        } else if (type.startsWith('int')) {
-                            console.log('gots')
-                            console.log(parseInt(parsed))
-                            return parseInt(parsed)
-                        } else if (type.startsWith('str')) {
-                            return parsed.toString()
-                        }
-                    } else {
-                        if (type.startsWith('list[')) {
-                            if (!Array.isArray(parsed)) {
-                                return `${inp} is not a valid value of type ${types[index]}`
-                            }
-                            const parsedLs = typeof parsed === 'string' ? JSON.parse(parsed) : parsed;
-                            if (type.startsWith('list[list[')) {
-                                if (!Array.isArray(parsed[0])) {
-                                    return `${inp} is not a valid value of type ${types[index]}`
-                                }
-
-                                if (type.startsWith('list[list[int]')) {
-                                    return parsedLs
-                                } else if (type.startsWith('list[list[str]')) {
-                                    return parsedLs.map(ls => {
-                                        return ls.map(val => val.toString())
-                                    })
-                                }
-
-                            } else if (type.startsWith('list[int]')) {
-                                return parsedLs
-                            } else if (type.startsWith('list[str]')) {
-                                return parsedLs.map(val => val.toString())
-                            }
-
-
-
-
-                        } else if (type.startsWith('int') && parsed) {
-                            console.log('gots')
-                            console.log(parseInt(parsed[index]))
-                            return parseInt(parsed[index])
-                        } else if (type.startsWith('str') && parsed) {
-
-                            return parsed[index].toString()
-                        }
+            try {
+                // Only parse if type is defined and value is a string
+                if (typeof value === 'string') {
+                    if (type?.startsWith('list[')) {
+                        return JSON.parse(value.trim());
+                    } else if (type === 'int') {
+                        return parseInt(value);
+                    } else if (type === 'str') {
+                        return value.toString();
                     }
-                    return parsed
-                } catch (e) {
-                    return `${inp} is not a valid value of type ${types[index]}`
                 }
-
-
-            })
-
+                // If already a number or array, just return
+                return value;
+            } catch (e) {
+                console.error(`Error parsing value "${value}" for type ${type}:`, e);
+                return value;
+            }
         });
-        if (!result) {
-            result = testCase;
-        } else {
-            result.push(testCase[0])
-        }
-    }
-    return result;
+    });
+
+    return testCases;
 };
 
+// Converts JS array to Python-style string
+export const toPythonListString = (arr) => {
+    if (Array.isArray(arr)) {
+        return `[${arr.map(toPythonListString).join(', ')}]`;
+    } else if (arr === null || arr === undefined) {
+        return 'None';
+    } else if (typeof arr === 'string') {
+        return `'${arr.replace(/'/g, "\\'")}'`;
+    } else {
+        return arr.toString();
+    }
+};
+
+// --- Usage examples ---
+
+const typedLines = [
+    [[2,7,11,15], 9],
+    [[2,7,11,15], 13],
+    [[2,7,11,15], 26]
+];
+const params = ['nums', 'target'];
+const types = ['list[int]', 'int'];
+
+const testsFromTyped = convertTestCase(typedLines, params, types);
 
 export const toCamelCase = (str) => {
     return str?.split(' ').map((word, index) =>

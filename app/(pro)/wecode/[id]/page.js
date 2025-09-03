@@ -13,7 +13,7 @@ import QuestionPanel from './QuestionPanel';
 import { LoadingDisplay, languages } from './Components';
 
 
-import { convertTestCase, BASE_CODE, SPECIFIC_BASE_CODE, toCamelCase } from './utils'
+import { convertTestCase, toPythonListString, BASE_CODE, SPECIFIC_BASE_CODE, toCamelCase } from './utils'
 
 
 const CodeEditorRunner = ({ params }) => {
@@ -47,7 +47,35 @@ const CodeEditorRunner = ({ params }) => {
     const [isTimerVisible, setIsTimerVisible] = useState(false);
     const [timer, setTimer] = useState(0);
     const [isTimerRunning, setIsTimerRunning] = useState(false);
+    const [pyodide, setPyodide] = useState(null);
 
+    // Add Pyodide initialization
+    useEffect(() => {
+        async function loadPyodide() {
+            try {
+                // Load Pyodide script dynamically
+                if (typeof window !== 'undefined' && !window.loadPyodide) {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/pyodide/v0.28.2/full/pyodide.js';
+                    script.async = true;
+                    document.head.appendChild(script);
+                    
+                    await new Promise((resolve) => {
+                        script.onload = resolve;
+                    });
+                }
+
+                // Initialize Pyodide
+                const pyodideInstance = await window.loadPyodide({
+                    indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.28.2/full/'
+                });
+                setPyodide(pyodideInstance);
+            } catch (error) {
+                console.error("Error loading Pyodide:", error);
+            }
+        }
+        loadPyodide();
+    }, []);
 
 
     useEffect(() => {
@@ -122,7 +150,7 @@ const CodeEditorRunner = ({ params }) => {
             const functionParams = inputParams || [];
 
             const baseCodeTemplate = !testFunction ?
-                BASE_CODE[language?.monacoId](JSON.stringify(functionParams), JSON.stringify(newInputs), functionName) :
+                BASE_CODE[language?.monacoId](JSON.stringify(functionParams), newInputs, functionName) :
                 SPECIFIC_BASE_CODE[language?.monacoId] && SPECIFIC_BASE_CODE[language?.monacoId][testFunction] && SPECIFIC_BASE_CODE[language?.monacoId][testFunction](JSON.stringify(newInputs), functionName, JSON.stringify(functionParams))
             setBaseCode(baseCodeTemplate)
             return baseCodeTemplate
@@ -133,18 +161,49 @@ const CodeEditorRunner = ({ params }) => {
     }, [language, question, inputs, inputParams, toCamelCase]);
 
     const runCode = useCallback(async () => {
-        setIsRunning(true);
-        setOutput('Running...');
-        setError(null);
-        setEvaluatedInputs(inputs.slice(0, maxShowingInputIndex + 1));
+    setIsRunning(true);
+    setOutput('Running...');
+    setError(null);
 
-        try {
-            const newInputs = convertTestCase(inputs, inputParams, inputTypes)
-            const bCode = baseCode || handleSetLangSample(newInputs);
-            const runCode = `${shortCode}\n\n${solution}\n\n${bCode}`;
+    try {
+        const newInputs = convertTestCase(inputs, inputParams, inputTypes);
+        
+        const bCode = baseCode || handleSetLangSample(newInputs);
+        const fullCode = `${shortCode}\n\n${solution}\n\n${bCode}`;
 
+        if (language.monacoId === 'python' && pyodide) {
+            try {
+                const result = await pyodide.runPythonAsync(fullCode);
+                const jsonStr = result.toString(); 
+                const jsResult = JSON.parse(jsonStr); 
 
-            console.log(runCode)
+                if (!jsResult) {
+                    throw new Error('Code execution produced no output');
+                }
+
+                // Process the output directly since it's already a JS object
+                if (jsResult.print_output || jsResult.test_results) {
+                    handlePassConditions(jsResult.test_results);
+                    setOutput(jsResult.test_results);
+                    setPrintOutput(jsResult.print_output || []);
+                    setExpectedOutput(jsResult.expected_outputs || []);
+                    setUserOutput(jsResult.user_outputs || []);
+                    setErrorOutput(jsResult.error_outputs || []);
+                } else {
+                    handlePassConditions(jsResult);
+                    setOutput(jsResult);
+                }
+
+            } catch (pyodideError) {
+                console.error('Pyodide execution error:', pyodideError);
+                const traceback = await pyodide.runPythonAsync(`
+                    import traceback
+                    traceback.format_exc()
+                `);
+                setError(`Python Error: ${pyodideError.message}\n\nTraceback:\n${traceback}`);
+            }
+        } else {
+            // Non-Python execution (Judge0)
             const createResponse = await fetch('http://127.0.0.1:2358/submissions', {
                 method: 'POST',
                 headers: {
@@ -164,7 +223,6 @@ const CodeEditorRunner = ({ params }) => {
             }
 
             let { token: runToken } = await createResponse.json();
-
             let getResponseData;
 
             do {
@@ -217,20 +275,20 @@ const CodeEditorRunner = ({ params }) => {
             } else {
                 setError(JSON.stringify(getResponseData, null, 2));
             }
-        } catch (error) {
-            console.error('Full error:', error);
-            setError('Error: ' + error.message);
-        } finally {
-            setIsRunning(false);
         }
-    }, [shortCode, baseCode, language.id, handlePassConditions, inputs, inputTypes, inputParams, maxShowingInputIndex]);
-
-
-
-    if (!question || inputParams.length === 0 || inputs.length === 0) {
-        return <LoadingDisplay />
+    } catch (error) {
+        console.error('Full error:', error);
+        setError('Error: ' + error.message);
+    } finally {
+        setIsRunning(false);
     }
+}, [shortCode, baseCode, language.id, handlePassConditions, inputs, inputTypes, inputParams, maxShowingInputIndex, pyodide, solution, handleSetLangSample]);
 
+
+
+    if (!question || inputParams.length === 0 || inputs.length === 0 || (language.monacoId === 'python' && !pyodide)) {
+        return <LoadingDisplay />;
+    }
     return (
         <div className="flex flex-col h-screen overflow-hidden max-h-full pb-1 mt-2 px-2">
             <MiniNavbar

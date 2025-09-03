@@ -7,7 +7,6 @@ const Example = () => {
     const [popUp, setPopUp] = useState(false)
 
     useEffect(() => {
-        console.log('Width is chnages')
     }, [width, height])
 
     return (

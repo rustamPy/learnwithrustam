@@ -44,8 +44,6 @@ const Inputs = () => {
 
         const criteria = [hasUpperCase, hasLowerCase, hasNumbers, hasSpecialChars, length >= 8].filter(Boolean).length;
 
-        console.log(criteria)
-
         if (criteria <= 2) return { strength: 'Weak', color: 'text-red-600' };
         if (criteria === 3) return { strength: 'Medium', color: 'text-yellow-600' };
         if (criteria === 4) return { strength: 'Strong', color: 'text-green-600' };
@@ -168,8 +166,6 @@ const Inputs = () => {
         const length = password.length;
 
         const criteria = [hasUpperCase, hasLowerCase, hasNumbers, hasSpecialChars, length >= 8].filter(Boolean).length;
-
-        console.log(criteria)
 
         if (criteria <= 2) return { strength: 'Weak', color: 'text-red-600' };
         if (criteria === 3) return { strength: 'Medium', color: 'text-yellow-600' };
