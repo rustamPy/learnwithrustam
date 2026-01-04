@@ -8,10 +8,54 @@ const customStyles = `
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-20px); }
   }
+  @keyframes rollerSpin {
+    0% { transform: rotateX(0deg); }
+    25% { transform: rotateX(90deg); }
+    50% { transform: rotateX(180deg); }
+    75% { transform: rotateX(270deg); }
+    100% { transform: rotateX(360deg); }
+  }
+  @keyframes letterRoll {
+    0% {
+      transform: translateY(0px) rotateX(0deg);
+      opacity: 1;
+    }
+    25% {
+      transform: translateY(-10px) rotateX(90deg);
+      opacity: 0.5;
+    }
+    50% {
+      transform: translateY(-20px) rotateX(180deg);
+      opacity: 0.3;
+    }
+    75% {
+      transform: translateY(-10px) rotateX(270deg);
+      opacity: 0.5;
+    }
+    100% {
+      transform: translateY(0px) rotateX(360deg);
+      opacity: 1;
+    }
+  }
+  @keyframes wheelGlow {
+    0%, 100% {
+      box-shadow: 0 0 5px rgba(245, 158, 11, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.6), 0 0 30px rgba(245, 158, 11, 0.4);
+    }
+  }
   .animation-delay-2s { animation-delay: 2s; }
   .animation-delay-4s { animation-delay: 4s; }
   .animation-delay-6s { animation-delay: 6s; }
   .animate-float { animation: float 6s ease-in-out infinite; }
+  .animate-roller-spin { animation: rollerSpin 1.5s ease-in-out; }
+  .animate-letter-roll { animation: letterRoll 1.5s ease-in-out; }
+  .animate-wheel-glow { animation: wheelGlow 1.5s ease-in-out; }
+  .roller-container {
+    perspective: 200px;
+    transform-style: preserve-3d;
+  }
 `;
 
 const ROWS = 6;
@@ -37,6 +81,7 @@ const WordleSolver = () => {
   const [filteredWords, setFilteredWords] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [kingWord, setKingWord] = useState('');
+  const [isRolling, setIsRolling] = useState(false);
   const inputRefs = useRef(Array(ROWS).fill().map(() => Array(COLS).fill().map(() => createRef())));
 
   // Load word list
@@ -55,30 +100,30 @@ const WordleSolver = () => {
             !/\d/.test(word) && // Exclude words with digits
             /^[A-Z]+$/.test(word) // Only letters
           );
-        
-        // Find the best "king word" with unique letters
+
         const uniqueLetterWords = words.filter(word => {
           const letters = word.split('');
           return letters.length === new Set(letters).size;
         });
         
         const bestKingWord = uniqueLetterWords.length > 0 ? 
-          uniqueLetterWords[Math.floor(Math.random() * uniqueLetterWords.length)] : '';
+            uniqueLetterWords[Math.floor(Math.random() * uniqueLetterWords.length)] :
+            (words.length > 0 ? words[Math.floor(Math.random() * words.length)] : '');
         
         setWordList(words);
         setFilteredWords(words);
-        setSuggestions(words.slice(0, 10));
+          setSuggestions(words.slice(0, 50));
         setKingWord(bestKingWord);
       } catch (error) {
-        console.error('Error loading words:', error);
-        // Fallback word list
+          console.error('Error loading words:', error);
         const fallbackWords = ['ABOUT', 'ABUSE', 'ADULT', 'AGENT', 'AGREE', 'AHEAD', 'ALARM', 'ALBUM', 'ALIVE', 'ALLOW', 'ALONE', 'ALONG', 'ALTER', 'ANGEL', 'ANGER', 'ANGLE', 'ANGRY', 'APART', 'APPLE', 'APPLY', 'ARENA', 'ARGUE', 'ARISE', 'ARMED', 'ARMOR', 'ARRAY', 'ARROW', 'ASIDE', 'ASSET', 'AVOID', 'AWAKE', 'AWARD', 'AWARE', 'BADLY', 'BAKER', 'BASES', 'BASIC', 'BEACH', 'BEGAN', 'BEGIN', 'BENCH', 'BIRTH', 'BLACK', 'BLAME', 'BLANK', 'BLIND', 'BLOCK', 'BLOOD', 'BOARD', 'BOOST', 'BOOTH', 'BOUND', 'BRAIN', 'BRAND', 'BRAVE', 'BREAD', 'BREAK', 'BREED', 'BRIEF', 'BRING', 'BROAD', 'BROKE', 'BROWN', 'BUILD', 'BUILT', 'BUYER', 'CABLE', 'CARRY', 'CATCH', 'CAUSE', 'CHAIN', 'CHAIR', 'CHAOS', 'CHARM', 'CHART', 'CHASE', 'CHEAP', 'CHECK', 'CHEST', 'CHIEF', 'CHILD', 'CHINA', 'CHOSE', 'CIVIL', 'CLAIM', 'CLASS', 'CLEAN', 'CLEAR', 'CLICK', 'CLIMB', 'CLOCK', 'CLOSE', 'COACH', 'COAST', 'COULD', 'COUNT', 'COURT', 'COVER', 'CRAFT', 'CRASH', 'CRAZY', 'CREAM', 'CRIME', 'CROSS', 'CROWD', 'CROWN', 'CRUDE', 'CURVE', 'CYCLE', 'DAILY', 'DANCE', 'DATED', 'DEALT', 'DEATH', 'DEBUT', 'DELAY', 'DEPTH', 'DOING', 'DOUBT', 'DOZEN', 'DRAFT', 'DRAMA', 'DRANK', 'DREAM', 'DRESS', 'DRILL', 'DRINK', 'DRIVE', 'DROVE', 'DYING', 'EAGER', 'EARLY', 'EARTH', 'ELITE', 'EMPTY', 'ENEMY', 'ENJOY', 'ENTER', 'ENTRY', 'EQUAL', 'ERROR', 'EVENT', 'EVERY', 'EXACT', 'EXIST', 'EXTRA', 'FAITH', 'FALSE', 'FAULT', 'FIBER', 'FIELD', 'FINAL', 'FIXED', 'FLASH', 'FLEET', 'FLOOR', 'FLUID', 'FOCUS', 'FORCE', 'FORTH', 'FORUM', 'FOUND', 'FRAME', 'FRANK', 'FRAUD', 'FRESH', 'FRONT', 'FRUIT', 'FULLY', 'FUNNY', 'GIANT', 'GIVEN', 'GLASS', 'GLOBE', 'GOING', 'GRACE', 'GRADE', 'GRAIN', 'GRAND', 'GRANT', 'GRASS', 'GRAVE', 'GREAT', 'GREEN', 'GROSS', 'GROUP', 'GROWN', 'GUARD', 'GUESS', 'GUEST', 'GUIDE', 'HAPPY', 'HEART', 'HEAVY', 'HORSE', 'HOTEL', 'HOUSE', 'HUMAN', 'IDEAL', 'IMAGE', 'INDEX', 'INNER', 'INPUT', 'ISSUE', 'JAPAN', 'JOINT', 'JONES', 'JUDGE', 'KNOWN', 'LABEL', 'LARGE', 'LASER', 'LATER', 'LAUGH', 'LAYER', 'LEARN', 'LEASE', 'LEAST', 'LEAVE', 'LEGAL', 'LEVEL', 'LEWIS', 'LIGHT', 'LIMIT', 'LINKS', 'LIVER', 'LOCAL', 'LOOSE', 'LOWER', 'LUCKY', 'LUNCH', 'LYING', 'MAGIC', 'MAJOR', 'MAKER', 'MARCH', 'MARIA', 'MATCH', 'MAYBE', 'MAYOR', 'MEANT', 'MEDIA', 'METAL', 'MIGHT', 'MINOR', 'MINUS', 'MIXED', 'MODEL', 'MONEY', 'MONTH', 'MORAL', 'MOTOR', 'MOUNT', 'MOUSE', 'MOUTH', 'MOVED', 'MOVIE', 'MUSIC', 'NEEDS', 'NEVER', 'NEWLY', 'NOISE', 'NORTH', 'NOTED', 'NOVEL', 'NURSE', 'OCEAN', 'OFFER', 'OFTEN', 'ORDER', 'OTHER', 'OUGHT', 'OUTER', 'OWNER', 'PAINT', 'PANEL', 'PAPER', 'PARTY', 'PEACE', 'PETER', 'PHASE', 'PHONE', 'PHOTO', 'PIANO', 'PIECE', 'PILOT', 'PITCH', 'PLACE', 'PLAIN', 'PLANE', 'PLANT', 'PLATE', 'POINT', 'POUND', 'POWER', 'PRESS', 'PRICE', 'PRIDE', 'PRIME', 'PRINT', 'PRIOR', 'PRIZE', 'PROOF', 'PROUD', 'PROVE', 'QUEEN', 'QUICK', 'QUIET', 'QUITE', 'RADIO', 'RAISE', 'RANGE', 'RAPID', 'RATIO', 'REACH', 'READY', 'REALM', 'REBEL', 'REFER', 'RELAX', 'RIDER', 'RIDGE', 'RIGHT', 'RIGID', 'RIVER', 'ROBOT', 'ROCKY', 'ROMAN', 'ROUGH', 'ROUND', 'ROUTE', 'ROYAL', 'RURAL', 'SCALE', 'SCENE', 'SCOPE', 'SCORE', 'SENSE', 'SERVE', 'SETUP', 'SEVEN', 'SHALL', 'SHAPE', 'SHARE', 'SHARP', 'SHEET', 'SHELF', 'SHELL', 'SHIFT', 'SHINE', 'SHIRT', 'SHOCK', 'SHOOT', 'SHORT', 'SHOWN', 'SINCE', 'SKILL', 'SLEEP', 'SLIDE', 'SMALL', 'SMART', 'SMILE', 'SMITH', 'SMOKE', 'SNAKE', 'SOLID', 'SOLVE', 'SORRY', 'SOUND', 'SOUTH', 'SPACE', 'SPARE', 'SPEAK', 'SPEED', 'SPEND', 'SPENT', 'SPLIT', 'SPOKE', 'SPORT', 'STAFF', 'STAGE', 'STAKE', 'STAND', 'START', 'STATE', 'STEAM', 'STEEL', 'STEEP', 'STEER', 'STICK', 'STILL', 'STOCK', 'STONE', 'STOOD', 'STORE', 'STORM', 'STORY', 'STRIP', 'STUCK', 'STUDY', 'STUFF', 'STYLE', 'SUGAR', 'SUITE', 'SUPER', 'SWEET', 'TABLE', 'TAKEN', 'TASTE', 'TAXES', 'TEACH', 'TEAMS', 'TEETH', 'TERRY', 'TEXAS', 'THANK', 'THEFT', 'THEIR', 'THEME', 'THERE', 'THESE', 'THICK', 'THING', 'THINK', 'THIRD', 'THOSE', 'THREE', 'THREW', 'THROW', 'THUMB', 'TIGER', 'TIGHT', 'TIMER', 'TIRED', 'TITLE', 'TODAY', 'TOPIC', 'TOTAL', 'TOUCH', 'TOUGH', 'TOWER', 'TRACK', 'TRADE', 'TRAIN', 'TREAT', 'TREND', 'TRIAL', 'TRIBE', 'TRICK', 'TRIED', 'TRIES', 'TRUCK', 'TRULY', 'TRUNK', 'TRUST', 'TRUTH', 'TWICE', 'TWIST', 'TYLER', 'UNCLE', 'UNDER', 'UNDUE', 'UNION', 'UNITY', 'UNTIL', 'UPPER', 'URBAN', 'USAGE', 'USUAL', 'VALID', 'VALUE', 'VIDEO', 'VIRUS', 'VISIT', 'VITAL', 'VOCAL', 'VOICE', 'WASTE', 'WATCH', 'WATER', 'WEIRD', 'WHEEL', 'WHERE', 'WHICH', 'WHILE', 'WHITE', 'WHOLE', 'WHOSE', 'WIDER', 'WOMAN', 'WOMEN', 'WORLD', 'WORRY', 'WORSE', 'WORST', 'WORTH', 'WOULD', 'WRITE', 'WRONG', 'WROTE', 'YIELD', 'YOUNG', 'YOUTH'].filter(word => !/\d/.test(word));
         const uniqueLetterWords = fallbackWords.filter(word => {
           const letters = word.split('');
           return letters.length === new Set(letters).size;
         });
         const randomKingWord = uniqueLetterWords.length > 0 ? 
-          uniqueLetterWords[Math.floor(Math.random() * uniqueLetterWords.length)] : 'AUDIO';
+            uniqueLetterWords[Math.floor(Math.random() * uniqueLetterWords.length)] :
+            (fallbackWords.length > 0 ? fallbackWords[Math.floor(Math.random() * fallbackWords.length)] : 'AUDIO');
         setWordList(fallbackWords);
         setFilteredWords(fallbackWords);
         setSuggestions(fallbackWords.slice(0, 10));
@@ -88,7 +133,6 @@ const WordleSolver = () => {
     loadWords();
   }, []);
 
-  // Filter words based on current grid state
   const filterWords = () => {
     let filtered = [...wordList];
 
@@ -138,17 +182,12 @@ const WordleSolver = () => {
     }
 
     setFilteredWords(filtered);
-    setSuggestions(filtered.slice(0, 10));
-    
-    // Don't update king word here - only update on row change or manual click
+      setSuggestions(filtered.slice(0, 50));
   };
 
-  useEffect(() => {
-    filterWords();
-  }, [grid, currentRow, wordList]);
-
-  const refreshKingWord = () => {
-    const uniqueLetterWords = filteredWords.filter(word => {
+  // Function to update king word from current filtered list
+  const updateKingWordFromFiltered = (wordList) => {
+    const uniqueLetterWords = wordList.filter(word => {
       const letters = word.split('');
       return letters.length === new Set(letters).size;
     });
@@ -156,8 +195,38 @@ const WordleSolver = () => {
     if (uniqueLetterWords.length > 0) {
       const randomIndex = Math.floor(Math.random() * uniqueLetterWords.length);
       setKingWord(uniqueLetterWords[randomIndex]);
+    } else if (wordList.length > 0) {
+      const randomIndex = Math.floor(Math.random() * wordList.length);
+      setKingWord(wordList[randomIndex]);
+    } else {
+      setKingWord('');
     }
   };
+
+  const refreshKingWord = () => {
+    setIsRolling(true);
+    
+    // Simulate rolling delay
+    setTimeout(() => {
+      updateKingWordFromFiltered(filteredWords);
+    }, 750); // Half way through animation
+    
+    // Reset rolling state after animation completes
+    setTimeout(() => {
+      setIsRolling(false);
+    }, 1500);
+  };
+
+  useEffect(() => {
+    filterWords();
+  }, [grid, currentRow, wordList]);
+
+  // Update king word when filtered words change or when row changes
+  useEffect(() => {
+    if (filteredWords.length > 0) {
+      updateKingWordFromFiltered(filteredWords);
+    }
+  }, [filteredWords, currentRow]);
 
   const useKingWord = () => {
     if (kingWord && currentRow < ROWS) {
@@ -272,12 +341,7 @@ const WordleSolver = () => {
       }
       
       setGrid(newGrid);
-      setCurrentRow(currentRow + 1);
-      
-      // Refresh king word for the new row
-      setTimeout(() => {
-        refreshKingWord();
-      }, 100);
+        setCurrentRow(currentRow + 1);
     }
   };
 
@@ -290,7 +354,7 @@ const WordleSolver = () => {
     ));
     setCurrentRow(0);
     setFilteredWords(wordList);
-    setSuggestions(wordList.slice(0, 10));
+      setSuggestions(wordList.slice(0, 50));
     // Reset input refs
     inputRefs.current = Array(ROWS).fill().map(() => Array(COLS).fill().map(() => createRef()));
   };
@@ -363,13 +427,13 @@ const WordleSolver = () => {
                 <button
                   onClick={moveToNextRow}
                   disabled={currentRow >= ROWS - 1}
-                  className="px-4 py-2 bg-blue-500 dark:bg-blue-600 text-white rounded hover:bg-blue-600 dark:hover:bg-blue-700 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors"
+                  className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors font-medium shadow-sm"
                 >
                   Next Row
                 </button>
                 <button
                   onClick={resetGame}
-                  className="px-4 py-2 bg-red-500 dark:bg-red-600 text-white rounded hover:bg-red-600 dark:hover:bg-red-700 transition-colors"
+                  className="px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-md hover:bg-gray-600 dark:hover:bg-gray-500 transition-colors font-medium shadow-sm"
                 >
                   Reset
                 </button>
@@ -395,37 +459,66 @@ const WordleSolver = () => {
               
               {/* King Word Recommendation */}
               {kingWord && (
-                <div className="mb-4 p-3 bg-gradient-to-r from-yellow-100 to-amber-100 dark:from-yellow-900 dark:to-amber-900 rounded-lg border border-yellow-300 dark:border-yellow-700">
-                  <div className="flex items-center justify-between mb-1">
-                    <h4 className="text-sm font-bold text-yellow-800 dark:text-yellow-200">👑 King Word Recommendation</h4>
+                <div className="mb-6 p-5 bg-amber-50 dark:bg-gray-900 rounded-xl border border-amber-200 dark:border-gray-700 shadow-lg transition-all duration-300">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <span className="text-amber-600 dark:text-amber-400">⭐</span>
+                      <h4 className="text-sm font-semibold text-amber-800 dark:text-gray-200">Recommended Word</h4>
+                    </div>
                     <button
                       onClick={refreshKingWord}
-                      className="text-xs px-2 py-1 bg-yellow-200 dark:bg-yellow-800 text-yellow-800 dark:text-yellow-200 rounded hover:bg-yellow-300 dark:hover:bg-yellow-700 transition-colors font-semibold"
-                      title="Get another random king word"
+                      disabled={isRolling}
+                      className={`px-1.5 py-1 bg-amber-100 dark:bg-gray-700 text-amber-800 dark:text-gray-300 rounded hover:bg-amber-200 dark:hover:bg-gray-600 transition-all duration-200 text-xs font-medium border border-amber-300 dark:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed ${isRolling ? 'animate-pulse' : ''}`}
+                      title={isRolling ? 'Generating new word...' : 'Get another random word'}
                     >
-                      🎲 Next
+                      <span>{isRolling ? '🔄' : '🎲'}</span>
                     </button>
                   </div>
-                  <div className="text-center mb-2">
-                    <span className="font-mono text-xl font-bold text-yellow-900 dark:text-yellow-100 bg-yellow-200 dark:bg-yellow-800 px-3 py-1 rounded tracking-widest">{kingWord}</span>
+                  
+                  <div className="text-center mb-5">
+                    <div className={`roller-container inline-block bg-white dark:bg-gray-800 rounded-lg p-4 border border-amber-300 dark:border-gray-600 shadow-inner transition-all duration-300 ${isRolling ? 'animate-roller-spin' : ''}`}>
+                      <div className={`overflow-hidden ${isRolling ? 'animate-letter-roll' : ''}`}>
+                        <span className="font-mono text-2xl font-bold text-amber-900 dark:text-gray-100 tracking-widest block">
+                          {isRolling ? (
+                            <span className="inline-block">
+                              {Array.from({length: 5}, (_, i) => (
+                                <span key={i} className={`inline-block animate-letter-roll`} style={{animationDelay: `${i * 0.1}s`}}>
+                                  {kingWord[i] || 'A'}
+                                </span>
+                              ))}
+                            </span>
+                          ) : (
+                            kingWord
+                          )}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-center mb-2">
+                  
+                  <div className="flex justify-center mb-4">
                     <button
                       onClick={useKingWord}
-                      className="text-sm px-4 py-2 bg-yellow-600 dark:bg-yellow-700 text-white rounded hover:bg-yellow-700 dark:hover:bg-yellow-600 transition-colors font-semibold shadow-sm"
+                      disabled={isRolling}
+                      className="px-6 py-2 bg-amber-600 dark:bg-amber-700 text-white rounded-md hover:bg-amber-700 dark:hover:bg-amber-600 transition-all duration-200 font-medium shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                       title="Fill this word into the current row"
                     >
-                      ✨ Use This Word
+                      <span className="inline-flex items-center gap-2">
+                        <span>✨</span>
+                        Use This Word
+                      </span>
                     </button>
                   </div>
-                  <p className="text-xs text-yellow-700 dark:text-yellow-300 text-center">
-                    {currentRow === 0 ? 'Random best starting word from the kingdom' : 'Random best word from remaining kingdom'}
-                  </p>
+                  
+                  <div className="bg-amber-100 dark:bg-gray-800 rounded-md px-3 py-2 border border-amber-200 dark:border-gray-700">
+                    <p className="text-xs text-amber-800 dark:text-gray-400 text-center font-medium">
+                      {currentRow === 0 ? '🎯 Optimal starting word with unique letters' : `📊 Best choice from ${filteredWords.length} remaining words`}
+                    </p>
+                  </div>
                 </div>
               )}
               
               <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-                Possible words: <span className="font-bold text-blue-600 dark:text-blue-400">{filteredWords.length}</span>
+                Possible words: <span className="font-semibold text-blue-600 dark:text-blue-400">{filteredWords.length}</span>
               </p>
               
               <div className="space-y-2 max-h-96 overflow-y-auto">
@@ -444,9 +537,9 @@ const WordleSolver = () => {
                 )}
               </div>
 
-              {filteredWords.length > 10 && (
+                              {filteredWords.length > 50 && (
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-4">
-                  Showing top 10 suggestions of {filteredWords.length} possible words
+                                      Showing top 50 suggestions of {filteredWords.length} possible words
                 </p>
               )}
             </div>

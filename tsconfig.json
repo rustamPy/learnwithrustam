@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -18,30 +22,33 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     },
-    "baseUrl": "."
+    "baseUrl": ".",
+    "target": "ES2017"
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "config/database.js"
-,
-"components/pro/Hero/SearchWindow.js",
-"components/pro/Hero/IndexHero.ks",
-"components/pro/Hero/Carousel.js",
-"components/pro/Header/Banner.js",
-"components/pro/Header/Navbar.js",
-"components/pro/ThemeToggle.js",
-"components/Footer.js",
-"app/(pro)/layout.js",
-"app/(pro)/loading.js",
-"app/(pro)/not-found.js",
-"app/(pro)/page.js"
-,
-"components/pro/Footer/LWRFooter.js"
-],
-  "exclude": ["node_modules"]
+    "config/database.js",
+    "components/pro/Hero/SearchWindow.js",
+    "components/pro/Hero/IndexHero.ks",
+    "components/pro/Hero/Carousel.js",
+    "components/pro/Header/Banner.js",
+    "components/pro/Header/Navbar.js",
+    "components/pro/ThemeToggle.js",
+    "components/Footer.js",
+    "app/(pro)/layout.js",
+    "app/(pro)/loading.js",
+    "app/(pro)/not-found.js",
+    "app/(pro)/page.js",
+    "components/pro/Footer/LWRFooter.js"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

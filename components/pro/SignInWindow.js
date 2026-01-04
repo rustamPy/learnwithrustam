@@ -1,6 +1,7 @@
 'use client';
 import React from "react";
 import { signIn, useSession } from "next-auth/react";
+import Link from "next/link";
 import {
     Card,
     Button,
@@ -105,20 +106,20 @@ const SignInWindow = ({ message, image_path, width }) => {
                                 {!session.user.phone ?
                                     (<div className="flex flex-col items-center">
                                         <AddPhoneNumber />
-                                        <a href="/">
+                                        <Link href="/">
                                             <Button variant="filled" size="sm" className="bg-lwr-orange-color-100 mt-4">Continue without adding phone number</Button>
-                                        </a>
+                                        </Link>
                                     </div>
                                     ) :
                                     <>
                                         <Typography variant="lead" className="mb-2 dark:text-white">
                                             You can now view course details, register for them, and directly reach out to me.
                                         </Typography>
-                                        <a href="/">
+                                        <Link href="/">
                                             <Button variant="filled" size="sm">
                                                 Start Journey
                                             </Button>
-                                        </a>
+                                        </Link>
                                     </>
                                 }
                                 <Typography>
