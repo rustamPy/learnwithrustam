@@ -31,6 +31,7 @@ import {
 import { FaLanguage } from "react-icons/fa";
 
 import { FiVideo } from 'react-icons/fi';
+import { FaPuzzlePiece } from 'react-icons/fa';
 
 import ThemeToggle from '@/components/pro/ThemeToggle'; // Adjust import if needed
 import BannerSection from '@/components/pro/Header/Banner';
@@ -53,6 +54,12 @@ const RESOURCES = [
         description: 'Exclusive tutorials only here',
         href: '/videos/tutorials',
         icon: <FiVideo size={25} />,
+    },
+    {
+        title: 'Wordle Solver',
+        description: 'Smart Wordle puzzle solver',
+        href: '/wordle',
+        icon: <FaPuzzlePiece size={25} />,
     },
 ];
 
